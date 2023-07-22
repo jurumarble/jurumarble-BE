@@ -13,7 +13,7 @@ public class EbHealthCheck {
 
     @GetMapping("/api/swagger-check")
     public String swagger() {
-        return "<h1>test</h1>";
+        return "<h1>왜 안되는거야</h1>";
     }
 
 }
