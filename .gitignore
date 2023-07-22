@@ -10,8 +10,6 @@ src/main/resources/application.properties
 !build/libs
 
 *.yml
-!application.yml
-!application-prod.yml
 !deploy.yml
 */**/generated/
 
