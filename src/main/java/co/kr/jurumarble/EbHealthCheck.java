@@ -10,12 +10,10 @@ import org.springframework.web.servlet.view.RedirectView;
 public class EbHealthCheck {
 
     @GetMapping("/")
-    public ResponseEntity<?> redirectToSwagger() {
+    public RedirectView redirectToSwagger() {
         String swaggerUrl = "http://jurumarble-env.eba-tv8jafay.ap-northeast-2.elasticbeanstalk.com/swagger-ui/index.html";
-        // 200(OK) 상태 코드로 리다이렉트 응답을 반환
-        return ResponseEntity.status(200).header("Location", swaggerUrl).build();
+        return new RedirectView(swaggerUrl);
     }
-
     @GetMapping("/api/swagger-check3")
     public String swagger() {
         return "<h1>되는지 확인용</h1>";
