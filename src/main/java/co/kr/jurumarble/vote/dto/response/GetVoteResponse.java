@@ -3,7 +3,6 @@ package co.kr.jurumarble.vote.dto.response;
 import co.kr.jurumarble.enums.AgeType;
 import co.kr.jurumarble.enums.GenderType;
 import co.kr.jurumarble.enums.MBTIType;
-import co.kr.jurumarble.vote.domain.VoteEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

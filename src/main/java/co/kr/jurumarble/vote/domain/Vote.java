@@ -5,7 +5,7 @@ import co.kr.jurumarble.common.domain.BaseTimeEntity;
 import co.kr.jurumarble.enums.AgeType;
 import co.kr.jurumarble.enums.GenderType;
 import co.kr.jurumarble.enums.MBTIType;
-import co.kr.jurumarble.user.domain.UserEntity;
+import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.vote.dto.request.CreateVoteRequest;
 import co.kr.jurumarble.vote.dto.request.UpdateVoteRequest;
 import co.kr.jurumarble.vote.dto.response.GetVoteResponse;
@@ -23,7 +23,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
-public class VoteEntity extends BaseTimeEntity {
+public class Vote extends BaseTimeEntity {
 
     @Id
     @GeneratedValue
@@ -35,12 +35,12 @@ public class VoteEntity extends BaseTimeEntity {
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
-    private UserEntity postedUser;
+    private User postedUser;
 
 
     @BatchSize(size = 1000)
     @OneToMany(mappedBy = "vote", fetch = FetchType.LAZY)
-    private List<VoteResultEntity> voteResultList = new ArrayList<>();
+    private List<VoteResult> voteResultList = new ArrayList<>();
 
     @Column
     private String title;
@@ -62,7 +62,7 @@ public class VoteEntity extends BaseTimeEntity {
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "VOTE_CONTENT_ID")
-    private VoteContentEntity voteContent;
+    private VoteContent voteContent;
 
 //    @OneToMany(fetch = FetchType.LAZY, mappedBy = "vote", cascade = CascadeType.REMOVE)
 //    private List<Bookmark> bookmarkList = new ArrayList<>();
@@ -71,7 +71,7 @@ public class VoteEntity extends BaseTimeEntity {
 //        this.bookmarkList.remove(bookmark);
 //    }
 
-    public VoteEntity(CreateVoteRequest request, UserEntity user, VoteContentEntity voteContent) {
+    public Vote(CreateVoteRequest request, User user, VoteContent voteContent) {
         this.postedUser = user;
         this.title = request.getTitle();
         this.voteContent = voteContent;
@@ -80,7 +80,7 @@ public class VoteEntity extends BaseTimeEntity {
         this.filteredMbti = request.getFilteredMbti();
     }
 
-    public void addVoteResult(VoteResultEntity voteResult) {
+    public void addVoteResult(VoteResult voteResult) {
         this.voteResultList.add(voteResult);
     }
 

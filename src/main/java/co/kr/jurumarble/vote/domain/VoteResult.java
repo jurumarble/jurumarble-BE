@@ -1,7 +1,7 @@
 package co.kr.jurumarble.vote.domain;
 
 import co.kr.jurumarble.enums.ChoiceType;
-import co.kr.jurumarble.user.domain.UserEntity;
+import co.kr.jurumarble.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
-public class VoteResultEntity {
+public class VoteResult {
 
     @Id
     @GeneratedValue
@@ -23,20 +23,20 @@ public class VoteResultEntity {
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "VOTE_ID")
-    private VoteEntity vote;
+    private Vote vote;
 
     /**
      * User 와의 연관관계 주인
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
-    private UserEntity votedUser;
+    private User votedUser;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ChoiceType choice;
 
-    public void doVote(VoteEntity vote, UserEntity user, ChoiceType choice) {
+    public void doVote(Vote vote, User user, ChoiceType choice) {
         this.vote = vote;
         vote.addVoteResult(this);
         this.votedUser = user;

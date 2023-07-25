@@ -10,13 +10,12 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
-public class UserEntity extends BaseTimeEntity {
+public class User extends BaseTimeEntity {
     @Id
     @GeneratedValue
     @Column(name = "USER_ID")

@@ -3,7 +3,6 @@ package co.kr.jurumarble.vote.domain;
 import co.kr.jurumarble.common.domain.BaseTimeEntity;
 import co.kr.jurumarble.vote.dto.request.CreateVoteRequest;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,7 +14,7 @@ import javax.persistence.Id;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
-public class VoteContentEntity extends BaseTimeEntity {
+public class VoteContent extends BaseTimeEntity {
 
     @Id
     @GeneratedValue
@@ -30,7 +29,7 @@ public class VoteContentEntity extends BaseTimeEntity {
 
     private String titleB;
 
-    public VoteContentEntity(CreateVoteRequest request) {
+    public VoteContent(CreateVoteRequest request) {
         this.imageA = request.getImageA();
         this.imageB = request.getImageB();
         this.titleA = request.getTitleA();

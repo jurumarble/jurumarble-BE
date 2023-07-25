@@ -3,10 +3,10 @@ package co.kr.jurumarble.vote.service;
 import co.kr.jurumarble.exception.user.UserNotAccessRightException;
 import co.kr.jurumarble.exception.user.UserNotFoundException;
 import co.kr.jurumarble.exception.vote.VoteNotFoundException;
-import co.kr.jurumarble.user.domain.UserEntity;
+import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.user.repository.UserRepository;
-import co.kr.jurumarble.vote.domain.VoteContentEntity;
-import co.kr.jurumarble.vote.domain.VoteEntity;
+import co.kr.jurumarble.vote.domain.VoteContent;
+import co.kr.jurumarble.vote.domain.Vote;
 import co.kr.jurumarble.vote.dto.request.CreateVoteRequest;
 import co.kr.jurumarble.vote.dto.request.UpdateVoteRequest;
 import co.kr.jurumarble.vote.dto.response.GetVoteResponse;
@@ -25,22 +25,22 @@ public class VoteService {
 
     public void createVote(CreateVoteRequest request, Long userId) {
 
-        UserEntity findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        VoteContentEntity voteContent = new VoteContentEntity(request);
-        VoteEntity vote = new VoteEntity(request, findUser, voteContent);
+        User findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        VoteContent voteContent = new VoteContent(request);
+        Vote vote = new Vote(request, findUser, voteContent);
 
         voteRepository.save(vote);
     }
 
     public GetVoteResponse getVote(Long voteId) {
         return voteRepository.findById(voteId)
-                .map(VoteEntity::toDto)
+                .map(Vote::toDto)
                 .orElseThrow(VoteNotFoundException::new);
     }
 
     public void updateVote(UpdateVoteRequest request, Long userId, Long voteId) {
 
-        VoteEntity vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
         isUserVote(userId, vote);
 
@@ -48,7 +48,7 @@ public class VoteService {
 
     }
 
-    public void isUserVote(Long userId, VoteEntity vote) {
+    public void isUserVote(Long userId, Vote vote) {
 
         if(!vote.isUsersVote(userId)) {
             throw new UserNotAccessRightException();
@@ -57,7 +57,7 @@ public class VoteService {
 
     public void deleteVote(Long voteId, Long userId) {
 
-        VoteEntity vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
         isUserVote(userId, vote);
 
