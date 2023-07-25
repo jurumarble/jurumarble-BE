@@ -1,5 +1,8 @@
 package co.kr.jurumarble.exception;
 
+import lombok.Getter;
+
+@Getter
 public enum StatusEnum {
     BAD_REQUEST(400, "BAD_REQUEST"),
     USER_NOT_FOUND(404,"USER_NOT_FOUND"),
