@@ -1,4 +1,4 @@
-package co.kr.jurumarble;
+package co.kr.jurumarble.token.domain;
 
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
