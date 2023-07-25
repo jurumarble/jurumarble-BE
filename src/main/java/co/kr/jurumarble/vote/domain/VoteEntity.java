@@ -7,6 +7,9 @@ import co.kr.jurumarble.enums.GenderType;
 import co.kr.jurumarble.enums.MBTIType;
 import co.kr.jurumarble.user.domain.UserEntity;
 import co.kr.jurumarble.vote.dto.request.CreateVoteRequest;
+import co.kr.jurumarble.vote.dto.request.UpdateVoteRequest;
+import co.kr.jurumarble.vote.dto.response.GetVoteResponse;
+import co.kr.jurumarble.vote.dto.response.GetVoteUserResponse;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,28 +46,12 @@ public class VoteEntity extends BaseTimeEntity {
     private String title;
 
     @Column
-    private String imageA;
-
-    @Column
-    private String imageB;
-
-    @Column
-    private String titleA;
-
-    @Column
-    private String titleB;
-
-    @Column
     private String detail;
 
     @Column
     @Enumerated(EnumType.STRING)
     private GenderType filteredGender;
 
-    /**
-     * 필터링 거는 나이는 10대, 20대, 30대 이므로 여기는 AGE enum을 이용하고
-     * User 엔티티의 나이는 실제 나이를 입력받으므로 INTEGER 로 저장
-     */
     @Column
     @Enumerated(EnumType.STRING)
     private AgeType filteredAge;
@@ -73,19 +60,9 @@ public class VoteEntity extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private MBTIType filteredMbti;
 
-    public VoteEntity(UserEntity postedUser, List<VoteResultEntity> voteResultList, String title, String imageA, String imageB, String titleA, String titleB, String detail, GenderType filteredGender, AgeType filteredAge, MBTIType filteredMbti) {
-        this.postedUser = postedUser;
-        this.voteResultList = voteResultList;
-        this.title = title;
-        this.imageA = imageA;
-        this.imageB = imageB;
-        this.titleA = titleA;
-        this.titleB = titleB;
-        this.detail = detail;
-        this.filteredGender = filteredGender;
-        this.filteredAge = filteredAge;
-        this.filteredMbti = filteredMbti;
-    }
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "VOTE_CONTENT_ID")
+    private VoteContentEntity voteContent;
 
 //    @OneToMany(fetch = FetchType.LAZY, mappedBy = "vote", cascade = CascadeType.REMOVE)
 //    private List<Bookmark> bookmarkList = new ArrayList<>();
@@ -94,28 +71,55 @@ public class VoteEntity extends BaseTimeEntity {
 //        this.bookmarkList.remove(bookmark);
 //    }
 
-    public VoteEntity(CreateVoteRequest request, UserEntity user) {
+    public VoteEntity(CreateVoteRequest request, UserEntity user, VoteContentEntity voteContent) {
         this.postedUser = user;
         this.title = request.getTitle();
-        this.imageA = request.getImageA();
-        this.imageB = request.getImageB();
-        this.titleA = request.getTitleA();
-        this.titleB = request.getTitleB();
+        this.voteContent = voteContent;
         this.filteredGender = request.getFilteredGender();
         this.filteredAge = request.getFilteredAge();
         this.filteredMbti = request.getFilteredMbti();
     }
-//
-//    public void  update(UpdateVoteRequest updateVoteRequest) {
-//        this.title = updateVoteRequest.getTitle();
-//        this.titleA = updateVoteRequest.getTitleA();
-//        this.titleB = updateVoteRequest.getTitleB();
-//        this.detail = updateVoteRequest.getDetail();
-//        this.category = updateVoteRequest.getCategory();
-//    }
-//
+
     public void addVoteResult(VoteResultEntity voteResult) {
         this.voteResultList.add(voteResult);
+    }
+
+    public GetVoteResponse toDto() {
+
+        GetVoteUserResponse getVoteUserResponse = GetVoteUserResponse.builder()
+                .userImage(postedUser.getImageUrl())
+                .userGender(postedUser.getGender())
+                .userAge(postedUser.classifyAge(postedUser.getAge()))
+                .userMbti(postedUser.getMbti())
+                .nickName(postedUser.getNickname())
+                .build();
+
+        return GetVoteResponse.builder()
+                .writer(getVoteUserResponse)
+                .voteCreatedDate(getCreatedDate())
+                .title(title)
+                .imageA(voteContent.getImageA())
+                .imageB(voteContent.getImageB())
+                .filteredGender(filteredGender)
+                .filteredAge(filteredAge)
+                .filteredMbti(filteredMbti)
+                .titleA(voteContent.getTitleA())
+                .titleB(voteContent.getTitleB())
+                .description(detail)
+                .build();
+
+    }
+
+    public boolean isUsersVote(Long userId) {
+
+        return this.postedUser.getId().equals(userId);
+
+    }
+
+    public void update(UpdateVoteRequest request) {
+        this.title = request.getTitle();
+        this.detail = request.getDetail();
+        this.getVoteContent().update(request.getTitleA(), request.getTitleB());
     }
 //
 //    public void mappingBookmark(Bookmark bookmark) {

@@ -1,6 +1,7 @@
 package co.kr.jurumarble.user.domain;
 
 import co.kr.jurumarble.common.domain.BaseTimeEntity;
+import co.kr.jurumarble.enums.AgeType;
 import co.kr.jurumarble.enums.GenderType;
 import co.kr.jurumarble.enums.MBTIType;
 import co.kr.jurumarble.user.enums.Providers;
@@ -91,30 +92,30 @@ public class UserEntity extends BaseTimeEntity {
 //        this.modifiedMBTIDate = modifiedMBTIDate;
 //    }
 //
-//    public Age classifyAge(Integer age){
-//        Age ageGroup;
-//        switch (age/10){
-//            case 1:
-//                ageGroup = Age.teenager;
-//                break;
-//            case 2:
-//                ageGroup = Age.twenties;
-//                break;
-//            case 3:
-//                ageGroup = Age.thirties;
-//                break;
-//            case 4:
-//                ageGroup = Age.fourties;
-//                break;
-//            case 5:
-//                ageGroup = Age.fifties;
-//                break;
-//            default:
-//                ageGroup = Age.NULL;
-//                break;
-//        }
-//        return ageGroup;
-//    }
+    public AgeType classifyAge(Integer age){
+        AgeType ageGroup;
+        switch (age/10){
+            case 1:
+                ageGroup = AgeType.teenager;
+                break;
+            case 2:
+                ageGroup = AgeType.twenties;
+                break;
+            case 3:
+                ageGroup = AgeType.thirties;
+                break;
+            case 4:
+                ageGroup = AgeType.fourties;
+                break;
+            case 5:
+                ageGroup = AgeType.fifties;
+                break;
+            default:
+                ageGroup = AgeType.NULL;
+                break;
+        }
+        return ageGroup;
+    }
 //    public void clearCategoryList(){
 //        this.categoryLists.clear();
 //    }
