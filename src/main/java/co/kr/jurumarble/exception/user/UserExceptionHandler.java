@@ -15,26 +15,26 @@ public class UserExceptionHandler {
 
     @ExceptionHandler(AlreadyExistUserException.class)
     public ResponseEntity<ExceptionMessage> handle(AlreadyExistUserException e) {
-        final ExceptionMessage message = ExceptionMessage.of(e.getStatus(), e.getMessage());
-        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ExceptionMessage.of(e.getStatus(), e.getMessage()));
     }
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ExceptionMessage> handle(UserNotFoundException e) {
-        final ExceptionMessage message = ExceptionMessage.of(e.getStatus(), e.getMessage());
-        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ExceptionMessage.of(e.getStatus(), e.getMessage()));
     }
 
     @ExceptionHandler(UserIllegalStateException.class)
     public ResponseEntity<ExceptionMessage> handle(UserIllegalStateException e) {
-        final ExceptionMessage message = ExceptionMessage.of(e.getStatus(), e.getMessage());
-        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ExceptionMessage.of(e.getStatus(), e.getMessage()));
     }
 
     @ExceptionHandler(UserNotAccessRightException.class)
     public ResponseEntity<ExceptionMessage> handle(UserNotAccessRightException e) {
-        final ExceptionMessage message = ExceptionMessage.of(e.getStatus(), e.getMessage());
-        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ExceptionMessage.of(e.getStatus(), e.getMessage()));
     }
 
 }
