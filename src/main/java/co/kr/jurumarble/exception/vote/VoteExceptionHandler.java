@@ -15,13 +15,13 @@ public class VoteExceptionHandler {
 
     @ExceptionHandler(VoteNotFoundException.class)
     public ResponseEntity<ExceptionMessage> handle(VoteNotFoundException e) {
-        final ExceptionMessage message = ExceptionMessage.of(e.getStatus(), e.getMessage());
-        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ExceptionMessage.of(e.getStatus(), e.getMessage()));
     }
 
     @ExceptionHandler(AlreadyUserDoVoteException.class)
     public ResponseEntity<ExceptionMessage> handle(AlreadyUserDoVoteException e) {
-        final ExceptionMessage message = ExceptionMessage.of(e.getStatus(), e.getMessage());
-        return new ResponseEntity<>(message, HttpStatus.FORBIDDEN);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(ExceptionMessage.of(e.getStatus(), e.getMessage()));
     }
 }

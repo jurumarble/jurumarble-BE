@@ -16,7 +16,7 @@ public class CommentExceptionHandler {
 
     @ExceptionHandler(CommentNotFoundException.class)
     public ResponseEntity<ExceptionMessage> handle(CommentNotFoundException e) {
-        final ExceptionMessage message = ExceptionMessage.of(e.getStatus(), e.getMessage());
-        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ExceptionMessage.of(e.getStatus(), e.getMessage()));
     }
 }
