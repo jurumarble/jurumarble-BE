@@ -2,7 +2,6 @@ package co.kr.jurumarble.interceptor;
 
 import co.kr.jurumarble.token.domain.JwtTokenProvider;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -16,21 +15,15 @@ import java.util.HashMap;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class JwtInterceptor implements HandlerInterceptor {
+public class TokenInterceptor implements HandlerInterceptor {
 
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     // 컨트롤러 호출전에 호출
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        try {
-            parseTokenAndTransferUserId(request, authorizationHeader);
-        } catch (JwtException | IllegalArgumentException exception) {
-            log.info("jwtException : {}", exception);
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "인증에 실패하였습니다.");
-            return false;
-        }
+        parseTokenAndTransferUserId(request, authorizationHeader);
         return true;
     }
 

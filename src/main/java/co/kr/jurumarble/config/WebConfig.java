@@ -1,10 +1,7 @@
 package co.kr.jurumarble.config;
 
-import co.kr.jurumarble.interceptor.JwtInterceptor;
-import co.kr.jurumarble.token.domain.JwtTokenProvider;
+import co.kr.jurumarble.interceptor.TokenInterceptor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -15,11 +12,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
     public static final String ALLOWED_METHOD_NAMES = "GET,HEAD,POST,PUT,DELETE,TRACE,OPTIONS,PATCH";
-    private final JwtInterceptor jwtInterceptor;
+    private final TokenInterceptor tokenInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(jwtInterceptor)
+        registry.addInterceptor(tokenInterceptor)
                 .order(1)
                 .addPathPatterns("/api/users/additional-info");
     }
