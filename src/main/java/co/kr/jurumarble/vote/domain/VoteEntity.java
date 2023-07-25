@@ -6,7 +6,6 @@ import co.kr.jurumarble.enums.AgeType;
 import co.kr.jurumarble.enums.GenderType;
 import co.kr.jurumarble.enums.MBTIType;
 import co.kr.jurumarble.user.domain.UserEntity;
-import co.kr.jurumarble.vote.dto.request.CreateVoteRequest;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -94,18 +93,19 @@ public class VoteEntity extends BaseTimeEntity {
 //        this.bookmarkList.remove(bookmark);
 //    }
 
-    public VoteEntity(CreateVoteRequest request, UserEntity user) {
-        this.postedUser = user;
-        this.title = request.getTitle();
-        this.imageA = request.getImageA();
-        this.imageB = request.getImageB();
-        this.titleA = request.getTitleA();
-        this.titleB = request.getTitleB();
-        this.filteredGender = request.getFilteredGender();
-        this.filteredAge = request.getFilteredAge();
-        this.filteredMbti = request.getFilteredMbti();
-    }
-//
+//    public VoteEntity(CreateVoteRequest request, UserEntity user) {
+//        this.postedUser = user;
+//        this.title = request.getTitle();
+//        this.imageA = request.getImageA();
+//        this.imageB = request.getImageB();
+//        this.titleA = request.getTitleA();
+//        this.titleB = request.getTitleB();
+//        this.filteredGender = request.getFilteredGender();
+//        this.filteredAge = request.getFilteredAge();
+//        this.filteredMbti = request.getFilteredMbti();
+//    }
+
+    //
 //    public void  update(UpdateVoteRequest updateVoteRequest) {
 //        this.title = updateVoteRequest.getTitle();
 //        this.titleA = updateVoteRequest.getTitleA();
