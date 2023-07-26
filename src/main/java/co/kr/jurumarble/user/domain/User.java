@@ -50,47 +50,7 @@ public class User extends BaseTimeEntity {
     @Column(name = "modified_MBTI_Date")
     private LocalDateTime modifiedMBTIDate;
 
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
-//    private List<Bookmark> bookmarkList = new ArrayList<>();
 
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
-//    private List<CommentEmotion> commentEmotionList = new ArrayList<>();
-
-
-//    public void mappingCommentLike(CommentEmotion commentEmotion) {
-//        this.commentEmotionList.add(commentEmotion);
-//    }
-//
-//    public void mappingBookmark(Bookmark bookmark) {
-//        this.bookmarkList.add(bookmark);
-//    }
-
-//    public void updateProfile(String nickname, String image) {
-//        this.nickname = nickname;
-//        this.imageUrl = image;
-//    }
-//
-//    public void updateMbti(MBTI mbti, LocalDateTime modifiedMBTIDate) {
-//        this.mbti = mbti;
-//        this.modifiedMBTIDate = modifiedMBTIDate;
-//    }
-//
-//    @Builder
-//    public User(String nickname, String email, String imageUrl, String password, Providers provider, String providerId, Role role, Integer age, Gender gender, MBTI mbti, List<CategoryEntity> categoryLists, LocalDateTime modifiedMBTIDate) {
-//        this.nickname = nickname;
-//        this.email = email;
-//        this.imageUrl = imageUrl;
-//        this.password = password;
-//        this.provider = provider;
-//        this.providerId = providerId;
-//        this.role = role;
-//        this.age = age;
-//        this.gender = gender;
-//        this.mbti = mbti;
-//        this.categoryLists = categoryLists;
-//        this.modifiedMBTIDate = modifiedMBTIDate;
-//    }
-//
     public AgeType classifyAge(Integer age){
         AgeType ageGroup;
         switch (age/10){
@@ -115,8 +75,7 @@ public class User extends BaseTimeEntity {
         }
         return ageGroup;
     }
-//    public void clearCategoryList(){
-//        this.categoryLists.clear();
-//    }
+
+
 
 }
