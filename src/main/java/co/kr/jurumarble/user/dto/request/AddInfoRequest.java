@@ -1,8 +1,7 @@
 package co.kr.jurumarble.user.dto.request;
 
-import kr.co.chooz.user.domain.entitiy.GenderType;
-import kr.co.chooz.user.domain.entitiy.MbtiType;
-import kr.co.chooz.user.dto.AddUserInfo;
+
+import co.kr.jurumarble.enums.GenderType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

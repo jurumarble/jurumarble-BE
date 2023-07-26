@@ -1,8 +1,6 @@
 package co.kr.jurumarble.user.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import kr.co.chooz.user.domain.entitiy.ProviderType;
-import kr.co.chooz.user.dto.ThirdPartySignupInfo;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;

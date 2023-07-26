@@ -1,6 +1,5 @@
 package co.kr.jurumarble.user.dto.request;
 
-import kr.co.chooz.user.dto.AddUserCategory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
