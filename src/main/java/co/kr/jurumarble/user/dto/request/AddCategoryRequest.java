@@ -1,5 +1,6 @@
 package co.kr.jurumarble.user.dto.request;
 
+import co.kr.jurumarble.user.dto.AddUserCategory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -2,7 +2,7 @@ package co.kr.jurumarble.vote.dto.response;
 
 import co.kr.jurumarble.enums.AgeType;
 import co.kr.jurumarble.enums.GenderType;
-import co.kr.jurumarble.enums.MBTIType;
+import co.kr.jurumarble.enums.MbtiType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,12 +16,12 @@ public class GetVoteUserResponse {
 
     private AgeType userAge;
 
-    private MBTIType userMbti;
+    private MbtiType userMbti;
 
     private String nickName;
 
     @Builder
-    public GetVoteUserResponse(String userImage, GenderType userGender, AgeType userAge, MBTIType userMbti, String nickName) {
+    public GetVoteUserResponse(String userImage, GenderType userGender, AgeType userAge, MbtiType userMbti, String nickName) {
         this.userImage = userImage;
         this.userGender = userGender;
         this.userAge = userAge;

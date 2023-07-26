@@ -2,6 +2,8 @@ package co.kr.jurumarble.user.dto.request;
 
 
 import co.kr.jurumarble.enums.GenderType;
+import co.kr.jurumarble.enums.MbtiType;
+import co.kr.jurumarble.user.dto.AddUserInfo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

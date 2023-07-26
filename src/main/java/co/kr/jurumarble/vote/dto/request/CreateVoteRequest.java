@@ -2,7 +2,7 @@ package co.kr.jurumarble.vote.dto.request;
 
 import co.kr.jurumarble.enums.AgeType;
 import co.kr.jurumarble.enums.GenderType;
-import co.kr.jurumarble.enums.MBTIType;
+import co.kr.jurumarble.enums.MbtiType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -37,10 +37,10 @@ public class CreateVoteRequest {
     private AgeType filteredAge;
 
     @Schema(description = "투표 받고 싶은 MBTI")
-    private MBTIType filteredMbti;
+    private MbtiType filteredMbti;
 
     @Builder
-    public CreateVoteRequest(String title, String titleA, String titleB, String imageA, String imageB, GenderType filteredGender, AgeType filteredAge, MBTIType filteredMbti) {
+    public CreateVoteRequest(String title, String titleA, String titleB, String imageA, String imageB, GenderType filteredGender, AgeType filteredAge, MbtiType filteredMbti) {
         this.title = title;
         this.titleA = titleA;
         this.titleB = titleB;

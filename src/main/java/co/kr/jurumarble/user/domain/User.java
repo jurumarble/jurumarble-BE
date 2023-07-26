@@ -3,7 +3,7 @@ package co.kr.jurumarble.user.domain;
 import co.kr.jurumarble.common.domain.BaseTimeEntity;
 import co.kr.jurumarble.enums.AgeType;
 import co.kr.jurumarble.enums.GenderType;
-import co.kr.jurumarble.enums.MBTIType;
+import co.kr.jurumarble.enums.MbtiType;
 import co.kr.jurumarble.user.enums.Providers;
 import co.kr.jurumarble.user.enums.Role;
 import lombok.*;
@@ -45,7 +45,7 @@ public class User extends BaseTimeEntity {
     private GenderType gender;
 
     @Enumerated(EnumType.STRING)
-    private MBTIType mbti;
+    private MbtiType mbti;
 
     @Column(name = "modified_MBTI_Date")
     private LocalDateTime modifiedMBTIDate;
