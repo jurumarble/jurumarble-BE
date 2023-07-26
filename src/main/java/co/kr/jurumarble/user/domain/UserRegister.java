@@ -18,7 +18,7 @@ public class UserRegister {
             throw new IllegalArgumentException("이미 가입된 이메일입니다.");
         }
         User user = userOfWhenLogin(providerId, providerType);
-        userRepository.register(user);
+        userRepository.save(user);
     }
 
     /**
@@ -29,7 +29,7 @@ public class UserRegister {
             return false;
         }
         User user = userOfWhenLogin(providerId, providerType);
-        userRepository.register(user);
+        userRepository.save(user);
         return true;
     }
 

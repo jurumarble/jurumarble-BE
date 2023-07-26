@@ -1,5 +1,6 @@
 package co.kr.jurumarble.token.domain;
 
+import co.kr.jurumarble.exception.token.TokenNotFoundException;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -78,7 +79,7 @@ public class JwtTokenProvider {
     private void validationAuthorizationHeader(String header) {
         log.info("*******header : {}", header);
         if (header == null || !header.startsWith("Bearer ")) {
-            throw new IllegalArgumentException();
+            throw new TokenNotFoundException();
         }
     }
 

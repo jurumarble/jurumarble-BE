@@ -1,11 +1,11 @@
 package co.kr.jurumarble.user.domain;
 
 import co.kr.jurumarble.common.domain.BaseTimeEntity;
+import co.kr.jurumarble.user.dto.AddUserInfo;
 import co.kr.jurumarble.user.enums.AgeType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
 import co.kr.jurumarble.user.enums.ProviderType;
-import co.kr.jurumarble.user.enums.Role;
 import lombok.*;
 
 import javax.persistence.*;
@@ -14,9 +14,10 @@ import java.util.Objects;
 
 @Entity
 @Getter
-@Setter
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "users")
 public class User extends BaseTimeEntity {
+
     @Id
     @GeneratedValue
     @Column(name = "USER_ID")
@@ -28,16 +29,16 @@ public class User extends BaseTimeEntity {
     @Column
     private String email;
 
+    private String password;
+
     private String imageUrl;
 
-    private String password;
+    private Integer age;
 
     @Enumerated(EnumType.STRING)
     private ProviderType providerType;    // oauth2를 이용할 경우 어떤 플랫폼을 이용하는지
 
     private String providerId;  // oauth2를 이용할 경우 아이디값
-
-    private Integer age;
 
     @Enumerated(EnumType.STRING)
     private GenderType gender;
@@ -45,8 +46,8 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private MbtiType mbti;
 
-    @Column(name = "modified_MBTI_Date")
-    private LocalDateTime modifiedMBTIDate;
+    @Column
+    private LocalDateTime modifiedMbtiDate;
 
 
     public AgeType classifyAge(Integer age) {
@@ -74,8 +75,14 @@ public class User extends BaseTimeEntity {
         return ageGroup;
     }
 
+    public void addInfo(AddUserInfo addUserInfo) {
+        this.mbti = addUserInfo.getMbti();
+        this.age = addUserInfo.getAge();
+        this.gender = addUserInfo.getGender();
+    }
+
     @Builder
-    private User(Long id, String nickname, String email, String imageUrl, String password, ProviderType providerType, String providerId, Integer age, GenderType gender, MbtiType mbti, LocalDateTime modifiedMBTIDate) {
+    private User(Long id, String nickname, String email, String imageUrl, String password, ProviderType providerType, String providerId, Integer age, GenderType gender, MbtiType mbti, LocalDateTime modifiedMbtiDate) {
         this.id = id;
         this.nickname = nickname;
         this.email = email;
@@ -86,7 +93,7 @@ public class User extends BaseTimeEntity {
         this.age = age;
         this.gender = gender;
         this.mbti = mbti;
-        this.modifiedMBTIDate = modifiedMBTIDate;
+        this.modifiedMbtiDate = modifiedMbtiDate;
     }
 
 
