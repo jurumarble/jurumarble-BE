@@ -2,9 +2,9 @@ package co.kr.jurumarble.vote.domain;
 
 
 import co.kr.jurumarble.common.domain.BaseTimeEntity;
-import co.kr.jurumarble.enums.AgeType;
-import co.kr.jurumarble.enums.GenderType;
-import co.kr.jurumarble.enums.MbtiType;
+import co.kr.jurumarble.user.enums.AgeType;
+import co.kr.jurumarble.user.enums.GenderType;
+import co.kr.jurumarble.user.enums.MbtiType;
 import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.vote.dto.request.CreateVoteRequest;
 import co.kr.jurumarble.vote.dto.request.UpdateVoteRequest;

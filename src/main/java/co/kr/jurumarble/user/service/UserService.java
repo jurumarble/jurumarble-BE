@@ -1,5 +1,9 @@
 package co.kr.jurumarble.user.service;
 
+import co.kr.jurumarble.client.common.ThirdPartyAuthorizer;
+import co.kr.jurumarble.client.common.ThirdPartyAuthorizerProvider;
+import co.kr.jurumarble.token.domain.TokenGenerator;
+import co.kr.jurumarble.user.domain.UserManager;
 import co.kr.jurumarble.user.domain.UserRegister;
 import co.kr.jurumarble.user.dto.*;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +19,7 @@ public class UserService {
     private final UserRegister userRegister;
     private final ThirdPartyAuthorizerProvider thirdPartyAuthorizerProvider;
     private final TokenGenerator tokenGenerator;
+    private final UserManager userManager;
 
     public void signup(SocialLoginInfo socialLoginInfo) {
         userRegister.register(socialLoginInfo.getProviderId(), socialLoginInfo.getProviderType());

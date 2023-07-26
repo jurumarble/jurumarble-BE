@@ -1,4 +1,4 @@
-package co.kr.jurumarble.enums;
+package co.kr.jurumarble.user.enums;
 
 import co.kr.jurumarble.common.enums.EnumModel;
 

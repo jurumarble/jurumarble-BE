@@ -1,6 +1,6 @@
 package co.kr.jurumarble.user.dto;
 
-import co.kr.jurumarble.enums.ProviderType;
+import co.kr.jurumarble.user.enums.ProviderType;
 import lombok.Getter;
 
 @Getter

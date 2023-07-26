@@ -1,15 +1,16 @@
 package co.kr.jurumarble.user.domain;
 
 import co.kr.jurumarble.common.domain.BaseTimeEntity;
-import co.kr.jurumarble.enums.AgeType;
-import co.kr.jurumarble.enums.GenderType;
-import co.kr.jurumarble.enums.MbtiType;
-import co.kr.jurumarble.user.enums.Providers;
+import co.kr.jurumarble.user.enums.AgeType;
+import co.kr.jurumarble.user.enums.GenderType;
+import co.kr.jurumarble.user.enums.MbtiType;
+import co.kr.jurumarble.user.enums.ProviderType;
 import co.kr.jurumarble.user.enums.Role;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -32,12 +33,9 @@ public class User extends BaseTimeEntity {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private Providers provider;    // oauth2를 이용할 경우 어떤 플랫폼을 이용하는지
+    private ProviderType providerType;    // oauth2를 이용할 경우 어떤 플랫폼을 이용하는지
 
     private String providerId;  // oauth2를 이용할 경우 아이디값
-
-    @Enumerated(EnumType.STRING)
-    private Role role;
 
     private Integer age;
 
@@ -51,9 +49,9 @@ public class User extends BaseTimeEntity {
     private LocalDateTime modifiedMBTIDate;
 
 
-    public AgeType classifyAge(Integer age){
+    public AgeType classifyAge(Integer age) {
         AgeType ageGroup;
-        switch (age/10){
+        switch (age / 10) {
             case 1:
                 ageGroup = AgeType.teenager;
                 break;
@@ -76,6 +74,32 @@ public class User extends BaseTimeEntity {
         return ageGroup;
     }
 
+    @Builder
+    private User(Long id, String nickname, String email, String imageUrl, String password, ProviderType providerType, String providerId, Integer age, GenderType gender, MbtiType mbti, LocalDateTime modifiedMBTIDate) {
+        this.id = id;
+        this.nickname = nickname;
+        this.email = email;
+        this.imageUrl = imageUrl;
+        this.password = password;
+        this.providerType = providerType;
+        this.providerId = providerId;
+        this.age = age;
+        this.gender = gender;
+        this.mbti = mbti;
+        this.modifiedMBTIDate = modifiedMBTIDate;
+    }
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

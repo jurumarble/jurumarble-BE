@@ -1,7 +1,7 @@
 package co.kr.jurumarble.user.dto;
 
-import co.kr.jurumarble.enums.GenderType;
-import co.kr.jurumarble.enums.MbtiType;
+import co.kr.jurumarble.user.enums.GenderType;
+import co.kr.jurumarble.user.enums.MbtiType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

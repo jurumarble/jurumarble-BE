@@ -1,6 +1,6 @@
 package co.kr.jurumarble.user.domain;
 
-import co.kr.jurumarble.enums.ProviderType;
+import co.kr.jurumarble.user.enums.ProviderType;
 import co.kr.jurumarble.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

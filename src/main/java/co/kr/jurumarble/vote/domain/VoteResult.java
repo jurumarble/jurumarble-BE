@@ -1,6 +1,6 @@
 package co.kr.jurumarble.vote.domain;
 
-import co.kr.jurumarble.enums.ChoiceType;
+import co.kr.jurumarble.user.enums.ChoiceType;
 import co.kr.jurumarble.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
