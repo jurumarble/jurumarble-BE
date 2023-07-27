@@ -1,6 +1,6 @@
 package co.kr.jurumarble.vote.domain;
 
-import co.kr.jurumarble.enums.ChoiceType;
+import co.kr.jurumarble.user.enums.ChoiceType;
 import co.kr.jurumarble.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class VoteResult {
 
     @Id
