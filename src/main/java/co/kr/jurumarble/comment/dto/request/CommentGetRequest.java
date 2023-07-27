@@ -1,15 +1,14 @@
 package co.kr.jurumarble.comment.dto.request;
 
-import co.kr.jurumarble.enums.AgeType;
-import co.kr.jurumarble.enums.GenderType;
-import co.kr.jurumarble.enums.MBTIType;
-import co.kr.jurumarble.enums.SortType;
+import co.kr.jurumarble.comment.enums.SortType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class CommentGetRequest {
 

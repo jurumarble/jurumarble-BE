@@ -8,6 +8,7 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @NoArgsConstructor
 public class CommentCreateRequest {
+
     private Long parentId;
 
     @NotBlank

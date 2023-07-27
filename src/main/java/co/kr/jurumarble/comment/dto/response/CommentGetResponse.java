@@ -1,17 +1,21 @@
 package co.kr.jurumarble.comment.dto.response;
 
 
-import co.kr.jurumarble.enums.AgeType;
-import co.kr.jurumarble.enums.GenderType;
-import co.kr.jurumarble.enums.MBTIType;
+import co.kr.jurumarble.comment.domain.Comment;
+import co.kr.jurumarble.comment.dto.request.CommentGetRequest;
+import co.kr.jurumarble.user.enums.AgeType;
+import co.kr.jurumarble.user.enums.GenderType;
+import co.kr.jurumarble.user.enums.MbtiType;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@Setter
 public class CommentGetResponse {
 
     private Long id;
@@ -30,14 +34,14 @@ public class CommentGetResponse {
 
     private AgeType age;
 
-    private MBTIType mbti;
+    private MbtiType mbti;
 
     private LocalDateTime createdDate;
 
     private List<CommentGetResponse> children;
 
     @Builder
-    public CommentGetResponse(Long id, Long userId, String nickName, Long parentId, String content, String imageUrl, GenderType gender, AgeType age, MBTIType mbti, LocalDateTime createdDate, List<CommentGetResponse> children) {
+    public CommentGetResponse(Long id, Long userId, String nickName, Long parentId, String content, String imageUrl, GenderType gender, AgeType age, MbtiType mbti, LocalDateTime createdDate, List<CommentGetResponse> children) {
         this.id = id;
         this.userId = userId;
         this.nickName = nickName;
@@ -50,4 +54,28 @@ public class CommentGetResponse {
         this.createdDate = createdDate;
         this.children = children;
     }
+
+    @Builder
+    public CommentGetResponse(Comment comment) {
+        this.id = comment.getId();
+        this.userId = comment.getUser().getId();
+        this.content = comment.getContent();
+        this.gender = comment.getGender();
+        this.imageUrl = comment.getUser().getImageUrl();
+        this.age = comment.getAge();
+        this.mbti = comment.getMbti();
+        this.nickName = comment.getUser().getNickname();
+        this.createdDate = comment.getCreatedDate();
+        this.children = new ArrayList<>();
+
+        if (comment.getParent() != null) {
+            this.parentId = comment.getParent().getId();
+        } else {
+            this.parentId = null;
+        }
+    }
+
+
+
+
 }
