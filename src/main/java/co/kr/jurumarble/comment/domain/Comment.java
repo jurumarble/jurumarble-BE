@@ -45,8 +45,10 @@ public class Comment extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column
     private GenderType gender;
+
     @Column
     private Long likeCount;
+
     @Column
     private Long hateCount;
 
@@ -57,9 +59,14 @@ public class Comment extends BaseTimeEntity {
     @OneToMany(mappedBy = "parent", orphanRemoval = true)
     private List<Comment> children = new ArrayList<>();
 
-    public Comment(CommentCreateRequest request, Comment parentComment) {
+    public Comment(CommentCreateRequest request, Comment parentComment, User user, Long voteId) {
+        this.user = user;
+        this.voteId = voteId;
         this.parent = parentComment;
         this.content = request.getContent();
+        this.age = user.classifyAge(user.getAge());
+        this.mbti = user.getMbti();
+        this.gender = user.getGender();
     }
 
 //    @OneToMany(fetch = FetchType.LAZY, mappedBy = "comment")

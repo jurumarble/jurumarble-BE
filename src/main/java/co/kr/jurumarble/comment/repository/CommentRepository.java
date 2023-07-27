@@ -13,13 +13,13 @@ import java.util.List;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
 
-    @Query(value = "SELECT c FROM Comment c WHERE c.voteId = :postId AND c.parent IS NULL ORDER BY (c.likeCount + c.hateCount) DESC , c.createdDate DESC")
+    @Query(value = "SELECT c FROM Comment c WHERE c.voteId = :voteId AND c.parent IS NULL ORDER BY (c.likeCount + c.hateCount) DESC , c.createdDate DESC")
     List<Comment> findHotComments(@Param("voteId") Long voteId, Pageable pageable);                    //인기순 댓글 불러오기
 
-    @Query(value = "SELECT c FROM Comment c WHERE c.voteId = :postId AND c.parent IS NULL Order By c.createdDate DESC")
+    @Query(value = "SELECT c FROM Comment c WHERE c.voteId = :voteId AND c.parent IS NULL Order By c.createdDate DESC")
     List<Comment> findNewestComments(@Param("voteId") Long voteId, Pageable pageable);                 //최신순 댓글 불러오기
 
-    int countCommentsByVoteId(@Param("voteId") Long voteId);
+    int countByVoteIdAndParentIsNull(Long voteId);
 
-    List<Comment> findByParentComment(Comment parentComment);
+    List<Comment> findByParent(Comment parent);
 }

@@ -8,12 +8,11 @@ import co.kr.jurumarble.comment.repository.CommentRepository;
 import co.kr.jurumarble.exception.comment.CommentNotFoundException;
 import co.kr.jurumarble.exception.user.UserNotFoundException;
 import co.kr.jurumarble.exception.vote.VoteNotFoundException;
+import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.user.repository.UserRepository;
 import co.kr.jurumarble.vote.repository.VoteRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,36 +28,51 @@ public class CommentService {
     private final CommentRepository commentRepository;
 
     public void createComment(Long voteId, Long userId, CommentCreateRequest request) {
-        validateUserAndVote(voteId, userId);
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment parentComment = checkParentComment(request);
 
-        Comment comment = new Comment(request, parentComment);
+        Comment comment = new Comment(request, parentComment, user, voteId);
         commentRepository.save(comment);
 
     }
 
-    public Slice<Comment> getCommentsBySortType(Long voteId, CommentGetRequest request) {
+    private void getComments(Long voteId, CommentGetRequest request, Pageable pageable) {
+        List<Comment> comments = getCommentsBySortType(voteId, request, pageable); //정렬방식에 따라 Pageable 적용하여 부모댓글 가져오기
 
-        Pageable pageable = PageRequest.of(request.getPage(), request.getSize());
+        getChildCommentByParentComment(comments);  //부모댓글에 속한 대댓글들 다가져오기
 
-        getCommentBySortType(voteId, request, pageable);
+        int countComments = commentRepository.countByVoteIdAndParentIsNull(voteId);   //투표에 속한 부모 댓글수 전부 가져오기
+
+
+
 
 
     }
 
-    private void getCommentBySortType(Long voteId, CommentGetRequest request, Pageable pageable) {
-        List<Comment> comments; //댓글
+    public void updateComment(Long voteId, Long commentId, Long userId, CommentUpdateRequest request) {
+        userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+        Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
+
+        comment.updateContent(request);
+    }
+
+    public void deleteComment(Long voteId, Long commentId, Long userId) {
+        userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+        Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
+
+        commentRepository.delete(comment);
+    }
+
+
+    private void getChildCommentByParentComment(List<Comment> comments) {
         List<Comment> childComments = new ArrayList<>(); //대댓글
-
-        List<Comment> comments = getCommentsBySortType(voteId, request, pageable);
-
-        int countComments = commentRepository.countCommentsByVoteId(voteId);
-
         //대댓글 가져오기
-        for (Comment parentComment : comments) {
-            childComments.addAll(commentRepository.findByParentComment(parentComment));
+        for (Comment parent : comments) {
+            childComments.addAll(commentRepository.findByParent(parent));
         }
-
         comments.addAll(childComments);
     }
 
@@ -75,26 +89,6 @@ public class CommentService {
                 throw new IllegalArgumentException("적절한 정렬 방식이 아닙니다.");   //예외처리 분리해야 함
         }
         return comments;
-    }
-
-
-    public void updateComment(Long voteId, Long commentId, Long userId, CommentUpdateRequest request) {
-        validateUserAndVote(voteId, userId);
-        Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
-
-        comment.updateContent(request);
-    }
-
-    public void deleteComment(Long voteId, Long commentId, Long userId) {
-        validateUserAndVote(voteId, userId);
-        Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
-
-        commentRepository.delete(comment);
-    }
-
-    private void validateUserAndVote(Long voteId, Long userId) {
-        userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
     }
 
     private Comment checkParentComment(CommentCreateRequest request) {
