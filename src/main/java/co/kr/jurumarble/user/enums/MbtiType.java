@@ -1,8 +1,8 @@
-package co.kr.jurumarble.enums;
+package co.kr.jurumarble.user.enums;
 
 import co.kr.jurumarble.common.enums.EnumModel;
 
-public enum MBTIType implements EnumModel {
+public enum MbtiType implements EnumModel {
 
     ENFJ("enfj"),
     ENFP("enfp"),
@@ -24,7 +24,7 @@ public enum MBTIType implements EnumModel {
 
     private String value;
 
-    MBTIType(String value) {
+    MbtiType(String value) {
         this.value = value;
     }
 
