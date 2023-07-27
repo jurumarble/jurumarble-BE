@@ -110,7 +110,7 @@ public class Vote extends BaseTimeEntity {
 
     }
 
-    public boolean isUsersVote(Long userId) {
+    public boolean isVoteOfUser(Long userId) {
 
         return this.postedUser.getId().equals(userId);
 

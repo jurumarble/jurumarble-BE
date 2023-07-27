@@ -50,9 +50,12 @@ public class User extends BaseTimeEntity {
     private LocalDateTime modifiedMbtiDate;
 
 
-    public AgeType classifyAge(Integer age) {
+    public AgeType classifyAge(Integer age){
+        if (age == null) {
+            return AgeType.NULL; // 혹은 원하는 다른 동작 수행
+        }
         AgeType ageGroup;
-        switch (age / 10) {
+        switch (age/10){
             case 1:
                 ageGroup = AgeType.teenager;
                 break;

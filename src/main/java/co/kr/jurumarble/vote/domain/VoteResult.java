@@ -36,11 +36,9 @@ public class VoteResult {
     @Enumerated(EnumType.STRING)
     private ChoiceType choice;
 
-    public void doVote(Vote vote, User user, ChoiceType choice) {
+    public VoteResult(Vote vote, User votedUser, ChoiceType choice) {
         this.vote = vote;
-        vote.addVoteResult(this);
-        this.votedUser = user;
+        this.votedUser = votedUser;
         this.choice = choice;
     }
-
 }
