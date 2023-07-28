@@ -7,6 +7,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Objects;
 
 @Component
 public class NicknameGenerator {
@@ -15,16 +16,12 @@ public class NicknameGenerator {
      * 외부 api 호출해서 랜덤닉네임을 생성
      * @return GetUserNickNameRequest
      */
-    public GetUserNickNameRequest generateRandomNickName() {
+    public String generateRandomNickName() {
         URI uri = ofUri();
-        ResponseEntity<GetUserNickNameRequest> result = requestNickName(uri);
-        return result.getBody();
-    }
-
-    private static ResponseEntity<GetUserNickNameRequest> requestNickName(URI uri) {
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<GetUserNickNameRequest> result = restTemplate.getForEntity(uri, GetUserNickNameRequest.class);
-        return result;
+        GetUserNickNameRequest getUserNickNameRequest = restTemplate.getForObject(uri, GetUserNickNameRequest.class);
+        return Objects.requireNonNull(getUserNickNameRequest).getWords()[0];
+
     }
 
     private static URI ofUri() {

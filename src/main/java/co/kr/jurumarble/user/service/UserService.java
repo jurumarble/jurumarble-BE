@@ -26,13 +26,17 @@ public class UserService {
     }
 
     public LoginToken signupByThirdParty(ThirdPartySignupInfo signupInfo) {
-        ThirdPartyAuthorizer authorizer = thirdPartyAuthorizerProvider.get(signupInfo.getProviderType());
-        String accessToken = authorizer.getAccessToken(signupInfo);
-        Map<String, String> userInfo = authorizer.getUserInfo(accessToken);
-        String providerId = userInfo.get("id");
+        String providerId = requestProviderIdFromThirdParty(signupInfo);
 
         boolean isNewUser = userRegister.registerIfNeed(providerId, signupInfo.getProviderType());
         return tokenGenerator.generate(providerId, isNewUser);
+    }
+
+    private String requestProviderIdFromThirdParty(ThirdPartySignupInfo signupInfo) {
+        ThirdPartyAuthorizer authorizer = thirdPartyAuthorizerProvider.get(signupInfo.getProviderType());
+        String accessToken = authorizer.getAccessToken(signupInfo);
+        Map<String, String> userInfo = authorizer.getUserInfo(accessToken);
+        return userInfo.get("id");
     }
 
     public void addUserInfo(Long userId, AddUserInfo addUserInfo) {

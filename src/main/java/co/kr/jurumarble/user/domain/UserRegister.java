@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class UserRegister {
     private final UserRepository userRepository;
+    private final NicknameGenerator nicknameGenerator;
 
     /**
      * 일반 회원 가입
@@ -17,7 +18,8 @@ public class UserRegister {
         if (userRepository.existsByProviderId(providerId)) {
             throw new IllegalArgumentException("이미 가입된 이메일입니다.");
         }
-        User user = userOfWhenLogin(providerId, providerType);
+        String randomNickName = nicknameGenerator.generateRandomNickName();
+        User user = userOfWhenLogin(providerId, providerType, randomNickName);
         userRepository.save(user);
     }
 
@@ -28,15 +30,18 @@ public class UserRegister {
         if (userRepository.existsByProviderId(providerId)) {
             return false;
         }
-        User user = userOfWhenLogin(providerId, providerType);
+        String randomNickName = nicknameGenerator.generateRandomNickName();
+        User user = userOfWhenLogin(providerId, providerType, randomNickName);
         userRepository.save(user);
         return true;
     }
 
-    private User userOfWhenLogin(String providerId, ProviderType providerType) {
+    private User userOfWhenLogin(String providerId, ProviderType providerType, String nickName) {
         return User.builder()
+                .nickname(nickName)
                 .providerId(providerId)
                 .providerType(providerType)
                 .build();
     }
+
 }
