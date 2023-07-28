@@ -53,7 +53,7 @@ public class CommentService {
 
         List<CommentGetResponse> commentGetResponse = convertToCommentGetResponseList(comments); // 댓글 목록을 매개 변수로 받아, CommentGetResponse 목록을 반환
 
-        Slice<CommentGetResponse> slice = getSliceCommentGetResponses(voteId, request, pageable, commentGetResponse); // Response 리스트를 Slice 객체로 만들어주기
+        Slice<CommentGetResponse> slice = convertToSlice(voteId, request, pageable, commentGetResponse); // Response 리스트를 Slice 객체로 만들어주기
 
         return slice;
 
@@ -127,7 +127,7 @@ public class CommentService {
         return commentGetResponse;
     }
 
-    private Slice<CommentGetResponse> getSliceCommentGetResponses(Long voteId, CommentGetRequest request, Pageable pageable, List<CommentGetResponse> commentGetResponse) {
+    private Slice<CommentGetResponse> convertToSlice(Long voteId, CommentGetRequest request, Pageable pageable, List<CommentGetResponse> commentGetResponse) {
         int countComments = commentRepository.countByVoteIdAndParentIsNull(voteId);   //투표에 속한 부모 댓글수 전부 가져오기
         int lastPageNumber = (int) Math.ceil((double) countComments / request.getSize());
         boolean hasNext = request.getPage() < lastPageNumber - 1;
