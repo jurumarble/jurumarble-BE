@@ -9,7 +9,6 @@ import co.kr.jurumarble.comment.dto.response.CommentGetResponse;
 import co.kr.jurumarble.comment.enums.Emotion;
 import co.kr.jurumarble.comment.repository.CommentEmotionRepository;
 import co.kr.jurumarble.comment.repository.CommentRepository;
-import co.kr.jurumarble.exception.comment.CommentEmotionNotFoundException;
 import co.kr.jurumarble.exception.comment.CommentNotFoundException;
 import co.kr.jurumarble.exception.user.UserNotFoundException;
 import co.kr.jurumarble.exception.vote.VoteNotFoundException;
@@ -34,12 +33,11 @@ public class CommentService {
     private final UserRepository userRepository;
     private final VoteRepository voteRepository;
     private final CommentRepository commentRepository;
-
     private final CommentEmotionRepository commentEmotionRepository;
 
     public void createComment(Long voteId, Long userId, CommentCreateRequest request) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment parentComment = checkParentComment(request);
 
         Comment comment = new Comment(request, parentComment, user, voteId);
@@ -64,22 +62,30 @@ public class CommentService {
     }
 
 
-
     public void updateComment(Long voteId, Long commentId, Long userId, CommentUpdateRequest request) {
-        userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
 
         comment.updateContent(request);
     }
 
     public void deleteComment(Long voteId, Long commentId, Long userId) {
-        userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
 
         commentRepository.delete(comment);
     }
+
+    public void emoteComment(Long voteId, Long commentId, Long userId, Emotion emotion) {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+        Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
+
+        doEmote(emotion, user, comment);
+    }
+
 
 
     private void getChildCommentByParentComment(List<Comment> comments) {
@@ -140,52 +146,44 @@ public class CommentService {
         return slice;
     }
 
-    public void emoteComment(Long voteId, Long commentId, Long userId, Emotion emotion) {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
-        Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
 
-        doEmote(emotion, user, comment);
-    }
-
-    private void doEmote(Emotion emotion, User user, Comment comment) {  //책임에 맞게 리팩토링 해야함
+    private void doEmote(Emotion emotion, User user, Comment comment) {
         Optional<CommentEmotion> byCommentAndUser = commentEmotionRepository.findByCommentAndUser(comment, user);
 
-        byCommentAndUser.ifPresentOrElse(commentEmotion -> {
-
-                    //좋아요(싫어요)를 기존에 눌렀는데 또 눌렀을 경우 좋아요(싫어요) 취소
+        byCommentAndUser.ifPresentOrElse(
+                commentEmotion -> {
                     if (emotion == commentEmotion.getEmotion()) {
-                        commentEmotionRepository.delete(commentEmotion);
-                        comment.removeEmotion(commentEmotion);
-                        comment.updateLikeHateCount();
+                        //좋아요(싫어요)를 기존에 눌렀는데 또 눌렀을 경우 좋아요(싫어요) 취소
+                        cancelEmotion(commentEmotion, comment);
+                    } else {
+                        //싫어요(좋아요)를 기존에 누른 상태로 좋아요(싫어요)를 누른 경우 싫어요(좋아요) 취소 후 좋아요(싫어요)로 등록
+                        changeEmotion(commentEmotion, emotion, user, comment);
                     }
-                    //싫어요(좋아요)를 기존에 누른 상태로 좋아요(싫어요)를 누른 경우 싫어요(좋아요) 취소 후 좋아요(싫어요)로 등록
-                    else {
-                        commentEmotionRepository.delete(commentEmotion);
-                        comment.removeEmotion(commentEmotion);
-
-                        CommentEmotion changeEmotion = new CommentEmotion();
-
-                        changeEmotion.setEmote(emotion);
-                        changeEmotion.mappingComment(comment);
-                        changeEmotion.mappingUser(user);
-                        comment.updateLikeHateCount();
-
-                        commentEmotionRepository.save(changeEmotion);
-                    }
-
                 },
                 // 좋아요(싫어요)가 없을 경우 좋아요(싫어요) 추가
-                () -> {
-                    CommentEmotion commentEmotion = new CommentEmotion();
+                () -> addEmotion(emotion, user, comment));
+    }
 
-                    commentEmotion.setEmote(emotion);
-                    commentEmotion.mappingComment(comment);
-                    commentEmotion.mappingUser(user);
-                    comment.updateLikeHateCount();
 
-                    commentEmotionRepository.save(commentEmotion);
-                });
+    private void cancelEmotion(CommentEmotion commentEmotion, Comment comment) {
+        commentEmotionRepository.delete(commentEmotion);
+        comment.removeEmotion(commentEmotion);
+        comment.updateLikeHateCount();
+    }
+
+    private void changeEmotion(CommentEmotion existingEmotion, Emotion newEmotion, User user, Comment comment) {
+        commentEmotionRepository.delete(existingEmotion);
+        comment.removeEmotion(existingEmotion);
+        addEmotion(newEmotion, user, comment);
+    }
+
+    private void addEmotion(Emotion emotion, User user, Comment comment) {
+        CommentEmotion newEmotion = new CommentEmotion();
+        newEmotion.setEmote(emotion);
+        newEmotion.mappingComment(comment);
+        newEmotion.mappingUser(user);
+        comment.updateLikeHateCount();
+        commentEmotionRepository.save(newEmotion);
     }
 
 }
