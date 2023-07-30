@@ -6,6 +6,7 @@ import co.kr.jurumarble.user.dto.AddUserInfo;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -15,5 +16,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     public Optional<User> findByProviderId(String providerId);
 
     public Optional<User> findById(Long userId);
+
+    public Optional<User> findByIdAndDeletedDate(Long userId, LocalDateTime deletedAt);
 
 }
