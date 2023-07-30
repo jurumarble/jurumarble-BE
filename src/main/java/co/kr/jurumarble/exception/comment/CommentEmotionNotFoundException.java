@@ -7,9 +7,9 @@ import lombok.Getter;
 public class CommentEmotionNotFoundException extends IllegalArgumentException {
 
     private final StatusEnum status;
-    private static final String message = "해당 아이디를 가진 댓글이 없습니다 아이디 값을 다시 한번 확인하세요.";
+    private static final String message = "해당 아이디를 가진 Emote 가 없습니다 아이디 값을 다시 한번 확인하세요.";
     public CommentEmotionNotFoundException() {
         super(message);
-        this.status = StatusEnum.COMMENT_NOT_FOUND;
+        this.status = StatusEnum.COMMENT_EMOTION_NOT_FOUND;
     }
 }

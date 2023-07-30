@@ -7,9 +7,12 @@ import co.kr.jurumarble.comment.dto.request.CommentGetRequest;
 import co.kr.jurumarble.comment.dto.request.CommentUpdateRequest;
 import co.kr.jurumarble.comment.dto.response.CommentGetResponse;
 import co.kr.jurumarble.comment.enums.Emotion;
+import co.kr.jurumarble.comment.enums.SortType;
 import co.kr.jurumarble.comment.repository.CommentEmotionRepository;
 import co.kr.jurumarble.comment.repository.CommentRepository;
 import co.kr.jurumarble.exception.comment.CommentNotFoundException;
+import co.kr.jurumarble.exception.comment.InvalidSortingMethodException;
+import co.kr.jurumarble.exception.comment.NestedCommentNotAllowedException;
 import co.kr.jurumarble.exception.user.UserNotFoundException;
 import co.kr.jurumarble.exception.vote.VoteNotFoundException;
 import co.kr.jurumarble.user.domain.User;
@@ -26,6 +29,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
+import static co.kr.jurumarble.comment.enums.SortType.ByPopularity;
+import static co.kr.jurumarble.comment.enums.SortType.ByTime;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -38,7 +44,9 @@ public class CommentService {
     public void createComment(Long voteId, Long userId, CommentCreateRequest request) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
-        Comment parentComment = checkParentComment(request);
+        Comment parentComment = checkParentComment(request);  // 부모댓글이 있는지 없는지 확인
+
+        checkNestedCommentAllowed(parentComment);
 
         Comment comment = new Comment(request, parentComment, user, voteId);
 
@@ -88,13 +96,18 @@ public class CommentService {
 
 
 
-    private void getChildCommentByParentComment(List<Comment> comments) {
-        List<Comment> childComments = new ArrayList<>(); //대댓글
-        //대댓글 가져오기
-        for (Comment parent : comments) {
-            childComments.addAll(commentRepository.findByParent(parent));
+    private Comment checkParentComment(CommentCreateRequest request) {
+        if (request.getParentId() == null) {
+            return null;
         }
-        comments.addAll(childComments);
+        return commentRepository.findById(request.getParentId())
+                .orElseThrow(() -> new CommentNotFoundException());
+    }
+
+    private void checkNestedCommentAllowed(Comment parentComment) {
+        if (parentComment != null && parentComment.getParent() != null) {
+            throw new NestedCommentNotAllowedException();
+        }
     }
 
     private List<Comment> findCommentsBySortType(Long voteId, CommentGetRequest request, Pageable pageable) {
@@ -107,18 +120,21 @@ public class CommentService {
                 comments = commentRepository.findHotComments(voteId, pageable);
                 break;
             default:
-                throw new IllegalArgumentException("적절한 정렬 방식이 아닙니다.");   //예외처리 분리해야 함
+                throw new InvalidSortingMethodException();
         }
         return comments;
     }
 
-    private Comment checkParentComment(CommentCreateRequest request) {
-        if (request.getParentId() == null) {
-            return null;
+    private void getChildCommentByParentComment(List<Comment> comments) {
+        List<Comment> childComments = new ArrayList<>(); //대댓글
+        //대댓글 가져오기
+        for (Comment parent : comments) {
+            childComments.addAll(commentRepository.findByParent(parent));
         }
-        return commentRepository.findById(request.getParentId())
-                .orElseThrow(() -> new CommentNotFoundException());
+        comments.addAll(childComments);
     }
+
+
 
     private List<CommentGetResponse> convertToCommentGetResponseList(List<Comment> parentComments) {
         List<CommentGetResponse> commentGetResponse = new ArrayList<>();
