@@ -38,4 +38,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(new TokenResponse(loginToken));
     }
 
+    @DeleteMapping()
+    public ResponseEntity<HttpStatus> deleteUser(@RequestAttribute Long userId) {
+        userService.deleteUser(userId);
+        return ResponseEntity.ok().build();
+    }
 }

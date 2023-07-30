@@ -42,4 +42,8 @@ public class UserService {
     public void addUserInfo(Long userId, AddUserInfo addUserInfo) {
         userManager.addUserInfo(userId, addUserInfo);
     }
+
+    public void deleteUser(Long userId) {
+        userManager.deleteUser(userId);
+    }
 }

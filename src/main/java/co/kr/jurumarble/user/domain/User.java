@@ -23,10 +23,8 @@ public class User extends BaseTimeEntity {
     @Column(name = "USER_ID")
     private Long id;
 
-    @Column
     private String nickname;
 
-    @Column
     private String email;
 
     private String password;
@@ -46,8 +44,9 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private MbtiType mbti;
 
-    @Column
     private LocalDateTime modifiedMbtiDate;
+
+    private LocalDateTime deletedDate;
 
 
     public AgeType classifyAge(Integer age) {
@@ -108,5 +107,9 @@ public class User extends BaseTimeEntity {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public void deleteUser() {
+        this.deletedDate = LocalDateTime.now();
     }
 }
