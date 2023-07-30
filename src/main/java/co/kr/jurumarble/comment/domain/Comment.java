@@ -2,6 +2,7 @@ package co.kr.jurumarble.comment.domain;
 
 import co.kr.jurumarble.comment.dto.request.CommentCreateRequest;
 import co.kr.jurumarble.comment.dto.request.CommentUpdateRequest;
+import co.kr.jurumarble.comment.enums.Emotion;
 import co.kr.jurumarble.common.domain.BaseTimeEntity;
 import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.user.enums.AgeType;
@@ -47,10 +48,10 @@ public class Comment extends BaseTimeEntity {
     private GenderType gender;
 
     @Column
-    private Long likeCount;
+    private Integer likeCount;
 
     @Column
-    private Long hateCount;
+    private Integer hateCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PARENT_ID")
@@ -58,6 +59,10 @@ public class Comment extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "parent", orphanRemoval = true)
     private List<Comment> children = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "comment")
+    private List<CommentEmotion> commentEmotionList = new ArrayList<>();
+
 
     public Comment(CommentCreateRequest request, Comment parent, User user, Long voteId) {
         this.user = user;
@@ -67,40 +72,38 @@ public class Comment extends BaseTimeEntity {
         this.mbti = user.getMbti();
         this.gender = user.getGender();
         this.parent = parent;
+        this.likeCount = 0;
+        this.hateCount = 0;
     }
 
     public void updateParent(Comment parent) {
         this.parent = parent;
     }
 
+    public void mappingCommentEmotion(CommentEmotion commentEmotion) {
+        this.commentEmotionList.add(commentEmotion);
+    }
 
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "comment")
-//    private List<CommentEmotion> commentEmotionList = new ArrayList<>();
-//
-//    public void mappingCommentEmotion(CommentEmotion commentEmotion) {
-//        this.commentEmotionList.add(commentEmotion);
-//    }
-
-//    public void updateLikeHateCount() {
-//        int likecnt = 0;
-//        int hatecnt = 0;
-//        for (CommentEmotion commentEmotion : commentEmotionList) {
-//            if (commentEmotion.getEmotion().equals(Emotion.LIKE)) {
-//                likecnt += 1;
-//            } else {
-//                hatecnt += 1;
-//            }
-//        }
-//        this.likeCount = (long) likecnt;
-//        this.hateCount = (long) hatecnt;
-//    }
-
-//    public void removeEmotion(CommentEmotion commentEmotion) {
-//        this.commentEmotionList.remove(commentEmotion);
-//    }
+    public void updateLikeHateCount() {
+        int likecnt = 0;
+        int hatecnt = 0;
+        for (CommentEmotion commentEmotion : commentEmotionList) {
+            if (commentEmotion.getEmotion().equals(Emotion.LIKE)) {
+                likecnt += 1;
+            } else {
+                hatecnt += 1;
+            }
+        }
+        this.likeCount = likecnt;
+        this.hateCount = hatecnt;
+    }
 
     public void updateContent(CommentUpdateRequest commentUpdateRequest) {
         this.content = commentUpdateRequest.getContent();
+    }
+
+    public void removeEmotion(CommentEmotion commentEmotion) {
+        this.commentEmotionList.remove(commentEmotion);
     }
 
 

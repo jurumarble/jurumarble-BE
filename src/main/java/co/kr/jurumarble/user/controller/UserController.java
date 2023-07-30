@@ -6,6 +6,7 @@ import co.kr.jurumarble.user.dto.request.KakaoLoginRequest;
 import co.kr.jurumarble.user.dto.request.NaverLoginRequest;
 import co.kr.jurumarble.user.dto.response.TokenResponse;
 import co.kr.jurumarble.user.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,16 +1,21 @@
 package co.kr.jurumarble.comment.service;
 
 import co.kr.jurumarble.comment.domain.Comment;
+import co.kr.jurumarble.comment.domain.CommentEmotion;
 import co.kr.jurumarble.comment.dto.request.CommentCreateRequest;
 import co.kr.jurumarble.comment.dto.request.CommentGetRequest;
 import co.kr.jurumarble.comment.dto.request.CommentUpdateRequest;
 import co.kr.jurumarble.comment.dto.response.CommentGetResponse;
+import co.kr.jurumarble.comment.enums.Emotion;
+import co.kr.jurumarble.comment.repository.CommentEmotionRepository;
 import co.kr.jurumarble.comment.repository.CommentRepository;
+import co.kr.jurumarble.exception.comment.CommentEmotionNotFoundException;
 import co.kr.jurumarble.exception.comment.CommentNotFoundException;
 import co.kr.jurumarble.exception.user.UserNotFoundException;
 import co.kr.jurumarble.exception.vote.VoteNotFoundException;
 import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.user.repository.UserRepository;
+import co.kr.jurumarble.vote.domain.Vote;
 import co.kr.jurumarble.vote.repository.VoteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -20,10 +25,7 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +34,8 @@ public class CommentService {
     private final UserRepository userRepository;
     private final VoteRepository voteRepository;
     private final CommentRepository commentRepository;
+
+    private final CommentEmotionRepository commentEmotionRepository;
 
     public void createComment(Long voteId, Long userId, CommentCreateRequest request) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
@@ -136,4 +140,53 @@ public class CommentService {
         return slice;
     }
 
+    public void emoteComment(Long voteId, Long commentId, Long userId, Emotion emotion) {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+        Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
+
+        doEmote(emotion, user, comment);
+    }
+
+    private void doEmote(Emotion emotion, User user, Comment comment) {  //책임에 맞게 리팩토링 해야함
+        Optional<CommentEmotion> byCommentAndUser = commentEmotionRepository.findByCommentAndUser(comment, user);
+
+        byCommentAndUser.ifPresentOrElse(commentEmotion -> {
+
+                    //좋아요(싫어요)를 기존에 눌렀는데 또 눌렀을 경우 좋아요(싫어요) 취소
+                    if (emotion == commentEmotion.getEmotion()) {
+                        commentEmotionRepository.delete(commentEmotion);
+                        comment.removeEmotion(commentEmotion);
+                        comment.updateLikeHateCount();
+                    }
+                    //싫어요(좋아요)를 기존에 누른 상태로 좋아요(싫어요)를 누른 경우 싫어요(좋아요) 취소 후 좋아요(싫어요)로 등록
+                    else {
+                        commentEmotionRepository.delete(commentEmotion);
+                        comment.removeEmotion(commentEmotion);
+
+                        CommentEmotion changeEmotion = new CommentEmotion();
+
+                        changeEmotion.setEmote(emotion);
+                        changeEmotion.mappingComment(comment);
+                        changeEmotion.mappingUser(user);
+                        comment.updateLikeHateCount();
+
+                        commentEmotionRepository.save(changeEmotion);
+                    }
+
+                },
+                // 좋아요(싫어요)가 없을 경우 좋아요(싫어요) 추가
+                () -> {
+                    CommentEmotion commentEmotion = new CommentEmotion();
+
+                    commentEmotion.setEmote(emotion);
+                    commentEmotion.mappingComment(comment);
+                    commentEmotion.mappingUser(user);
+                    comment.updateLikeHateCount();
+
+                    commentEmotionRepository.save(commentEmotion);
+                });
+    }
+
 }
+

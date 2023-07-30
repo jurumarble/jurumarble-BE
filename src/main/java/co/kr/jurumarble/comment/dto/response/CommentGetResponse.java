@@ -2,7 +2,6 @@ package co.kr.jurumarble.comment.dto.response;
 
 
 import co.kr.jurumarble.comment.domain.Comment;
-import co.kr.jurumarble.comment.dto.request.CommentGetRequest;
 import co.kr.jurumarble.user.enums.AgeType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
@@ -40,8 +39,12 @@ public class CommentGetResponse {
 
     private List<CommentGetResponse> children;
 
+    private Integer likeCount;
+
+    private Integer hateCount;
+
     @Builder
-    public CommentGetResponse(Long id, Long userId, String nickName, Long parentId, String content, String imageUrl, GenderType gender, AgeType age, MbtiType mbti, LocalDateTime createdDate, List<CommentGetResponse> children) {
+    public CommentGetResponse(Long id, Long userId, String nickName, Long parentId, String content, String imageUrl, GenderType gender, AgeType age, MbtiType mbti, LocalDateTime createdDate, List<CommentGetResponse> children, Integer likeCount, Integer hateCount) {
         this.id = id;
         this.userId = userId;
         this.nickName = nickName;
@@ -53,6 +56,8 @@ public class CommentGetResponse {
         this.mbti = mbti;
         this.createdDate = createdDate;
         this.children = children;
+        this.likeCount = likeCount;
+        this.hateCount = hateCount;
     }
 
     @Builder
@@ -67,6 +72,8 @@ public class CommentGetResponse {
         this.nickName = comment.getUser().getNickname();
         this.createdDate = comment.getCreatedDate();
         this.children = new ArrayList<>();
+        this.likeCount = comment.getLikeCount();
+        this.hateCount = comment.getHateCount();
 
         if (comment.getParent() != null) {
             this.parentId = comment.getParent().getId();
@@ -74,8 +81,6 @@ public class CommentGetResponse {
             this.parentId = null;
         }
     }
-
-
 
 
 }

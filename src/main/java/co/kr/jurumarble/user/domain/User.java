@@ -1,5 +1,6 @@
 package co.kr.jurumarble.user.domain;
 
+import co.kr.jurumarble.comment.domain.CommentEmotion;
 import co.kr.jurumarble.common.domain.BaseTimeEntity;
 import co.kr.jurumarble.user.dto.AddUserInfo;
 import co.kr.jurumarble.user.enums.AgeType;
@@ -10,6 +11,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -48,6 +51,9 @@ public class User extends BaseTimeEntity {
 
     @Column
     private LocalDateTime modifiedMbtiDate;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<CommentEmotion> commentEmotionList = new ArrayList<>();
 
 
     public AgeType classifyAge(Integer age) {
@@ -96,7 +102,6 @@ public class User extends BaseTimeEntity {
         this.modifiedMbtiDate = modifiedMbtiDate;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -109,4 +114,11 @@ public class User extends BaseTimeEntity {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+
+    public void mappingCommentLike(CommentEmotion commentEmotion) {
+        this.commentEmotionList.add(commentEmotion);
+    }
+
+
 }
