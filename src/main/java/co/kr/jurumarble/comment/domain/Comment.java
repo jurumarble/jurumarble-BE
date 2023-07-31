@@ -85,17 +85,13 @@ public class Comment extends BaseTimeEntity {
     }
 
     public void updateLikeHateCount() {
-        int likecnt = 0;
-        int hatecnt = 0;
-        for (CommentEmotion commentEmotion : commentEmotionList) {
-            if (commentEmotion.getEmotion().equals(Emotion.LIKE)) {
-                likecnt += 1;
-            } else {
-                hatecnt += 1;
-            }
-        }
-        this.likeCount = likecnt;
-        this.hateCount = hatecnt;
+        this.likeCount = (int) commentEmotionList.stream()
+                .filter(commentEmotion -> commentEmotion.getEmotion().equals(Emotion.LIKE))
+                .count();
+
+        this.hateCount = (int) commentEmotionList.stream()
+                .filter(commentEmotion -> commentEmotion.getEmotion().equals(Emotion.HATE))
+                .count();
     }
 
     public void updateContent(CommentUpdateRequest commentUpdateRequest) {
