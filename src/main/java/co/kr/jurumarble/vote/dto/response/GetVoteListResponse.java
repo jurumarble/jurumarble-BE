@@ -12,11 +12,7 @@ public class GetVoteListResponse {
 
     private Slice<VoteListData> voteSlice;
 
-    private String message;
-
-    @Builder
-    public GetVoteListResponse(Slice<VoteListData> voteSlice, String message) {
+    public GetVoteListResponse(Slice<VoteListData> voteSlice) {
         this.voteSlice = voteSlice;
-        this.message = message;
     }
 }

@@ -30,13 +30,7 @@ public class Vote extends BaseTimeEntity {
     @Column(name = "VOTE_ID")
     private Long id;
 
-    /**
-     * User 와의 연관관계 주인
-     */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
-    private User postedUser;
-
+    private Long postedUserId;
 
     @BatchSize(size = 1000)
     @OneToMany(mappedBy = "vote", fetch = FetchType.LAZY)
@@ -64,15 +58,15 @@ public class Vote extends BaseTimeEntity {
     @JoinColumn(name = "VOTE_CONTENT_ID")
     private VoteContent voteContent;
 
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "vote", cascade = CascadeType.REMOVE)
-//    private List<Bookmark> bookmarkList = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "vote", cascade = CascadeType.REMOVE)
+    private List<Bookmark> bookmarkList = new ArrayList<>();
 
-//    public void removeBookmark(Bookmark bookmark) {
-//        this.bookmarkList.remove(bookmark);
-//    }
+    public void removeBookmark(Bookmark bookmark) {
+        this.bookmarkList.remove(bookmark);
+    }
 
-    public Vote(CreateVoteRequest request, User user, VoteContent voteContent) {
-        this.postedUser = user;
+    public Vote(CreateVoteRequest request, Long postedUserId, VoteContent voteContent) {
+        this.postedUserId = postedUserId;
         this.title = request.getTitle();
         this.voteContent = voteContent;
         this.filteredGender = request.getFilteredGender();
@@ -84,14 +78,14 @@ public class Vote extends BaseTimeEntity {
         this.voteResultList.add(voteResult);
     }
 
-    public GetVoteResponse toDto() {
+    public GetVoteResponse toDto(User user) {
 
         GetVoteUserResponse getVoteUserResponse = GetVoteUserResponse.builder()
-                .userImage(postedUser.getImageUrl())
-                .userGender(postedUser.getGender())
-                .userAge(postedUser.classifyAge(postedUser.getAge()))
-                .userMbti(postedUser.getMbti())
-                .nickName(postedUser.getNickname())
+                .userImage(user.getImageUrl())
+                .userGender(user.getGender())
+                .userAge(user.classifyAge(user.getAge()))
+                .userMbti(user.getMbti())
+                .nickName(user.getNickname())
                 .build();
 
         return GetVoteResponse.builder()
@@ -112,7 +106,7 @@ public class Vote extends BaseTimeEntity {
 
     public boolean isVoteOfUser(Long userId) {
 
-        return this.postedUser.getId().equals(userId);
+        return this.postedUserId.equals(userId);
 
     }
 
@@ -121,10 +115,10 @@ public class Vote extends BaseTimeEntity {
         this.detail = request.getDetail();
         this.getVoteContent().update(request.getTitleA(), request.getTitleB());
     }
-//
-//    public void mappingBookmark(Bookmark bookmark) {
-//        this.bookmarkList.add(bookmark);
-//    }
+
+    public void mappingBookmark(Bookmark bookmark) {
+        this.bookmarkList.add(bookmark);
+    }
 
 
 }

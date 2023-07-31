@@ -13,8 +13,6 @@ public class VoteListData {
 
     private final Long voteId;
 
-    private final UserData writer;
-
     private final String title;
 
     private final GenderType filteredGender;
@@ -50,7 +48,5 @@ public class VoteListData {
         this.titleB = vote.getVoteContent().getTitleB();
         this.detail = vote.getDetail();
         this.countVoted = countVoted;
-        UserData userData = new UserData(vote.getPostedUser());
-        this.writer = userData;
     }
 }

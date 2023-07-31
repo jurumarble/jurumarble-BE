@@ -6,10 +6,13 @@ import co.kr.jurumarble.user.enums.AgeType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
 import co.kr.jurumarble.user.enums.ProviderType;
+import co.kr.jurumarble.vote.domain.Bookmark;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -48,6 +51,9 @@ public class User extends BaseTimeEntity {
 
     @Column
     private LocalDateTime modifiedMbtiDate;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Bookmark> bookmarkList = new ArrayList<>();
 
 
     public AgeType classifyAge(Integer age){
@@ -99,6 +105,10 @@ public class User extends BaseTimeEntity {
         this.modifiedMbtiDate = modifiedMbtiDate;
     }
 
+    public void mappingBookmark(Bookmark bookmark) {
+        this.bookmarkList.add(bookmark);
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -112,4 +122,5 @@ public class User extends BaseTimeEntity {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }
