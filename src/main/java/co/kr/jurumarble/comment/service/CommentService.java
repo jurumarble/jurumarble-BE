@@ -94,6 +94,18 @@ public class CommentService {
         doEmote(emotion, user, comment);
     }
 
+    public void addSnackToComment(Long voteId, Long commentId, Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+        Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
+
+
+
+
+
+
+    }
+
 
 
     private Comment checkParentComment(CommentCreateRequest request) {

@@ -85,4 +85,14 @@ public class CommentController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    @Operation(summary = "안주 추가", description = "헤더에 토큰 담고, 파라미터에 voteId, commentId 보내주시면 됩니다")
+    @PatchMapping("/votes/{voteId}/comments/{commentId}/snack")
+    public ResponseEntity addSnackToComment(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Long userId){
+
+        commentService.addSnackToComment(voteId, commentId, userId);
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+
 }
