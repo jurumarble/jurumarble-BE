@@ -1,9 +1,10 @@
 package co.kr.jurumarble.comment.controller;
 
-import co.kr.jurumarble.comment.dto.request.CommentCreateRequest;
 import co.kr.jurumarble.comment.dto.request.CommentGetRequest;
-import co.kr.jurumarble.comment.dto.request.CommentUpdateRequest;
-import co.kr.jurumarble.comment.dto.response.CommentGetResponse;
+import co.kr.jurumarble.comment.dto.request.CreateCommentRequest;
+import co.kr.jurumarble.comment.dto.request.UpdateCommentRequest;
+import co.kr.jurumarble.comment.dto.request.UpdateSnackRequest;
+import co.kr.jurumarble.comment.dto.response.GetCommentResponse;
 import co.kr.jurumarble.comment.enums.Emotion;
 import co.kr.jurumarble.comment.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Map;
 
 @RequestMapping("/api")
 @RestController
@@ -29,9 +29,9 @@ public class CommentController {
 
     @Operation(summary = "댓글 생성", description = "헤더에 토큰, 파라미터에 voteId, 바디에 {parentId, content} json 형식으로 보내주시면 됩니다.")
     @PostMapping("/votes/{voteId}/comments")
-    public ResponseEntity createComment(@PathVariable Long voteId, @RequestAttribute Long userId, @RequestBody @Valid CommentCreateRequest commentCreateRequest) {
+    public ResponseEntity createComment(@PathVariable Long voteId, @RequestAttribute Long userId, @RequestBody @Valid CreateCommentRequest createCommentRequest) {
 
-        commentService.createComment(voteId, userId, commentCreateRequest);
+        commentService.createComment(voteId, userId, createCommentRequest);
 
         return new ResponseEntity(HttpStatus.CREATED);
     }
@@ -39,19 +39,19 @@ public class CommentController {
 
     @Operation(summary = "댓글 조회", description = "파라미터에 voteId, {age, mbti, gender, sortBy, page, size} json 형식으로 보내주시면 됩니다.")
     @GetMapping("/votes/{voteId}/comments")
-    public ResponseEntity<Slice<CommentGetResponse>> getComment(@PathVariable Long voteId, @ModelAttribute CommentGetRequest commentGetRequest) {
+    public ResponseEntity<Slice<GetCommentResponse>> getComment(@PathVariable Long voteId, @ModelAttribute CommentGetRequest commentGetRequest) {
 
-        Slice<CommentGetResponse> commentGetResponses = commentService.getComments(voteId, commentGetRequest);
+        Slice<GetCommentResponse> getCommentResponses = commentService.getComments(voteId, commentGetRequest);
 
-        return new ResponseEntity(commentGetResponses, HttpStatus.OK);
+        return new ResponseEntity(getCommentResponses, HttpStatus.OK);
     }
 
 
     @Operation(summary = "댓글 수정", description = "파라미터에 voteId, commentId {content} json 형식으로 보내주시면 됩니다.")
     @PatchMapping("/votes/{voteId}/comments/{commentId}")
-    public ResponseEntity updateComment(@PathVariable Long voteId, @PathVariable Long commentId, @Valid @RequestBody CommentUpdateRequest commentUpdateRequest, @RequestAttribute Long userId) {
+    public ResponseEntity updateComment(@PathVariable Long voteId, @PathVariable Long commentId, @Valid @RequestBody UpdateCommentRequest updateCommentRequest, @RequestAttribute Long userId) {
 
-        commentService.updateComment(voteId, commentId, userId, commentUpdateRequest);
+        commentService.updateComment(voteId, commentId, userId, updateCommentRequest);
 
         return new ResponseEntity(HttpStatus.OK);
     }
@@ -87,9 +87,18 @@ public class CommentController {
 
     @Operation(summary = "안주 추가", description = "헤더에 토큰 담고, 파라미터에 voteId, commentId 보내주시면 됩니다")
     @PatchMapping("/votes/{voteId}/comments/{commentId}/snack")
-    public ResponseEntity addSnackToComment(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Long userId){
+    public ResponseEntity addSnackToComment(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Long userId, @RequestBody UpdateSnackRequest updateSnackRequest) {
 
-        commentService.addSnackToComment(voteId, commentId, userId);
+        commentService.addSnackToComment(voteId, commentId, userId, updateSnackRequest);
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @Operation(summary = "안주 검색", description = "헤더에 토큰 담고, 파라미터에 voteId, commentId 보내주시면 됩니다")
+    @GetMapping("/votes/{voteId}/comments/{commentId}/snack")
+    public ResponseEntity searchSnack(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Long userId, @RequestParam(value = "keyword", required = false) String keyword) {
+
+        commentService.searchSnack(voteId, commentId, userId, keyword);
 
         return new ResponseEntity(HttpStatus.OK);
     }

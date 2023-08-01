@@ -2,12 +2,13 @@ package co.kr.jurumarble.comment.service;
 
 import co.kr.jurumarble.comment.domain.Comment;
 import co.kr.jurumarble.comment.domain.CommentEmotion;
-import co.kr.jurumarble.comment.dto.request.CommentCreateRequest;
+import co.kr.jurumarble.comment.domain.Snack;
+import co.kr.jurumarble.comment.dto.request.CreateCommentRequest;
 import co.kr.jurumarble.comment.dto.request.CommentGetRequest;
-import co.kr.jurumarble.comment.dto.request.CommentUpdateRequest;
-import co.kr.jurumarble.comment.dto.response.CommentGetResponse;
+import co.kr.jurumarble.comment.dto.request.UpdateCommentRequest;
+import co.kr.jurumarble.comment.dto.request.UpdateSnackRequest;
+import co.kr.jurumarble.comment.dto.response.GetCommentResponse;
 import co.kr.jurumarble.comment.enums.Emotion;
-import co.kr.jurumarble.comment.enums.SortType;
 import co.kr.jurumarble.comment.repository.CommentEmotionRepository;
 import co.kr.jurumarble.comment.repository.CommentRepository;
 import co.kr.jurumarble.exception.comment.CommentNotFoundException;
@@ -29,9 +30,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
-import static co.kr.jurumarble.comment.enums.SortType.ByPopularity;
-import static co.kr.jurumarble.comment.enums.SortType.ByTime;
-
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -41,7 +39,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final CommentEmotionRepository commentEmotionRepository;
 
-    public void createComment(Long voteId, Long userId, CommentCreateRequest request) {
+    public void createComment(Long voteId, Long userId, CreateCommentRequest request) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment parentComment = checkParentComment(request);  // 부모댓글이 있는지 없는지 확인
@@ -54,23 +52,23 @@ public class CommentService {
 
     }
 
-    public Slice<CommentGetResponse> getComments(Long voteId, CommentGetRequest request) {
+    public Slice<GetCommentResponse> getComments(Long voteId, CommentGetRequest request) {
         Pageable pageable = PageRequest.of(request.getPage(), request.getSize());
 
         List<Comment> comments = findCommentsBySortType(voteId, request, pageable); //정렬방식에 따라 Pageable 적용하여 부모댓글 가져오기
 
         getChildCommentByParentComment(comments);  //부모댓글에 속한 대댓글들 다가져오기
 
-        List<CommentGetResponse> commentGetResponse = convertToCommentGetResponseList(comments); // 댓글 목록을 매개 변수로 받아, CommentGetResponse 목록을 반환
+        List<GetCommentResponse> getCommentResponse = convertToGetCommentResponseList(comments); // 댓글 목록을 매개 변수로 받아, GetCommentResponse 목록을 반환
 
-        Slice<CommentGetResponse> slice = convertToSlice(voteId, request, pageable, commentGetResponse); // Response 리스트를 Slice 객체로 만들어주기
+        Slice<GetCommentResponse> slice = convertToSlice(voteId, request, pageable, getCommentResponse); // Response 리스트를 Slice 객체로 만들어주기
 
         return slice;
 
     }
 
 
-    public void updateComment(Long voteId, Long commentId, Long userId, CommentUpdateRequest request) {
+    public void updateComment(Long voteId, Long commentId, Long userId, UpdateCommentRequest request) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
@@ -94,21 +92,26 @@ public class CommentService {
         doEmote(emotion, user, comment);
     }
 
-    public void addSnackToComment(Long voteId, Long commentId, Long userId) {
+    public void addSnackToComment(Long voteId, Long commentId, Long userId, UpdateSnackRequest request) {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+        Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
+
+        comment.updateSnack(request);
+
+    }
+
+    public void searchSnack(Long voteId, Long commentId, Long userId, String keyword) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
 
 
 
-
-
-
     }
 
 
-
-    private Comment checkParentComment(CommentCreateRequest request) {
+    private Comment checkParentComment(CreateCommentRequest request) {
         if (request.getParentId() == null) {
             return null;
         }
@@ -147,30 +150,29 @@ public class CommentService {
     }
 
 
-
-    private List<CommentGetResponse> convertToCommentGetResponseList(List<Comment> parentComments) {
-        List<CommentGetResponse> commentGetResponse = new ArrayList<>();
-        Map<Long, CommentGetResponse> map = new HashMap<>();
+    private List<GetCommentResponse> convertToGetCommentResponseList(List<Comment> parentComments) {
+        List<GetCommentResponse> getCommentResponse = new ArrayList<>();
+        Map<Long, GetCommentResponse> map = new HashMap<>();
 
         for (Comment comment : parentComments) {
-            CommentGetResponse response = new CommentGetResponse(comment);
+            GetCommentResponse response = new GetCommentResponse(comment);
             map.put(response.getId(), response);
 
             if (response.getParentId() != null) {
                 map.get(response.getParentId()).getChildren().add(response);
             } else {
-                commentGetResponse.add(response);
+                getCommentResponse.add(response);
             }
         }
-        return commentGetResponse;
+        return getCommentResponse;
     }
 
-    private Slice<CommentGetResponse> convertToSlice(Long voteId, CommentGetRequest request, Pageable pageable, List<CommentGetResponse> commentGetResponse) {
+    private Slice<GetCommentResponse> convertToSlice(Long voteId, CommentGetRequest request, Pageable pageable, List<GetCommentResponse> getCommentResponse) {
         int countComments = commentRepository.countByVoteIdAndParentIsNull(voteId);   //투표에 속한 부모 댓글수 전부 가져오기
         int lastPageNumber = (int) Math.ceil((double) countComments / request.getSize());
         boolean hasNext = request.getPage() < lastPageNumber - 1;
 
-        Slice<CommentGetResponse> slice = new SliceImpl<>(commentGetResponse, pageable, hasNext);
+        Slice<GetCommentResponse> slice = new SliceImpl<>(getCommentResponse, pageable, hasNext);
         return slice;
     }
 

@@ -1,7 +1,8 @@
 package co.kr.jurumarble.comment.domain;
 
-import co.kr.jurumarble.comment.dto.request.CommentCreateRequest;
-import co.kr.jurumarble.comment.dto.request.CommentUpdateRequest;
+import co.kr.jurumarble.comment.dto.request.CreateCommentRequest;
+import co.kr.jurumarble.comment.dto.request.UpdateCommentRequest;
+import co.kr.jurumarble.comment.dto.request.UpdateSnackRequest;
 import co.kr.jurumarble.comment.enums.Emotion;
 import co.kr.jurumarble.common.domain.BaseTimeEntity;
 import co.kr.jurumarble.user.domain.User;
@@ -63,8 +64,16 @@ public class Comment extends BaseTimeEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "comment")
     private List<CommentEmotion> commentEmotionList = new ArrayList<>();
 
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "snackImage", column = @Column(name = "snack_image")),
+            @AttributeOverride(name = "snackName", column = @Column(name = "snack_name")),
+            @AttributeOverride(name = "restaurantName", column = @Column(name = "restaurant_name"))
+    })
+    private Snack snack;
 
-    public Comment(CommentCreateRequest request, Comment parent, User user, Long voteId) {
+
+    public Comment(CreateCommentRequest request, Comment parent, User user, Long voteId) {
         this.user = user;
         this.voteId = voteId;
         this.content = request.getContent();
@@ -94,8 +103,8 @@ public class Comment extends BaseTimeEntity {
                 .count();
     }
 
-    public void updateContent(CommentUpdateRequest commentUpdateRequest) {
-        this.content = commentUpdateRequest.getContent();
+    public void updateContent(UpdateCommentRequest updateCommentRequest) {
+        this.content = updateCommentRequest.getContent();
     }
 
     public void removeEmotion(CommentEmotion commentEmotion) {
@@ -103,4 +112,17 @@ public class Comment extends BaseTimeEntity {
     }
 
 
+    public void updateSnack(UpdateSnackRequest request) {
+        if (request.getSnackImage() != null && !request.getSnackImage().isEmpty()) {
+            this.snack.updateSnackImage(request.getSnackImage());
+        }
+
+        if (request.getSnackName() != null && !request.getSnackName().isEmpty()) {
+            this.snack.updateSnackName(request.getSnackName());
+        }
+
+        if (request.getRestaurantName() != null && !request.getRestaurantName().isEmpty()) {
+            this.snack.updateRestaurantName(request.getRestaurantName());
+        }
+    }
 }
