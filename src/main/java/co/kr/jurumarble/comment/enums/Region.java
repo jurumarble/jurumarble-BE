@@ -15,8 +15,8 @@ public enum Region {
     CHUNGNAM(34, "충청남도"),
     GYEONGBUK(35, "경상북도"),
     GYEONGNAM(36, "경상남도"),
-    JEOLLABUK(37, "전라북도"),
-    JEOLLANAM(38, "전라남도"),
+    JEONBUK(37, "전라북도"),
+    JEONNAM(38, "전라남도"),
     JEJU(39, "제주도");
 
     private final int code;
