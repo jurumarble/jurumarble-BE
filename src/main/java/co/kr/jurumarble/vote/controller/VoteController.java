@@ -65,7 +65,7 @@ public class VoteController {
     }
 
     @Operation(summary = "투표 수정", description = "파라미터에 voteId, 바디에 {title, detail, titleA, titleB} json 형식으로 보내주시면 됩니다.")
-    @PatchMapping("/{voteId}")
+    @PutMapping("/{voteId}")
     public ResponseEntity updateVote(@PathVariable("voteId") Long voteId, @RequestBody UpdateVoteRequest request, @RequestAttribute Long userId) {
 
         voteService.updateVote(request, userId, voteId);
