@@ -40,6 +40,7 @@ CREATE TABLE users
     created_date       TIMESTAMP    DEFAULT NULL,
     modified_date      TIMESTAMP    DEFAULT NULL,
     modified_mbti_date TIMESTAMP    DEFAULT NULL,
+    deleted_date       TIMESTAMP    DEFAULT NULL,
     PRIMARY KEY (id)
 );
 
