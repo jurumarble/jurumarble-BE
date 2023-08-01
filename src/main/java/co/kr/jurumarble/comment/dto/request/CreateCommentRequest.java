@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @NoArgsConstructor
-public class CommentCreateRequest {
+public class CreateCommentRequest {
 
     private Long parentId;
 

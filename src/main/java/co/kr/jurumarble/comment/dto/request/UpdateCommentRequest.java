@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @NoArgsConstructor
-public class CommentUpdateRequest {
+public class UpdateCommentRequest {
     @NotBlank
     private String content;
 }

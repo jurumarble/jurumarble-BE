@@ -15,7 +15,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class CommentGetResponse {
+public class GetCommentResponse {
 
     private Long id;
 
@@ -37,14 +37,16 @@ public class CommentGetResponse {
 
     private LocalDateTime createdDate;
 
-    private List<CommentGetResponse> children;
+    private List<GetCommentResponse> children;
 
     private Integer likeCount;
 
     private Integer hateCount;
 
+
+
     @Builder
-    public CommentGetResponse(Long id, Long userId, String nickName, Long parentId, String content, String imageUrl, GenderType gender, AgeType age, MbtiType mbti, LocalDateTime createdDate, List<CommentGetResponse> children, Integer likeCount, Integer hateCount) {
+    public GetCommentResponse(Long id, Long userId, String nickName, Long parentId, String content, String imageUrl, GenderType gender, AgeType age, MbtiType mbti, LocalDateTime createdDate, List<GetCommentResponse> children, Integer likeCount, Integer hateCount) {
         this.id = id;
         this.userId = userId;
         this.nickName = nickName;
@@ -61,7 +63,7 @@ public class CommentGetResponse {
     }
 
     @Builder
-    public CommentGetResponse(Comment comment) {
+    public GetCommentResponse(Comment comment) {
         this.id = comment.getId();
         this.userId = comment.getUser().getId();
         this.content = comment.getContent();
