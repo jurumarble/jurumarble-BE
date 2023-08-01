@@ -1,6 +1,8 @@
 package co.kr.jurumarble.user.domain;
 
 import co.kr.jurumarble.common.domain.BaseTimeEntity;
+import co.kr.jurumarble.exception.StatusEnum;
+import co.kr.jurumarble.exception.user.AlreadyDeletedUserException;
 import co.kr.jurumarble.user.dto.AddUserInfo;
 import co.kr.jurumarble.user.enums.AgeType;
 import co.kr.jurumarble.user.enums.GenderType;
@@ -26,10 +28,8 @@ public class User extends BaseTimeEntity {
     @Column(name = "USER_ID")
     private Long id;
 
-    @Column
     private String nickname;
 
-    @Column
     private String email;
 
     private String password;
@@ -49,11 +49,13 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private MbtiType mbti;
 
-    @Column
     private LocalDateTime modifiedMbtiDate;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Bookmark> bookmarkList = new ArrayList<>();
+
+    private LocalDateTime deletedDate;
+
 
 
     public AgeType classifyAge(Integer age){
@@ -92,6 +94,7 @@ public class User extends BaseTimeEntity {
 
     @Builder
     private User(Long id, String nickname, String email, String imageUrl, String password, ProviderType providerType, String providerId, Integer age, GenderType gender, MbtiType mbti, LocalDateTime modifiedMbtiDate) {
+        vaildIsDeletedUser();
         this.id = id;
         this.nickname = nickname;
         this.email = email;
@@ -109,6 +112,11 @@ public class User extends BaseTimeEntity {
         this.bookmarkList.add(bookmark);
     }
 
+    private void vaildIsDeletedUser() {
+        if (!(deletedDate == null)) {
+            throw new AlreadyDeletedUserException(StatusEnum.BAD_REQUEST);
+        }
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -123,4 +131,7 @@ public class User extends BaseTimeEntity {
         return Objects.hash(id);
     }
 
+    public void deleteUser() {
+        this.deletedDate = LocalDateTime.now();
+    }
 }
