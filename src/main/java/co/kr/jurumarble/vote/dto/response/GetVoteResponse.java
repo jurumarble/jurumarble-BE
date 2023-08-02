@@ -23,12 +23,6 @@ public class GetVoteResponse {
 
     private String imageB;
 
-    private GenderType filteredGender;
-
-    private AgeType filteredAge;
-
-    private MbtiType filteredMbti;
-
     private String titleA;
 
     private String titleB;
@@ -36,15 +30,12 @@ public class GetVoteResponse {
     private String description;
 
     @Builder
-    public GetVoteResponse(GetVoteUserResponse writer, LocalDateTime voteCreatedDate, String title, String imageA, String imageB, GenderType filteredGender, AgeType filteredAge, MbtiType filteredMbti, String titleA, String titleB, String description) {
+    public GetVoteResponse(GetVoteUserResponse writer, LocalDateTime voteCreatedDate, String title, String imageA, String imageB, String titleA, String titleB, String description) {
         this.writer = writer;
         this.voteCreatedDate = voteCreatedDate;
         this.title = title;
         this.imageA = imageA;
         this.imageB = imageB;
-        this.filteredGender = filteredGender;
-        this.filteredAge = filteredAge;
-        this.filteredMbti = filteredMbti;
         this.titleA = titleA;
         this.titleB = titleB;
         this.description = description;

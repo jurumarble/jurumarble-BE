@@ -69,9 +69,6 @@ public class Vote extends BaseTimeEntity {
         this.postedUserId = postedUserId;
         this.title = request.getTitle();
         this.voteContent = voteContent;
-        this.filteredGender = request.getFilteredGender();
-        this.filteredAge = request.getFilteredAge();
-        this.filteredMbti = request.getFilteredMbti();
     }
 
     public void addVoteResult(VoteResult voteResult) {
@@ -94,9 +91,6 @@ public class Vote extends BaseTimeEntity {
                 .title(title)
                 .imageA(voteContent.getImageA())
                 .imageB(voteContent.getImageB())
-                .filteredGender(filteredGender)
-                .filteredAge(filteredAge)
-                .filteredMbti(filteredMbti)
                 .titleA(voteContent.getTitleA())
                 .titleB(voteContent.getTitleB())
                 .description(detail)

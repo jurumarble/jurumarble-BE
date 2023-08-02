@@ -30,24 +30,13 @@ public class CreateVoteRequest {
     @Schema(description = "B 이미지")
     private String imageB;
 
-    @Schema(description = "투표 받고 싶은 성별")
-    private GenderType filteredGender;
-
-    @Schema(description = "투표 받고 싶은 나이대")
-    private AgeType filteredAge;
-
-    @Schema(description = "투표 받고 싶은 MBTI")
-    private MbtiType filteredMbti;
 
     @Builder
-    public CreateVoteRequest(String title, String titleA, String titleB, String imageA, String imageB, GenderType filteredGender, AgeType filteredAge, MbtiType filteredMbti) {
+    public CreateVoteRequest(String title, String titleA, String titleB, String imageA, String imageB) {
         this.title = title;
         this.titleA = titleA;
         this.titleB = titleB;
         this.imageA = imageA;
         this.imageB = imageB;
-        this.filteredGender = filteredGender;
-        this.filteredAge = filteredAge;
-        this.filteredMbti = filteredMbti;
     }
 }
