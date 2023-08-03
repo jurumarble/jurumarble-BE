@@ -2,6 +2,7 @@ DROP TABLE if EXISTS vote CASCADE;
 DROP TABLE if EXISTS vote_content;
 DROP TABLE if EXISTS users CASCADE;
 DROP TABLE if EXISTS vote_result;
+DROP TABLE if EXISTS drink;
 
 CREATE TABLE vote
 (
@@ -29,7 +30,7 @@ CREATE TABLE vote_content
 CREATE TABLE users
 (
     id                 BIGINT NOT NULL AUTO_INCREMENT,
-    nickname           VARCHAR(10)  DEFAULT NULL,
+    nickname           VARCHAR(20)  DEFAULT NULL,
     email              VARCHAR(55)  DEFAULT NULL,
     password           VARCHAR(15)  DEFAULT NULL,
     image_url          VARCHAR(255) DEFAULT NULL,
@@ -49,6 +50,21 @@ CREATE TABLE vote_result
 (
     id     BIGINT NOT NULL AUTO_INCREMENT,
     choice VARCHAR(2) DEFAULT NULL,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE drink
+(
+    id     BIGINT NOT NULL AUTO_INCREMENT,
+    name   VARCHAR(30) DEFAULT NULL,
+    type   VARCHAR(10) DEFAULT NULL,
+    product_name VARCHAR(50) DEFAULT NULL,
+    alcoholic_beverage VARCHAR(100) DEFAULT NULL,
+    raw_meterial VARCHAR(255) DEFAULT NULL,
+    capacity INTEGER DEFAULT  NULL,
+    manufacture_adress VARCHAR(255) DEFAULT NULL,
+    price INTEGER DEFAULT NULL,
+    image VARCHAR(255) DEFAULT NULL,
     PRIMARY KEY (id)
 );
 
