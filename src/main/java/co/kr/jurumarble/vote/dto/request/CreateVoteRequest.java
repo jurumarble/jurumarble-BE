@@ -1,8 +1,5 @@
 package co.kr.jurumarble.vote.dto.request;
 
-import co.kr.jurumarble.user.enums.AgeType;
-import co.kr.jurumarble.user.enums.GenderType;
-import co.kr.jurumarble.user.enums.MbtiType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 

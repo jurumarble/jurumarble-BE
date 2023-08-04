@@ -1,7 +1,7 @@
 package co.kr.jurumarble.client.common;
 
-import co.kr.jurumarble.user.enums.ProviderType;
 import co.kr.jurumarble.user.dto.ThirdPartySignupInfo;
+import co.kr.jurumarble.user.enums.ProviderType;
 
 import java.util.Map;
 

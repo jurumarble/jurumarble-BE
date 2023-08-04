@@ -29,21 +29,14 @@ public class VoteContent extends BaseTimeEntity {
 
     private String titleB;
 
+    private Long voteId;
+
     public VoteContent(CreateVoteRequest request) {
         this.imageA = request.getImageA();
         this.imageB = request.getImageB();
         this.titleA = request.getTitleA();
         this.titleB = request.getTitleB();
     }
-
-//    public static VoteContentJpaEntity of(VoteContent voteContent) {
-//        return VoteContentJpaEntity.builder()
-//                .imageA(voteContent.getImageA())
-//                .imageB(voteContent.getImageB())
-//                .titleA(voteContent.getTitleA())
-//                .titleB(voteContent.getTitleB())
-//                .build();
-//    }
 
 
     public void update(String titleA, String titleB) {

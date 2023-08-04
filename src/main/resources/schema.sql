@@ -5,21 +5,23 @@ DROP TABLE if EXISTS vote_result;
 DROP TABLE if EXISTS drink;
 
 CREATE TABLE vote
-(
-    id            BIGINT NOT NULL AUTO_INCREMENT,
-    title         VARCHAR(55)  DEFAULT NULL,
-    detail        VARCHAR(255) DEFAULT NULL,
-    age           INT          DEFAULT NULL,
-    gender        VARCHAR(6)   DEFAULT NULL,
-    mbti          VARCHAR(4)   DEFAULT NULL,
-    created_date  TIMESTAMP    DEFAULT NULL,
-    modified_date TIMESTAMP    DEFAULT NULL,
-    PRIMARY KEY (id)
-);
+  (
+      id            BIGINT NOT NULL AUTO_INCREMENT,
+      posted_user_id BIGINT NOT NULL,
+      title         VARCHAR(55)  DEFAULT NULL,
+      detail        VARCHAR(255) DEFAULT NULL,
+      age           INT          DEFAULT NULL,
+      gender        VARCHAR(6)   DEFAULT NULL,
+      mbti          VARCHAR(4)   DEFAULT NULL,
+      created_date  TIMESTAMP    DEFAULT NULL,
+      modified_date TIMESTAMP    DEFAULT NULL,
+      PRIMARY KEY (id)
+  );
 
 CREATE TABLE vote_content
 (
     id     BIGINT NOT NULL AUTO_INCREMENT,
+    vote_id BIGINT NOT NULL,
     imageA VARCHAR(255) DEFAULT NULL,
     imageB VARCHAR(255) DEFAULT NULL,
     titleA VARCHAR(55)  DEFAULT NULL,
@@ -49,6 +51,8 @@ CREATE TABLE users
 CREATE TABLE vote_result
 (
     id     BIGINT NOT NULL AUTO_INCREMENT,
+    vote_id BIGINT NOT NULL,
+    voted_user_id BIGINT NOT NULL,
     choice VARCHAR(2) DEFAULT NULL,
     created_date       TIMESTAMP    DEFAULT NULL,
     modified_date      TIMESTAMP    DEFAULT NULL,

@@ -1,9 +1,6 @@
 package co.kr.jurumarble.user.repository;
 
 import co.kr.jurumarble.user.domain.User;
-import co.kr.jurumarble.user.dto.AddUserCategory;
-import co.kr.jurumarble.user.dto.AddUserInfo;
-import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
