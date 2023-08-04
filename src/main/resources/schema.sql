@@ -50,6 +50,8 @@ CREATE TABLE vote_result
 (
     id     BIGINT NOT NULL AUTO_INCREMENT,
     choice VARCHAR(2) DEFAULT NULL,
+    created_date       TIMESTAMP    DEFAULT NULL,
+    modified_date      TIMESTAMP    DEFAULT NULL,
     PRIMARY KEY (id)
 );
 
