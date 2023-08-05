@@ -1,5 +1,6 @@
 package co.kr.jurumarble.vote.dto.request;
 
+import co.kr.jurumarble.vote.service.CreateVoteServiceRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -40,5 +41,15 @@ public class CreateVoteRequest {
         this.titleB = titleB;
         this.imageA = imageA;
         this.imageB = imageB;
+    }
+
+    public CreateVoteServiceRequest toServiceRequest() {
+        return CreateVoteServiceRequest.builder()
+                .title(title)
+                .titleA(titleA)
+                .titleB(titleB)
+                .imageA(imageA)
+                .imageB(imageB)
+                .build();
     }
 }

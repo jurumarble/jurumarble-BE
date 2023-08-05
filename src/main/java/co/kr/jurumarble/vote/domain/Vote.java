@@ -7,6 +7,7 @@ import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
 import co.kr.jurumarble.vote.dto.request.CreateVoteRequest;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -41,10 +42,20 @@ public class Vote extends BaseTimeEntity {
     @Column(name = "filtered_mbti")
     private MbtiType filteredMbti;
 
-    public Vote(CreateVoteRequest request, Long postedUserId) {
+
+    private VoteContent voteContent;
+
+    @Builder
+    private Vote(Long id, Long postedUserId, String title, String detail, GenderType filteredGender, AgeType filteredAge, MbtiType filteredMbti) {
+        this.id = id;
         this.postedUserId = postedUserId;
-        this.title = request.getTitle();
+        this.title = title;
+        this.detail = detail;
+        this.filteredGender = filteredGender;
+        this.filteredAge = filteredAge;
+        this.filteredMbti = filteredMbti;
     }
+
 
 //    public GetVoteResponse toDto(User user) {
 //
