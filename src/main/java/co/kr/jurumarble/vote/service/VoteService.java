@@ -31,7 +31,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class VoteService {
 
     private final UserRepository userRepository;
@@ -39,6 +39,8 @@ public class VoteService {
     private final BookmarkRepository bookmarkRepository;
     private final VoteGenerator voteGenerator;
 
+
+    @Transactional
     public void createVote(CreateVoteServiceRequest request, Long userId) {
         userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         VoteContent voteContent = request.toVoteContent();
@@ -50,7 +52,7 @@ public class VoteService {
 
 //        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
-        User user = userRepository.findById(vote.getPostedUserId()).orElseThrow(UserNotFoundException::new);
+//        User user = userRepository.findById(vote.getPostedUserId()).orElseThrow(UserNotFoundException::new);
 
 //        return vote.toDto(user);
         return null;

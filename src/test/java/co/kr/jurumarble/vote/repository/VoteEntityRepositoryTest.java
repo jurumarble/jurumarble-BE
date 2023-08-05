@@ -1,7 +1,11 @@
 package co.kr.jurumarble.vote.repository;
 
 import co.kr.jurumarble.config.JpaAuditionConfig;
-import co.kr.jurumarble.vote.dto.FindVoteListData;
+import co.kr.jurumarble.exception.vote.VoteNotFoundException;
+import co.kr.jurumarble.user.enums.AgeType;
+import co.kr.jurumarble.user.enums.GenderType;
+import co.kr.jurumarble.user.enums.MbtiType;
+import co.kr.jurumarble.vote.dto.VoteData;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,6 +19,9 @@ import org.springframework.test.context.TestPropertySource;
 
 import javax.persistence.EntityManager;
 
+import java.util.Collections;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
 
 @DataJpaTest
@@ -34,16 +41,16 @@ class VoteEntityRepositoryTest {
 
     @DisplayName("인기순으로 투표를 조회한다.")
     @Test
-    void findWithVoteResult(){
+    void findWithVoteResult() {
         // given
         PageRequest of = PageRequest.of(0, 7);
 
         // when
-        Page<FindVoteListData> actual = voteEntityRepository.findWithVoteWithPopular(of);
+        Page<VoteData> actual = voteEntityRepository.findWithVoteWithPopular(of);
 
         // then
-        Assertions.assertThat(actual).hasSize(7)
-                .extracting(  "title", "voteNum")
+        assertThat(actual).hasSize(7)
+                .extracting("title", "votedNum")
                 .containsExactly(
                         tuple("테스트 투표 1", 10L),
                         tuple("테스트 투표 3", 3L),
@@ -55,9 +62,35 @@ class VoteEntityRepositoryTest {
                 );
 
         // 각 투표안의 투표 컨텐츠 객체 검증
-        Assertions.assertThat(actual.getContent())
-                .extracting(findVoteListData -> findVoteListData.getVoteContent().getTitleA())
+        assertThat(actual.getContent())
+                .extracting(voteData -> voteData.getVoteContent().getTitleA())
                 .containsExactly("A1", "E1", "C1", "G1", "I1", "K1", "M1");
+    }
+
+
+    @DisplayName("투표와 투표 컨텐츠를 같이 조회한다.")
+    @Test
+    void test() {
+        // given // when
+        VoteData voteData = voteEntityRepository.findVoteDataByVoteId(1L).orElseThrow(VoteNotFoundException::new);
+
+        // then
+        assertThat(Collections.singletonList(voteData)).extracting(
+                "title",
+                "detail",
+                "filteredAge",
+                "filteredGender",
+                "filteredMbti"
+        ).contains(
+                tuple("테스트 투표 1", "테스트 투표 상세 설명 1", AgeType.twenties, GenderType.FEMALE, MbtiType.INFP)
+        );
+
+        // 투표안의 투표 컨텐츠 객체 검증
+        assertThat(Collections.singletonList(voteData.getVoteContent()))
+                .extracting("imageA", "titleA")
+                .contains(
+                        tuple("https://picsum.photos/200/300", "A1")
+                );
     }
 
 }

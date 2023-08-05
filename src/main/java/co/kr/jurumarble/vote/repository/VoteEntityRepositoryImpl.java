@@ -2,8 +2,9 @@ package co.kr.jurumarble.vote.repository;
 
 import co.kr.jurumarble.vote.domain.Vote;
 import co.kr.jurumarble.vote.domain.VoteContent;
-import co.kr.jurumarble.vote.dto.FindVoteListData;
+import co.kr.jurumarble.vote.dto.VoteData;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static co.kr.jurumarble.vote.domain.QVote.vote;
@@ -28,7 +30,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
         this.jpaQueryFactory = new JPAQueryFactory(entityManager);
     }
     @Override
-    public Page<FindVoteListData> findWithVoteWithPopular(PageRequest pageRequest) {
+    public Page<VoteData> findWithVoteWithPopular(PageRequest pageRequest) {
         int pageNo = pageRequest.getPageNumber();
         int pageSize = pageRequest.getPageSize();
 
@@ -41,11 +43,11 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
         Map<Long, VoteContent> voteContentsMap = voteContents.stream()  // List를 순회하면 성능이 안나오므로 <voteId, VoteConent> 로 이루어진 Map을 만듬
                 .collect(Collectors.toMap(VoteContent::getVoteId, voteContent -> voteContent));// ex) <1, {voteContent}>
 
-        List<FindVoteListData> findVoteListDatas = getFindVoteListDatas(findVotesOrderByPopularTuples, voteContentsMap);
+        List<VoteData> voteData = getFindVoteListDatas(findVotesOrderByPopularTuples, voteContentsMap);
 
         long totalCount = getTotalCount();
 
-        return new PageImpl<>(findVoteListDatas, pageRequest, totalCount);
+        return new PageImpl<>(voteData, pageRequest, totalCount);
     }
 
     private List<Tuple> getVotesTupleOrderByPopular(int pageNo, int pageSize) {
@@ -75,12 +77,12 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .fetch();
     }
 
-    private List<FindVoteListData> getFindVoteListDatas(List<Tuple> findVotesOrderByPopularTuples, Map<Long, VoteContent> voteContentsMap) {
+    private List<VoteData> getFindVoteListDatas(List<Tuple> findVotesOrderByPopularTuples, Map<Long, VoteContent> voteContentsMap) {
         return findVotesOrderByPopularTuples.stream()
                 .map(findVoteTuple -> {
                     Vote vote = findVoteTuple.get(0, Vote.class);
                     VoteContent voteContent = voteContentsMap.get(vote.getId());
-                    return FindVoteListData.builder()
+                    return VoteData.builder()
                             .voteId(vote.getId())
                             .postedUserId(vote.getPostedUserId())
                             .title(vote.getTitle())
@@ -88,7 +90,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                             .filteredGender(vote.getFilteredGender())
                             .filteredAge(vote.getFilteredAge())
                             .voteContent(voteContent)
-                            .voteNum(findVoteTuple.get(1,Long.class))
+                            .votedNum(findVoteTuple.get(1,Long.class))
                             .build();
                 }).collect(Collectors.toList());
     }
@@ -99,5 +101,27 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .innerJoin(voteResult).on(vote.id.eq(voteResult.voteId))
                 .groupBy(vote.id)
                 .fetchCount();
+    }
+
+
+    @Override
+    public Optional<VoteData> findVoteDataByVoteId(Long voteId) {
+        VoteData voteData = jpaQueryFactory.select(
+                Projections.bean(VoteData.class,
+                        vote.id,
+                        vote.postedUserId,
+                        vote.title,
+                        vote.detail,
+                        vote.filteredGender,
+                        vote.filteredAge,
+                        vote.filteredMbti,
+                        voteContent
+                ))
+                .from(vote)
+                .innerJoin(voteContent)
+                .on(vote.id.eq(voteContent.voteId))
+                .where(vote.id.eq(voteId))
+                .fetchOne();
+        return Optional.ofNullable(voteData);
     }
 }

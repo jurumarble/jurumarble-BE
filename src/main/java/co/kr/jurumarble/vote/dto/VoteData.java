@@ -8,10 +8,10 @@ import lombok.*;
 
 @Getter
 @Setter // QueryDsl 때문에 필요함
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FindVoteListData {
+public class VoteData {
 
     private Long voteId;
 
@@ -29,5 +29,5 @@ public class FindVoteListData {
 
     private VoteContent voteContent;
 
-    private Long voteNum;
+    private Long votedNum;
 }

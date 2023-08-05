@@ -1,6 +1,5 @@
 package co.kr.jurumarble.vote.domain;
 
-import co.kr.jurumarble.user.repository.UserRepository;
 import co.kr.jurumarble.vote.repository.VoteContentRepository;
 import co.kr.jurumarble.vote.repository.VoteRepository;
 import lombok.RequiredArgsConstructor;

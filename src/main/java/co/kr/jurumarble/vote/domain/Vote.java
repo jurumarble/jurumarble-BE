@@ -42,9 +42,6 @@ public class Vote extends BaseTimeEntity {
     @Column(name = "filtered_mbti")
     private MbtiType filteredMbti;
 
-
-    private VoteContent voteContent;
-
     @Builder
     private Vote(Long id, Long postedUserId, String title, String detail, GenderType filteredGender, AgeType filteredAge, MbtiType filteredMbti) {
         this.id = id;
