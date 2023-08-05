@@ -2141,25 +2141,15 @@ VALUES
 INSERT INTO vote_content (vote_id, imageA, imageB, titleA, titleB)
 VALUES
     (1,'https://picsum.photos/200/300', 'https://picsum.photos/200/300', 'A1', 'A2'),
-    (1,'https://picsum.photos/200/300', 'https://picsum.photos/200/300', 'B1', 'B2'),
     (2,'https://picsum.photos/200/300', 'https://picsum.photos/200/300', 'C1', 'C2'),
-    (2,'https://picsum.photos/200/300', 'https://picsum.photos/200/300', 'D1', 'D2'),
     (3,'https://picsum.photos/200/300', 'https://picsum.photos/200/300', 'E1', 'E2'),
-    (3,'https://picsum.photos/200/300', 'https://picsum.photos/200/300', 'F1', 'F2'),
     (4,'https://picsum.photos/200/300', 'https://picsum.photos/200/300', 'G1', 'G2'),
-    (4,'https://picsum.photos/200/300', 'https://picsum.photos/200/300', 'H1', 'H2'),
     (5,'https://picsum.photos/200/300', 'https://picsum.photos/200/300', 'I1', 'I2'),
-    (5,'https://picsum.photos/200/300', 'https://picsum.photos/200/300', 'J1', 'J2'),
     (6,'https://picsum.photos/200/300', 'https://picsum.photos/200/300', 'K1', 'K2'),
-    (6,'https://picsum.photos/200/300', 'https://picsum.photos/200/300', 'L1', 'L2'),
     (7,'https://picsum.photos/200/300', 'https://picsum.photos/200/300', 'M1', 'M2'),
-    (7,'https://picsum.photos/200/300', 'https://picsum.photos/200/300', 'N1', 'N2'),
     (8,'https://picsum.photos/200/300', 'https://picsum.photos/200/300', 'O1', 'O2'),
-    (8,'https://picsum.photos/200/300', 'https://picsum.photos/200/300', 'P1', 'P2'),
     (9,'https://picsum.photos/200/300', 'https://picsum.photos/200/300', 'Q1', 'Q2'),
-    (9,'https://picsum.photos/200/300', 'https://picsum.photos/200/300', 'R1', 'R2'),
-    (10,'https://picsum.photos/200/300', 'https://picsum.photos/200/300', 'S1', 'S2'),
-    (10,'https://picsum.photos/200/300', 'https://picsum.photos/200/300', 'T1', 'T2');
+    (10,'https://picsum.photos/200/300', 'https://picsum.photos/200/300', 'S1', 'S2');
 
 
 INSERT INTO vote_result (vote_id, voted_user_id, choice, created_date, modified_date)

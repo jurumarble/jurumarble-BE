@@ -38,9 +38,7 @@ public class VoteContent{
 
 
     public void update(String titleA, String titleB) {
-
         this.titleA = titleA;
         this.titleB = titleB;
-
     }
 }

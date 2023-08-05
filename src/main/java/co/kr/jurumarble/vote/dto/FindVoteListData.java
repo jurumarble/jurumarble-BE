@@ -27,7 +27,7 @@ public class FindVoteListData {
 
     private MbtiType filteredMbti;
 
-    private VoteContent voteContentA;
+    private VoteContent voteContent;
 
-    private VoteContent voteContentB;
+    private Long voteNum;
 }
