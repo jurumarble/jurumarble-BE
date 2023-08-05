@@ -16,7 +16,7 @@ import java.util.List;
 
 @DataJpaTest
 @Import(JpaAuditionConfig.class)
-@TestPropertySource("classpath:application-dev.yml")
+@TestPropertySource(locations = "classpath:application-test.yml")
 class VoteEntityRepositoryTest {
 
     @Autowired

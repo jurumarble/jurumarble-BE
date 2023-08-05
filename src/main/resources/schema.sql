@@ -10,9 +10,9 @@ CREATE TABLE vote
       posted_user_id BIGINT NOT NULL,
       title         VARCHAR(55)  DEFAULT NULL,
       detail        VARCHAR(255) DEFAULT NULL,
-      age           INT          DEFAULT NULL,
-      gender        VARCHAR(6)   DEFAULT NULL,
-      mbti          VARCHAR(4)   DEFAULT NULL,
+      filtered_age          VARCHAR(10)           DEFAULT NULL,
+      filtered_gender        VARCHAR(6)   DEFAULT NULL,
+      filtered_mbti          VARCHAR(4)   DEFAULT NULL,
       created_date  TIMESTAMP    DEFAULT NULL,
       modified_date TIMESTAMP    DEFAULT NULL,
       PRIMARY KEY (id)

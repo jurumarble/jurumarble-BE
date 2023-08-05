@@ -26,6 +26,7 @@ public class Vote extends BaseTimeEntity {
     @GeneratedValue
     private Long id;
 
+    @Column(name = "posted_user_id")
     private Long postedUserId;
 
     private String title;
@@ -33,12 +34,15 @@ public class Vote extends BaseTimeEntity {
     private String detail;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "filtered_gender")
     private GenderType filteredGender;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "filtered_age")
     private AgeType filteredAge;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "filtered_mbti")
     private MbtiType filteredMbti;
 
     public Vote(CreateVoteRequest request, Long postedUserId) {

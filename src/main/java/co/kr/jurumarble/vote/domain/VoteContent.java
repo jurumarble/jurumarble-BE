@@ -6,19 +6,16 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
-public class VoteContent extends BaseTimeEntity {
+@Table(name = "vote_content")
+public class VoteContent{
 
     @Id
     @GeneratedValue
-    @Column(name = "VOTE_CONTENT_ID")
     private Long id;
 
     private String imageA;
@@ -29,6 +26,7 @@ public class VoteContent extends BaseTimeEntity {
 
     private String titleB;
 
+    @Column(name = "vote_id")
     private Long voteId;
 
     public VoteContent(CreateVoteRequest request) {
