@@ -5,7 +5,6 @@ import co.kr.jurumarble.common.domain.BaseTimeEntity;
 import co.kr.jurumarble.user.enums.AgeType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
-import co.kr.jurumarble.vote.dto.request.CreateVoteRequest;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
