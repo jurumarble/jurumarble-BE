@@ -6,25 +6,27 @@ import lombok.*;
 import javax.validation.constraints.NotBlank;
 
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CreateVoteRequest {
 
     @Schema(description = "투표 제목", example = "A, B 중 어떤게 나을까요?")
+    @NotBlank(message = "투표 제목은 필수입니다.")
     private String title;
 
     @Schema(description = "A 항목의 제목")
-    @NotBlank
+    @NotBlank(message = "투표 A항목의 제목은 필수입니다.")
     private String titleA;
 
     @Schema(description = "B 항목의 제목")
-    @NotBlank
+    @NotBlank(message = "투표 B항목의 제목은 필수입니다.")
     private String titleB;
 
     @Schema(description = "A 이미지")
+    @NotBlank(message = "투표 A 이미지는 필수입니다.")
     private String imageA;
 
     @Schema(description = "B 이미지")
+    @NotBlank(message = "투표 B 이미지는 필수입니다.")
     private String imageB;
 
 

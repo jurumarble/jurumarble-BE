@@ -44,11 +44,11 @@ public class VoteService {
 
     public void createVote(CreateVoteRequest request, Long userId) {
 
-//        User findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-//        VoteContent voteContent = new VoteContent(request);
-//        Vote vote = new Vote(request, findUser.getId(), voteContent);
-//
-//        voteRepository.save(vote);
+        User findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        VoteContent voteContent = new VoteContent(request);
+        Vote vote = new Vote(request, findUser.getId(), voteContent);
+
+        voteRepository.save(vote);
     }
 
     public GetVoteResponse getVote(Long voteId) {
