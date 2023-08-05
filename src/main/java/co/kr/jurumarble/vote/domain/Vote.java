@@ -6,15 +6,11 @@ import co.kr.jurumarble.user.enums.AgeType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
 import co.kr.jurumarble.vote.dto.request.CreateVoteRequest;
-import co.kr.jurumarble.vote.dto.response.GetVoteResponse;
-import co.kr.jurumarble.vote.dto.response.GetVoteUserResponse;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-
-import static co.kr.jurumarble.vote.domain.QVoteContent.voteContent;
 
 
 @Entity

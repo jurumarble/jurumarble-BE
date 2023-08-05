@@ -1,6 +1,5 @@
 package co.kr.jurumarble.vote.domain;
 
-import co.kr.jurumarble.common.domain.BaseTimeEntity;
 import co.kr.jurumarble.vote.dto.request.CreateVoteRequest;
 import lombok.AccessLevel;
 import lombok.Getter;

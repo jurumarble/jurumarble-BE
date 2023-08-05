@@ -1,12 +1,6 @@
 package co.kr.jurumarble.vote.dto;
 
-import co.kr.jurumarble.user.enums.AgeType;
-import co.kr.jurumarble.user.enums.GenderType;
-import co.kr.jurumarble.user.enums.MbtiType;
-import co.kr.jurumarble.vote.domain.Vote;
 import lombok.Getter;
-
-import java.time.LocalDateTime;
 
 @Getter
 public class VoteListData {

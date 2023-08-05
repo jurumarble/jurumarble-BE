@@ -1,17 +1,13 @@
 package co.kr.jurumarble.vote.service;
 
-import co.kr.jurumarble.exception.user.UserNotAccessRightException;
 import co.kr.jurumarble.exception.user.UserNotFoundException;
-import co.kr.jurumarble.exception.vote.AlreadyUserDoVoteException;
 import co.kr.jurumarble.exception.vote.VoteNotFoundException;
 import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.user.repository.UserRepository;
 import co.kr.jurumarble.vote.domain.Bookmark;
 import co.kr.jurumarble.vote.domain.Vote;
 import co.kr.jurumarble.vote.domain.VoteContent;
-import co.kr.jurumarble.vote.domain.VoteResult;
 import co.kr.jurumarble.vote.dto.DoVoteInfo;
-import co.kr.jurumarble.vote.dto.FindVoteListData;
 import co.kr.jurumarble.vote.dto.GetIsUserVoted;
 import co.kr.jurumarble.vote.dto.VoteListData;
 import co.kr.jurumarble.vote.dto.request.CreateVoteRequest;
@@ -30,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
