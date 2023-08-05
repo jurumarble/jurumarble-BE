@@ -35,7 +35,7 @@ public class VoteController {
     @PostMapping("")
     public ResponseEntity createVote(@Valid @RequestBody CreateVoteRequest request, @RequestAttribute Long userId) {
 
-        voteService.createVote(request, userId);
+        voteService.createVote(request.toServiceRequest(), userId);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

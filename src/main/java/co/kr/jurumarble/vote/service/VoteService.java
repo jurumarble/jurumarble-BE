@@ -7,6 +7,7 @@ import co.kr.jurumarble.user.repository.UserRepository;
 import co.kr.jurumarble.vote.domain.Bookmark;
 import co.kr.jurumarble.vote.domain.Vote;
 import co.kr.jurumarble.vote.domain.VoteContent;
+import co.kr.jurumarble.vote.domain.VoteGenerator;
 import co.kr.jurumarble.vote.dto.DoVoteInfo;
 import co.kr.jurumarble.vote.dto.GetIsUserVoted;
 import co.kr.jurumarble.vote.dto.VoteListData;
@@ -15,6 +16,7 @@ import co.kr.jurumarble.vote.dto.request.UpdateVoteRequest;
 import co.kr.jurumarble.vote.dto.response.GetVoteResponse;
 import co.kr.jurumarble.vote.enums.SortByType;
 import co.kr.jurumarble.vote.repository.BookmarkRepository;
+import co.kr.jurumarble.vote.repository.VoteContentRepository;
 import co.kr.jurumarble.vote.repository.VoteRepository;
 import co.kr.jurumarble.vote.repository.VoteResultRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,23 +34,21 @@ import java.util.Optional;
 @Transactional
 public class VoteService {
 
-    private final VoteRepository voteRepository;
     private final UserRepository userRepository;
     private final VoteResultRepository voteResultRepository;
     private final BookmarkRepository bookmarkRepository;
+    private final VoteGenerator voteGenerator;
 
-    public void createVote(CreateVoteRequest request, Long userId) {
-
-        User findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        VoteContent voteContent = new VoteContent(request);
-//        Vote vote = new Vote(request, findUser.getId(), voteContent);
-
-//        voteRepository.save(vote);
+    public void createVote(CreateVoteServiceRequest request, Long userId) {
+        userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        VoteContent voteContent = request.toVoteContent();
+        Vote vote = request.toVote(userId);
+        voteGenerator.createVote(vote, voteContent);
     }
 
     public GetVoteResponse getVote(Long voteId) {
 
-        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+//        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
         User user = userRepository.findById(vote.getPostedUserId()).orElseThrow(UserNotFoundException::new);
 
@@ -58,9 +58,9 @@ public class VoteService {
 
     public void updateVote(UpdateVoteRequest request, Long userId, Long voteId) {
 
-        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+//        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
-        isVoteOfUser(userId, vote);
+//        isVoteOfUser(userId, vote);
 
 //        vote.update(request);
 
@@ -74,17 +74,17 @@ public class VoteService {
 
     public void deleteVote(Long voteId, Long userId) {
 
-        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
-
-        isVoteOfUser(userId, vote);
-
-        voteRepository.delete(vote);
+//        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+//
+//        isVoteOfUser(userId, vote);
+//
+//        voteRepository.delete(vote);
     }
 
     public void doVote(DoVoteInfo info) {
 
-        Vote vote = voteRepository.findById(info.getVoteId()).orElseThrow(VoteNotFoundException::new);
-        User user = userRepository.findById(info.getUserId()).orElseThrow(UserNotFoundException::new);
+//        Vote vote = voteRepository.findById(info.getVoteId()).orElseThrow(VoteNotFoundException::new);
+//        User user = userRepository.findById(info.getUserId()).orElseThrow(UserNotFoundException::new);
 
 //        if(vote.isVoteOfUser(user.getId())) throw new UserNotAccessRightException();
 
@@ -145,7 +145,7 @@ public class VoteService {
 
         if(sortBy.equals(SortByType.ByTime)) {
             PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
-            searchedVoteSlice = voteRepository.findAllByTitleAfter(keyword, pageRequest);
+//            searchedVoteSlice = voteRepository.findAllByTitleAfter(keyword, pageRequest);
         } else if(sortBy.equals(SortByType.ByPopularity)) {
             PageRequest pageRequest = PageRequest.of(page, size);
 //            searchedVoteSlice = voteRepository.findSliceByTitleContainsPopularity(keyword, pageRequest);
@@ -180,9 +180,9 @@ public class VoteService {
     public void bookmarkVote(Long userId, Long voteId) {
 
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+//        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
-        Optional<Bookmark> byVoteAndUser = bookmarkRepository.findByVoteAndUser(vote, user);
+//        Optional<Bookmark> byVoteAndUser = bookmarkRepository.findByVoteAndUser(vote, user);
 
 //        byVoteAndUser.ifPresentOrElse(
 //                bookmark -> {
