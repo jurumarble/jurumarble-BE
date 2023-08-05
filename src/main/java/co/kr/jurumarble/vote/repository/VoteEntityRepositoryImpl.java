@@ -39,22 +39,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
         Map<Long, List<VoteContent>> voteContentsMap = voteContents.stream() // 하나의 voteId당 두개의 voteContent를 가지는 Map이 생김
                 .collect(Collectors.groupingBy(VoteContent::getVoteId)); // ex) <1, {voteContentA, voteContentB}>
 
-        return findVotesOrderByPopularTuples.stream()
-                .map(findVoteTuple -> {
-                    Vote vote = findVoteTuple.get(0, Vote.class);
-                    VoteContent voteContentA = voteContentsMap.get(vote.getId()).get(FIRST_INDEX_OF_VOTE_CONTENT);
-                    VoteContent voteContentB = voteContentsMap.get(vote.getId()).get(SECOND_INDEX_OF_VOTE_CONTENT);
-                    return FindVoteListData.builder()
-                            .voteId(vote.getId())
-                            .postedUserId(vote.getPostedUserId())
-                            .title(vote.getTitle())
-                            .detail(vote.getDetail())
-                            .filteredGender(vote.getFilteredGender())
-                            .filteredAge(vote.getFilteredAge())
-                            .voteContentA(voteContentA)
-                            .voteContentB(voteContentB)
-                            .build();
-                }).collect(Collectors.toList());
+        return getFindVoteListDatas(findVotesOrderByPopularTuples, voteContentsMap);
     }
 
 
@@ -81,5 +66,24 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .selectFrom(voteContent)
                 .where(voteContent.voteId.in(voteIds))
                 .fetch();
+    }
+
+    private List<FindVoteListData> getFindVoteListDatas(List<Tuple> findVotesOrderByPopularTuples, Map<Long, List<VoteContent>> voteContentsMap) {
+        return findVotesOrderByPopularTuples.stream()
+                .map(findVoteTuple -> {
+                    Vote vote = findVoteTuple.get(0, Vote.class);
+                    VoteContent voteContentA = voteContentsMap.get(vote.getId()).get(FIRST_INDEX_OF_VOTE_CONTENT);
+                    VoteContent voteContentB = voteContentsMap.get(vote.getId()).get(SECOND_INDEX_OF_VOTE_CONTENT);
+                    return FindVoteListData.builder()
+                            .voteId(vote.getId())
+                            .postedUserId(vote.getPostedUserId())
+                            .title(vote.getTitle())
+                            .detail(vote.getDetail())
+                            .filteredGender(vote.getFilteredGender())
+                            .filteredAge(vote.getFilteredAge())
+                            .voteContentA(voteContentA)
+                            .voteContentB(voteContentB)
+                            .build();
+                }).collect(Collectors.toList());
     }
 }
