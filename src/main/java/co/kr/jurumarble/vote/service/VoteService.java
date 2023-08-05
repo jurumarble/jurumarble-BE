@@ -46,9 +46,9 @@ public class VoteService {
 
         User findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         VoteContent voteContent = new VoteContent(request);
-        Vote vote = new Vote(request, findUser.getId(), voteContent);
+//        Vote vote = new Vote(request, findUser.getId(), voteContent);
 
-        voteRepository.save(vote);
+//        voteRepository.save(vote);
     }
 
     public GetVoteResponse getVote(Long voteId) {

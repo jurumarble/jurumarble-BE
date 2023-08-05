@@ -37,7 +37,7 @@ public class VoteController {
 
         voteService.createVote(request, userId);
 
-        return new ResponseEntity(HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @Operation(summary = "투표 리스트 조회", description = "파라미터에 sortBy, page, size, category 보내주시면 됩니다.")
