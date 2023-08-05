@@ -15,9 +15,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = VoteController.class)
@@ -64,5 +66,29 @@ class VoteControllerTest {
                 )
                 .andDo(print()) // 요청에 대한 로그를 더 자세하게 확인 가능
                 .andExpect(status().isCreated());
+    }
+
+    @DisplayName("토큰 없이 투표 생성 요청을 보내서 401 에러를 반환한다.")
+    @Test
+    void createVoteWithOutToken() throws Exception {
+        // given
+        CreateVoteRequest request = CreateVoteRequest.builder()
+                .title("투표 제목")
+                .titleA("A 항목 제목")
+                .titleB("B 항목 제목")
+                .imageA("A 항목 이미지")
+                .imageB("B 항목 이미지")
+                .build();
+
+
+        // when // then
+        mockMvc.perform(
+                        post("/api/votes/")
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print()) // 요청에 대한 로그를 더 자세하게 확인 가능
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.status").value("TOKEN_EXPIRED"));
     }
 }
