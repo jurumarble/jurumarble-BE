@@ -25,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestPropertySource(locations = "classpath:application-test.yml")
 class VoteControllerTest {
     private static final int TOKEN_VALID_TIME = 30;
+    private static final int TOKEN_EXPIRED_TIME = 0;
 
     @Autowired
     private MockMvc mockMvc;
@@ -82,6 +83,35 @@ class VoteControllerTest {
         // when // then
         mockMvc.perform(
                         post("/api/votes/")
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print()) // 요청에 대한 로그를 더 자세하게 확인 가능
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.status").value("TOKEN_EXPIRED"));
+    }
+
+    @DisplayName("만료된 토큰과 투표 생성 요청을 보내서 401 에러를 반환한다.")
+    @Test
+    void createVoteWithExpiredToken() throws Exception {
+        // given
+        CreateVoteRequest request = CreateVoteRequest.builder()
+                .title("투표 제목")
+                .titleA("A 항목 제목")
+                .titleB("B 항목 제목")
+                .imageA("A 항목 이미지")
+                .imageB("B 항목 이미지")
+                .build();
+
+        // 테스트용 사용자 토큰 생성
+        Long userId = 1L;
+        String testToken = jwtTokenProvider.makeJwtToken(userId,TOKEN_EXPIRED_TIME);
+
+
+        // when // then
+        mockMvc.perform(
+                        post("/api/votes/")
+                                .header(HttpHeaders.AUTHORIZATION,"Bearer " + testToken) // 생성된 토큰을 헤더에 추가
                                 .content(objectMapper.writeValueAsString(request))
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
