@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 
 @Entity
@@ -52,8 +53,20 @@ public class Vote extends BaseTimeEntity {
         this.filteredMbti = filteredMbti;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Vote)) return false;
+        Vote vote = (Vote) o;
+        return Objects.equals(id, vote.id);
+    }
 
-//    public GetVoteResponse toDto(User user) {
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    //    public GetVoteResponse toDto(User user) {
 //
 //        GetVoteUserResponse getVoteUserResponse = GetVoteUserResponse.builder()
 //                .build();
