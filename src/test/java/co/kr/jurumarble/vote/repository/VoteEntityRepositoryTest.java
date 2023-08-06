@@ -68,7 +68,7 @@ class VoteEntityRepositoryTest {
 
     @DisplayName("투표와 투표 컨텐츠를 같이 조회한다.")
     @Test
-    void test() {
+    void findVoteDataByVoteId() {
         // given // when
         VoteData voteData = voteEntityRepository.findVoteDataByVoteId(1L).orElseThrow(VoteNotFoundException::new);
 

@@ -12,10 +12,11 @@ public class VoteGenerator {
     private final VoteRepository voteRepository;
     private final VoteContentRepository voteContentRepository;
 
-    public void createVote(Vote vote, VoteContent voteContent) {
+    public Long createVote(Vote vote, VoteContent voteContent) {
         voteRepository.save(vote);
         voteContent.mappingVote(vote.getId());
-        voteContentRepository.save(voteContent);
+        VoteContent save = voteContentRepository.save(voteContent);
+        return save.getVoteId();
     }
 
 

@@ -13,8 +13,7 @@ import javax.persistence.*;
 public class Bookmark extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue
-    @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class VoteResult extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "vote_id")

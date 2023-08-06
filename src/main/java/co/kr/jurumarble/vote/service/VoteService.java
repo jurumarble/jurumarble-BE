@@ -35,11 +35,11 @@ public class VoteService {
 
 
     @Transactional
-    public void createVote(CreateVoteServiceRequest request, Long userId) {
+    public Long createVote(CreateVoteServiceRequest request, Long userId) {
         userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         VoteContent voteContent = request.toVoteContent();
         Vote vote = request.toVote(userId);
-        voteGenerator.createVote(vote, voteContent);
+        return voteGenerator.createVote(vote, voteContent);
     }
 
     public GetVoteResponse getVote(Long voteId) {
