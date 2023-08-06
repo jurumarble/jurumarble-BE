@@ -1,8 +1,5 @@
 package co.kr.jurumarble.vote.dto.response;
 
-import co.kr.jurumarble.user.enums.AgeType;
-import co.kr.jurumarble.user.enums.GenderType;
-import co.kr.jurumarble.user.enums.MbtiType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -35,9 +35,9 @@ public class VoteController {
     @PostMapping("")
     public ResponseEntity createVote(@Valid @RequestBody CreateVoteRequest request, @RequestAttribute Long userId) {
 
-        voteService.createVote(request, userId);
+        voteService.createVote(request.toServiceRequest(), userId);
 
-        return new ResponseEntity(HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @Operation(summary = "투표 리스트 조회", description = "파라미터에 sortBy, page, size, category 보내주시면 됩니다.")

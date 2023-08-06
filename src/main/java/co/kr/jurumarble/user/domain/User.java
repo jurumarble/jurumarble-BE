@@ -9,7 +9,10 @@ import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
 import co.kr.jurumarble.user.enums.ProviderType;
 import co.kr.jurumarble.vote.domain.Bookmark;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -24,8 +27,7 @@ import java.util.Objects;
 public class User extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue
-    @Column(name = "USER_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nickname;
@@ -34,14 +36,10 @@ public class User extends BaseTimeEntity {
 
     private String password;
 
+    @Column(name = "image_url")
     private String imageUrl;
 
     private Integer age;
-
-    @Enumerated(EnumType.STRING)
-    private ProviderType providerType;    // oauth2를 이용할 경우 어떤 플랫폼을 이용하는지
-
-    private String providerId;  // oauth2를 이용할 경우 아이디값
 
     @Enumerated(EnumType.STRING)
     private GenderType gender;
@@ -49,11 +47,20 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private MbtiType mbti;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "provider_type")
+    private ProviderType providerType;    // oauth2를 이용할 경우 어떤 플랫폼을 이용하는지
+
+    @Column(name = "provider_id")
+    private String providerId;  // oauth2를 이용할 경우 아이디값
+
+    @Column(name = "modified_mbti_date")
     private LocalDateTime modifiedMbtiDate;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Bookmark> bookmarkList = new ArrayList<>();
 
+    @Column(name = "deleted_date")
     private LocalDateTime deletedDate;
 
 

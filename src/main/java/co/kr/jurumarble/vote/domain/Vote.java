@@ -5,19 +5,13 @@ import co.kr.jurumarble.common.domain.BaseTimeEntity;
 import co.kr.jurumarble.user.enums.AgeType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
-import co.kr.jurumarble.user.domain.User;
-import co.kr.jurumarble.vote.dto.request.CreateVoteRequest;
-import co.kr.jurumarble.vote.dto.request.UpdateVoteRequest;
-import co.kr.jurumarble.vote.dto.response.GetVoteResponse;
-import co.kr.jurumarble.vote.dto.response.GetVoteUserResponse;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
 
 @Entity
@@ -26,93 +20,75 @@ import java.util.List;
 public class Vote extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue
-    @Column(name = "VOTE_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "posted_user_id")
     private Long postedUserId;
 
-    @BatchSize(size = 1000)
-    @OneToMany(mappedBy = "vote", fetch = FetchType.LAZY)
-    private List<VoteResult> voteResultList = new ArrayList<>();
-
-    @Column
     private String title;
 
-    @Column
     private String detail;
 
-    @Column
     @Enumerated(EnumType.STRING)
+    @Column(name = "filtered_gender")
     private GenderType filteredGender;
 
-    @Column
     @Enumerated(EnumType.STRING)
+    @Column(name = "filtered_age")
     private AgeType filteredAge;
 
-    @Column
     @Enumerated(EnumType.STRING)
+    @Column(name = "filtered_mbti")
     private MbtiType filteredMbti;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "VOTE_CONTENT_ID")
-    private VoteContent voteContent;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "vote", cascade = CascadeType.REMOVE)
-    private List<Bookmark> bookmarkList = new ArrayList<>();
-
-    public void removeBookmark(Bookmark bookmark) {
-        this.bookmarkList.remove(bookmark);
-    }
-
-    public Vote(CreateVoteRequest request, Long postedUserId, VoteContent voteContent) {
+    @Builder
+    private Vote(Long id, Long postedUserId, String title, String detail, GenderType filteredGender, AgeType filteredAge, MbtiType filteredMbti) {
+        this.id = id;
         this.postedUserId = postedUserId;
-        this.title = request.getTitle();
-        this.voteContent = voteContent;
+        this.title = title;
+        this.detail = detail;
+        this.filteredGender = filteredGender;
+        this.filteredAge = filteredAge;
+        this.filteredMbti = filteredMbti;
     }
 
-    public void addVoteResult(VoteResult voteResult) {
-        this.voteResultList.add(voteResult);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Vote)) return false;
+        Vote vote = (Vote) o;
+        return Objects.equals(id, vote.id);
     }
 
-    public GetVoteResponse toDto(User user) {
-
-        GetVoteUserResponse getVoteUserResponse = GetVoteUserResponse.builder()
-                .userImage(user.getImageUrl())
-                .userGender(user.getGender())
-                .userAge(user.classifyAge(user.getAge()))
-                .userMbti(user.getMbti())
-                .nickName(user.getNickname())
-                .build();
-
-        return GetVoteResponse.builder()
-                .writer(getVoteUserResponse)
-                .voteCreatedDate(getCreatedDate())
-                .title(title)
-                .imageA(voteContent.getImageA())
-                .imageB(voteContent.getImageB())
-                .titleA(voteContent.getTitleA())
-                .titleB(voteContent.getTitleB())
-                .description(detail)
-                .build();
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
-    public boolean isVoteOfUser(Long userId) {
+    //    public GetVoteResponse toDto(User user) {
+//
+//        GetVoteUserResponse getVoteUserResponse = GetVoteUserResponse.builder()
+//                .build();
+//
+//        return GetVoteResponse.builder()
+//                .writer(getVoteUserResponse)
+//                .voteCreatedDate(getCreatedDate())
+//                .title(title)
+//                .description(detail)
+//                .build();
+//
+//    }
 
-        return this.postedUserId.equals(userId);
+//    public boolean isVoteOfUser(Long userId) {
+//        return this.postedUserId.equals(userId);
+//    }
 
-    }
-
-    public void update(UpdateVoteRequest request) {
-        this.title = request.getTitle();
-        this.detail = request.getDetail();
-        this.getVoteContent().update(request.getTitleA(), request.getTitleB());
-    }
-
-    public void mappingBookmark(Bookmark bookmark) {
-        this.bookmarkList.add(bookmark);
-    }
+//    public void update(UpdateVoteRequest request) {
+//        this.title = request.getTitle();
+//        this.detail = request.getDetail();
+//        this.getVoteContent().update(request.getTitleA(), request.getTitleB());
+//    }
 
 
 }

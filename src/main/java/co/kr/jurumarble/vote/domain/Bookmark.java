@@ -13,8 +13,7 @@ import javax.persistence.*;
 public class Bookmark extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue
-    @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -25,10 +24,10 @@ public class Bookmark extends BaseTimeEntity {
     @JoinColumn(name = "VOTE_ID")
     private Vote vote;
 
-    public void mappingVote(Vote vote) {
-        this.vote = vote;
-        vote.mappingBookmark(this);
-    }
+//    public void mappingVote(Vote vote) {
+//        this.vote = vote;
+//        vote.mappingBookmark(this);
+//    }
 
     public void mappingUser(User user) {
         this.user = user;
