@@ -1,43 +1,43 @@
 package co.kr.jurumarble.user.domain;
 
 import co.kr.jurumarble.common.domain.BaseTimeEntity;
-import co.kr.jurumarble.enums.AgeType;
-import co.kr.jurumarble.enums.GenderType;
-import co.kr.jurumarble.enums.MBTIType;
-import co.kr.jurumarble.user.enums.Providers;
-import co.kr.jurumarble.user.enums.Role;
-import lombok.*;
+import co.kr.jurumarble.exception.StatusEnum;
+import co.kr.jurumarble.exception.user.AlreadyDeletedUserException;
+import co.kr.jurumarble.user.dto.AddUserInfo;
+import co.kr.jurumarble.user.enums.AgeType;
+import co.kr.jurumarble.user.enums.GenderType;
+import co.kr.jurumarble.user.enums.MbtiType;
+import co.kr.jurumarble.user.enums.ProviderType;
+import co.kr.jurumarble.vote.domain.Bookmark;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
-@Setter
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "users")
 public class User extends BaseTimeEntity {
+
     @Id
-    @GeneratedValue
-    @Column(name = "USER_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
     private String nickname;
 
-    @Column
     private String email;
-
-    private String imageUrl;
 
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    private Providers provider;    // oauth2를 이용할 경우 어떤 플랫폼을 이용하는지
-
-    private String providerId;  // oauth2를 이용할 경우 아이디값
-
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    @Column(name = "image_url")
+    private String imageUrl;
 
     private Integer age;
 
@@ -45,53 +45,30 @@ public class User extends BaseTimeEntity {
     private GenderType gender;
 
     @Enumerated(EnumType.STRING)
-    private MBTIType mbti;
+    private MbtiType mbti;
 
-    @Column(name = "modified_MBTI_Date")
-    private LocalDateTime modifiedMBTIDate;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "provider_type")
+    private ProviderType providerType;    // oauth2를 이용할 경우 어떤 플랫폼을 이용하는지
 
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
-//    private List<Bookmark> bookmarkList = new ArrayList<>();
+    @Column(name = "provider_id")
+    private String providerId;  // oauth2를 이용할 경우 아이디값
 
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
-//    private List<CommentEmotion> commentEmotionList = new ArrayList<>();
+    @Column(name = "modified_mbti_date")
+    private LocalDateTime modifiedMbtiDate;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Bookmark> bookmarkList = new ArrayList<>();
+
+    @Column(name = "deleted_date")
+    private LocalDateTime deletedDate;
 
 
-//    public void mappingCommentLike(CommentEmotion commentEmotion) {
-//        this.commentEmotionList.add(commentEmotion);
-//    }
-//
-//    public void mappingBookmark(Bookmark bookmark) {
-//        this.bookmarkList.add(bookmark);
-//    }
 
-//    public void updateProfile(String nickname, String image) {
-//        this.nickname = nickname;
-//        this.imageUrl = image;
-//    }
-//
-//    public void updateMbti(MBTI mbti, LocalDateTime modifiedMBTIDate) {
-//        this.mbti = mbti;
-//        this.modifiedMBTIDate = modifiedMBTIDate;
-//    }
-//
-//    @Builder
-//    public User(String nickname, String email, String imageUrl, String password, Providers provider, String providerId, Role role, Integer age, Gender gender, MBTI mbti, List<CategoryEntity> categoryLists, LocalDateTime modifiedMBTIDate) {
-//        this.nickname = nickname;
-//        this.email = email;
-//        this.imageUrl = imageUrl;
-//        this.password = password;
-//        this.provider = provider;
-//        this.providerId = providerId;
-//        this.role = role;
-//        this.age = age;
-//        this.gender = gender;
-//        this.mbti = mbti;
-//        this.categoryLists = categoryLists;
-//        this.modifiedMBTIDate = modifiedMBTIDate;
-//    }
-//
     public AgeType classifyAge(Integer age){
+        if (age == null) {
+            return AgeType.NULL; // 혹은 원하는 다른 동작 수행
+        }
         AgeType ageGroup;
         switch (age/10){
             case 1:
@@ -115,8 +92,53 @@ public class User extends BaseTimeEntity {
         }
         return ageGroup;
     }
-//    public void clearCategoryList(){
-//        this.categoryLists.clear();
-//    }
 
+    public void addInfo(AddUserInfo addUserInfo) {
+        this.mbti = addUserInfo.getMbti();
+        this.age = addUserInfo.getAge();
+        this.gender = addUserInfo.getGender();
+    }
+
+    @Builder
+    private User(Long id, String nickname, String email, String imageUrl, String password, ProviderType providerType, String providerId, Integer age, GenderType gender, MbtiType mbti, LocalDateTime modifiedMbtiDate) {
+        vaildIsDeletedUser();
+        this.id = id;
+        this.nickname = nickname;
+        this.email = email;
+        this.imageUrl = imageUrl;
+        this.password = password;
+        this.providerType = providerType;
+        this.providerId = providerId;
+        this.age = age;
+        this.gender = gender;
+        this.mbti = mbti;
+        this.modifiedMbtiDate = modifiedMbtiDate;
+    }
+
+    public void mappingBookmark(Bookmark bookmark) {
+        this.bookmarkList.add(bookmark);
+    }
+
+    private void vaildIsDeletedUser() {
+        if (!(deletedDate == null)) {
+            throw new AlreadyDeletedUserException(StatusEnum.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    public void deleteUser() {
+        this.deletedDate = LocalDateTime.now();
+    }
 }

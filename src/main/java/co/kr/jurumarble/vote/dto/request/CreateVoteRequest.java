@@ -1,53 +1,55 @@
 package co.kr.jurumarble.vote.dto.request;
 
-import co.kr.jurumarble.enums.AgeType;
-import co.kr.jurumarble.enums.GenderType;
-import co.kr.jurumarble.enums.MBTIType;
+import co.kr.jurumarble.vote.service.CreateVoteServiceRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CreateVoteRequest {
 
     @Schema(description = "투표 제목", example = "A, B 중 어떤게 나을까요?")
+    @NotBlank(message = "투표 제목은 필수입니다.")
     private String title;
 
     @Schema(description = "A 항목의 제목")
-    @NotBlank
+    @NotBlank(message = "투표 A항목의 제목은 필수입니다.")
     private String titleA;
 
     @Schema(description = "B 항목의 제목")
-    @NotBlank
+    @NotBlank(message = "투표 B항목의 제목은 필수입니다.")
     private String titleB;
 
     @Schema(description = "A 이미지")
+    @NotBlank(message = "투표 A 이미지는 필수입니다.")
     private String imageA;
 
     @Schema(description = "B 이미지")
+    @NotBlank(message = "투표 B 이미지는 필수입니다.")
     private String imageB;
 
-    @Schema(description = "투표 받고 싶은 성별")
-    private GenderType filteredGender;
-
-    @Schema(description = "투표 받고 싶은 나이대")
-    private AgeType filteredAge;
-
-    @Schema(description = "투표 받고 싶은 MBTI")
-    private MBTIType filteredMbti;
 
     @Builder
-    public CreateVoteRequest(String title, String titleA, String titleB, String imageA, String imageB, GenderType filteredGender, AgeType filteredAge, MBTIType filteredMbti) {
+    public CreateVoteRequest(String title, String titleA, String titleB, String imageA, String imageB) {
         this.title = title;
         this.titleA = titleA;
         this.titleB = titleB;
         this.imageA = imageA;
         this.imageB = imageB;
-        this.filteredGender = filteredGender;
-        this.filteredAge = filteredAge;
-        this.filteredMbti = filteredMbti;
+    }
+
+    public CreateVoteServiceRequest toServiceRequest() {
+        return CreateVoteServiceRequest.builder()
+                .title(title)
+                .titleA(titleA)
+                .titleB(titleB)
+                .imageA(imageA)
+                .imageB(imageB)
+                .build();
     }
 }

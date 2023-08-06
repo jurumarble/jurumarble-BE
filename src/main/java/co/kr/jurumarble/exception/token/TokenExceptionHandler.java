@@ -27,4 +27,10 @@ public class TokenExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(ExceptionMessage.of(StatusEnum.TOKEN_EXPIRED, e.getMessage()));
     }
+
+    @ExceptionHandler(TokenNotFoundException.class)
+    public ResponseEntity<ExceptionMessage> handle(TokenNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(ExceptionMessage.of(StatusEnum.TOKEN_EXPIRED, e.getMessage()));
+    }
 }

@@ -18,7 +18,12 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(tokenInterceptor)
                 .order(1)
-                .addPathPatterns("/api/users/additional-info");
+                .addPathPatterns("/api/users/additional-info")
+                .addPathPatterns("/api/votes")
+                .addPathPatterns("/api/votes/{voteId}")
+                .addPathPatterns("/api/votes/{voteId}/vote")
+                .addPathPatterns("/api/votes/{voteId}/voted")
+                .addPathPatterns("/api/votes/{voteId}/bookmark");
     }
 
     @Override
