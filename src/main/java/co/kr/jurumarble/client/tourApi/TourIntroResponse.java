@@ -8,33 +8,33 @@ import java.util.List;
 @Data
 public class TourIntroResponse {
     @JsonProperty("response")
-    private Response response;
+    private TourIntroResponse.Response response;
 
     public String getTreatMenu() {
         return response.getBody().getItems().getItem().get(0).getTreatmenu();
     }
-}
 
-@Data
-class Response {
-    @JsonProperty("body")
-    private Body body;
-}
+    @Data
+    static class Response {
+        @JsonProperty("body")
+        private TourIntroResponse.Body body;
+    }
 
-@Data
-class Body {
-    @JsonProperty("items")
-    private Items items;
-}
+    @Data
+    static class Body {
+        @JsonProperty("items")
+        private TourIntroResponse.Items items;
+    }
 
-@Data
-class Items {
-    @JsonProperty("item")
-    private List<Item> item;
-}
+    @Data
+    static class Items {
+        @JsonProperty("item")
+        private List<TourIntroResponse.Item> item;
+    }
 
-@Data
-class Item {
-    @JsonProperty("treatmenu")
-    private String treatmenu;
+    @Data
+    static class Item {
+        @JsonProperty("treatmenu")
+        private String treatmenu;
+    }
 }
