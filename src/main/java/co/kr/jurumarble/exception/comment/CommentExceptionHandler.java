@@ -36,4 +36,10 @@ public class CommentExceptionHandler {
         return ResponseEntity.status(e.getStatus().getStatusCode())
                 .body(ExceptionMessage.of(e.getStatus(), e.getMessage()));
     }
+
+    @ExceptionHandler(NoDataFoundException.class)
+    public ResponseEntity<ExceptionMessage> handle(NoDataFoundException e) {
+        return ResponseEntity.status(e.getStatus().getStatusCode())
+                .body(ExceptionMessage.of(e.getStatus(), e.getMessage()));
+    }
 }

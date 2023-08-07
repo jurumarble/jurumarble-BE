@@ -7,13 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class TourImageResponse {
+public class TourDetailImageResponse {
     @JsonProperty("response")
-    private TourImageResponse.Response response;
+    private TourDetailImageResponse.Response response;
 
     public List<String> getDetailImages() {
         List<String> urls = new ArrayList<>();
-        for (TourImageResponse.Item item : response.getBody().getItems().getItem()) {
+        for (TourDetailImageResponse.Item item : response.getBody().getItems().getItem()) {
             urls.add(item.getOriginimgurl());
         }
         return urls;
@@ -22,19 +22,19 @@ public class TourImageResponse {
     @Data
     static class Response {
         @JsonProperty("body")
-        private TourImageResponse.Body body;
+        private TourDetailImageResponse.Body body;
     }
 
     @Data
     static class Body {
         @JsonProperty("items")
-        private TourImageResponse.Items items;
+        private TourDetailImageResponse.Items items;
     }
 
     @Data
     static class Items {
         @JsonProperty("item")
-        private List<TourImageResponse.Item> item;
+        private List<TourDetailImageResponse.Item> item;
     }
 
     @Data

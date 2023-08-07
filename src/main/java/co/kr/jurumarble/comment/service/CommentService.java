@@ -2,9 +2,8 @@ package co.kr.jurumarble.comment.service;
 
 import co.kr.jurumarble.comment.domain.Comment;
 import co.kr.jurumarble.comment.domain.CommentEmotion;
-import co.kr.jurumarble.comment.domain.Snack;
 import co.kr.jurumarble.comment.dto.request.CreateCommentRequest;
-import co.kr.jurumarble.comment.dto.request.CommentGetRequest;
+import co.kr.jurumarble.comment.dto.request.GetCommentRequest;
 import co.kr.jurumarble.comment.dto.request.UpdateCommentRequest;
 import co.kr.jurumarble.comment.dto.request.UpdateSnackRequest;
 import co.kr.jurumarble.comment.dto.response.GetCommentResponse;
@@ -52,7 +51,7 @@ public class CommentService {
 
     }
 
-    public Slice<GetCommentResponse> getComments(Long voteId, CommentGetRequest request) {
+    public Slice<GetCommentResponse> getComments(Long voteId, GetCommentRequest request) {
         Pageable pageable = PageRequest.of(request.getPage(), request.getSize());
 
         List<Comment> comments = findCommentsBySortType(voteId, request, pageable); //정렬방식에 따라 Pageable 적용하여 부모댓글 가져오기
@@ -125,7 +124,7 @@ public class CommentService {
         }
     }
 
-    private List<Comment> findCommentsBySortType(Long voteId, CommentGetRequest request, Pageable pageable) {
+    private List<Comment> findCommentsBySortType(Long voteId, GetCommentRequest request, Pageable pageable) {
         List<Comment> comments;
         switch (request.getSortBy()) {
             case ByTime:
@@ -167,7 +166,7 @@ public class CommentService {
         return getCommentResponse;
     }
 
-    private Slice<GetCommentResponse> convertToSlice(Long voteId, CommentGetRequest request, Pageable pageable, List<GetCommentResponse> getCommentResponse) {
+    private Slice<GetCommentResponse> convertToSlice(Long voteId, GetCommentRequest request, Pageable pageable, List<GetCommentResponse> getCommentResponse) {
         int countComments = commentRepository.countByVoteIdAndParentIsNull(voteId);   //투표에 속한 부모 댓글수 전부 가져오기
         int lastPageNumber = (int) Math.ceil((double) countComments / request.getSize());
         boolean hasNext = request.getPage() < lastPageNumber - 1;

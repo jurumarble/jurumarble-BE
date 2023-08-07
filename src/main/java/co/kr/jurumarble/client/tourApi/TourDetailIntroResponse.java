@@ -6,9 +6,9 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class TourIntroResponse {
+public class TourDetailIntroResponse {
     @JsonProperty("response")
-    private TourIntroResponse.Response response;
+    private TourDetailIntroResponse.Response response;
 
     public String getTreatMenu() {
         return response.getBody().getItems().getItem().get(0).getTreatmenu();
@@ -17,19 +17,19 @@ public class TourIntroResponse {
     @Data
     static class Response {
         @JsonProperty("body")
-        private TourIntroResponse.Body body;
+        private TourDetailIntroResponse.Body body;
     }
 
     @Data
     static class Body {
         @JsonProperty("items")
-        private TourIntroResponse.Items items;
+        private TourDetailIntroResponse.Items items;
     }
 
     @Data
     static class Items {
         @JsonProperty("item")
-        private List<TourIntroResponse.Item> item;
+        private List<TourDetailIntroResponse.Item> item;
     }
 
     @Data

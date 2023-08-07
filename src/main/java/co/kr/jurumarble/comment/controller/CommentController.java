@@ -1,6 +1,6 @@
 package co.kr.jurumarble.comment.controller;
 
-import co.kr.jurumarble.comment.dto.request.CommentGetRequest;
+import co.kr.jurumarble.comment.dto.request.GetCommentRequest;
 import co.kr.jurumarble.comment.dto.request.CreateCommentRequest;
 import co.kr.jurumarble.comment.dto.request.UpdateCommentRequest;
 import co.kr.jurumarble.comment.dto.request.UpdateSnackRequest;
@@ -39,9 +39,9 @@ public class CommentController {
 
     @Operation(summary = "댓글 조회", description = "파라미터에 voteId, {age, mbti, gender, sortBy, page, size} json 형식으로 보내주시면 됩니다.")
     @GetMapping("/votes/{voteId}/comments")
-    public ResponseEntity<Slice<GetCommentResponse>> getComment(@PathVariable Long voteId, @ModelAttribute CommentGetRequest commentGetRequest) {
+    public ResponseEntity<Slice<GetCommentResponse>> getComment(@PathVariable Long voteId, @ModelAttribute GetCommentRequest getCommentRequest) {
 
-        Slice<GetCommentResponse> getCommentResponses = commentService.getComments(voteId, commentGetRequest);
+        Slice<GetCommentResponse> getCommentResponses = commentService.getComments(voteId, getCommentRequest);
 
         return new ResponseEntity(getCommentResponses, HttpStatus.OK);
     }
