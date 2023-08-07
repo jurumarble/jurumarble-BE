@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CommentGetRequest {
+public class GetCommentRequest {
 
     @NotNull
     private SortType sortBy;
