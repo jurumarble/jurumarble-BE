@@ -66,9 +66,9 @@ CREATE TABLE drink
     type   VARCHAR(10) DEFAULT NULL,
     product_name VARCHAR(50) DEFAULT NULL,
     alcoholic_beverage VARCHAR(100) DEFAULT NULL,
-    raw_meterial VARCHAR(255) DEFAULT NULL,
+    raw_material VARCHAR(255) DEFAULT NULL,
     capacity INTEGER DEFAULT  NULL,
-    manufacture_adress VARCHAR(255) DEFAULT NULL,
+    manufacture_address VARCHAR(255) DEFAULT NULL,
     price INTEGER DEFAULT NULL,
     image VARCHAR(255) DEFAULT NULL,
     PRIMARY KEY (id)
