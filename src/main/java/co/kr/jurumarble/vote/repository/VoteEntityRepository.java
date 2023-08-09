@@ -12,7 +12,7 @@ public interface VoteEntityRepository {
 
     Page<VoteData> findVoteDataWithPopularity(PageRequest pageRequest);
 
-//    Page(VoteData)
+    Page<VoteData> findVoteDataWithTime(PageRequest pageRequest);
 
     Optional<VoteData> findVoteDataByVoteId(Long voteId);
 

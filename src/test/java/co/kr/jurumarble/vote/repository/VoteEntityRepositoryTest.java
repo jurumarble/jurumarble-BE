@@ -39,7 +39,7 @@ class VoteEntityRepositoryTest {
 
     @DisplayName("인기순으로 투표를 조회한다.")
     @Test
-    void findWithVoteResult() {
+    void findVoteDataWithPopularity() {
         // given
         PageRequest of = PageRequest.of(0, 7);
 
@@ -89,6 +89,34 @@ class VoteEntityRepositoryTest {
                 .contains(
                         tuple("https://picsum.photos/200/300", "A1")
                 );
+    }
+
+    @DisplayName("시간순으로 투표를 조회한다.")
+    @Test
+    void findVoteDataWithTime() {
+        // given
+        PageRequest of = PageRequest.of(0, 7);
+
+        // when
+        Page<VoteData> actual = voteEntityRepository.findVoteDataWithTime(of);
+
+        // then
+        assertThat(actual).hasSize(7)
+                .extracting("title")
+                .containsExactly(
+                        "테스트 투표 10",
+                        "테스트 투표 9",
+                        "테스트 투표 8",
+                        "테스트 투표 7",
+                        "테스트 투표 6",
+                        "테스트 투표 5",
+                        "테스트 투표 4"
+                );
+
+        // 각 투표안의 투표 컨텐츠 객체 검증
+        assertThat(actual.getContent())
+                .extracting(voteData -> voteData.getVoteContent().getTitleA())
+                .containsExactly("S1", "Q1", "O1", "M1", "K1", "I1", "G1");
     }
 
 }
