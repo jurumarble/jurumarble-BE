@@ -4,6 +4,8 @@ import co.kr.jurumarble.exception.comment.NoDataFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -96,6 +98,39 @@ public class TourApiService {
                 arrange,
                 cat1,
                 cat2,
+                responseType);
+
+        List<String> contentIds = restaurantList.getContentIds();
+        List<String> firstImages = restaurantList.getFirstImages();
+        List<String> titles = restaurantList.getTitles();
+
+        List<RestaurantInfoDto> restaurantInfoList = new ArrayList<>();
+        for (int i = 0; i < contentIds.size(); i++) {
+            String contentId = contentIds.get(i);
+            String firstImage = firstImages.get(i);
+            String title = titles.get(i);
+            restaurantInfoList.add(new RestaurantInfoDto(contentId, firstImage, title));
+        }
+
+        System.out.println("API response: " + restaurantInfoList);
+
+        return restaurantInfoList;
+    }
+
+
+    public List<RestaurantInfoDto> getRestaurantInfoByKeyWord(String keyWord, int pageNo, int areaCode) {
+        String decodedServiceKey = decodeServiceKey(serviceKey);
+
+        TourSearchKeyWordResponse restaurantList = tourApiClient.getRestaurantList(
+                decodedServiceKey,
+                contentTypeId,
+                areaCode,
+                mobileOS,
+                mobileApp,
+                listYN,
+                numOfRows,
+                pageNo,
+                keyWord,
                 responseType);
 
         List<String> contentIds = restaurantList.getContentIds();

@@ -33,4 +33,10 @@ public class TourApiController {
         return tourApiService.getRestaurantInfo(areaCode, pageNo);
     }
 
+    @GetMapping("/restaurantInfoByKeyWord")
+    public List<RestaurantInfoDto> getRestaurantInfoByKeyWord(@RequestParam String keyWord, @RequestParam int areaCode, @RequestParam int pageNo){
+
+        return tourApiService.getRestaurantInfoByKeyWord(keyWord,areaCode, pageNo);
+    }
+
 }
