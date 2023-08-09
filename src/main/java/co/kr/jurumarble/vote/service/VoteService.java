@@ -14,6 +14,7 @@ import co.kr.jurumarble.vote.dto.response.GetVoteResponse;
 import co.kr.jurumarble.vote.enums.SortByType;
 import co.kr.jurumarble.vote.repository.BookmarkRepository;
 import co.kr.jurumarble.vote.repository.VoteResultRepository;
+import co.kr.jurumarble.vote.service.request.CreateNormalVoteServiceRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -35,7 +36,7 @@ public class VoteService {
 
 
     @Transactional
-    public Long createVote(CreateVoteServiceRequest request, Long userId) {
+    public Long createNormalVote(CreateNormalVoteServiceRequest request, Long userId) {
         userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         VoteContent voteContent = request.toVoteContent();
         Vote vote = request.toVote(userId);

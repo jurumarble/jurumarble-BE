@@ -8,6 +8,7 @@ import co.kr.jurumarble.vote.domain.VoteGenerator;
 import co.kr.jurumarble.vote.repository.BookmarkRepository;
 import co.kr.jurumarble.vote.repository.VoteRepository;
 import co.kr.jurumarble.vote.repository.VoteResultRepository;
+import co.kr.jurumarble.vote.service.request.CreateNormalVoteServiceRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,7 +46,7 @@ class VoteServiceTest {
         User user = User.builder()
                 .build();
 
-        CreateVoteServiceRequest request = CreateVoteServiceRequest.builder()
+        CreateNormalVoteServiceRequest request = CreateNormalVoteServiceRequest.builder()
                 .title("투표 제목")
                 .titleA("A 타이틀")
                 .titleB("B 타이틀")

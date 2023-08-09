@@ -1,4 +1,4 @@
-package co.kr.jurumarble.vote.service;
+package co.kr.jurumarble.vote.service.request;
 
 import co.kr.jurumarble.vote.domain.Vote;
 import co.kr.jurumarble.vote.domain.VoteContent;
@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class CreateVoteServiceRequest {
+public class CreateNormalVoteServiceRequest {
     private String title;
     private String titleA;
     private String titleB;
@@ -14,7 +14,7 @@ public class CreateVoteServiceRequest {
     private String imageB;
 
     @Builder
-    private CreateVoteServiceRequest(String title, String titleA, String titleB, String imageA, String imageB) {
+    private CreateNormalVoteServiceRequest(String title, String titleA, String titleB, String imageA, String imageB) {
         this.title = title;
         this.titleA = titleA;
         this.titleB = titleB;
