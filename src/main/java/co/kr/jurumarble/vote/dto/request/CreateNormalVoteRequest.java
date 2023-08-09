@@ -54,6 +54,7 @@ public class CreateNormalVoteRequest {
                 .titleB(titleB)
                 .imageA(imageA)
                 .imageB(imageB)
+                .voteType(voteType)
                 .build();
     }
 }
