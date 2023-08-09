@@ -44,7 +44,7 @@ class VoteEntityRepositoryTest {
         PageRequest of = PageRequest.of(0, 7);
 
         // when
-        Page<VoteData> actual = voteEntityRepository.findWithVoteWithPopular(of);
+        Page<VoteData> actual = voteEntityRepository.findVoteDataWithPopularity(of);
 
         // then
         assertThat(actual).hasSize(7)

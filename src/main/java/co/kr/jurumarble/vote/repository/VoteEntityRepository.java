@@ -10,7 +10,9 @@ import java.util.Optional;
 @Repository
 public interface VoteEntityRepository {
 
-    Page<VoteData> findWithVoteWithPopular(PageRequest pageRequest);
+    Page<VoteData> findVoteDataWithPopularity(PageRequest pageRequest);
+
+//    Page(VoteData)
 
     Optional<VoteData> findVoteDataByVoteId(Long voteId);
 
