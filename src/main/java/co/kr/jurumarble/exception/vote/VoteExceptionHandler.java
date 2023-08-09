@@ -24,4 +24,10 @@ public class VoteExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(ExceptionMessage.of(e.getStatus(), e.getMessage()));
     }
+
+    @ExceptionHandler(VoteTypeNotMatchException.class)
+    public ResponseEntity<ExceptionMessage> handle(VoteTypeNotMatchException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ExceptionMessage.of(e.getStatus(), e.getMessage()));
+    }
 }
