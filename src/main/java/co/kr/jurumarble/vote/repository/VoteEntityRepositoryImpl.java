@@ -30,7 +30,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
         this.jpaQueryFactory = new JPAQueryFactory(entityManager);
     }
     @Override
-    public Page<VoteData> findWithVoteWithPopular(PageRequest pageRequest) {
+    public Page<VoteData> findVoteDataWithPopularity(PageRequest pageRequest) {
         int pageNo = pageRequest.getPageNumber();
         int pageSize = pageRequest.getPageSize();
 
@@ -45,7 +45,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
 
         List<VoteData> voteData = getFindVoteListDatas(findVotesOrderByPopularTuples, voteContentsMap);
 
-        long totalCount = getTotalCount();
+        long totalCount = getVoteTotalCount();
 
         return new PageImpl<>(voteData, pageRequest, totalCount);
     }
@@ -89,13 +89,16 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                             .detail(vote.getDetail())
                             .filteredGender(vote.getFilteredGender())
                             .filteredAge(vote.getFilteredAge())
-                            .voteContent(voteContent)
+                            .imageA(voteContent.getImageA())
+                            .imageB(voteContent.getImageB())
+                            .titleA(voteContent.getTitleA())
+                            .titleB(voteContent.getTitleB())
                             .votedNum(findVoteTuple.get(1,Long.class))
                             .build();
                 }).collect(Collectors.toList());
     }
 
-    private long getTotalCount() {
+    private long getVoteTotalCount() {
         return jpaQueryFactory
                 .from(vote)
                 .innerJoin(voteResult).on(vote.id.eq(voteResult.voteId))
@@ -115,7 +118,10 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                         vote.filteredGender,
                         vote.filteredAge,
                         vote.filteredMbti,
-                        voteContent
+                        voteContent.imageA,
+                        voteContent.imageB,
+                        voteContent.titleA,
+                        voteContent.titleB
                 ))
                 .from(vote)
                 .innerJoin(voteContent)
@@ -123,5 +129,36 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .where(vote.id.eq(voteId))
                 .fetchOne();
         return Optional.ofNullable(voteData);
+    }
+
+    @Override
+    public Page<VoteData> findVoteDataWithTime(PageRequest pageRequest) {
+        int pageNo = pageRequest.getPageNumber();
+        int pageSize = pageRequest.getPageSize();
+
+        List<VoteData> voteData = jpaQueryFactory.select(
+                        Projections.bean(VoteData.class,
+                                vote.id,
+                                vote.postedUserId,
+                                vote.title,
+                                vote.detail,
+                                vote.filteredGender,
+                                vote.filteredAge,
+                                vote.filteredMbti,
+                                voteContent.imageA,
+                                voteContent.imageB,
+                                voteContent.titleA,
+                                voteContent.titleB
+                        ))
+                .from(vote)
+                .innerJoin(voteContent)
+                .on(vote.id.eq(voteContent.voteId))
+                .orderBy(vote.createdDate.desc())
+                .offset(pageNo * pageSize)
+                .limit(pageSize)
+                .fetch();
+
+        long totalCount = getVoteTotalCount();
+        return new PageImpl<>(voteData, pageRequest, totalCount);
     }
 }

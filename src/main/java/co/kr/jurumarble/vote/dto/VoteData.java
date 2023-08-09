@@ -27,7 +27,13 @@ public class VoteData {
 
     private MbtiType filteredMbti;
 
-    private VoteContent voteContent;
+    private String imageA;
+
+    private String imageB;
+
+    private String titleA;
+
+    private String titleB;
 
     private Long votedNum;
 }

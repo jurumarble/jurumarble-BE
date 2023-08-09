@@ -39,30 +39,25 @@ class VoteEntityRepositoryTest {
 
     @DisplayName("인기순으로 투표를 조회한다.")
     @Test
-    void findWithVoteResult() {
+    void findVoteDataWithPopularity() {
         // given
         PageRequest of = PageRequest.of(0, 7);
 
         // when
-        Page<VoteData> actual = voteEntityRepository.findWithVoteWithPopular(of);
+        Page<VoteData> actual = voteEntityRepository.findVoteDataWithPopularity(of);
 
         // then
         assertThat(actual).hasSize(7)
-                .extracting("title", "votedNum")
+                .extracting("title", "votedNum", "titleA")
                 .containsExactly(
-                        tuple("테스트 투표 1", 10L),
-                        tuple("테스트 투표 3", 3L),
-                        tuple("테스트 투표 2", 2L),
-                        tuple("테스트 투표 4", 2L),
-                        tuple("테스트 투표 5", 1L),
-                        tuple("테스트 투표 6", 1L),
-                        tuple("테스트 투표 7", 1L)
+                        tuple("테스트 투표 1", 10L, "A1"),
+                        tuple("테스트 투표 3", 3L, "E1"),
+                        tuple("테스트 투표 2", 2L, "C1"),
+                        tuple("테스트 투표 4", 2L, "G1"),
+                        tuple("테스트 투표 5", 1L, "I1"),
+                        tuple("테스트 투표 6", 1L, "K1"),
+                        tuple("테스트 투표 7", 1L, "M1")
                 );
-
-        // 각 투표안의 투표 컨텐츠 객체 검증
-        assertThat(actual.getContent())
-                .extracting(voteData -> voteData.getVoteContent().getTitleA())
-                .containsExactly("A1", "E1", "C1", "G1", "I1", "K1", "M1");
     }
 
 
@@ -78,17 +73,39 @@ class VoteEntityRepositoryTest {
                 "detail",
                 "filteredAge",
                 "filteredGender",
-                "filteredMbti"
+                "filteredMbti",
+                "imageA",
+                "titleA"
         ).contains(
-                tuple("테스트 투표 1", "테스트 투표 상세 설명 1", AgeType.twenties, GenderType.FEMALE, MbtiType.INFP)
+                tuple("테스트 투표 1", "테스트 투표 상세 설명 1", AgeType.twenties, GenderType.FEMALE, MbtiType.INFP, "https://picsum.photos/200/300", "A1")
         );
 
-        // 투표안의 투표 컨텐츠 객체 검증
-        assertThat(Collections.singletonList(voteData.getVoteContent()))
-                .extracting("imageA", "titleA")
-                .contains(
-                        tuple("https://picsum.photos/200/300", "A1")
-                );
+
+    }
+
+    @DisplayName("시간순으로 투표를 조회한다.")
+    @Test
+    void findVoteDataWithTime() {
+        // given
+        PageRequest of = PageRequest.of(0, 7);
+
+        // when
+        Page<VoteData> actual = voteEntityRepository.findVoteDataWithTime(of);
+
+        // then
+        assertThat(actual).hasSize(7)
+                .extracting("title", "titleA")
+                .containsExactly(
+                        tuple("테스트 투표 10", "S1"),
+                        tuple("테스트 투표 9", "Q1"),
+                        tuple("테스트 투표 8", "O1"),
+                        tuple("테스트 투표 7", "M1"),
+                        tuple("테스트 투표 6", "K1"),
+                        tuple("테스트 투표 5", "I1"),
+                        tuple("테스트 투표 4","G1")
+                        );
+
+
     }
 
 }
