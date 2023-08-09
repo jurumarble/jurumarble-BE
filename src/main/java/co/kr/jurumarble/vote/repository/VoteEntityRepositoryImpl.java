@@ -89,7 +89,10 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                             .detail(vote.getDetail())
                             .filteredGender(vote.getFilteredGender())
                             .filteredAge(vote.getFilteredAge())
-                            .voteContent(voteContent)
+                            .imageA(voteContent.getImageA())
+                            .imageB(voteContent.getImageB())
+                            .titleA(voteContent.getTitleA())
+                            .titleB(voteContent.getTitleB())
                             .votedNum(findVoteTuple.get(1,Long.class))
                             .build();
                 }).collect(Collectors.toList());
@@ -115,7 +118,10 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                         vote.filteredGender,
                         vote.filteredAge,
                         vote.filteredMbti,
-                        voteContent
+                        voteContent.imageA,
+                        voteContent.imageB,
+                        voteContent.titleA,
+                        voteContent.titleB
                 ))
                 .from(vote)
                 .innerJoin(voteContent)
@@ -139,7 +145,10 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                                 vote.filteredGender,
                                 vote.filteredAge,
                                 vote.filteredMbti,
-                                voteContent
+                                voteContent.imageA,
+                                voteContent.imageB,
+                                voteContent.titleA,
+                                voteContent.titleB
                         ))
                 .from(vote)
                 .innerJoin(voteContent)
