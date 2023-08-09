@@ -5,27 +5,28 @@ DROP TABLE if EXISTS vote_result;
 DROP TABLE if EXISTS drink;
 
 CREATE TABLE vote
-  (
-      id            BIGINT NOT NULL AUTO_INCREMENT,
-      posted_user_id BIGINT NOT NULL,
-      title         VARCHAR(55)  DEFAULT NULL,
-      detail        VARCHAR(255) DEFAULT NULL,
-      filtered_age          VARCHAR(10)           DEFAULT NULL,
-      filtered_gender        VARCHAR(6)   DEFAULT NULL,
-      filtered_mbti          VARCHAR(4)   DEFAULT NULL,
-      created_date  TIMESTAMP    DEFAULT NULL,
-      modified_date TIMESTAMP    DEFAULT NULL,
-      PRIMARY KEY (id)
-  );
+(
+    id              BIGINT NOT NULL AUTO_INCREMENT,
+    posted_user_id  BIGINT NOT NULL,
+    title           VARCHAR(55)  DEFAULT NULL,
+    detail          VARCHAR(255) DEFAULT NULL,
+    filtered_age    VARCHAR(10)  DEFAULT NULL,
+    filtered_gender VARCHAR(6)   DEFAULT NULL,
+    filtered_mbti   VARCHAR(4)   DEFAULT NULL,
+    vote_type       VARCHAR(6)   DEFAULT NULL,
+    created_date    TIMESTAMP    DEFAULT NULL,
+    modified_date   TIMESTAMP    DEFAULT NULL,
+    PRIMARY KEY (id)
+);
 
 CREATE TABLE vote_content
 (
-    id     BIGINT NOT NULL AUTO_INCREMENT,
+    id      BIGINT NOT NULL AUTO_INCREMENT,
     vote_id BIGINT NOT NULL,
-    imageA VARCHAR(255) DEFAULT NULL,
-    imageB VARCHAR(255) DEFAULT NULL,
-    titleA VARCHAR(55)  DEFAULT NULL,
-    titleB VARCHAR(55)  DEFAULT NULL,
+    imageA  VARCHAR(255) DEFAULT NULL,
+    imageB  VARCHAR(255) DEFAULT NULL,
+    titleA  VARCHAR(55)  DEFAULT NULL,
+    titleB  VARCHAR(55)  DEFAULT NULL,
     PRIMARY KEY (id)
 );
 
@@ -50,27 +51,27 @@ CREATE TABLE users
 
 CREATE TABLE vote_result
 (
-    id     BIGINT NOT NULL AUTO_INCREMENT,
-    vote_id BIGINT NOT NULL,
+    id            BIGINT NOT NULL AUTO_INCREMENT,
+    vote_id       BIGINT NOT NULL,
     voted_user_id BIGINT NOT NULL,
-    choice VARCHAR(2) DEFAULT NULL,
-    created_date       TIMESTAMP    DEFAULT NULL,
-    modified_date      TIMESTAMP    DEFAULT NULL,
+    choice        VARCHAR(2) DEFAULT NULL,
+    created_date  TIMESTAMP  DEFAULT NULL,
+    modified_date TIMESTAMP  DEFAULT NULL,
     PRIMARY KEY (id)
 );
 
 CREATE TABLE drink
 (
-    id     BIGINT NOT NULL AUTO_INCREMENT,
-    name   VARCHAR(30) DEFAULT NULL,
-    type   VARCHAR(10) DEFAULT NULL,
-    product_name VARCHAR(50) DEFAULT NULL,
-    alcoholic_beverage VARCHAR(100) DEFAULT NULL,
-    raw_material VARCHAR(255) DEFAULT NULL,
-    capacity INTEGER DEFAULT  NULL,
+    id                  BIGINT NOT NULL AUTO_INCREMENT,
+    name                VARCHAR(30)  DEFAULT NULL,
+    type                VARCHAR(10)  DEFAULT NULL,
+    product_name        VARCHAR(50)  DEFAULT NULL,
+    alcoholic_beverage  VARCHAR(100) DEFAULT NULL,
+    raw_material        VARCHAR(255) DEFAULT NULL,
+    capacity            INTEGER      DEFAULT NULL,
     manufacture_address VARCHAR(255) DEFAULT NULL,
-    price INTEGER DEFAULT NULL,
-    image VARCHAR(255) DEFAULT NULL,
+    price               INTEGER      DEFAULT NULL,
+    image               VARCHAR(255) DEFAULT NULL,
     PRIMARY KEY (id)
 );
 

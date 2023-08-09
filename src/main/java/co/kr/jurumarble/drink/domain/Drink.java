@@ -35,7 +35,6 @@ public class Drink extends BaseTimeEntity {
     private String manufactureAddress;
 
     private int price;
-    
-    private String image;
 
+    private String image;
 }
