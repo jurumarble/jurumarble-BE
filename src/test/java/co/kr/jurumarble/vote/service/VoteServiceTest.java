@@ -5,6 +5,7 @@ import co.kr.jurumarble.user.repository.UserRepository;
 import co.kr.jurumarble.vote.domain.Vote;
 import co.kr.jurumarble.vote.domain.VoteContent;
 import co.kr.jurumarble.vote.domain.VoteGenerator;
+import co.kr.jurumarble.vote.enums.VoteType;
 import co.kr.jurumarble.vote.repository.BookmarkRepository;
 import co.kr.jurumarble.vote.repository.VoteRepository;
 import co.kr.jurumarble.vote.repository.VoteResultRepository;
@@ -52,6 +53,7 @@ class VoteServiceTest {
                 .titleB("B 타이틀")
                 .imageA("A 이미지")
                 .imageB("B 이미지")
+                .voteType(VoteType.NORMAL)
                 .build();
         VoteContent voteContent = request.toVoteContent();
 
@@ -61,7 +63,7 @@ class VoteServiceTest {
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
         // when
-        voteService.createVote(request, userId);
+        voteService.createNormalVote(request, userId);
 
         // then
         verify(voteGenerator, times(1)).createVote(vote, voteContent);
