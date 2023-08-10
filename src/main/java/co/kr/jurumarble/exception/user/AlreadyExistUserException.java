@@ -4,7 +4,6 @@ import co.kr.jurumarble.exception.StatusEnum;
 import co.kr.jurumarble.exception.common.CustomException;
 import lombok.Getter;
 
-@Getter
 public class AlreadyExistUserException extends CustomException {
 
     private final StatusEnum status;
