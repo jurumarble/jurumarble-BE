@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class VoteDrinkContentTest {
 
     @DisplayName("전통주 컨텐츠로 중복된 전통주를 입력하면 VoteDrinksDuplicatedException를 throw한다.")

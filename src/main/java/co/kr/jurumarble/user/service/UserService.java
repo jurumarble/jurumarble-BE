@@ -3,6 +3,7 @@ package co.kr.jurumarble.user.service;
 import co.kr.jurumarble.client.common.ThirdPartyAuthorizer;
 import co.kr.jurumarble.client.common.ThirdPartyAuthorizerProvider;
 import co.kr.jurumarble.token.domain.TokenGenerator;
+import co.kr.jurumarble.user.domain.UserFinder;
 import co.kr.jurumarble.user.domain.UserManager;
 import co.kr.jurumarble.user.domain.UserRegister;
 import co.kr.jurumarble.user.dto.AddUserInfo;
@@ -23,6 +24,7 @@ public class UserService {
     private final ThirdPartyAuthorizerProvider thirdPartyAuthorizerProvider;
     private final TokenGenerator tokenGenerator;
     private final UserManager userManager;
+    private final UserFinder userFinder;
 
     public void signup(SocialLoginInfo socialLoginInfo) {
         userRegister.register(socialLoginInfo.getProviderId(), socialLoginInfo.getProviderType());
@@ -44,6 +46,10 @@ public class UserService {
 
     public void addUserInfo(Long userId, AddUserInfo addUserInfo) {
         userManager.addUserInfo(userId, addUserInfo);
+    }
+
+    public void getUserInfo(Long userId) {
+        userFinder.findByUserId(userId);
     }
 
     public void deleteUser(Long userId) {

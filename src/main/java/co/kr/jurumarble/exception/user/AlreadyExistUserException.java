@@ -1,10 +1,11 @@
 package co.kr.jurumarble.exception.user;
 
 import co.kr.jurumarble.exception.StatusEnum;
+import co.kr.jurumarble.exception.common.CustomException;
 import lombok.Getter;
 
 @Getter
-public class AlreadyExistUserException extends RuntimeException {
+public class AlreadyExistUserException extends CustomException {
 
     private final StatusEnum status;
 
@@ -13,5 +14,15 @@ public class AlreadyExistUserException extends RuntimeException {
     public AlreadyExistUserException(StatusEnum status) {
         super(message);
         this.status = status;
+    }
+
+    @Override
+    public StatusEnum getStatus() {
+        return status;
+    }
+
+    @Override
+    public String getMessage() {
+        return message;
     }
 }

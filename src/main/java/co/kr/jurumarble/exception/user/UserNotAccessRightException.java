@@ -1,10 +1,11 @@
 package co.kr.jurumarble.exception.user;
 
 import co.kr.jurumarble.exception.StatusEnum;
+import co.kr.jurumarble.exception.common.CustomException;
 import lombok.Getter;
 
 @Getter
-public class UserNotAccessRightException extends RuntimeException {
+public class UserNotAccessRightException extends CustomException {
 
     private final StatusEnum status;
 
@@ -13,5 +14,15 @@ public class UserNotAccessRightException extends RuntimeException {
     public UserNotAccessRightException() {
         super(message);
         this.status = StatusEnum.ACCESS_RIGHT_FAILED;
+    }
+
+    @Override
+    public StatusEnum getStatus() {
+        return status;
+    }
+
+    @Override
+    public String getMessage() {
+        return message;
     }
 }
