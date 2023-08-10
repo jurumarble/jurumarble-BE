@@ -1,11 +1,8 @@
 package co.kr.jurumarble.client.tourApi;
 
-import co.kr.jurumarble.exception.comment.NoDataFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -121,7 +118,7 @@ public class TourApiService {
     public List<RestaurantInfoDto> getRestaurantInfoByKeyWord(String keyWord, int pageNo, int areaCode) {
         String decodedServiceKey = decodeServiceKey(serviceKey);
 
-        TourSearchKeyWordResponse restaurantList = tourApiClient.getRestaurantList(
+        TourSearchKeyWordResponse restaurantList = tourApiClient.getRestaurantListByKeyWord(
                 decodedServiceKey,
                 contentTypeId,
                 areaCode,

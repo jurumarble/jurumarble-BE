@@ -45,17 +45,16 @@ public interface TourApiClient {
                                                 @RequestParam("_type") String responseType);
 
 
-
-    @GetMapping(value = "searchKeyword1?")
-    TourSearchKeyWordResponse getRestaurantList(@RequestParam("ServiceKey") String serviceKey,
-                                                @RequestParam("contentTypeId") int contentTypeId,
-                                                @RequestParam("areaCode") int areaCode,
-                                                @RequestParam("MobileOS") String mobileOS,
-                                                @RequestParam("MobileApp") String mobileApp,
-                                                @RequestParam("listYN") String listYN,
-                                                @RequestParam("numOfRows") int numOfRows,
-                                                @RequestParam("pageNo") int pageNo,
-                                                @RequestParam("keyword") String keyWord,
-                                                @RequestParam("_type") String responseType);
+    @GetMapping(value = "/searchKeyword1")
+    TourSearchKeyWordResponse getRestaurantListByKeyWord(@RequestParam("ServiceKey") String serviceKey,
+                                                         @RequestParam("contentTypeId") int contentTypeId,
+                                                         @RequestParam("areaCode") int areaCode,
+                                                         @RequestParam("MobileOS") String mobileOS,
+                                                         @RequestParam("MobileApp") String mobileApp,
+                                                         @RequestParam("listYN") String listYN,
+                                                         @RequestParam("numOfRows") int numOfRows,
+                                                         @RequestParam("pageNo") int pageNo,
+                                                         @RequestParam("keyword") String keyWord,
+                                                         @RequestParam("_type") String responseType);
 
 }
