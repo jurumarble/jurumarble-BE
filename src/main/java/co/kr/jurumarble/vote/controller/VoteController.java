@@ -2,6 +2,7 @@ package co.kr.jurumarble.vote.controller;
 
 import co.kr.jurumarble.vote.dto.GetIsUserVoted;
 import co.kr.jurumarble.vote.dto.VoteListData;
+import co.kr.jurumarble.vote.dto.request.CreateDrinkVoteRequest;
 import co.kr.jurumarble.vote.dto.request.CreateNormalVoteRequest;
 import co.kr.jurumarble.vote.dto.request.DoVoteRequest;
 import co.kr.jurumarble.vote.dto.request.UpdateVoteRequest;
@@ -31,11 +32,20 @@ import java.util.List;
 public class VoteController {
     private final VoteService voteService;
 
-    @Operation(summary = "투표 생성", description = "헤더에 토큰 담고, 바디에 {title, titleA, titleB, imageA, imageB, filteredGender, filteredAge, filteredMbti} json 형식으로 보내주시면 됩니다.")
+    @Operation(summary = "일반 투표 생성", description = "헤더에 토큰 담고, 바디에 {title, titleA, titleB, imageA, imageB, filteredGender, filteredAge, filteredMbti} json 형식으로 보내주시면 됩니다.")
     @PostMapping("")
     public ResponseEntity createNormalVote(@Valid @RequestBody CreateNormalVoteRequest request, @RequestAttribute Long userId) {
 
         voteService.createNormalVote(request.toServiceRequest(), userId);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @Operation(summary = "전통주 투표 생성", description = "헤더에 토큰 담고, 바디에 {title, titleA, titleB, imageA, imageB, filteredGender, filteredAge, filteredMbti} json 형식으로 보내주시면 됩니다.")
+    @PostMapping("")
+    public ResponseEntity createDrinkVote(@Valid @RequestBody CreateDrinkVoteRequest request, @RequestAttribute Long userId) {
+
+        voteService.createDrinkVote(request.toServiceRequest(), userId);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

@@ -14,6 +14,7 @@ import co.kr.jurumarble.vote.dto.response.GetVoteResponse;
 import co.kr.jurumarble.vote.enums.SortByType;
 import co.kr.jurumarble.vote.repository.BookmarkRepository;
 import co.kr.jurumarble.vote.repository.VoteResultRepository;
+import co.kr.jurumarble.vote.service.request.CreateDrinkVoteServiceRequest;
 import co.kr.jurumarble.vote.service.request.CreateNormalVoteServiceRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -41,6 +42,14 @@ public class VoteService {
         VoteContent voteContent = request.toVoteContent();
         Vote vote = request.toVote(userId);
         return voteGenerator.createVote(vote, voteContent);
+    }
+
+    @Transactional
+    public Long createDrinkVote(CreateDrinkVoteServiceRequest request, Long userId) {
+        userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+//        VoteContent voteContent = request.toVoteContent();
+//        Vote vote = request.toVote(userId);
+        return voteGenerator.createVote(null,null);
     }
 
     public GetVoteResponse getVote(Long voteId) {
