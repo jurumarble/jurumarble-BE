@@ -54,7 +54,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
         return jpaQueryFactory
                 .select(vote, voteResult.id.count())
                 .from(vote)
-                .innerJoin(voteResult).on(vote.id.eq(voteResult.voteId))
+                .leftJoin(voteResult).on(vote.id.eq(voteResult.voteId))
                 .groupBy(vote.id)
                 .orderBy(voteResult.id.count().desc())
                 .offset(pageNo * pageSize)
@@ -187,7 +187,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
         return jpaQueryFactory
                 .select(vote, voteResult.id.count())
                 .from(vote)
-                .innerJoin(voteResult).on(vote.id.eq(voteResult.voteId))
+                .leftJoin(voteResult).on(vote.id.eq(voteResult.voteId))
                 .where(vote.title.like(keyword + "%"))
                 .groupBy(vote.id)
                 .orderBy(voteResult.id.count().desc())
