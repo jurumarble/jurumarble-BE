@@ -1,6 +1,7 @@
 package co.kr.jurumarble.vote.dto.request;
 
-import co.kr.jurumarble.vote.service.CreateVoteServiceRequest;
+import co.kr.jurumarble.vote.enums.VoteType;
+import co.kr.jurumarble.vote.service.request.CreateNormalVoteServiceRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -11,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CreateVoteRequest {
+public class CreateNormalVoteRequest {
 
     @Schema(description = "투표 제목", example = "A, B 중 어떤게 나을까요?")
     @NotBlank(message = "투표 제목은 필수입니다.")
@@ -35,7 +36,7 @@ public class CreateVoteRequest {
 
 
     @Builder
-    public CreateVoteRequest(String title, String titleA, String titleB, String imageA, String imageB) {
+    public CreateNormalVoteRequest(String title, String titleA, String titleB, String imageA, String imageB) {
         this.title = title;
         this.titleA = titleA;
         this.titleB = titleB;
@@ -43,13 +44,14 @@ public class CreateVoteRequest {
         this.imageB = imageB;
     }
 
-    public CreateVoteServiceRequest toServiceRequest() {
-        return CreateVoteServiceRequest.builder()
+    public CreateNormalVoteServiceRequest toServiceRequest() {
+        return CreateNormalVoteServiceRequest.builder()
                 .title(title)
                 .titleA(titleA)
                 .titleB(titleB)
                 .imageA(imageA)
                 .imageB(imageB)
+                .voteType(VoteType.NORMAL)
                 .build();
     }
 }

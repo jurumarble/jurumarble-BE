@@ -5,6 +5,7 @@ import co.kr.jurumarble.common.domain.BaseTimeEntity;
 import co.kr.jurumarble.user.enums.AgeType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
+import co.kr.jurumarble.vote.enums.VoteType;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,6 +32,10 @@ public class Vote extends BaseTimeEntity {
     private String detail;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "vote_type")
+    private VoteType voteType;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "filtered_gender")
     private GenderType filteredGender;
 
@@ -43,11 +48,11 @@ public class Vote extends BaseTimeEntity {
     private MbtiType filteredMbti;
 
     @Builder
-    private Vote(Long id, Long postedUserId, String title, String detail, GenderType filteredGender, AgeType filteredAge, MbtiType filteredMbti) {
-        this.id = id;
+    public Vote(Long postedUserId, String title, String detail, VoteType voteType, GenderType filteredGender, AgeType filteredAge, MbtiType filteredMbti) {
         this.postedUserId = postedUserId;
         this.title = title;
         this.detail = detail;
+        this.voteType = voteType;
         this.filteredGender = filteredGender;
         this.filteredAge = filteredAge;
         this.filteredMbti = filteredMbti;

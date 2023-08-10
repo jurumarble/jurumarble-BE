@@ -5,6 +5,7 @@ import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.user.repository.UserRepository;
 import co.kr.jurumarble.vote.domain.Vote;
 import co.kr.jurumarble.vote.domain.VoteContent;
+import co.kr.jurumarble.vote.domain.VoteDrinkContent;
 import co.kr.jurumarble.vote.domain.VoteGenerator;
 import co.kr.jurumarble.vote.dto.DoVoteInfo;
 import co.kr.jurumarble.vote.dto.GetIsUserVoted;
@@ -14,6 +15,8 @@ import co.kr.jurumarble.vote.dto.response.GetVoteResponse;
 import co.kr.jurumarble.vote.enums.SortByType;
 import co.kr.jurumarble.vote.repository.BookmarkRepository;
 import co.kr.jurumarble.vote.repository.VoteResultRepository;
+import co.kr.jurumarble.vote.service.request.CreateDrinkVoteServiceRequest;
+import co.kr.jurumarble.vote.service.request.CreateNormalVoteServiceRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -35,11 +38,19 @@ public class VoteService {
 
 
     @Transactional
-    public Long createVote(CreateVoteServiceRequest request, Long userId) {
+    public Long createNormalVote(CreateNormalVoteServiceRequest request, Long userId) {
         userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         VoteContent voteContent = request.toVoteContent();
         Vote vote = request.toVote(userId);
-        return voteGenerator.createVote(vote, voteContent);
+        return voteGenerator.createNormalVote(vote, voteContent);
+    }
+
+    @Transactional
+    public Long createDrinkVote(CreateDrinkVoteServiceRequest request, Long userId) {
+        userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        VoteDrinkContent voteDrinkContent = request.toVoteDrinkContent();
+        Vote vote = request.toVote(userId);
+        return voteGenerator.createDrinkVote(vote,voteDrinkContent);
     }
 
     public GetVoteResponse getVote(Long voteId) {

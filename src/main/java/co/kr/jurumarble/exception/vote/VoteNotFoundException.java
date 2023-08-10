@@ -1,10 +1,10 @@
 package co.kr.jurumarble.exception.vote;
 
 import co.kr.jurumarble.exception.StatusEnum;
+import co.kr.jurumarble.exception.common.CustomException;
 import lombok.Getter;
 
-@Getter
-public class VoteNotFoundException extends IllegalArgumentException {
+public class VoteNotFoundException extends CustomException {
 
     private final StatusEnum status;
 
@@ -13,5 +13,15 @@ public class VoteNotFoundException extends IllegalArgumentException {
     public VoteNotFoundException() {
         super(message);
         this.status = StatusEnum.VOTE_NOT_FOUND;
+    }
+
+    @Override
+    public StatusEnum getStatus() {
+        return status;
+    }
+
+    @Override
+    public String getMessage() {
+        return message;
     }
 }

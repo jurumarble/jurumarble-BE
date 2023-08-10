@@ -5,10 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -21,18 +18,23 @@ public class Drink extends BaseTimeEntity {
 
     private String name;
 
+    private String type;
 
-//    type
-//
-//
-//    private String productName;
-//
-//
-//    alcoholic_beverage
-//    raw_meterial
-//    capacity
-//    manufacture_adress
-//    price
-//    image
+    @Column(name = "product_name")
+    private String productName;
 
+    @Column(name = "alcoholic_beverage")
+    private int alcoholicBeverage;
+
+    @Column(name = "raw_material")
+    private String rawMaterial;
+
+    private int capacity;
+
+    @Column(name = "manufacture_address")
+    private String manufactureAddress;
+
+    private int price;
+
+    private String image;
 }

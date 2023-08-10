@@ -13,4 +13,8 @@ public class UserFinder {
     public User findByProviderId(String providerId) {
         return userRepository.findByProviderId(providerId).orElseThrow(UserNotFoundException::new);
     }
+
+    public User findByUserId(Long userId) {
+        return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+    }
 }

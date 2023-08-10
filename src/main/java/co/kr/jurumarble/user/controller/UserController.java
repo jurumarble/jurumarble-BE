@@ -32,6 +32,12 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/{userId}")
+    public ResponseEntity<HttpStatus> getUserInfo(@PathVariable Long userId) {
+        userService.getUserInfo(userId);
+        return ResponseEntity.ok().build();
+    }
+
     @PostMapping("/signup/naver")
     public ResponseEntity<TokenResponse> naverLogin(@Valid @RequestBody NaverLoginRequest naverLoginRequest) {
         LoginToken loginToken = userService.signupByThirdParty(naverLoginRequest.toDomain());

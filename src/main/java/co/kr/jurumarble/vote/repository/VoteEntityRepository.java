@@ -1,6 +1,6 @@
 package co.kr.jurumarble.vote.repository;
 
-import co.kr.jurumarble.vote.dto.VoteData;
+import co.kr.jurumarble.vote.dto.NormalVoteData;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
@@ -10,10 +10,10 @@ import java.util.Optional;
 @Repository
 public interface VoteEntityRepository {
 
-    Page<VoteData> findVoteDataWithPopularity(PageRequest pageRequest);
+    Page<NormalVoteData> findNormalVoteDataWithPopularity(PageRequest pageRequest);
 
-    Page<VoteData> findVoteDataWithTime(PageRequest pageRequest);
+    Page<NormalVoteData> findNormalVoteDataWithTime(PageRequest pageRequest);
 
-    Optional<VoteData> findVoteDataByVoteId(Long voteId);
+    Optional<NormalVoteData> findNormalVoteDataByVoteId(Long voteId);
 
 }

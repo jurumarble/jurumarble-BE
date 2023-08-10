@@ -101,7 +101,7 @@ public class User extends BaseTimeEntity {
 
     @Builder
     private User(Long id, String nickname, String email, String imageUrl, String password, ProviderType providerType, String providerId, Integer age, GenderType gender, MbtiType mbti, LocalDateTime modifiedMbtiDate) {
-        vaildIsDeletedUser();
+        validIsUserDeleted();
         this.id = id;
         this.nickname = nickname;
         this.email = email;
@@ -119,7 +119,7 @@ public class User extends BaseTimeEntity {
         this.bookmarkList.add(bookmark);
     }
 
-    private void vaildIsDeletedUser() {
+    private void validIsUserDeleted() {
         if (!(deletedDate == null)) {
             throw new AlreadyDeletedUserException(StatusEnum.BAD_REQUEST);
         }
