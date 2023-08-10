@@ -30,4 +30,10 @@ public class VoteExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ExceptionMessage.of(e.getStatus(), e.getMessage()));
     }
+
+    @ExceptionHandler(VoteDrinksDuplicatedException.class)
+    public ResponseEntity<ExceptionMessage> handle(VoteDrinksDuplicatedException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ExceptionMessage.of(e.getStatus(), e.getMessage()));
+    }
 }

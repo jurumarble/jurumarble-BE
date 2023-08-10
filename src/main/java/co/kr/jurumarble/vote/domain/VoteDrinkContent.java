@@ -1,6 +1,7 @@
 package co.kr.jurumarble.vote.domain;
 
 
+import co.kr.jurumarble.exception.vote.VoteDrinksDuplicatedException;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,9 +31,16 @@ public class VoteDrinkContent {
 
     @Builder
     public VoteDrinkContent(Long voteId, Long drinkIdA, Long drinkIdB) {
+        validateDrinksDuplicated(drinkIdA, drinkIdB);
         this.voteId = voteId;
         this.drinkIdA = drinkIdA;
         this.drinkIdB = drinkIdB;
+    }
+
+    private void validateDrinksDuplicated(Long drinkIdA, Long drinkIdB) {
+        if (Objects.equals(drinkIdA, drinkIdB)) {
+            throw new VoteDrinksDuplicatedException();
+        }
     }
 
     public void mappingVote(Long voteId) {
