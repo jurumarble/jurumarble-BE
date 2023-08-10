@@ -47,8 +47,7 @@ public class VoteService {
     @Transactional
     public Long createDrinkVote(CreateDrinkVoteServiceRequest request, Long userId) {
         userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-//        VoteContent voteContent = request.toVoteContent();
-//        Vote vote = request.toVote(userId);
+
         return voteGenerator.createVote(null,null);
     }
 

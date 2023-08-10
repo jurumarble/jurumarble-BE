@@ -60,6 +60,16 @@ CREATE TABLE vote_result
     PRIMARY KEY (id)
 );
 
+CREATE TABLE vote_drink_content
+(
+    id      BIGINT NOT NULL AUTO_INCREMENT,
+    vote_id BIGINT NOT NULL,
+    drink_id_a BIGINT NOT NULL,
+    drink_id_b BIGINT NOT NULL,
+    PRIMARY KEY (id)
+);
+
+
 CREATE TABLE drink
 (
     id                  BIGINT NOT NULL AUTO_INCREMENT,
