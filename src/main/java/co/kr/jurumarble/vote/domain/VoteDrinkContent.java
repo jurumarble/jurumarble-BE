@@ -2,6 +2,7 @@ package co.kr.jurumarble.vote.domain;
 
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,10 +28,15 @@ public class VoteDrinkContent {
     @Column(name = "drink_id_b")
     private Long drinkIdB;
 
+    @Builder
     public VoteDrinkContent(Long voteId, Long drinkIdA, Long drinkIdB) {
         this.voteId = voteId;
         this.drinkIdA = drinkIdA;
         this.drinkIdB = drinkIdB;
+    }
+
+    public void mappingVote(Long voteId) {
+        this.voteId = voteId;
     }
 
     @Override

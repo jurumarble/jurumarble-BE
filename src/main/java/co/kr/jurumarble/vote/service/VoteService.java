@@ -5,6 +5,7 @@ import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.user.repository.UserRepository;
 import co.kr.jurumarble.vote.domain.Vote;
 import co.kr.jurumarble.vote.domain.VoteContent;
+import co.kr.jurumarble.vote.domain.VoteDrinkContent;
 import co.kr.jurumarble.vote.domain.VoteGenerator;
 import co.kr.jurumarble.vote.dto.DoVoteInfo;
 import co.kr.jurumarble.vote.dto.GetIsUserVoted;
@@ -41,14 +42,15 @@ public class VoteService {
         userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         VoteContent voteContent = request.toVoteContent();
         Vote vote = request.toVote(userId);
-        return voteGenerator.createVote(vote, voteContent);
+        return voteGenerator.createNormalVote(vote, voteContent);
     }
 
     @Transactional
     public Long createDrinkVote(CreateDrinkVoteServiceRequest request, Long userId) {
         userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-
-        return voteGenerator.createVote(null,null);
+        VoteDrinkContent voteDrinkContent = request.toVoteDrinkContent();
+        Vote vote = request.toVote(userId);
+        return voteGenerator.createDrinkVote(vote,voteDrinkContent);
     }
 
     public GetVoteResponse getVote(Long voteId) {
