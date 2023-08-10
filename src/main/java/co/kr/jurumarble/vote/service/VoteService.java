@@ -9,14 +9,14 @@ import co.kr.jurumarble.vote.domain.VoteGenerator;
 import co.kr.jurumarble.vote.dto.DoVoteInfo;
 import co.kr.jurumarble.vote.dto.GetIsUserVoted;
 import co.kr.jurumarble.vote.dto.VoteData;
-import co.kr.jurumarble.vote.dto.VoteListData;
 import co.kr.jurumarble.vote.dto.request.UpdateVoteRequest;
 import co.kr.jurumarble.vote.dto.response.GetVoteResponse;
 import co.kr.jurumarble.vote.enums.SortByType;
-import co.kr.jurumarble.vote.repository.BookmarkRepository;
 import co.kr.jurumarble.vote.repository.VoteEntityRepository;
-import co.kr.jurumarble.vote.repository.VoteResultRepository;
+import co.kr.jurumarble.vote.repository.VoteEntityRepositoryImpl;
+import co.kr.jurumarble.vote.repository.VoteRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -32,8 +32,7 @@ public class VoteService {
 
     private final UserRepository userRepository;
     private final VoteGenerator voteGenerator;
-    private final VoteEntityRepository voteEntityRepository;
-
+    private final VoteRepository voteRepository;
 
     @Transactional
     public void createVote(CreateVoteServiceRequest request, Long userId) {
@@ -115,34 +114,29 @@ public class VoteService {
     }
 
     private Slice<VoteData> getVoteSortByTime(PageRequest pageRequest) {
-        Slice<VoteData> voteListData = voteEntityRepository.findVoteDataWithTime(pageRequest);
+        Slice<VoteData> voteListData = voteRepository.findVoteDataWithTime(pageRequest);
         return voteListData;
     }
 
     private Slice<VoteData> getVoteByPopularity(PageRequest pageRequest) {
 
-        Slice<VoteData> voteSlice = voteEntityRepository.findVoteDataWithPopularity(pageRequest);
+        Slice<VoteData> voteSlice = voteRepository.findVoteDataWithPopularity(pageRequest);
         return voteSlice;
     }
 
     public Slice<VoteData> getSearchVoteList(String keyword, SortByType sortBy, int page, int size) {
 
-        Slice<Vote> searchedVoteSlice = null;
+        Slice<VoteData> searchedVoteSlice = null;
 
         if(sortBy.equals(SortByType.ByTime)) {
             PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
-//            searchedVoteSlice = voteRepository.findAllByTitleAfter(keyword, pageRequest);
+            searchedVoteSlice = voteRepository.findVoteDataByTitleContainsWithTime(keyword, pageRequest);
         } else if(sortBy.equals(SortByType.ByPopularity)) {
             PageRequest pageRequest = PageRequest.of(page, size);
-//            searchedVoteSlice = voteRepository.findSliceByTitleContainsPopularity(keyword, pageRequest);
+            searchedVoteSlice = voteRepository.findVoteDataByTitleContainsPopularity(keyword, pageRequest);
         }
 
-//        Slice<VoteListData> voteListData = searchedVoteSlice.map(vote -> {
-//            Long countVoted = voteResultRepository.countByVote(vote);
-//            return new VoteListData(vote, countVoted);
-//        });
-//        return voteListData;
-        return null;
+        return searchedVoteSlice;
     }
 
     public List<String> getRecommendVoteList(String keyword) {

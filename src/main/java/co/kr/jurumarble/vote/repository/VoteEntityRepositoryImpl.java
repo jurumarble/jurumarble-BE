@@ -6,9 +6,9 @@ import co.kr.jurumarble.vote.dto.VoteData;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -30,7 +30,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
         this.jpaQueryFactory = new JPAQueryFactory(entityManager);
     }
     @Override
-    public Page<VoteData> findVoteDataWithPopularity(PageRequest pageRequest) {
+    public Slice<VoteData> findVoteDataWithPopularity(PageRequest pageRequest) {
         int pageNo = pageRequest.getPageNumber();
         int pageSize = pageRequest.getPageSize();
 
@@ -132,7 +132,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
     }
 
     @Override
-    public Page<VoteData> findVoteDataWithTime(PageRequest pageRequest) {
+    public Slice<VoteData> findVoteDataWithTime(PageRequest pageRequest) {
         int pageNo = pageRequest.getPageNumber();
         int pageSize = pageRequest.getPageSize();
 
@@ -161,4 +161,71 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
         long totalCount = getVoteTotalCount();
         return new PageImpl<>(voteData, pageRequest, totalCount);
     }
+
+    @Override
+    public Slice<VoteData> findVoteDataByTitleContainsPopularity(String keyword, PageRequest pageRequest) {
+        int pageNo = pageRequest.getPageNumber();
+        int pageSize = pageRequest.getPageSize();
+
+        List<Tuple> findVotesOrderByPopularTuples = getSearchVotesTupleOrderByPopular(pageNo, pageSize, keyword);
+
+        List<Long> voteIds = getVoteIdsFromFindVotes(findVotesOrderByPopularTuples);
+
+        List<VoteContent> voteContents = findVoteContentsByVoteIds(voteIds); //하나의 vote에서 두개의 voteContent 찾아야 함
+
+        Map<Long, VoteContent> voteContentsMap = voteContents.stream()  // List를 순회하면 성능이 안나오므로 <voteId, VoteConent> 로 이루어진 Map을 만듬
+                .collect(Collectors.toMap(VoteContent::getVoteId, voteContent -> voteContent));// ex) <1, {voteContent}>
+
+        List<VoteData> voteData = getFindVoteListDatas(findVotesOrderByPopularTuples, voteContentsMap);
+
+        long totalCount = getVoteTotalCount();
+
+        return new PageImpl<>(voteData, pageRequest, totalCount);
+    }
+
+    private List<Tuple> getSearchVotesTupleOrderByPopular(int pageNo, int pageSize, String keyword) {
+        return jpaQueryFactory
+                .select(vote, voteResult.id.count())
+                .from(vote)
+                .innerJoin(voteResult).on(vote.id.eq(voteResult.voteId))
+                .where(vote.title.like("%" + keyword + "%"))
+                .groupBy(vote.id)
+                .orderBy(voteResult.id.count().desc())
+                .offset(pageNo * pageSize)
+                .limit(pageSize)
+                .fetch();
+    }
+
+    @Override
+    public Slice<VoteData> findVoteDataByTitleContainsWithTime(String keyword, PageRequest pageRequest) {
+        int pageNo = pageRequest.getPageNumber();
+        int pageSize = pageRequest.getPageSize();
+
+        List<VoteData> voteData = jpaQueryFactory.select(
+                        Projections.bean(VoteData.class,
+                                vote.id,
+                                vote.postedUserId,
+                                vote.title,
+                                vote.detail,
+                                vote.filteredGender,
+                                vote.filteredAge,
+                                vote.filteredMbti,
+                                voteContent.imageA,
+                                voteContent.imageB,
+                                voteContent.titleA,
+                                voteContent.titleB
+                        ))
+                .from(vote)
+                .innerJoin(voteContent)
+                .on(vote.id.eq(voteContent.voteId))
+                .where(vote.title.like("%" + keyword + "%"))
+                .orderBy(vote.createdDate.desc())
+                .offset(pageNo * pageSize)
+                .limit(pageSize)
+                .fetch();
+
+        long totalCount = getVoteTotalCount();
+        return new PageImpl<>(voteData, pageRequest, totalCount);
+    }
+
 }

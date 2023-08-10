@@ -17,4 +17,8 @@ public interface VoteEntityRepository {
 
     Optional<VoteData> findVoteDataByVoteId(Long voteId);
 
+    Slice<VoteData> findVoteDataByTitleContainsPopularity(String keyword, PageRequest pageRequest);
+
+    Slice<VoteData> findVoteDataByTitleContainsWithTime(String keyword, PageRequest pageRequest);
+
 }
