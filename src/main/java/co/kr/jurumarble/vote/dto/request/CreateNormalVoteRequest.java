@@ -34,8 +34,6 @@ public class CreateNormalVoteRequest {
     @NotBlank(message = "투표 B 이미지는 필수입니다.")
     private String imageB;
 
-    @Schema(description = "투표 타입")
-    private VoteType voteType;
 
     @Builder
     public CreateNormalVoteRequest(String title, String titleA, String titleB, String imageA, String imageB) {
@@ -53,7 +51,7 @@ public class CreateNormalVoteRequest {
                 .titleB(titleB)
                 .imageA(imageA)
                 .imageB(imageB)
-                .voteType(voteType)
+                .voteType(VoteType.NORMAL)
                 .build();
     }
 }

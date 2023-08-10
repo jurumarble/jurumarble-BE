@@ -22,15 +22,12 @@ public class CreateDrinkVoteRequest {
     @Schema(description = "전통주 후보 B의 id")
     private Long drinkIdB;
 
-    @Schema(description = "투표 타입")
-    private VoteType voteType;
-
     public CreateDrinkVoteServiceRequest toServiceRequest() {
         return CreateDrinkVoteServiceRequest.builder()
                 .title(title)
                 .drinkIdA(drinkIdA)
                 .drinkIdB(drinkIdB)
-                .voteType(voteType)
+                .voteType(VoteType.DRINK)
                 .build();
     }
 }
