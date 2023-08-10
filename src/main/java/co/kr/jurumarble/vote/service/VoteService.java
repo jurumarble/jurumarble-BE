@@ -29,17 +29,15 @@ import java.util.List;
 public class VoteService {
 
     private final UserRepository userRepository;
-    private final VoteResultRepository voteResultRepository;
-    private final BookmarkRepository bookmarkRepository;
     private final VoteGenerator voteGenerator;
 
 
     @Transactional
-    public Long createVote(CreateVoteServiceRequest request, Long userId) {
+    public void createVote(CreateVoteServiceRequest request, Long userId) {
         userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         VoteContent voteContent = request.toVoteContent();
         Vote vote = request.toVote(userId);
-        return voteGenerator.createVote(vote, voteContent);
+        voteGenerator.createVote(vote, voteContent);
     }
 
     public GetVoteResponse getVote(Long voteId) {
