@@ -35,7 +35,6 @@ public class CreateNormalVoteRequest {
     private String imageB;
 
     @Schema(description = "투표 타입")
-    @NotBlank(message = "투표 타입은 필수입니다.")
     private VoteType voteType;
 
     @Builder

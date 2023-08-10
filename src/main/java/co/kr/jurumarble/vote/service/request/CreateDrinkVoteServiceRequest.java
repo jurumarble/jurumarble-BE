@@ -39,6 +39,7 @@ public class CreateDrinkVoteServiceRequest {
     public Vote toVote(Long userId) {
         return Vote.builder()
                 .postedUserId(userId)
+                .voteType(voteType)
                 .title(title)
                 .build();
     }

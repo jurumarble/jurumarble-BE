@@ -33,7 +33,7 @@ public class VoteController {
     private final VoteService voteService;
 
     @Operation(summary = "일반 투표 생성", description = "헤더에 토큰 담고, 바디에 {title, titleA, titleB, imageA, imageB, filteredGender, filteredAge, filteredMbti} json 형식으로 보내주시면 됩니다.")
-    @PostMapping("")
+    @PostMapping("/normal")
     public ResponseEntity createNormalVote(@Valid @RequestBody CreateNormalVoteRequest request, @RequestAttribute Long userId) {
 
         voteService.createNormalVote(request.toServiceRequest(), userId);
@@ -42,7 +42,7 @@ public class VoteController {
     }
 
     @Operation(summary = "전통주 투표 생성", description = "헤더에 토큰 담고, 바디에 {title, titleA, titleB, imageA, imageB, filteredGender, filteredAge, filteredMbti} json 형식으로 보내주시면 됩니다.")
-    @PostMapping("")
+    @PostMapping("/drink")
     public ResponseEntity createDrinkVote(@Valid @RequestBody CreateDrinkVoteRequest request, @RequestAttribute Long userId) {
 
         voteService.createDrinkVote(request.toServiceRequest(), userId);

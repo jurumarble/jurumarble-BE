@@ -3,6 +3,7 @@ DROP TABLE if EXISTS vote_content;
 DROP TABLE if EXISTS users CASCADE;
 DROP TABLE if EXISTS vote_result;
 DROP TABLE if EXISTS drink;
+DROP TABLE if EXISTS vote_drink_content;
 
 CREATE TABLE vote
 (

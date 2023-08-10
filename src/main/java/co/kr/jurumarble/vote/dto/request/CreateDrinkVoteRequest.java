@@ -23,7 +23,6 @@ public class CreateDrinkVoteRequest {
     private Long drinkIdB;
 
     @Schema(description = "투표 타입")
-    @NotBlank(message = "투표 타입은 필수입니다.")
     private VoteType voteType;
 
     public CreateDrinkVoteServiceRequest toServiceRequest() {
