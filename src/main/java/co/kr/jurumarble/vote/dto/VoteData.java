@@ -35,5 +35,5 @@ public class VoteData {
 
     private String titleB;
 
-    private Long votedNum;
+    private Long votedCount;
 }

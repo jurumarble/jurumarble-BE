@@ -8,11 +8,13 @@ import co.kr.jurumarble.vote.domain.VoteContent;
 import co.kr.jurumarble.vote.domain.VoteGenerator;
 import co.kr.jurumarble.vote.dto.DoVoteInfo;
 import co.kr.jurumarble.vote.dto.GetIsUserVoted;
+import co.kr.jurumarble.vote.dto.VoteData;
 import co.kr.jurumarble.vote.dto.VoteListData;
 import co.kr.jurumarble.vote.dto.request.UpdateVoteRequest;
 import co.kr.jurumarble.vote.dto.response.GetVoteResponse;
 import co.kr.jurumarble.vote.enums.SortByType;
 import co.kr.jurumarble.vote.repository.BookmarkRepository;
+import co.kr.jurumarble.vote.repository.VoteEntityRepository;
 import co.kr.jurumarble.vote.repository.VoteResultRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +32,7 @@ public class VoteService {
 
     private final UserRepository userRepository;
     private final VoteGenerator voteGenerator;
+    private final VoteEntityRepository voteEntityRepository;
 
 
     @Transactional
@@ -90,15 +93,15 @@ public class VoteService {
 
     }
 
-    public Slice<VoteListData> getVoteList(SortByType sortBy, Integer page, Integer size) {
+    public Slice<VoteData> getVoteList(SortByType sortBy, Integer page, Integer size) {
 
-        Slice<VoteListData> voteListData = getVoteListData(sortBy, page, size);
+        Slice<VoteData> voteListData = getVoteListData(sortBy, page, size);
 
         return voteListData;
     }
 
-    private Slice<VoteListData> getVoteListData(SortByType sortBy, Integer page, Integer size) {
-        Slice<VoteListData> voteListData;
+    private Slice<VoteData> getVoteListData(SortByType sortBy, Integer page, Integer size) {
+        Slice<VoteData> voteListData;
         if (sortBy.equals(SortByType.ByTime)) {
             PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
             voteListData = getVoteSortByTime(pageRequest);
@@ -111,29 +114,18 @@ public class VoteService {
         return voteListData;
     }
 
-    private Slice<VoteListData> getVoteSortByTime(PageRequest pageRequest) {
-        Slice<VoteListData> voteListData;
-
-//        Slice<FindVoteListData> sliceBy = voteRepository.findSliceBy(pageRequest);
-//        voteListData = sliceBy.map(findVoteListData -> new VoteListData(findVoteListData.getVote(), findVoteListData.getCnt()));
-
-//        return voteListData;
-        return null;
+    private Slice<VoteData> getVoteSortByTime(PageRequest pageRequest) {
+        Slice<VoteData> voteListData = voteEntityRepository.findVoteDataWithTime(pageRequest);
+        return voteListData;
     }
 
-    private Slice<VoteListData> getVoteByPopularity(PageRequest pageRequest) {
+    private Slice<VoteData> getVoteByPopularity(PageRequest pageRequest) {
 
-//        Slice<Vote> voteSlice = voteRepository.findWithVoteResult(pageRequest);
-
-//        Slice<VoteListData> voteListData = voteSlice.map(vote -> {
-//            Long countVoted = voteResultRepository.countByVote(vote);
-//            return new VoteListData(vote, countVoted);
-//        });
-//        return voteListData;
-        return null;
+        Slice<VoteData> voteSlice = voteEntityRepository.findVoteDataWithPopularity(pageRequest);
+        return voteSlice;
     }
 
-    public Slice<VoteListData> getSearchVoteList(String keyword, SortByType sortBy, int page, int size) {
+    public Slice<VoteData> getSearchVoteList(String keyword, SortByType sortBy, int page, int size) {
 
         Slice<Vote> searchedVoteSlice = null;
 

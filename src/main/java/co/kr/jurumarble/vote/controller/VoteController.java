@@ -1,6 +1,7 @@
 package co.kr.jurumarble.vote.controller;
 
 import co.kr.jurumarble.vote.dto.GetIsUserVoted;
+import co.kr.jurumarble.vote.dto.VoteData;
 import co.kr.jurumarble.vote.dto.VoteListData;
 import co.kr.jurumarble.vote.dto.request.CreateVoteRequest;
 import co.kr.jurumarble.vote.dto.request.DoVoteRequest;
@@ -43,7 +44,7 @@ public class VoteController {
     @Operation(summary = "투표 리스트 조회", description = "파라미터에 sortBy, page, size, category 보내주시면 됩니다.")
     @GetMapping("")
     public ResponseEntity<GetVoteListResponse> getVoteList(@RequestParam SortByType sortBy, @RequestParam int page, @RequestParam int size) {
-        Slice<VoteListData> voteListData = voteService.getVoteList(sortBy, page, size);
+        Slice<VoteData> voteListData = voteService.getVoteList(sortBy, page, size);
 
         return new ResponseEntity(new GetVoteListResponse(voteListData), HttpStatus.OK);
     }
@@ -51,7 +52,7 @@ public class VoteController {
     @Operation(summary = "투표 리스트 검색", description = "파라미터에 keyeword, sortBy, page, size, category 보내주시면 됩니다.")
     @GetMapping("/search")
     public ResponseEntity<GetVoteListResponse> getVoteSearchList(@RequestParam String keyword, @RequestParam SortByType sortBy, @RequestParam int page, @RequestParam int size) {
-        Slice<VoteListData> voteListData = voteService.getSearchVoteList(keyword, sortBy, page, size);
+        Slice<VoteData> voteListData = voteService.getSearchVoteList(keyword, sortBy, page, size);
         return new ResponseEntity(new GetVoteListResponse(voteListData), HttpStatus.OK);
     }
 

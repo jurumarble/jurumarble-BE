@@ -93,7 +93,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                             .imageB(voteContent.getImageB())
                             .titleA(voteContent.getTitleA())
                             .titleB(voteContent.getTitleB())
-                            .votedNum(findVoteTuple.get(1,Long.class))
+                            .votedCount(findVoteTuple.get(1,Long.class))
                             .build();
                 }).collect(Collectors.toList());
     }
