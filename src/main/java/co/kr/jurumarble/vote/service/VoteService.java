@@ -92,7 +92,7 @@ public class VoteService {
 
         if(vote.isVoteOfUser(user.getId())) throw new UserNotAccessRightException();
 
-        if(voteResultRepository.existsByVoteAndVotedUser(vote, user)) throw new AlreadyUserDoVoteException();
+        if(voteResultRepository.existsByVoteIdAndVotedUserId(vote.getId(), user.getId())) throw new AlreadyUserDoVoteException();
 
         VoteResult voteResult = new VoteResult(vote.getId(), user.getId(), info.getChoice());
 
@@ -148,11 +148,10 @@ public class VoteService {
     }
 
     public List<String> getRecommendVoteList(String keyword) {
-//        return voteRepository.findByTitleContains(keyword).stream()
-//                .limit(5)
-//                .map(Vote::getTitle)
-//                .collect(Collectors.toList());
-        return null;
+        return voteRepository.findByTitleContains(keyword).stream()
+                .limit(5)
+                .map(Vote::getTitle)
+                .collect(Collectors.toList());
     }
 
     public GetIsUserVoted isUserVoted(Long voteId, Long userId) {

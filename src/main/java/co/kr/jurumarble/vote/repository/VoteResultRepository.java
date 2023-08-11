@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface VoteResultRepository extends JpaRepository<VoteResult, Long> {
-    boolean existsByVoteAndVotedUser(@Param("vote") Vote vote, @Param("votedUser") User user);
+    boolean existsByVoteIdAndVotedUserId(@Param("voteId") Long voteId, @Param("votedUserId") Long votedUserId);
 
 //    Long countByVote(@Param("vote") Vote vote);
 

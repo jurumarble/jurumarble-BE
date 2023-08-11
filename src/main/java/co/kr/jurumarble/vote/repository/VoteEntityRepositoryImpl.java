@@ -228,4 +228,50 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
         return new PageImpl<>(normalVoteData, pageRequest, totalCount);
     }
 
+    @Override
+    public List<Vote> findByTitleContains(String keyword) {
+        List<Vote> recommendTitle = jpaQueryFactory
+                .select(vote)
+                .from(vote)
+                .innerJoin(voteContent)
+                .on(vote.id.eq(voteContent.voteId))
+                .innerJoin(voteResult)
+                .on(vote.id.eq(voteResult.voteId))
+                .where(vote.title.like(keyword + "%"))
+                .groupBy(vote.id)
+                .orderBy(voteResult.id.count().desc())
+                .fetch();
+
+        return recommendTitle;
+    }
+
+//    @Override
+//    public List<String> findByTitleContains(String keyword) {
+//
+//        List<Tuple> findVotesOrderByPopularTuples = getRecommendVotesTupleOrderByPopular(keyword);
+//
+//        List<Long> voteIds = getVoteIdsFromFindVotes(findVotesOrderByPopularTuples);
+//
+//        List<VoteContent> voteContents = findVoteContentsByVoteIds(voteIds); //하나의 vote에서 두개의 voteContent 찾아야 함
+//
+//        Map<Long, VoteContent> voteContentsMap = voteContents.stream()  // List를 순회하면 성능이 안나오므로 <voteId, VoteConent> 로 이루어진 Map을 만듬
+//                .collect(Collectors.toMap(VoteContent::getVoteId, voteContent -> voteContent));// ex) <1, {voteContent}>
+//
+//        List<NormalVoteData> normalVoteData = getFindVoteListDatas(findVotesOrderByPopularTuples, voteContentsMap);
+//
+//        long totalCount = getVoteTotalCount();
+//
+//    }
+//
+//    private List<Tuple> getRecommendVotesTupleOrderByPopular(String keyword) {
+//        return jpaQueryFactory
+//                .select(vote, voteResult.id.count())
+//                .from(vote)
+//                .leftJoin(voteResult).on(vote.id.eq(voteResult.voteId))
+//                .where(vote.title.like(keyword + "%"))
+//                .groupBy(vote.id)
+//                .orderBy(voteResult.id.count().desc())
+//                .fetch();
+//    }
+
 }
