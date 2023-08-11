@@ -2,18 +2,21 @@ package co.kr.jurumarble.vote.service;
 
 import co.kr.jurumarble.exception.user.UserNotAccessRightException;
 import co.kr.jurumarble.exception.user.UserNotFoundException;
+import co.kr.jurumarble.exception.vote.AlreadyUserDoVoteException;
 import co.kr.jurumarble.exception.vote.VoteNotFoundException;
 import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.user.repository.UserRepository;
 import co.kr.jurumarble.vote.domain.Vote;
 import co.kr.jurumarble.vote.domain.VoteContent;
 import co.kr.jurumarble.vote.domain.VoteGenerator;
+import co.kr.jurumarble.vote.domain.VoteResult;
 import co.kr.jurumarble.vote.dto.DoVoteInfo;
 import co.kr.jurumarble.vote.dto.GetIsUserVoted;
 import co.kr.jurumarble.vote.dto.VoteData;
 import co.kr.jurumarble.vote.enums.SortByType;
 import co.kr.jurumarble.vote.repository.VoteContentRepository;
 import co.kr.jurumarble.vote.repository.VoteRepository;
+import co.kr.jurumarble.vote.repository.VoteResultRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -32,6 +35,7 @@ public class VoteService {
     private final VoteGenerator voteGenerator;
     private final VoteRepository voteRepository;
     private final VoteContentRepository voteContentRepository;
+    private final VoteResultRepository voteResultRepository;
 
     @Transactional
     public void createVote(CreateVoteServiceRequest request, Long userId) {
@@ -73,25 +77,25 @@ public class VoteService {
 
     public void deleteVote(Long voteId, Long userId) {
 
-//        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
-//
-//        isVoteOfUser(userId, vote);
-//
-//        voteRepository.delete(vote);
+        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+
+        isVoteOfUser(userId, vote);
+
+        voteRepository.delete(vote);
     }
 
     public void doVote(DoVoteInfo info) {
 
-//        Vote vote = voteRepository.findById(info.getVoteId()).orElseThrow(VoteNotFoundException::new);
-//        User user = userRepository.findById(info.getUserId()).orElseThrow(UserNotFoundException::new);
+        Vote vote = voteRepository.findById(info.getVoteId()).orElseThrow(VoteNotFoundException::new);
+        User user = userRepository.findById(info.getUserId()).orElseThrow(UserNotFoundException::new);
 
-//        if(vote.isVoteOfUser(user.getId())) throw new UserNotAccessRightException();
+        if(vote.isVoteOfUser(user.getId())) throw new UserNotAccessRightException();
 
-//        if(voteResultRepository.existsByVoteAndVotedUser(vote, user)) throw new AlreadyUserDoVoteException();
+        if(voteResultRepository.existsByVoteAndVotedUser(vote, user)) throw new AlreadyUserDoVoteException();
 
-//        VoteResult voteResult = new VoteResult(vote, user, info.getChoice());
+        VoteResult voteResult = new VoteResult(vote.getId(), user.getId(), info.getChoice());
 
-//        voteResultRepository.save(voteResult);
+        voteResultRepository.save(voteResult);
 
     }
 
