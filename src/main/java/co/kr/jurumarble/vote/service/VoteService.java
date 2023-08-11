@@ -157,12 +157,11 @@ public class VoteService {
 
     public GetIsUserVoted isUserVoted(Long voteId, Long userId) {
         GetIsUserVoted getIsUserVoted = new GetIsUserVoted(false, null);
-//        voteResultRepository.getVoteResultByVoteIdAndUserId(voteId, userId).ifPresent(voteResult -> {
-//            getIsUserVoted.setVoted(true);
-//            getIsUserVoted.setUserChoice(voteResult.getChoice());
-//        });
-//        return getIsUserVoted;
-        return null;
+        voteResultRepository.getVoteResultByVoteIdAndUserId(voteId, userId).ifPresent(voteResult -> {
+            getIsUserVoted.setVoted(true);
+            getIsUserVoted.setUserChoice(voteResult.getChoice());
+        });
+        return getIsUserVoted;
     }
 
     public void bookmarkVote(Long userId, Long voteId) {

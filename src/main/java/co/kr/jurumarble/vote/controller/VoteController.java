@@ -114,9 +114,7 @@ public class VoteController {
     @GetMapping("/{voteId}/voted")
     public ResponseEntity<GetIsUserVotedResponse> getIsUserVoted(@PathVariable Long voteId, @RequestAttribute Long userId) {
         GetIsUserVoted userVoted = voteService.isUserVoted(voteId, userId);
-        GetIsUserVotedResponse getIsUserVotedResponse = new GetIsUserVotedResponse();
-        getIsUserVotedResponse.converter(userVoted);
-        return new ResponseEntity(getIsUserVotedResponse,HttpStatus.OK);
+        return new ResponseEntity(new GetIsUserVotedResponse(userVoted),HttpStatus.OK);
     }
 //
 //    @Operation(summary = "북마크 여부 조회", description = "파라미어테 voteId, 헤더에 userId 보내주시면 됩니다.")

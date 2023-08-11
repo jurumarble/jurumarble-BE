@@ -13,8 +13,8 @@ public class GetIsUserVotedResponse {
 
     private ChoiceType userChoice;
 
-    public void converter(GetIsUserVoted getIsUserVoted) {
-        isVoted = getIsUserVoted.isVoted();
-        userChoice = getIsUserVoted.getUserChoice();
+    public GetIsUserVotedResponse(GetIsUserVoted userVoted) {
+        this.isVoted = userVoted.isVoted();
+        this.userChoice = userVoted.getUserChoice();
     }
 }
