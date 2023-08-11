@@ -1,7 +1,10 @@
 package co.kr.jurumarble.comment.service;
 
+import co.kr.jurumarble.client.tourApi.RestaurantInfoDto;
+import co.kr.jurumarble.client.tourApi.TourApiService;
 import co.kr.jurumarble.comment.domain.Comment;
 import co.kr.jurumarble.comment.domain.CommentEmotion;
+import co.kr.jurumarble.comment.dto.SearchSnackResponse;
 import co.kr.jurumarble.comment.dto.request.CreateCommentRequest;
 import co.kr.jurumarble.comment.dto.request.GetCommentRequest;
 import co.kr.jurumarble.comment.dto.request.UpdateCommentRequest;
@@ -28,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +41,8 @@ public class CommentService {
     private final VoteRepository voteRepository;
     private final CommentRepository commentRepository;
     private final CommentEmotionRepository commentEmotionRepository;
+
+    private final TourApiService tourApiService;
 
     public void createComment(Long voteId, Long userId, CreateCommentRequest request) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
@@ -100,12 +106,16 @@ public class CommentService {
 
     }
 
-    public void searchSnack(Long voteId, Long commentId, Long userId, String keyword) {
+    public List<SearchSnackResponse> searchSnack(Long voteId, Long commentId, Long userId, String keyword, int page) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
 
+        //vote의 지역이 있으면 받아오고 없으면 선택받은 지역
 
+        List<RestaurantInfoDto> restaurantInfo = getRestaurantInfoList(keyword, page);
+
+        return mapToSearchSnackResponses(restaurantInfo);
 
     }
 
@@ -213,6 +223,23 @@ public class CommentService {
         newEmotion.mappingUser(user);
         comment.updateLikeHateCount();
         commentEmotionRepository.save(newEmotion);
+    }
+
+    private List<RestaurantInfoDto> getRestaurantInfoList(String keyword, int page) {
+        return (keyword != null)
+                ? tourApiService.getRestaurantInfoByKeyWord(keyword, page, 1)
+                : tourApiService.getRestaurantInfo(1, page);
+    }
+
+    private List<SearchSnackResponse> mapToSearchSnackResponses(List<RestaurantInfoDto> restaurantInfo) {
+        return restaurantInfo.stream()
+                .map(restaurant -> new SearchSnackResponse(
+                        restaurant.getContentId(),
+                        restaurant.getTitle(),
+                        restaurant.getFirstImage(),
+                        tourApiService.getTreatMenu(restaurant.getContentId())
+                ))
+                .collect(Collectors.toList());
     }
 
 }

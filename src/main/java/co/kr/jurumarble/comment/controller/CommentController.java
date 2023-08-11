@@ -1,5 +1,6 @@
 package co.kr.jurumarble.comment.controller;
 
+import co.kr.jurumarble.comment.dto.SearchSnackResponse;
 import co.kr.jurumarble.comment.dto.request.GetCommentRequest;
 import co.kr.jurumarble.comment.dto.request.CreateCommentRequest;
 import co.kr.jurumarble.comment.dto.request.UpdateCommentRequest;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RequestMapping("/api")
 @RestController
@@ -96,11 +98,11 @@ public class CommentController {
 
     @Operation(summary = "안주 검색", description = "헤더에 토큰 담고, 파라미터에 voteId, commentId 보내주시면 됩니다")
     @GetMapping("/votes/{voteId}/comments/{commentId}/snack")
-    public ResponseEntity searchSnack(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Long userId, @RequestParam(value = "keyword", required = false) String keyword) {
+    public ResponseEntity<List<SearchSnackResponse>> searchSnack(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Long userId, @RequestParam(value = "keyword", required = false) String keyword, @RequestParam int page) {
 
-        commentService.searchSnack(voteId, commentId, userId, keyword);
+        List<SearchSnackResponse> searchSnackResponses = commentService.searchSnack(voteId, commentId, userId, keyword, page);
 
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(searchSnackResponses, HttpStatus.OK);
     }
 
 

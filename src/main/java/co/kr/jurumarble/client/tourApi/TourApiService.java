@@ -56,8 +56,6 @@ public class TourApiService {
                 mobileApp,
                 responseType);
 
-        System.out.println("API response: " + introResponse);
-
         return introResponse.getTreatMenu();
     }
 
@@ -73,8 +71,6 @@ public class TourApiService {
                 numOfRows,
                 responseType);
 
-
-        System.out.println("API response: " + imageResponse);
 
         return imageResponse.getDetailImages();
     }
@@ -109,8 +105,6 @@ public class TourApiService {
             restaurantInfoList.add(new RestaurantInfoDto(contentId, firstImage, title));
         }
 
-        System.out.println("API response: " + restaurantInfoList);
-
         return restaurantInfoList;
     }
 
@@ -141,8 +135,6 @@ public class TourApiService {
             String title = titles.get(i);
             restaurantInfoList.add(new RestaurantInfoDto(contentId, firstImage, title));
         }
-
-        System.out.println("API response: " + restaurantInfoList);
 
         return restaurantInfoList;
     }
