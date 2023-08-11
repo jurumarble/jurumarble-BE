@@ -12,7 +12,7 @@ import co.kr.jurumarble.vote.domain.VoteGenerator;
 import co.kr.jurumarble.vote.domain.VoteResult;
 import co.kr.jurumarble.vote.dto.DoVoteInfo;
 import co.kr.jurumarble.vote.dto.GetIsUserVoted;
-import co.kr.jurumarble.vote.dto.VoteData;
+import co.kr.jurumarble.vote.dto.NormalVoteData;
 import co.kr.jurumarble.vote.enums.SortByType;
 import co.kr.jurumarble.vote.repository.VoteContentRepository;
 import co.kr.jurumarble.vote.repository.VoteRepository;
@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -99,15 +100,15 @@ public class VoteService {
 
     }
 
-    public Slice<VoteData> getVoteList(SortByType sortBy, Integer page, Integer size) {
+    public Slice<NormalVoteData> getVoteList(SortByType sortBy, Integer page, Integer size) {
 
-        Slice<VoteData> voteListData = getVoteListData(sortBy, page, size);
+        Slice<NormalVoteData> voteListData = getVoteListData(sortBy, page, size);
 
         return voteListData;
     }
 
-    private Slice<VoteData> getVoteListData(SortByType sortBy, Integer page, Integer size) {
-        Slice<VoteData> voteListData;
+    private Slice<NormalVoteData> getVoteListData(SortByType sortBy, Integer page, Integer size) {
+        Slice<NormalVoteData> voteListData;
         if (sortBy.equals(SortByType.ByTime)) {
             PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
             voteListData = getVoteSortByTime(pageRequest);
@@ -120,20 +121,20 @@ public class VoteService {
         return voteListData;
     }
 
-    private Slice<VoteData> getVoteSortByTime(PageRequest pageRequest) {
-        Slice<VoteData> voteListData = voteRepository.findVoteDataWithTime(pageRequest);
+    private Slice<NormalVoteData> getVoteSortByTime(PageRequest pageRequest) {
+        Slice<NormalVoteData> voteListData = voteRepository.findVoteDataWithTime(pageRequest);
         return voteListData;
     }
 
-    private Slice<VoteData> getVoteByPopularity(PageRequest pageRequest) {
+    private Slice<NormalVoteData> getVoteByPopularity(PageRequest pageRequest) {
 
-        Slice<VoteData> voteSlice = voteRepository.findVoteDataWithPopularity(pageRequest);
+        Slice<NormalVoteData> voteSlice = voteRepository.findVoteDataWithPopularity(pageRequest);
         return voteSlice;
     }
 
-    public Slice<VoteData> getSearchVoteList(String keyword, SortByType sortBy, int page, int size) {
+    public Slice<NormalVoteData> getSearchVoteList(String keyword, SortByType sortBy, int page, int size) {
 
-        Slice<VoteData> searchedVoteSlice = null;
+        Slice<NormalVoteData> searchedVoteSlice = null;
 
         if(sortBy.equals(SortByType.ByTime)) {
             PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
@@ -190,18 +191,3 @@ public class VoteService {
 
     }
 }
-
-// voteResult 상위 투표 결과 5개 가져왔음 voteId 5개만 잇음
-// voteId 5개를 쿼리로 데이터를 뽑아오는거 페이지네이션으로 프론트에 반환
-
-// Slice<VoteResult> voteResults (5개) -> voteId 5개 있으면
-// voteResults.stream().map(voteResult -> voteRepository.findById(voteResult.voteId)).collects.toList;
-
-// Slice<Vote> voteRepository.findById(voteId 5개)
-
-// page = 3, size = 10 -> 30번째부터 40번쨰까지 받아오는거
-
-// jpa 에서 제공하는 voteResult말고 우리가 정의한 객체 끍어오는
-
-// 목표-> 투표 인기순 조회 투표 결과를 통해서 투표를 가지고 올 때
-// 투표안에 작성자가 있다,

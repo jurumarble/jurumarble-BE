@@ -5,14 +5,13 @@ import co.kr.jurumarble.exception.vote.VoteNotFoundException;
 import co.kr.jurumarble.user.enums.AgeType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
-import co.kr.jurumarble.vote.dto.VoteData;
+import co.kr.jurumarble.vote.dto.NormalVoteData;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.test.context.TestPropertySource;
@@ -45,7 +44,7 @@ class VoteEntityRepositoryTest {
         PageRequest of = PageRequest.of(0, 7);
 
         // when
-        Slice<VoteData> actual = voteEntityRepository.findVoteDataWithPopularity(of);
+        Slice<NormalVoteData> actual = voteEntityRepository.findVoteDataWithPopularity(of);
 
         // then
         assertThat(actual).hasSize(7)
@@ -66,10 +65,10 @@ class VoteEntityRepositoryTest {
     @Test
     void findVoteDataByVoteId() {
         // given // when
-        VoteData voteData = voteEntityRepository.findVoteDataByVoteId(1L).orElseThrow(VoteNotFoundException::new);
+        NormalVoteData normalVoteData = voteEntityRepository.findVoteDataByVoteId(1L).orElseThrow(VoteNotFoundException::new);
 
         // then
-        assertThat(Collections.singletonList(voteData)).extracting(
+        assertThat(Collections.singletonList(normalVoteData)).extracting(
                 "title",
                 "detail",
                 "filteredAge",
@@ -91,7 +90,7 @@ class VoteEntityRepositoryTest {
         PageRequest of = PageRequest.of(0, 7);
 
         // when
-        Slice<VoteData> actual = voteEntityRepository.findVoteDataWithTime(of);
+        Slice<NormalVoteData> actual = voteEntityRepository.findVoteDataWithTime(of);
 
         // then
         assertThat(actual).hasSize(7)

@@ -1,7 +1,6 @@
 package co.kr.jurumarble.vote.dto.response;
 
-import co.kr.jurumarble.vote.dto.VoteData;
-import co.kr.jurumarble.vote.dto.VoteListData;
+import co.kr.jurumarble.vote.dto.NormalVoteData;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Slice;
@@ -10,9 +9,9 @@ import org.springframework.data.domain.Slice;
 @NoArgsConstructor
 public class GetVoteListResponse {
 
-    private Slice<VoteData> voteSlice;
+    private Slice<NormalVoteData> voteSlice;
 
-    public GetVoteListResponse(Slice<VoteData> voteSlice) {
+    public GetVoteListResponse(Slice<NormalVoteData> voteSlice) {
         this.voteSlice = voteSlice;
     }
 }

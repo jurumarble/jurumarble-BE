@@ -2,7 +2,7 @@ package co.kr.jurumarble.vote.repository;
 
 import co.kr.jurumarble.vote.domain.Vote;
 import co.kr.jurumarble.vote.domain.VoteContent;
-import co.kr.jurumarble.vote.dto.VoteData;
+import co.kr.jurumarble.vote.dto.NormalVoteData;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -30,7 +30,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
         this.jpaQueryFactory = new JPAQueryFactory(entityManager);
     }
     @Override
-    public Slice<VoteData> findVoteDataWithPopularity(PageRequest pageRequest) {
+    public Slice<NormalVoteData> findVoteDataWithPopularity(PageRequest pageRequest) {
         int pageNo = pageRequest.getPageNumber();
         int pageSize = pageRequest.getPageSize();
 
@@ -38,16 +38,16 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
 
         List<Long> voteIds = getVoteIdsFromFindVotes(findVotesOrderByPopularTuples);
 
-        List<VoteContent> voteContents = findVoteContentsByVoteIds(voteIds); //하나의 vote에서 두개의 voteContent 찾아야 함
+        List<VoteContent> voteContents = findVoteContentsByVoteIds(voteIds); //각 vote에서 voteContent 찾아야 함
 
         Map<Long, VoteContent> voteContentsMap = voteContents.stream()  // List를 순회하면 성능이 안나오므로 <voteId, VoteConent> 로 이루어진 Map을 만듬
                 .collect(Collectors.toMap(VoteContent::getVoteId, voteContent -> voteContent));// ex) <1, {voteContent}>
 
-        List<VoteData> voteData = getFindVoteListDatas(findVotesOrderByPopularTuples, voteContentsMap);
+        List<NormalVoteData> normalVoteData = getFindVoteListDatas(findVotesOrderByPopularTuples, voteContentsMap);
 
         long totalCount = getVoteTotalCount();
 
-        return new PageImpl<>(voteData, pageRequest, totalCount);
+        return new PageImpl<>(normalVoteData, pageRequest, totalCount);
     }
 
     private List<Tuple> getVotesTupleOrderByPopular(int pageNo, int pageSize) {
@@ -77,12 +77,12 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .fetch();
     }
 
-    private List<VoteData> getFindVoteListDatas(List<Tuple> findVotesOrderByPopularTuples, Map<Long, VoteContent> voteContentsMap) {
+    private List<NormalVoteData> getFindVoteListDatas(List<Tuple> findVotesOrderByPopularTuples, Map<Long, VoteContent> voteContentsMap) {
         return findVotesOrderByPopularTuples.stream()
                 .map(findVoteTuple -> {
                     Vote vote = findVoteTuple.get(0, Vote.class);
                     VoteContent voteContent = voteContentsMap.get(vote.getId());
-                    return VoteData.builder()
+                    return NormalVoteData.builder()
                             .voteId(vote.getId())
                             .postedUserId(vote.getPostedUserId())
                             .title(vote.getTitle())
@@ -108,9 +108,9 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
 
 
     @Override
-    public Optional<VoteData> findVoteDataByVoteId(Long voteId) {
-        VoteData voteData = jpaQueryFactory.select(
-                Projections.bean(VoteData.class,
+    public Optional<NormalVoteData> findVoteDataByVoteId(Long voteId) {
+        NormalVoteData normalVoteData = jpaQueryFactory.select(
+                Projections.bean(NormalVoteData.class,
                         vote.id,
                         vote.postedUserId,
                         vote.title,
@@ -128,16 +128,16 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .on(vote.id.eq(voteContent.voteId))
                 .where(vote.id.eq(voteId))
                 .fetchOne();
-        return Optional.ofNullable(voteData);
+        return Optional.ofNullable(normalVoteData);
     }
 
     @Override
-    public Slice<VoteData> findVoteDataWithTime(PageRequest pageRequest) {
+    public Slice<NormalVoteData> findVoteDataWithTime(PageRequest pageRequest) {
         int pageNo = pageRequest.getPageNumber();
         int pageSize = pageRequest.getPageSize();
 
-        List<VoteData> voteData = jpaQueryFactory.select(
-                        Projections.bean(VoteData.class,
+        List<NormalVoteData> normalVoteData = jpaQueryFactory.select(
+                        Projections.bean(NormalVoteData.class,
                                 vote.id,
                                 vote.postedUserId,
                                 vote.title,
@@ -159,11 +159,11 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .fetch();
 
         long totalCount = getVoteTotalCount();
-        return new PageImpl<>(voteData, pageRequest, totalCount);
+        return new PageImpl<>(normalVoteData, pageRequest, totalCount);
     }
 
     @Override
-    public Slice<VoteData> findVoteDataByTitleContainsPopularity(String keyword, PageRequest pageRequest) {
+    public Slice<NormalVoteData> findVoteDataByTitleContainsPopularity(String keyword, PageRequest pageRequest) {
         int pageNo = pageRequest.getPageNumber();
         int pageSize = pageRequest.getPageSize();
 
@@ -176,11 +176,11 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
         Map<Long, VoteContent> voteContentsMap = voteContents.stream()  // List를 순회하면 성능이 안나오므로 <voteId, VoteConent> 로 이루어진 Map을 만듬
                 .collect(Collectors.toMap(VoteContent::getVoteId, voteContent -> voteContent));// ex) <1, {voteContent}>
 
-        List<VoteData> voteData = getFindVoteListDatas(findVotesOrderByPopularTuples, voteContentsMap);
+        List<NormalVoteData> normalVoteData = getFindVoteListDatas(findVotesOrderByPopularTuples, voteContentsMap);
 
         long totalCount = getVoteTotalCount();
 
-        return new PageImpl<>(voteData, pageRequest, totalCount);
+        return new PageImpl<>(normalVoteData, pageRequest, totalCount);
     }
 
     private List<Tuple> getSearchVotesTupleOrderByPopular(int pageNo, int pageSize, String keyword) {
@@ -197,12 +197,12 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
     }
 
     @Override
-    public Slice<VoteData> findVoteDataByTitleContainsWithTime(String keyword, PageRequest pageRequest) {
+    public Slice<NormalVoteData> findVoteDataByTitleContainsWithTime(String keyword, PageRequest pageRequest) {
         int pageNo = pageRequest.getPageNumber();
         int pageSize = pageRequest.getPageSize();
 
-        List<VoteData> voteData = jpaQueryFactory.select(
-                        Projections.bean(VoteData.class,
+        List<NormalVoteData> normalVoteData = jpaQueryFactory.select(
+                        Projections.bean(NormalVoteData.class,
                                 vote.id,
                                 vote.postedUserId,
                                 vote.title,
@@ -225,7 +225,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .fetch();
 
         long totalCount = getVoteTotalCount();
-        return new PageImpl<>(voteData, pageRequest, totalCount);
+        return new PageImpl<>(normalVoteData, pageRequest, totalCount);
     }
 
 }

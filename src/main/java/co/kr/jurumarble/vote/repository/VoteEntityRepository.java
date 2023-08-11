@@ -1,24 +1,24 @@
 package co.kr.jurumarble.vote.repository;
 
-import co.kr.jurumarble.vote.dto.VoteData;
-import org.springframework.data.domain.Page;
+import co.kr.jurumarble.vote.domain.Vote;
+import co.kr.jurumarble.vote.dto.NormalVoteData;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface VoteEntityRepository {
 
-    Slice<VoteData> findVoteDataWithPopularity(PageRequest pageRequest);
+    Slice<NormalVoteData> findVoteDataWithPopularity(PageRequest pageRequest);
 
-    Slice<VoteData> findVoteDataWithTime(PageRequest pageRequest);
+    Slice<NormalVoteData> findVoteDataWithTime(PageRequest pageRequest);
 
-    Optional<VoteData> findVoteDataByVoteId(Long voteId);
+    Optional<NormalVoteData> findVoteDataByVoteId(Long voteId);
 
-    Slice<VoteData> findVoteDataByTitleContainsPopularity(String keyword, PageRequest pageRequest);
+    Slice<NormalVoteData> findVoteDataByTitleContainsPopularity(String keyword, PageRequest pageRequest);
 
-    Slice<VoteData> findVoteDataByTitleContainsWithTime(String keyword, PageRequest pageRequest);
-
+    Slice<NormalVoteData> findVoteDataByTitleContainsWithTime(String keyword, PageRequest pageRequest);
 }
