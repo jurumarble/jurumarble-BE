@@ -115,7 +115,7 @@ public class CommentService {
 
         List<RestaurantInfoDto> restaurantInfo = getRestaurantInfoList(keyword, page);
 
-        return mapToSearchSnackResponses(restaurantInfo);
+        return convertToSearchSnackResponseList(restaurantInfo);
 
     }
 
@@ -231,7 +231,7 @@ public class CommentService {
                 : tourApiService.getRestaurantInfo(1, page);
     }
 
-    private List<SearchSnackResponse> mapToSearchSnackResponses(List<RestaurantInfoDto> restaurantInfo) {
+    private List<SearchSnackResponse> convertToSearchSnackResponseList(List<RestaurantInfoDto> restaurantInfo) {
         return restaurantInfo.stream()
                 .map(restaurant -> new SearchSnackResponse(
                         restaurant.getContentId(),
