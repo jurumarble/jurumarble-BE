@@ -1,5 +1,6 @@
 package co.kr.jurumarble.vote.service;
 
+import co.kr.jurumarble.exception.user.UserNotAccessRightException;
 import co.kr.jurumarble.exception.user.UserNotFoundException;
 import co.kr.jurumarble.exception.vote.VoteNotFoundException;
 import co.kr.jurumarble.user.domain.User;
@@ -10,15 +11,10 @@ import co.kr.jurumarble.vote.domain.VoteGenerator;
 import co.kr.jurumarble.vote.dto.DoVoteInfo;
 import co.kr.jurumarble.vote.dto.GetIsUserVoted;
 import co.kr.jurumarble.vote.dto.VoteData;
-import co.kr.jurumarble.vote.dto.request.UpdateVoteRequest;
-import co.kr.jurumarble.vote.dto.response.GetVoteResponse;
 import co.kr.jurumarble.vote.enums.SortByType;
 import co.kr.jurumarble.vote.repository.VoteContentRepository;
-import co.kr.jurumarble.vote.repository.VoteEntityRepository;
-import co.kr.jurumarble.vote.repository.VoteEntityRepositoryImpl;
 import co.kr.jurumarble.vote.repository.VoteRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -55,19 +51,23 @@ public class VoteService {
         return new GetVoteData(vote, user, voteContent);
     }
 
-    public void updateVote(UpdateVoteRequest request, Long userId, Long voteId) {
+    public void updateVote(UpdateVoteServiceRequest request) {
 
-//        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+        Vote vote = voteRepository.findById(request.getVoteId()).orElseThrow(VoteNotFoundException::new);
 
-//        isVoteOfUser(userId, vote);
+        isVoteOfUser(request.getUserId(), vote);
 
-//        vote.update(request);
+        VoteContent voteContent = voteContentRepository.findByVoteId(vote.getId()).orElseThrow(VoteNotFoundException::new);
+
+        vote.update(request);
+
+        voteContent.update(request);
 
     }
 
     public void isVoteOfUser(Long userId, Vote vote) {
 
-//        if(!vote.isVoteOfUser(userId)) throw new UserNotAccessRightException();
+        if(!vote.isVoteOfUser(userId)) throw new UserNotAccessRightException();
 
     }
 

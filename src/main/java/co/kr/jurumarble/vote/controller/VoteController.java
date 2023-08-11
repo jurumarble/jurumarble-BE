@@ -70,7 +70,7 @@ public class VoteController {
     @PutMapping("/{voteId}")
     public ResponseEntity updateVote(@PathVariable("voteId") Long voteId, @RequestBody UpdateVoteRequest request, @RequestAttribute Long userId) {
 
-        voteService.updateVote(request, userId, voteId);
+        voteService.updateVote(request.toServiceRequest(voteId, userId, request));
 
         return new ResponseEntity(HttpStatus.OK);
     }
