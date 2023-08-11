@@ -11,6 +11,7 @@ import co.kr.jurumarble.vote.dto.response.GetVoteListResponse;
 import co.kr.jurumarble.vote.dto.response.GetVoteRecommendListResponse;
 import co.kr.jurumarble.vote.dto.response.GetVoteResponse;
 import co.kr.jurumarble.vote.enums.SortByType;
+import co.kr.jurumarble.vote.service.GetVoteData;
 import co.kr.jurumarble.vote.service.VoteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -60,9 +61,9 @@ public class VoteController {
     @GetMapping("/{voteId}")
     public ResponseEntity<GetVoteResponse> getVote(@PathVariable Long voteId) {
 
-        GetVoteResponse response = voteService.getVote(voteId);
+        GetVoteData data = voteService.getVote(voteId);
 
-        return new ResponseEntity(response,HttpStatus.OK);
+        return new ResponseEntity(new GetVoteResponse(data),HttpStatus.OK);
     }
 
     @Operation(summary = "투표 수정", description = "파라미터에 voteId, 바디에 {title, detail, titleA, titleB} json 형식으로 보내주시면 됩니다.")

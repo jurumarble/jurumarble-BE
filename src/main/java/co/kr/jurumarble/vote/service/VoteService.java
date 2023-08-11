@@ -1,6 +1,7 @@
 package co.kr.jurumarble.vote.service;
 
 import co.kr.jurumarble.exception.user.UserNotFoundException;
+import co.kr.jurumarble.exception.vote.VoteNotFoundException;
 import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.user.repository.UserRepository;
 import co.kr.jurumarble.vote.domain.Vote;
@@ -12,6 +13,7 @@ import co.kr.jurumarble.vote.dto.VoteData;
 import co.kr.jurumarble.vote.dto.request.UpdateVoteRequest;
 import co.kr.jurumarble.vote.dto.response.GetVoteResponse;
 import co.kr.jurumarble.vote.enums.SortByType;
+import co.kr.jurumarble.vote.repository.VoteContentRepository;
 import co.kr.jurumarble.vote.repository.VoteEntityRepository;
 import co.kr.jurumarble.vote.repository.VoteEntityRepositoryImpl;
 import co.kr.jurumarble.vote.repository.VoteRepository;
@@ -33,6 +35,7 @@ public class VoteService {
     private final UserRepository userRepository;
     private final VoteGenerator voteGenerator;
     private final VoteRepository voteRepository;
+    private final VoteContentRepository voteContentRepository;
 
     @Transactional
     public void createVote(CreateVoteServiceRequest request, Long userId) {
@@ -42,14 +45,14 @@ public class VoteService {
         voteGenerator.createVote(vote, voteContent);
     }
 
-    public GetVoteResponse getVote(Long voteId) {
+    public GetVoteData getVote(Long voteId) {
 
-//        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
-//        User user = userRepository.findById(vote.getPostedUserId()).orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findById(vote.getPostedUserId()).orElseThrow(UserNotFoundException::new);
 
-//        return vote.toDto(user);
-        return null;
+        VoteContent voteContent = voteContentRepository.findByVoteId(voteId).orElseThrow(VoteNotFoundException::new);
+        return new GetVoteData(vote, user, voteContent);
     }
 
     public void updateVote(UpdateVoteRequest request, Long userId, Long voteId) {

@@ -66,7 +66,7 @@ public class Vote extends BaseTimeEntity {
         return Objects.hash(id);
     }
 
-    //    public GetVoteResponse toDto(User user) {
+//    public GetVoteData toDto(User user) {
 //
 //        GetVoteUserResponse getVoteUserResponse = GetVoteUserResponse.builder()
 //                .build();
@@ -79,6 +79,7 @@ public class Vote extends BaseTimeEntity {
 //                .build();
 //
 //    }
+
 
 //    public boolean isVoteOfUser(Long userId) {
 //        return this.postedUserId.equals(userId);
