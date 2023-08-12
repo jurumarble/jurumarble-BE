@@ -133,13 +133,13 @@ public class VoteService {
     }
 
     private Slice<NormalVoteData> getVoteSortByTime(PageRequest pageRequest) {
-        Slice<NormalVoteData> voteListData = voteRepository.findVoteDataWithTime(pageRequest);
+        Slice<NormalVoteData> voteListData = voteRepository.findNormalVoteDataWithTime(pageRequest);
         return voteListData;
     }
 
     private Slice<NormalVoteData> getVoteByPopularity(PageRequest pageRequest) {
 
-        Slice<NormalVoteData> voteSlice = voteRepository.findVoteDataWithPopularity(pageRequest);
+        Slice<NormalVoteData> voteSlice = voteRepository.findNormalVoteDataWithPopularity(pageRequest);
         return voteSlice;
     }
 

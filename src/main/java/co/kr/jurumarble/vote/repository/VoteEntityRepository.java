@@ -13,11 +13,11 @@ import java.util.Optional;
 @Repository
 public interface VoteEntityRepository {
 
-    Slice<NormalVoteData> findVoteDataWithPopularity(PageRequest pageRequest);
+    Slice<NormalVoteData> findNormalVoteDataWithPopularity(PageRequest pageRequest);
 
-    Slice<NormalVoteData> findVoteDataWithTime(PageRequest pageRequest);
+    Slice<NormalVoteData> findNormalVoteDataWithTime(PageRequest pageRequest);
 
-    Optional<NormalVoteData> findVoteDataByVoteId(Long voteId);
+    Optional<NormalVoteData> findNormalVoteDataByVoteId(Long voteId);
 
     Slice<NormalVoteData> findVoteDataByTitleContainsPopularity(String keyword, PageRequest pageRequest);
 
