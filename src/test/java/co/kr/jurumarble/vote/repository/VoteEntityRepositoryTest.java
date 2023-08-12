@@ -24,7 +24,7 @@ import static org.assertj.core.groups.Tuple.tuple;
 
 @DataJpaTest
 @Import(JpaAuditionConfig.class)
-@TestPropertySource(locations = "classpath:application-test.yml")
+@TestPropertySource(locations = "classpath:application-dev.yml")
 class VoteEntityRepositoryTest {
 
     @Autowired
@@ -41,14 +41,14 @@ class VoteEntityRepositoryTest {
     @Test
     void findVoteDataWithPopularity() {
         // given
-        PageRequest of = PageRequest.of(0, 7);
+        PageRequest of = PageRequest.of(0, 10);
 
         // when
         Slice<NormalVoteData> actual = voteEntityRepository.findNormalVoteDataWithPopularity(of);
 
         // then
-        assertThat(actual).hasSize(7)
-                .extracting("title", "votedNum", "titleA")
+        assertThat(actual).hasSize(10)
+                .extracting("title", "votedCount", "titleA")
                 .containsExactly(
                         tuple("테스트 투표 1", 10L, "A1"),
                         tuple("테스트 투표 3", 3L, "E1"),
@@ -56,7 +56,10 @@ class VoteEntityRepositoryTest {
                         tuple("테스트 투표 4", 2L, "G1"),
                         tuple("테스트 투표 5", 1L, "I1"),
                         tuple("테스트 투표 6", 1L, "K1"),
-                        tuple("테스트 투표 7", 1L, "M1")
+                        tuple("테스트 투표 7", 1L, "M1"),
+                        tuple("테스트 투표 8", 0L, "O1"),
+                        tuple("테스트 투표 9", 0L, "Q1"),
+                        tuple("테스트 투표 10", 0L, "S1")
                 );
     }
 
@@ -102,8 +105,8 @@ class VoteEntityRepositoryTest {
                         tuple("테스트 투표 7", "M1"),
                         tuple("테스트 투표 6", "K1"),
                         tuple("테스트 투표 5", "I1"),
-                        tuple("테스트 투표 4","G1")
-                        );
+                        tuple("테스트 투표 4", "G1")
+                );
 
 
     }

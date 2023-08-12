@@ -31,7 +31,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
         this.jpaQueryFactory = new JPAQueryFactory(entityManager);
     }
     @Override
-    public Slice<NormalVoteData> findVoteDataWithPopularity(PageRequest pageRequest) {
+    public Slice<NormalVoteData> findNormalVoteDataWithPopularity(PageRequest pageRequest) {
         int pageNo = pageRequest.getPageNumber();
         int pageSize = pageRequest.getPageSize();
 
