@@ -40,7 +40,7 @@ class VoteControllerTest {
     private JwtTokenProvider jwtTokenProvider;
 
 
-    @DisplayName("토큰과 같이 요청을 보내서 투표를 생성한다.")
+    @DisplayName("토큰과 같이 요청을 보내서 일반 투표를 생성한다.")
     @Test
     void createVote() throws Exception {
         // given
@@ -58,7 +58,7 @@ class VoteControllerTest {
 
         // when // then
         mockMvc.perform(
-                post("/api/votes/")
+                post("/api/votes/normal")
                         .header(HttpHeaders.AUTHORIZATION,"Bearer " + testToken) // 생성된 토큰을 헤더에 추가
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -67,7 +67,7 @@ class VoteControllerTest {
                 .andExpect(status().isCreated());
     }
 
-    @DisplayName("토큰 없이 투표 생성 요청을 보내서 401 에러를 반환한다.")
+    @DisplayName("토큰 없이 일반 투표 생성 요청을 보내서 401 에러를 반환한다.")
     @Test
     void createVoteWithOutToken() throws Exception {
         // given
@@ -82,7 +82,7 @@ class VoteControllerTest {
 
         // when // then
         mockMvc.perform(
-                        post("/api/votes/")
+                        post("/api/votes/normal")
                                 .content(objectMapper.writeValueAsString(request))
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -91,7 +91,7 @@ class VoteControllerTest {
                 .andExpect(jsonPath("$.status").value("TOKEN_EXPIRED"));
     }
 
-    @DisplayName("만료된 토큰과 투표 생성 요청을 보내서 401 에러를 반환한다.")
+    @DisplayName("만료된 토큰과 일반 투표 생성 요청을 보내서 401 에러를 반환한다.")
     @Test
     void createVoteWithExpiredToken() throws Exception {
         // given
@@ -110,7 +110,7 @@ class VoteControllerTest {
 
         // when // then
         mockMvc.perform(
-                        post("/api/votes/")
+                        post("/api/votes/normal")
                                 .header(HttpHeaders.AUTHORIZATION,"Bearer " + testToken) // 생성된 토큰을 헤더에 추가
                                 .content(objectMapper.writeValueAsString(request))
                                 .contentType(MediaType.APPLICATION_JSON)

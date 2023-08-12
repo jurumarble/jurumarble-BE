@@ -7,9 +7,7 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -31,9 +29,9 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
         this.jpaQueryFactory = new JPAQueryFactory(entityManager);
     }
     @Override
-    public Slice<NormalVoteData> findNormalVoteDataWithPopularity(String keyword, PageRequest pageRequest) {
+    public Slice<NormalVoteData> findNormalVoteDataWithPopularity(String keyword, Pageable pageable) {
 
-        List<Tuple> findVotesOrderByPopularTuples = getVotesTupleOrderByPopular(keyword, pageRequest);
+        List<Tuple> findVotesOrderByPopularTuples = getVotesTupleOrderByPopular(keyword, pageable);
 
         List<Long> voteIds = getVoteIdsFromFindVotes(findVotesOrderByPopularTuples);
 
@@ -44,14 +42,18 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
 
         List<NormalVoteData> normalVoteData = getFindVoteListDatas(findVotesOrderByPopularTuples, voteContentsMap);
 
-        long totalCount = getVoteTotalCount();
+        boolean hasNext = false;
+        if (normalVoteData.size() > pageable.getPageSize()) {
+            hasNext = true;
+            normalVoteData = normalVoteData.subList(0, pageable.getPageSize()); // 조회된 결과에서 실제 페이지의 데이터만 가져옴
+        }
 
-        return new PageImpl<>(normalVoteData, pageRequest, totalCount);
+        return new SliceImpl<>(normalVoteData, pageable, hasNext);
     }
 
-    private List<Tuple> getVotesTupleOrderByPopular(String keyword, PageRequest pageRequest) {
-        int pageNo = pageRequest.getPageNumber();
-        int pageSize = pageRequest.getPageSize();
+    private List<Tuple> getVotesTupleOrderByPopular(String keyword, Pageable pageable) {
+        int pageNo = pageable.getPageNumber();
+        int pageSize = pageable.getPageSize();
 
         BooleanExpression keywordExpression = getKeywordExpression(keyword);
 
@@ -137,9 +139,9 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
     }
 
     @Override
-    public Slice<NormalVoteData> findNormalVoteDataWithTime(String keyword, PageRequest pageRequest) {
-        int pageNo = pageRequest.getPageNumber();
-        int pageSize = pageRequest.getPageSize();
+    public Slice<NormalVoteData> findNormalVoteDataWithTime(String keyword, Pageable pageable) {
+        int pageNo = pageable.getPageNumber();
+        int pageSize = pageable.getPageSize();
 
         BooleanExpression keywordExpression = getKeywordExpression(keyword);
 
@@ -166,8 +168,13 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .limit(pageSize)
                 .fetch();
 
-        long totalCount = getVoteTotalCount();
-        return new PageImpl<>(normalVoteData, pageRequest, totalCount);
+        boolean hasNext = false;
+        if (normalVoteData.size() > pageSize) {
+            hasNext = true;
+            normalVoteData = normalVoteData.subList(0, pageSize); // 조회된 결과에서 실제 페이지의 데이터만 가져옴
+        }
+
+        return new SliceImpl<>(normalVoteData, pageable, hasNext);
     }
 
     private BooleanExpression getKeywordExpression(String keyword) {
