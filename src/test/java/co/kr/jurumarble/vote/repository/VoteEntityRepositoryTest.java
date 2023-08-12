@@ -37,14 +37,14 @@ class VoteEntityRepositoryTest {
     @Autowired
     private EntityManager entityManager;
 
-    @DisplayName("인기순으로 투표를 조회한다.")
+    @DisplayName("인기순으로 일반 투표를 조회한다.")
     @Test
     void findVoteDataWithPopularity() {
         // given
         PageRequest of = PageRequest.of(0, 10);
 
         // when
-        Slice<NormalVoteData> actual = voteEntityRepository.findNormalVoteDataWithPopularity(of);
+        Slice<NormalVoteData> actual = voteEntityRepository.findNormalVoteDataWithPopularity(null,of);
 
         // then
         assertThat(actual).hasSize(10)
@@ -64,7 +64,7 @@ class VoteEntityRepositoryTest {
     }
 
 
-    @DisplayName("투표와 투표 컨텐츠를 같이 조회한다.")
+    @DisplayName("일반 투표와 투표 컨텐츠를 같이 조회한다.")
     @Test
     void findVoteDataByVoteId() {
         // given // when
@@ -86,7 +86,7 @@ class VoteEntityRepositoryTest {
 
     }
 
-    @DisplayName("시간순으로 투표를 조회한다.")
+    @DisplayName("시간순으로 일반 투표를 조회한다.")
     @Test
     void findVoteDataWithTime() {
         // given
