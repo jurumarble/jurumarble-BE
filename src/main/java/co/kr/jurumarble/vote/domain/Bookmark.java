@@ -16,23 +16,21 @@ public class Bookmark extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
-    private User user;
+    @Column(name = "USER_ID")
+    private Long userId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "VOTE_ID")
-    private Vote vote;
+    @Column(name = "VOTE_ID")
+    private Long voteId;
 
 //    public void mappingVote(Vote vote) {
 //        this.vote = vote;
 //        vote.mappingBookmark(this);
 //    }
 
-    public void mappingUser(User user) {
-        this.user = user;
-        user.mappingBookmark(this);
-    }
+//    public void mappingUser(User user) {
+//        this.user = user;
+//        user.mappingBookmark(this);
+//    }
 
 
 }
