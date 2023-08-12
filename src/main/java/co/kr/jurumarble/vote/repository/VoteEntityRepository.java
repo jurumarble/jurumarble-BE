@@ -15,11 +15,9 @@ public interface VoteEntityRepository {
 
     Slice<NormalVoteData> findNormalVoteDataWithPopularity(String keyword,PageRequest pageRequest);
 
-    Slice<NormalVoteData> findNormalVoteDataWithTime(PageRequest pageRequest);
+    Slice<NormalVoteData> findNormalVoteDataWithTime(String keyword, PageRequest pageRequest);
 
     Optional<NormalVoteData> findNormalVoteDataByVoteId(Long voteId);
-
-    Slice<NormalVoteData> findVoteDataByTitleContainsWithTime(String keyword, PageRequest pageRequest);
 
     List<Vote> findByTitleContains(String keyword);
 }

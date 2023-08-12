@@ -54,9 +54,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
         int pageNo = pageRequest.getPageNumber();
         int pageSize = pageRequest.getPageSize();
 
-        BooleanExpression keywordExpression = keyword != null
-                ? vote.title.like(keyword + "%")
-                : null;
+        BooleanExpression keywordExpression = getKeywordExpression(keyword);
 
         return jpaQueryFactory
                 .select(vote, voteResult.id.count())
@@ -140,9 +138,11 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
     }
 
     @Override
-    public Slice<NormalVoteData> findNormalVoteDataWithTime(PageRequest pageRequest) {
+    public Slice<NormalVoteData> findNormalVoteDataWithTime(String keyword, PageRequest pageRequest) {
         int pageNo = pageRequest.getPageNumber();
         int pageSize = pageRequest.getPageSize();
+
+        BooleanExpression keywordExpression = getKeywordExpression(keyword);
 
         List<NormalVoteData> normalVoteData = jpaQueryFactory.select(
                         Projections.bean(NormalVoteData.class,
@@ -161,6 +161,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .from(vote)
                 .innerJoin(voteContent)
                 .on(vote.id.eq(voteContent.voteId))
+                .where(keywordExpression)
                 .orderBy(vote.createdDate.desc())
                 .offset(pageNo * pageSize)
                 .limit(pageSize)
@@ -170,38 +171,12 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
         return new PageImpl<>(normalVoteData, pageRequest, totalCount);
     }
 
-
-    @Override
-    public Slice<NormalVoteData> findVoteDataByTitleContainsWithTime(String keyword, PageRequest pageRequest) {
-        int pageNo = pageRequest.getPageNumber();
-        int pageSize = pageRequest.getPageSize();
-
-        List<NormalVoteData> normalVoteData = jpaQueryFactory.select(
-                        Projections.bean(NormalVoteData.class,
-                                vote.id,
-                                vote.postedUserId,
-                                vote.title,
-                                vote.detail,
-                                vote.filteredGender,
-                                vote.filteredAge,
-                                vote.filteredMbti,
-                                voteContent.imageA,
-                                voteContent.imageB,
-                                voteContent.titleA,
-                                voteContent.titleB
-                        ))
-                .from(vote)
-                .innerJoin(voteContent)
-                .on(vote.id.eq(voteContent.voteId))
-                .where(vote.title.like(keyword + "%"))
-                .orderBy(vote.createdDate.desc())
-                .offset(pageNo * pageSize)
-                .limit(pageSize)
-                .fetch();
-
-        long totalCount = getVoteTotalCount();
-        return new PageImpl<>(normalVoteData, pageRequest, totalCount);
+    private BooleanExpression getKeywordExpression(String keyword) {
+        return keyword != null
+                ? vote.title.like(keyword + "%")
+                : null;
     }
+
 
     @Override
     public List<Vote> findByTitleContains(String keyword) {

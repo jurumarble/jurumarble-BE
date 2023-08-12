@@ -19,6 +19,7 @@ import org.springframework.test.context.TestPropertySource;
 import javax.persistence.EntityManager;
 import java.util.Collections;
 
+import static org.assertj.core.api.Assertions.anyOf;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
 
@@ -93,7 +94,7 @@ class VoteEntityRepositoryTest {
         PageRequest of = PageRequest.of(0, 7);
 
         // when
-        Slice<NormalVoteData> actual = voteEntityRepository.findNormalVoteDataWithTime(of);
+        Slice<NormalVoteData> actual = voteEntityRepository.findNormalVoteDataWithTime(null,of);
 
         // then
         assertThat(actual).hasSize(7)
