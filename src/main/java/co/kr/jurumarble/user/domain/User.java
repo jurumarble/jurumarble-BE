@@ -13,6 +13,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -24,6 +26,7 @@ import java.util.Objects;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "users")
+@Where(clause = "deleted_date IS NULL")
 public class User extends BaseTimeEntity {
 
     @Id
@@ -56,9 +59,6 @@ public class User extends BaseTimeEntity {
 
     @Column(name = "modified_mbti_date")
     private LocalDateTime modifiedMbtiDate;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
-    private List<Bookmark> bookmarkList = new ArrayList<>();
 
     @Column(name = "deleted_date")
     private LocalDateTime deletedDate;
@@ -115,9 +115,9 @@ public class User extends BaseTimeEntity {
         this.modifiedMbtiDate = modifiedMbtiDate;
     }
 
-    public void mappingBookmark(Bookmark bookmark) {
-        this.bookmarkList.add(bookmark);
-    }
+//    public void mappingBookmark(Bookmark bookmark) {
+//        this.bookmarkList.add(bookmark);
+//    }
 
     private void validIsUserDeleted() {
         if (!(deletedDate == null)) {
