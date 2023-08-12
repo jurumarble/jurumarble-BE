@@ -11,6 +11,7 @@ import co.kr.jurumarble.vote.dto.DoVoteInfo;
 import co.kr.jurumarble.vote.dto.GetIsUserVoted;
 import co.kr.jurumarble.vote.dto.NormalVoteData;
 import co.kr.jurumarble.vote.enums.SortByType;
+import co.kr.jurumarble.vote.repository.BookmarkRepository;
 import co.kr.jurumarble.vote.repository.VoteContentRepository;
 import co.kr.jurumarble.vote.repository.VoteRepository;
 import co.kr.jurumarble.vote.repository.VoteResultRepository;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -36,6 +38,7 @@ public class VoteService {
     private final VoteRepository voteRepository;
     private final VoteContentRepository voteContentRepository;
     private final VoteResultRepository voteResultRepository;
+    private final BookmarkRepository bookmarkRepository;
 
     @Transactional
     public Long createNormalVote(CreateNormalVoteServiceRequest request, Long userId) {
@@ -155,26 +158,21 @@ public class VoteService {
     public void bookmarkVote(Long userId, Long voteId) {
 
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-//        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
-//        Optional<Bookmark> byVoteAndUser = bookmarkRepository.findByVoteAndUser(vote, user);
+        Optional<Bookmark> byVoteAndUser = bookmarkRepository.findByUserIdAndVoteId(userId, voteId);
 
-//        byVoteAndUser.ifPresentOrElse(
-//                bookmark -> {
-//                    //북마크를 눌렀는데 또 눌렀을 경우 북마크 취소
-//                    bookmarkRepository.delete(bookmark);
-//                    vote.removeBookmark(bookmark);
-//                },
-//                // 북마크가 없을 경우 북마크 추가
-//                () -> {
-//                    Bookmark bookmark = new Bookmark();
-//
-//                    bookmark.mappingVote(vote);
-//                    bookmark.mappingUser(user);
-//
-//                    bookmarkRepository.save(bookmark);
-//                }
-//        );
+        byVoteAndUser.ifPresentOrElse(
+                bookmark -> {
+                    //북마크를 눌렀는데 또 눌렀을 경우 북마크 취소
+                    bookmarkRepository.delete(bookmark);
+                },
+                // 북마크가 없을 경우 북마크 추가
+                () -> {
+                    Bookmark bookmark = new Bookmark(userId, voteId);
+                    bookmarkRepository.save(bookmark);
+                }
+        );
 
     }
 }
