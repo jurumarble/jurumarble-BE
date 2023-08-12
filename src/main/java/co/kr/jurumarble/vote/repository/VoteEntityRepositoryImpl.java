@@ -28,6 +28,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
     public VoteEntityRepositoryImpl(EntityManager entityManager) {
         this.jpaQueryFactory = new JPAQueryFactory(entityManager);
     }
+  
     @Override
     public Slice<NormalVoteData> findNormalVoteDataWithPopularity(String keyword, Pageable pageable) {
 
