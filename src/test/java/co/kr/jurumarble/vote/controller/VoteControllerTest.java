@@ -1,7 +1,7 @@
 package co.kr.jurumarble.vote.controller;
 
 import co.kr.jurumarble.token.domain.JwtTokenProvider;
-import co.kr.jurumarble.vote.dto.request.CreateVoteRequest;
+import co.kr.jurumarble.vote.dto.request.CreateNormalVoteRequest;
 import co.kr.jurumarble.vote.service.VoteService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -44,7 +44,7 @@ class VoteControllerTest {
     @Test
     void createVote() throws Exception {
         // given
-        CreateVoteRequest request = CreateVoteRequest.builder()
+        CreateNormalVoteRequest request = CreateNormalVoteRequest.builder()
                 .title("투표 제목")
                 .titleA("A 항목 제목")
                 .titleB("B 항목 제목")
@@ -71,7 +71,7 @@ class VoteControllerTest {
     @Test
     void createVoteWithOutToken() throws Exception {
         // given
-        CreateVoteRequest request = CreateVoteRequest.builder()
+        CreateNormalVoteRequest request = CreateNormalVoteRequest.builder()
                 .title("투표 제목")
                 .titleA("A 항목 제목")
                 .titleB("B 항목 제목")
@@ -95,7 +95,7 @@ class VoteControllerTest {
     @Test
     void createVoteWithExpiredToken() throws Exception {
         // given
-        CreateVoteRequest request = CreateVoteRequest.builder()
+        CreateNormalVoteRequest request = CreateNormalVoteRequest.builder()
                 .title("투표 제목")
                 .titleA("A 항목 제목")
                 .titleB("B 항목 제목")

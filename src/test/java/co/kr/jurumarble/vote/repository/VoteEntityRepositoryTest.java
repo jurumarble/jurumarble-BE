@@ -44,7 +44,7 @@ class VoteEntityRepositoryTest {
         PageRequest of = PageRequest.of(0, 7);
 
         // when
-        Slice<NormalVoteData> actual = voteEntityRepository.findVoteDataWithPopularity(of);
+        Slice<NormalVoteData> actual = voteEntityRepository.findNormalVoteDataWithPopularity(of);
 
         // then
         assertThat(actual).hasSize(7)
@@ -65,7 +65,7 @@ class VoteEntityRepositoryTest {
     @Test
     void findVoteDataByVoteId() {
         // given // when
-        NormalVoteData normalVoteData = voteEntityRepository.findVoteDataByVoteId(1L).orElseThrow(VoteNotFoundException::new);
+        NormalVoteData normalVoteData = voteEntityRepository.findNormalVoteDataByVoteId(1L).orElseThrow(VoteNotFoundException::new);
 
         // then
         assertThat(Collections.singletonList(normalVoteData)).extracting(
@@ -90,7 +90,7 @@ class VoteEntityRepositoryTest {
         PageRequest of = PageRequest.of(0, 7);
 
         // when
-        Slice<NormalVoteData> actual = voteEntityRepository.findVoteDataWithTime(of);
+        Slice<NormalVoteData> actual = voteEntityRepository.findNormalVoteDataWithTime(of);
 
         // then
         assertThat(actual).hasSize(7)

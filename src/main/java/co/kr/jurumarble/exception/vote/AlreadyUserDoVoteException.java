@@ -1,10 +1,10 @@
 package co.kr.jurumarble.exception.vote;
 
 import co.kr.jurumarble.exception.StatusEnum;
+import co.kr.jurumarble.exception.common.CustomException;
 import lombok.Getter;
 
-@Getter
-public class AlreadyUserDoVoteException extends RuntimeException{
+public class AlreadyUserDoVoteException extends CustomException {
 
     private final StatusEnum status;
 
@@ -15,4 +15,13 @@ public class AlreadyUserDoVoteException extends RuntimeException{
         this.status = StatusEnum.ALREADY_VOTE_RESULT_EXIST;
     }
 
+    @Override
+    public StatusEnum getStatus() {
+        return status;
+    }
+
+    @Override
+    public String getMessage() {
+        return message;
+    }
 }

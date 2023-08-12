@@ -3,6 +3,7 @@ package co.kr.jurumarble.vote.repository;
 import co.kr.jurumarble.vote.domain.Vote;
 import co.kr.jurumarble.vote.domain.VoteContent;
 import co.kr.jurumarble.vote.dto.NormalVoteData;
+import co.kr.jurumarble.vote.enums.VoteType;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -55,6 +56,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .select(vote, voteResult.id.count())
                 .from(vote)
                 .leftJoin(voteResult).on(vote.id.eq(voteResult.voteId))
+                .where(vote.voteType.eq(VoteType.NORMAL))
                 .groupBy(vote.id)
                 .orderBy(voteResult.id.count().desc())
                 .offset(pageNo * pageSize)
@@ -108,7 +110,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
 
 
     @Override
-    public Optional<NormalVoteData> findVoteDataByVoteId(Long voteId) {
+    public Optional<NormalVoteData> findNormalVoteDataByVoteId(Long voteId) {
         NormalVoteData normalVoteData = jpaQueryFactory.select(
                 Projections.bean(NormalVoteData.class,
                         vote.id,
@@ -132,7 +134,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
     }
 
     @Override
-    public Slice<NormalVoteData> findVoteDataWithTime(PageRequest pageRequest) {
+    public Slice<NormalVoteData> findNormalVoteDataWithTime(PageRequest pageRequest) {
         int pageNo = pageRequest.getPageNumber();
         int pageSize = pageRequest.getPageSize();
 
