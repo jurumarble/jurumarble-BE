@@ -8,6 +8,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Component
 @RequiredArgsConstructor
@@ -97,13 +99,10 @@ public class TourApiService {
         List<String> firstImages = restaurantList.getFirstImages();
         List<String> titles = restaurantList.getTitles();
 
-        List<RestaurantInfoDto> restaurantInfoList = new ArrayList<>();
-        for (int i = 0; i < contentIds.size(); i++) {
-            String contentId = contentIds.get(i);
-            String firstImage = firstImages.get(i);
-            String title = titles.get(i);
-            restaurantInfoList.add(new RestaurantInfoDto(contentId, firstImage, title));
-        }
+        List<RestaurantInfoDto> restaurantInfoList =
+                IntStream.range(0, contentIds.size())
+                        .mapToObj(i -> new RestaurantInfoDto(contentIds.get(i), firstImages.get(i), titles.get(i)))
+                        .collect(Collectors.toList());
 
         return restaurantInfoList;
     }
@@ -128,13 +127,10 @@ public class TourApiService {
         List<String> firstImages = restaurantList.getFirstImages();
         List<String> titles = restaurantList.getTitles();
 
-        List<RestaurantInfoDto> restaurantInfoList = new ArrayList<>();
-        for (int i = 0; i < contentIds.size(); i++) {
-            String contentId = contentIds.get(i);
-            String firstImage = firstImages.get(i);
-            String title = titles.get(i);
-            restaurantInfoList.add(new RestaurantInfoDto(contentId, firstImage, title));
-        }
+        List<RestaurantInfoDto> restaurantInfoList =
+                IntStream.range(0, contentIds.size())
+                        .mapToObj(i -> new RestaurantInfoDto(contentIds.get(i), firstImages.get(i), titles.get(i)))
+                        .collect(Collectors.toList());
 
         return restaurantInfoList;
     }
