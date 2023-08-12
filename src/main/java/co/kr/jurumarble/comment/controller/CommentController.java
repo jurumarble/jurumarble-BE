@@ -105,5 +105,14 @@ public class CommentController {
         return new ResponseEntity(searchSnackResponses, HttpStatus.OK);
     }
 
+    @Operation(summary = "안주 이미지", description = "헤더에 토큰 담고, 파라미터에 voteId, commentId 보내주시면 됩니다")
+    @GetMapping("/votes/{voteId}/comments/{commentId}/snack/{contentId}")
+    public ResponseEntity<List<String>> getSnackImage(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Long userId, @PathVariable String contentId) {
+
+        List<String> snackImage = commentService.getSnackImage(voteId, commentId, userId, contentId);
+
+        return new ResponseEntity(snackImage, HttpStatus.OK);
+    }
+
 
 }

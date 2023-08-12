@@ -1,11 +1,10 @@
 package co.kr.jurumarble.comment.dto.request;
 
-import co.kr.jurumarble.comment.domain.Snack;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class UpdateSnackRequest {
 
     private String snackImage;

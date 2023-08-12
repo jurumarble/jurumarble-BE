@@ -41,7 +41,6 @@ public class CommentService {
     private final VoteRepository voteRepository;
     private final CommentRepository commentRepository;
     private final CommentEmotionRepository commentEmotionRepository;
-
     private final TourApiService tourApiService;
 
     public void createComment(Long voteId, Long userId, CreateCommentRequest request) {
@@ -116,6 +115,17 @@ public class CommentService {
         List<RestaurantInfoDto> restaurantInfo = getRestaurantInfoList(keyword, page);
 
         return convertToSearchSnackResponseList(restaurantInfo);
+
+    }
+
+    public List<String> getSnackImage(Long voteId, Long commentId, Long userId, String contentId) {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+        Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
+
+        List<String> detailImages = tourApiService.getDetailImages(contentId);
+
+        return detailImages;
 
     }
 
@@ -241,6 +251,7 @@ public class CommentService {
                 ))
                 .collect(Collectors.toList());
     }
+
 
 }
 
