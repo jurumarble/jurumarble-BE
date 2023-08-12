@@ -4,6 +4,7 @@ import co.kr.jurumarble.user.dto.LoginToken;
 import co.kr.jurumarble.user.dto.request.AddInfoRequest;
 import co.kr.jurumarble.user.dto.request.KakaoLoginRequest;
 import co.kr.jurumarble.user.dto.request.NaverLoginRequest;
+import co.kr.jurumarble.user.dto.response.GetUserResponse;
 import co.kr.jurumarble.user.dto.response.TokenResponse;
 import co.kr.jurumarble.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -33,9 +34,9 @@ public class UserController {
     }
 
     @GetMapping()
-    public ResponseEntity<HttpStatus> getUserInfo(@RequestAttribute Long userId) {
-        userService.getUserInfo(userId);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<GetUserResponse> getUserInfo(@RequestAttribute Long userId) {
+        GetUserResponse userInfo = userService.getUserInfo(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(userInfo);
     }
 
     @PostMapping("/signup/naver")

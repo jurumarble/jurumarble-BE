@@ -8,18 +8,14 @@ import co.kr.jurumarble.user.enums.AgeType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
 import co.kr.jurumarble.user.enums.ProviderType;
-import co.kr.jurumarble.vote.domain.Bookmark;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -65,7 +61,7 @@ public class User extends BaseTimeEntity {
 
 
 
-    public AgeType classifyAge(Integer age){
+    public AgeType classifyAge(){
         if (age == null) {
             return AgeType.NULL; // 혹은 원하는 다른 동작 수행
         }
