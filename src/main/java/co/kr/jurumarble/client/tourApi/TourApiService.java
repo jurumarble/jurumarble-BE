@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -108,7 +107,7 @@ public class TourApiService {
     }
 
 
-    public List<RestaurantInfoDto> getRestaurantInfoByKeyWord(String keyWord, int pageNo, int areaCode) {
+    public List<RestaurantInfoDto> getRestaurantInfoByKeyWord(String keyWord,int areaCode, int pageNo) {
         String decodedServiceKey = decodeServiceKey(serviceKey);
 
         TourSearchKeyWordResponse restaurantList = tourApiClient.getRestaurantListByKeyWord(

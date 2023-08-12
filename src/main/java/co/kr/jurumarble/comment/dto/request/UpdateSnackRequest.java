@@ -7,11 +7,11 @@ import lombok.*;
 @AllArgsConstructor
 public class UpdateSnackRequest {
 
-    private String snackImage;
-
-    private String snackName;
-
     private String restaurantName;
+
+    private String restaurantImage;
+
+    private String treatMenu;
 
 
 }

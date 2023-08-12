@@ -17,26 +17,26 @@ public class TourApiController {
     @GetMapping("/treatMenu")
     public String getTreatMenu(@RequestParam String contentId) {
 
-        return tourApiService.getTreatMenu( contentId);
+        return tourApiService.getTreatMenu(contentId);
     }
 
 
     @GetMapping("/imgUrl")
-    public List<String> getDetailImgUrl(@RequestParam String contentId){
+    public List<String> getDetailImgUrl(@RequestParam String contentId) {
 
         return tourApiService.getDetailImages(contentId);
     }
 
     @GetMapping("/restaurantInfo")
-    public List<RestaurantInfoDto> getRestaurantInfo(@RequestParam int areaCode, @RequestParam int pageNo){
+    public List<RestaurantInfoDto> getRestaurantInfo(@RequestParam int areaCode, @RequestParam int pageNo) {
 
         return tourApiService.getRestaurantInfo(areaCode, pageNo);
     }
 
     @GetMapping("/restaurantInfoByKeyWord")
-    public List<RestaurantInfoDto> getRestaurantInfoByKeyWord(@RequestParam String keyWord, @RequestParam int areaCode, @RequestParam int pageNo){
+    public List<RestaurantInfoDto> getRestaurantInfoByKeyWord(@RequestParam String keyWord, @RequestParam int areaCode, @RequestParam int pageNo) {
 
-        return tourApiService.getRestaurantInfoByKeyWord(keyWord,areaCode, pageNo);
+        return tourApiService.getRestaurantInfoByKeyWord(keyWord, areaCode, pageNo);
     }
 
 }

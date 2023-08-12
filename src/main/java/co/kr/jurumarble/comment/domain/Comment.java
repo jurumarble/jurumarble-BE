@@ -66,11 +66,11 @@ public class Comment extends BaseTimeEntity {
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "snackImage", column = @Column(name = "snack_image")),
-            @AttributeOverride(name = "snackName", column = @Column(name = "snack_name")),
-            @AttributeOverride(name = "restaurantName", column = @Column(name = "restaurant_name"))
+            @AttributeOverride(name = "restaurantName", column = @Column(name = "restaurant_image")),
+            @AttributeOverride(name = "restaurantImage", column = @Column(name = "restaurant_name")),
+            @AttributeOverride(name = "treatMenu", column = @Column(name = "treat_menu"))
     })
-    private Snack snack;
+    private Restaurant restaurant;
 
 
     public Comment(CreateCommentRequest request, Comment parent, User user, Long voteId) {
@@ -113,16 +113,16 @@ public class Comment extends BaseTimeEntity {
 
 
     public void updateSnack(UpdateSnackRequest request) {
-        if (request.getSnackImage() != null && !request.getSnackImage().isEmpty()) {
-            this.snack.updateSnackImage(request.getSnackImage());
-        }
-
-        if (request.getSnackName() != null && !request.getSnackName().isEmpty()) {
-            this.snack.updateSnackName(request.getSnackName());
-        }
-
         if (request.getRestaurantName() != null && !request.getRestaurantName().isEmpty()) {
-            this.snack.updateRestaurantName(request.getRestaurantName());
+            this.restaurant.updateRestaurantName(request.getRestaurantName());
+        }
+
+        if (request.getRestaurantImage() != null && !request.getRestaurantImage().isEmpty()) {
+            this.restaurant.updateRestaurantImage(request.getRestaurantImage());
+        }
+
+        if (request.getTreatMenu() != null && !request.getTreatMenu().isEmpty()) {
+            this.restaurant.updateTreatMenu(request.getTreatMenu());
         }
     }
 }
