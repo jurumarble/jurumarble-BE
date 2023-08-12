@@ -117,7 +117,7 @@ public class User extends BaseTimeEntity {
 
     private void validIsUserDeleted() {
         if (!(deletedDate == null)) {
-            throw new AlreadyDeletedUserException(StatusEnum.BAD_REQUEST);
+            throw new AlreadyDeletedUserException();
         }
     }
 
