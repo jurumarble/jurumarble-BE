@@ -9,9 +9,9 @@ public class AlreadyDeletedUserException extends CustomException {
 
     private static final String message = "유저의 정보가 이미 존재합니다";
 
-    public AlreadyDeletedUserException(StatusEnum status) {
+    public AlreadyDeletedUserException() {
         super(message);
-        this.status = status;
+        this.status = StatusEnum.ALREADY_USER_EXIST;
     }
 
     @Override

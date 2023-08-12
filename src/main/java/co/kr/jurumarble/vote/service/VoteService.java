@@ -6,11 +6,7 @@ import co.kr.jurumarble.exception.vote.AlreadyUserDoVoteException;
 import co.kr.jurumarble.exception.vote.VoteNotFoundException;
 import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.user.repository.UserRepository;
-import co.kr.jurumarble.vote.domain.Vote;
-import co.kr.jurumarble.vote.domain.VoteContent;
-import co.kr.jurumarble.vote.domain.VoteDrinkContent;
-import co.kr.jurumarble.vote.domain.VoteGenerator;
-import co.kr.jurumarble.vote.domain.VoteResult;
+import co.kr.jurumarble.vote.domain.*;
 import co.kr.jurumarble.vote.dto.DoVoteInfo;
 import co.kr.jurumarble.vote.dto.GetIsUserVoted;
 import co.kr.jurumarble.vote.dto.NormalVoteData;
@@ -54,45 +50,31 @@ public class VoteService {
         userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         VoteDrinkContent voteDrinkContent = request.toVoteDrinkContent();
         Vote vote = request.toVote(userId);
-        return voteGenerator.createDrinkVote(vote,voteDrinkContent);
+        return voteGenerator.createDrinkVote(vote, voteDrinkContent);
     }
 
     public GetVoteData getVote(Long voteId) {
-
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
-
         User user = userRepository.findById(vote.getPostedUserId()).orElseThrow(UserNotFoundException::new);
-
         VoteContent voteContent = voteContentRepository.findByVoteId(voteId).orElseThrow(VoteNotFoundException::new);
         return new GetVoteData(vote, user, voteContent);
     }
 
     public void updateVote(UpdateVoteServiceRequest request) {
-
         Vote vote = voteRepository.findById(request.getVoteId()).orElseThrow(VoteNotFoundException::new);
-
         isVoteOfUser(request.getUserId(), vote);
-
         VoteContent voteContent = voteContentRepository.findByVoteId(vote.getId()).orElseThrow(VoteNotFoundException::new);
-
         vote.update(request);
-
         voteContent.update(request);
-
     }
 
     public void isVoteOfUser(Long userId, Vote vote) {
-
-        if(!vote.isVoteOfUser(userId)) throw new UserNotAccessRightException();
-
+        if (!vote.isVoteOfUser(userId)) throw new UserNotAccessRightException();
     }
 
     public void deleteVote(Long voteId, Long userId) {
-
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
-
         isVoteOfUser(userId, vote);
-
         voteRepository.delete(vote);
     }
 
@@ -101,9 +83,10 @@ public class VoteService {
         Vote vote = voteRepository.findById(info.getVoteId()).orElseThrow(VoteNotFoundException::new);
         User user = userRepository.findById(info.getUserId()).orElseThrow(UserNotFoundException::new);
 
-        if(vote.isVoteOfUser(user.getId())) throw new UserNotAccessRightException();
+        if (vote.isVoteOfUser(user.getId())) throw new UserNotAccessRightException();
 
-        if(voteResultRepository.existsByVoteIdAndVotedUserId(vote.getId(), user.getId())) throw new AlreadyUserDoVoteException();
+        if (voteResultRepository.existsByVoteIdAndVotedUserId(vote.getId(), user.getId()))
+            throw new AlreadyUserDoVoteException();
 
         VoteResult voteResult = new VoteResult(vote.getId(), user.getId(), info.getChoice());
 
@@ -113,9 +96,7 @@ public class VoteService {
 
     public Slice<NormalVoteData> getVoteList(SortByType sortBy, Integer page, Integer size) {
 
-        Slice<NormalVoteData> voteListData = getVoteListData(sortBy, page, size);
-
-        return voteListData;
+        return getVoteListData(sortBy, page, size);
     }
 
     private Slice<NormalVoteData> getVoteListData(SortByType sortBy, Integer page, Integer size) {
@@ -133,29 +114,26 @@ public class VoteService {
     }
 
     private Slice<NormalVoteData> getVoteSortByTime(PageRequest pageRequest) {
-        Slice<NormalVoteData> voteListData = voteRepository.findNormalVoteDataWithTime(pageRequest);
-        return voteListData;
+        return voteRepository.findNormalVoteDataWithTime(null,pageRequest);
     }
 
     private Slice<NormalVoteData> getVoteByPopularity(PageRequest pageRequest) {
-
-        Slice<NormalVoteData> voteSlice = voteRepository.findNormalVoteDataWithPopularity(pageRequest);
-        return voteSlice;
+        return voteRepository.findNormalVoteDataWithPopularity(null, pageRequest);
     }
 
     public Slice<NormalVoteData> getSearchVoteList(String keyword, SortByType sortBy, int page, int size) {
 
-        Slice<NormalVoteData> searchedVoteSlice = null;
-
-        if(sortBy.equals(SortByType.ByTime)) {
+        if (sortBy.equals(SortByType.ByTime)) {
             PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
-            searchedVoteSlice = voteRepository.findVoteDataByTitleContainsWithTime(keyword, pageRequest);
-        } else if(sortBy.equals(SortByType.ByPopularity)) {
-            PageRequest pageRequest = PageRequest.of(page, size);
-            searchedVoteSlice = voteRepository.findVoteDataByTitleContainsPopularity(keyword, pageRequest);
+            return voteRepository.findNormalVoteDataWithTime(keyword, pageRequest);
         }
 
-        return searchedVoteSlice;
+        if (sortBy.equals(SortByType.ByPopularity)) {
+            PageRequest pageRequest = PageRequest.of(page, size);
+            return voteRepository.findNormalVoteDataWithPopularity(keyword, pageRequest);
+        }
+
+        return null;
     }
 
     public List<String> getRecommendVoteList(String keyword) {

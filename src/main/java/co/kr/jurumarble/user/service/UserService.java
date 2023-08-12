@@ -3,6 +3,7 @@ package co.kr.jurumarble.user.service;
 import co.kr.jurumarble.client.common.ThirdPartyAuthorizer;
 import co.kr.jurumarble.client.common.ThirdPartyAuthorizerProvider;
 import co.kr.jurumarble.token.domain.TokenGenerator;
+import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.user.domain.UserFinder;
 import co.kr.jurumarble.user.domain.UserManager;
 import co.kr.jurumarble.user.domain.UserRegister;
@@ -10,6 +11,7 @@ import co.kr.jurumarble.user.dto.AddUserInfo;
 import co.kr.jurumarble.user.dto.LoginToken;
 import co.kr.jurumarble.user.dto.SocialLoginInfo;
 import co.kr.jurumarble.user.dto.ThirdPartySignupInfo;
+import co.kr.jurumarble.user.dto.response.GetUserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,8 +50,10 @@ public class UserService {
         userManager.addUserInfo(userId, addUserInfo);
     }
 
-    public void getUserInfo(Long userId) {
-        userFinder.findByUserId(userId);
+    public GetUserResponse getUserInfo(Long userId) {
+        User findUser = userFinder.findByUserId(userId);
+        return new GetUserResponse(findUser);
+
     }
 
     public void deleteUser(Long userId) {

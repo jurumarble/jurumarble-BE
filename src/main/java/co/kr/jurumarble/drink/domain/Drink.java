@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Drink extends BaseTimeEntity {
+public class Drink{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +24,7 @@ public class Drink extends BaseTimeEntity {
     private String productName;
 
     @Column(name = "alcoholic_beverage")
-    private int alcoholicBeverage;
+    private String alcoholicBeverage;
 
     @Column(name = "raw_material")
     private String rawMaterial;

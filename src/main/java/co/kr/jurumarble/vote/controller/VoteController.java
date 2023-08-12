@@ -2,7 +2,6 @@ package co.kr.jurumarble.vote.controller;
 
 import co.kr.jurumarble.vote.dto.GetIsUserVoted;
 import co.kr.jurumarble.vote.dto.NormalVoteData;
-import co.kr.jurumarble.vote.dto.VoteListData;
 import co.kr.jurumarble.vote.dto.request.CreateDrinkVoteRequest;
 import co.kr.jurumarble.vote.dto.request.CreateNormalVoteRequest;
 import co.kr.jurumarble.vote.dto.request.DoVoteRequest;

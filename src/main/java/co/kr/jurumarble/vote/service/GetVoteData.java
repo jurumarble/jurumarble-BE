@@ -11,33 +11,25 @@ import java.time.LocalDateTime;
 @Getter
 public class GetVoteData {
 
-    private GetVoteUserResponse writer;
+    private final GetVoteUserResponse writer;
 
-    private LocalDateTime voteCreatedDate;
+    private final LocalDateTime voteCreatedDate;
 
-    private String title;
+    private final String title;
 
-    private String imageA;
+    private final String imageA;
 
-    private String imageB;
+    private final String imageB;
 
-    private String titleA;
+    private final String titleA;
 
-    private String titleB;
+    private final String titleB;
 
-    private String description;
+    private final String description;
 
     public GetVoteData(Vote vote, User user, VoteContent voteContent) {
 
-        GetVoteUserResponse getVoteUserResponse = GetVoteUserResponse.builder()
-                .userImage(user.getImageUrl())
-                .userGender(user.getGender())
-                .userAge(user.classifyAge(user.getAge()))
-                .userMbti(user.getMbti())
-                .nickName(user.getNickname())
-                .build();
-
-        this.writer = getVoteUserResponse;
+        this.writer = getGetVoteUserResponse(user);
         this.voteCreatedDate = vote.getCreatedDate();
         this.title = vote.getTitle();
         this.imageA = voteContent.getImageA();
@@ -46,5 +38,15 @@ public class GetVoteData {
         this.titleB = voteContent.getTitleB();
         this.description = vote.getDetail();
 
+    }
+
+    private GetVoteUserResponse getGetVoteUserResponse(User user) {
+        return GetVoteUserResponse.builder()
+                .userImage(user.getImageUrl())
+                .userGender(user.getGender())
+                .userAge(user.classifyAge())
+                .userMbti(user.getMbti())
+                .nickName(user.getNickname())
+                .build();
     }
 }
