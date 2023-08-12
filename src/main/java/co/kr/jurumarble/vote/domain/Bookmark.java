@@ -29,10 +29,10 @@ public class Bookmark extends BaseTimeEntity {
 //        vote.mappingBookmark(this);
 //    }
 
-    public void mappingUser(User user) {
-        this.user = user;
-        user.mappingBookmark(this);
-    }
+//    public void mappingUser(User user) {
+//        this.user = user;
+//        user.mappingBookmark(this);
+//    }
 
 
 }

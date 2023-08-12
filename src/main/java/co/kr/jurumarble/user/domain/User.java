@@ -60,9 +60,6 @@ public class User extends BaseTimeEntity {
     @Column(name = "modified_mbti_date")
     private LocalDateTime modifiedMbtiDate;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
-    private List<Bookmark> bookmarkList = new ArrayList<>();
-
     @Column(name = "deleted_date")
     private LocalDateTime deletedDate;
 
@@ -118,9 +115,9 @@ public class User extends BaseTimeEntity {
         this.modifiedMbtiDate = modifiedMbtiDate;
     }
 
-    public void mappingBookmark(Bookmark bookmark) {
-        this.bookmarkList.add(bookmark);
-    }
+//    public void mappingBookmark(Bookmark bookmark) {
+//        this.bookmarkList.add(bookmark);
+//    }
 
     private void validIsUserDeleted() {
         if (!(deletedDate == null)) {
