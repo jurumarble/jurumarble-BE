@@ -32,8 +32,8 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<HttpStatus> getUserInfo(@PathVariable Long userId) {
+    @GetMapping()
+    public ResponseEntity<HttpStatus> getUserInfo(@RequestAttribute Long userId) {
         userService.getUserInfo(userId);
         return ResponseEntity.ok().build();
     }
