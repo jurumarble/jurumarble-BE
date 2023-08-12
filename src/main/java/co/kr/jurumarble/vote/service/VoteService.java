@@ -175,4 +175,12 @@ public class VoteService {
         );
 
     }
+
+    public boolean checkBookmarked(Long userId, Long voteId) {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+
+        return bookmarkRepository.findByUserIdAndVoteId(userId, voteId).isPresent();
+    }
+
 }

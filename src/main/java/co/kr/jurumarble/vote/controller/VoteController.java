@@ -6,10 +6,7 @@ import co.kr.jurumarble.vote.dto.request.CreateDrinkVoteRequest;
 import co.kr.jurumarble.vote.dto.request.CreateNormalVoteRequest;
 import co.kr.jurumarble.vote.dto.request.DoVoteRequest;
 import co.kr.jurumarble.vote.dto.request.UpdateVoteRequest;
-import co.kr.jurumarble.vote.dto.response.GetIsUserVotedResponse;
-import co.kr.jurumarble.vote.dto.response.GetVoteListResponse;
-import co.kr.jurumarble.vote.dto.response.GetVoteRecommendListResponse;
-import co.kr.jurumarble.vote.dto.response.GetVoteResponse;
+import co.kr.jurumarble.vote.dto.response.*;
 import co.kr.jurumarble.vote.enums.SortByType;
 import co.kr.jurumarble.vote.service.GetVoteData;
 import co.kr.jurumarble.vote.service.VoteService;
@@ -127,12 +124,12 @@ public class VoteController {
         return new ResponseEntity(new GetIsUserVotedResponse(userVoted),HttpStatus.OK);
     }
 
-//    @Operation(summary = "북마크 여부 조회", description = "파라미어테 voteId, 헤더에 userId 보내주시면 됩니다.")
-//    @GetMapping("/{voteId}/bookmark")
-//    public ResponseEntity checkBookmarked(@PathVariable Long voteId, @RequestAttribute Long userId){
-//
-//        boolean result = voteService.checkBookmarked(userId, voteId);
-//
-//        return new ResponseEntity<>(new GetBookmarkedResponse(voteService.checkBookmarked(userId, voteId)), HttpStatus.OK);
-//    }
+    @Operation(summary = "북마크 여부 조회", description = "파라미어테 voteId, 헤더에 userId 보내주시면 됩니다.")
+    @GetMapping("/{voteId}/bookmark")
+    public ResponseEntity checkBookmarked(@PathVariable Long voteId, @RequestAttribute Long userId){
+
+        boolean result = voteService.checkBookmarked(userId, voteId);
+
+        return new ResponseEntity<>(new GetBookmarkedResponse(result), HttpStatus.OK);
+    }
 }
