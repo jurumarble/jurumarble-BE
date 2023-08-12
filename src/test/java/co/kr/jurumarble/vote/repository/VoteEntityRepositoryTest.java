@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.test.context.TestPropertySource;
 
 import javax.persistence.EntityManager;
@@ -44,7 +44,7 @@ class VoteEntityRepositoryTest {
         PageRequest of = PageRequest.of(0, 7);
 
         // when
-        Page<NormalVoteData> actual = voteEntityRepository.findNormalVoteDataWithPopularity(of);
+        Slice<NormalVoteData> actual = voteEntityRepository.findNormalVoteDataWithPopularity(of);
 
         // then
         assertThat(actual).hasSize(7)
@@ -90,7 +90,7 @@ class VoteEntityRepositoryTest {
         PageRequest of = PageRequest.of(0, 7);
 
         // when
-        Page<NormalVoteData> actual = voteEntityRepository.findNormalVoteDataWithTime(of);
+        Slice<NormalVoteData> actual = voteEntityRepository.findNormalVoteDataWithTime(of);
 
         // then
         assertThat(actual).hasSize(7)

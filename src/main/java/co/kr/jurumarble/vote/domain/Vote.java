@@ -5,6 +5,7 @@ import co.kr.jurumarble.common.domain.BaseTimeEntity;
 import co.kr.jurumarble.user.enums.AgeType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
+import co.kr.jurumarble.vote.service.UpdateVoteServiceRequest;
 import co.kr.jurumarble.vote.enums.VoteType;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -71,29 +72,15 @@ public class Vote extends BaseTimeEntity {
         return Objects.hash(id);
     }
 
-    //    public GetVoteResponse toDto(User user) {
-//
-//        GetVoteUserResponse getVoteUserResponse = GetVoteUserResponse.builder()
-//                .build();
-//
-//        return GetVoteResponse.builder()
-//                .writer(getVoteUserResponse)
-//                .voteCreatedDate(getCreatedDate())
-//                .title(title)
-//                .description(detail)
-//                .build();
-//
-//    }
 
-//    public boolean isVoteOfUser(Long userId) {
-//        return this.postedUserId.equals(userId);
-//    }
+    public boolean isVoteOfUser(Long userId) {
+        return this.postedUserId.equals(userId);
+    }
 
-//    public void update(UpdateVoteRequest request) {
-//        this.title = request.getTitle();
-//        this.detail = request.getDetail();
-//        this.getVoteContent().update(request.getTitleA(), request.getTitleB());
-//    }
+    public void update(UpdateVoteServiceRequest request) {
+        this.title = request.getTitle();
+        this.detail = request.getDetail();
+    }
 
 
 }

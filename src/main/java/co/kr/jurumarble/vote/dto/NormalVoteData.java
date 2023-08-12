@@ -34,5 +34,6 @@ public class NormalVoteData {
 
     private String titleB;
 
-    private Long votedNum;
+    private Long votedCount;
+
 }
