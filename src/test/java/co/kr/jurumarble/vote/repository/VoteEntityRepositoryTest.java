@@ -19,7 +19,6 @@ import org.springframework.test.context.TestPropertySource;
 import javax.persistence.EntityManager;
 import java.util.Collections;
 
-import static org.assertj.core.api.Assertions.anyOf;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
 

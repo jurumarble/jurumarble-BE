@@ -2,7 +2,6 @@ package co.kr.jurumarble.exception.vote;
 
 import co.kr.jurumarble.exception.StatusEnum;
 import co.kr.jurumarble.exception.common.CustomException;
-import lombok.Getter;
 
 public class VoteNotFoundException extends CustomException {
 

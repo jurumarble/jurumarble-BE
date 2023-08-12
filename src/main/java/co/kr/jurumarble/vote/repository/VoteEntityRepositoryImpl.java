@@ -3,7 +3,6 @@ package co.kr.jurumarble.vote.repository;
 import co.kr.jurumarble.vote.domain.Vote;
 import co.kr.jurumarble.vote.domain.VoteContent;
 import co.kr.jurumarble.vote.dto.NormalVoteData;
-import co.kr.jurumarble.vote.enums.VoteType;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;

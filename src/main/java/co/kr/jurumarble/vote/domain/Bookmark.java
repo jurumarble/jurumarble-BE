@@ -1,7 +1,6 @@
 package co.kr.jurumarble.vote.domain;
 
 import co.kr.jurumarble.common.domain.BaseTimeEntity;
-import co.kr.jurumarble.user.domain.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
