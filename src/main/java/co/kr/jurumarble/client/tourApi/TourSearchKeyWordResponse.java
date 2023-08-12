@@ -1,5 +1,6 @@
 package co.kr.jurumarble.client.tourApi;
 
+import co.kr.jurumarble.exception.comment.NoDataFoundException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
@@ -12,21 +13,30 @@ public class TourSearchKeyWordResponse {
     private TourSearchKeyWordResponse.Response response;
 
     public List<String> getContentIds() {
-        return response.getBody().getItems().getItem().stream()
-                .map(TourSearchKeyWordResponse.Item::getContentid)
-                .collect(Collectors.toList());
+        if (response != null && response.getBody() != null && response.getBody().getItems() != null) {
+            return response.getBody().getItems().getItem().stream()
+                    .map(TourSearchKeyWordResponse.Item::getContentid)
+                    .collect(Collectors.toList());
+        }
+        throw new NoDataFoundException();
     }
 
     public List<String> getFirstImages() {
-        return response.getBody().getItems().getItem().stream()
-                .map(TourSearchKeyWordResponse.Item::getFirstimage)
-                .collect(Collectors.toList());
+        if (response != null && response.getBody() != null && response.getBody().getItems() != null) {
+            return response.getBody().getItems().getItem().stream()
+                    .map(TourSearchKeyWordResponse.Item::getFirstimage)
+                    .collect(Collectors.toList());
+        }
+        throw new NoDataFoundException();
     }
 
     public List<String> getTitles() {
-        return response.getBody().getItems().getItem().stream()
-                .map(TourSearchKeyWordResponse.Item::getTitle)
-                .collect(Collectors.toList());
+        if (response != null && response.getBody() != null && response.getBody().getItems() != null) {
+            return response.getBody().getItems().getItem().stream()
+                    .map(TourSearchKeyWordResponse.Item::getTitle)
+                    .collect(Collectors.toList());
+        }
+        throw new NoDataFoundException();
     }
 
     @Data
