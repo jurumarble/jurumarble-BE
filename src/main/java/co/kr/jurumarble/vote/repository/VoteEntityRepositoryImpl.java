@@ -206,6 +206,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .where(vote.title.like(keyword + "%"))
                 .groupBy(vote.id)
                 .orderBy(voteResult.id.count().desc())
+                .limit(5) // 최대 5개까지 제한
                 .fetch();
     }
 
@@ -214,7 +215,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
 
         BooleanBuilder whereClause = new BooleanBuilder();
         whereClause.and(voteResult.choice.eq(choiceType)); // 항상 포함되는 조건
-        whereClause.and(vote.id.eq(voteId)); // 추가: voteId 조건
+        whereClause.and(vote.id.eq(voteId)); // 항상 포함되는 조건
 
         if (gender != null) {
             whereClause.and(user.gender.eq(gender));

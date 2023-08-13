@@ -141,7 +141,6 @@ public class VoteService {
 
     public List<String> getRecommendVoteList(String keyword) {
         return voteRepository.findByTitleContains(keyword).stream()
-                .limit(5)
                 .map(Vote::getTitle)
                 .collect(Collectors.toList());
     }
