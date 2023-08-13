@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface VoteResultRepository extends JpaRepository<VoteResult, Long> {
     boolean existsByVoteIdAndVotedUserId(@Param("voteId") Long voteId, @Param("votedUserId") Long votedUserId);
 
-//    Long countByVote(@Param("vote") Vote vote);
+    Long countByVoteId(@Param("voteId") Long vote);
 
     @Query("SELECT vr FROM VoteResult vr WHERE vr.voteId = :voteId and vr.votedUserId = :userId")
     Optional<VoteResult> getVoteResultByVoteIdAndUserId(@Param("voteId") Long voteId, @Param("userId") Long userId);

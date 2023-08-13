@@ -1,12 +1,18 @@
 package co.kr.jurumarble.vote.repository;
 
+import co.kr.jurumarble.user.enums.AgeType;
+import co.kr.jurumarble.user.enums.ChoiceType;
+import co.kr.jurumarble.user.enums.GenderType;
+import co.kr.jurumarble.user.enums.MbtiType;
 import co.kr.jurumarble.vote.domain.Vote;
 import co.kr.jurumarble.vote.domain.VoteContent;
 import co.kr.jurumarble.vote.dto.NormalVoteData;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Repository;
 
@@ -19,8 +25,11 @@ import java.util.stream.Collectors;
 import static co.kr.jurumarble.vote.domain.QVote.vote;
 import static co.kr.jurumarble.vote.domain.QVoteContent.voteContent;
 import static co.kr.jurumarble.vote.domain.QVoteResult.voteResult;
+import static co.kr.jurumarble.user.domain.QUser.user;
+
 
 @Repository
+@Slf4j
 public class VoteEntityRepositoryImpl implements VoteEntityRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
@@ -198,6 +207,33 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .groupBy(vote.id)
                 .orderBy(voteResult.id.count().desc())
                 .fetch();
+    }
+
+    @Override
+    public Long countByVoteAndChoiceAndGenderAndAgeAndMBTI(Long voteId, ChoiceType choiceType, GenderType gender, Integer age, MbtiType mbti) {
+
+        BooleanBuilder whereClause = new BooleanBuilder();
+        whereClause.and(voteResult.choice.eq(choiceType)); // 항상 포함되는 조건
+        whereClause.and(vote.id.eq(voteId)); // 추가: voteId 조건
+
+        if (gender != null) {
+            whereClause.and(user.gender.eq(gender));
+        }
+        if (age != null) {
+            whereClause.and(user.age.eq(age));
+        }
+        if (mbti != null) {
+            whereClause.and(user.mbti.eq(mbti));
+        }
+
+        return jpaQueryFactory
+                .selectFrom(vote)
+                .innerJoin(voteResult)
+                .on(vote.id.eq(voteResult.voteId))
+                .innerJoin(user)
+                .on(vote.postedUserId.eq(user.id))
+                .where(whereClause)
+                .fetchCount();
     }
 
 }

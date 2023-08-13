@@ -86,10 +86,10 @@ public class VoteService {
         Vote vote = voteRepository.findById(info.getVoteId()).orElseThrow(VoteNotFoundException::new);
         User user = userRepository.findById(info.getUserId()).orElseThrow(UserNotFoundException::new);
 
-        if (vote.isVoteOfUser(user.getId())) throw new UserNotAccessRightException();
-
-        if (voteResultRepository.existsByVoteIdAndVotedUserId(vote.getId(), user.getId()))
-            throw new AlreadyUserDoVoteException();
+//        if (vote.isVoteOfUser(user.getId())) throw new UserNotAccessRightException();
+//
+//        if (voteResultRepository.existsByVoteIdAndVotedUserId(vote.getId(), user.getId()))
+//            throw new AlreadyUserDoVoteException();
 
         VoteResult voteResult = new VoteResult(vote.getId(), user.getId(), info.getChoice());
 
