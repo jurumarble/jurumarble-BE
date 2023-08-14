@@ -48,14 +48,13 @@ public class VoteController {
 
         voteService.createDrinkVote(request.toServiceRequest(), userId);
 
-        return new ResponseEntity(HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @Operation(summary = "투표 리스트 조회", description = "파라미터에 sortBy, page, size, category 보내주시면 됩니다.")
     @GetMapping("")
     public ResponseEntity<GetVoteListResponse> getVoteList(@RequestParam SortByType sortBy, @RequestParam int page, @RequestParam int size) {
         Slice<NormalVoteData> voteListData = voteService.getVoteList(sortBy, page, size);
-
         return new ResponseEntity(new GetVoteListResponse(voteListData), HttpStatus.OK);
     }
 

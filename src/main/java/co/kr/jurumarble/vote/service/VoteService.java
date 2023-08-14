@@ -95,26 +95,21 @@ public class VoteService {
     }
 
     public Slice<NormalVoteData> getVoteList(SortByType sortBy, Integer page, Integer size) {
-
-        return getVoteListData(sortBy, page, size);
-    }
-
-    private Slice<NormalVoteData> getVoteListData(SortByType sortBy, Integer page, Integer size) {
-        Slice<NormalVoteData> voteListData;
         if (sortBy.equals(SortByType.ByTime)) {
             PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
-            voteListData = getVoteSortByTime(pageRequest);
-        } else if (sortBy.equals(SortByType.ByPopularity)) {
-            PageRequest pageRequest = PageRequest.of(page, size);
-            voteListData = getVoteByPopularity(pageRequest);
-        } else {
-            throw new RuntimeException("잘못된 요청입니다.");
+            return getVoteSortByTime(pageRequest);
         }
-        return voteListData;
+
+        if (sortBy.equals(SortByType.ByPopularity)) {
+            PageRequest pageRequest = PageRequest.of(page, size);
+            return getVoteByPopularity(pageRequest);
+        }
+
+        throw new RuntimeException("잘못된 요청입니다.");
     }
 
     private Slice<NormalVoteData> getVoteSortByTime(PageRequest pageRequest) {
-        return voteRepository.findNormalVoteDataWithTime(null,pageRequest);
+        return voteRepository.findNormalVoteDataWithTime(null, pageRequest);
     }
 
     private Slice<NormalVoteData> getVoteByPopularity(PageRequest pageRequest) {
@@ -133,7 +128,7 @@ public class VoteService {
             return voteRepository.findNormalVoteDataWithPopularity(keyword, pageRequest);
         }
 
-        return null;
+        throw new RuntimeException("잘못된 요청입니다.");
     }
 
     public List<String> getRecommendVoteList(String keyword) {
