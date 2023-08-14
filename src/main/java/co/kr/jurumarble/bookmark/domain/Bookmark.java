@@ -1,4 +1,4 @@
-package co.kr.jurumarble.vote.domain;
+package co.kr.jurumarble.bookmark.domain;
 
 import co.kr.jurumarble.common.domain.BaseTimeEntity;
 import lombok.Getter;
@@ -21,15 +21,9 @@ public class Bookmark extends BaseTimeEntity {
     @Column(name = "VOTE_ID")
     private Long voteId;
 
-//    public void mappingVote(Vote vote) {
-//        this.vote = vote;
-//        vote.mappingBookmark(this);
-//    }
-
-//    public void mappingUser(User user) {
-//        this.user = user;
-//        user.mappingBookmark(this);
-//    }
-
+    public Bookmark(Long userId, Long voteId) {
+        this.userId = userId;
+        this.voteId = voteId;
+    }
 
 }

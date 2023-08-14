@@ -11,6 +11,7 @@ import co.kr.jurumarble.vote.dto.DoVoteInfo;
 import co.kr.jurumarble.vote.dto.GetIsUserVoted;
 import co.kr.jurumarble.vote.dto.NormalVoteData;
 import co.kr.jurumarble.vote.enums.SortByType;
+import co.kr.jurumarble.bookmark.repository.BookmarkRepository;
 import co.kr.jurumarble.vote.repository.VoteContentRepository;
 import co.kr.jurumarble.vote.repository.VoteRepository;
 import co.kr.jurumarble.vote.repository.VoteResultRepository;
@@ -36,6 +37,7 @@ public class VoteService {
     private final VoteRepository voteRepository;
     private final VoteContentRepository voteContentRepository;
     private final VoteResultRepository voteResultRepository;
+    private final BookmarkRepository bookmarkRepository;
 
     @Transactional
     public Long createNormalVote(CreateNormalVoteServiceRequest request, Long userId) {
@@ -60,6 +62,7 @@ public class VoteService {
         return new GetVoteData(vote, user, voteContent);
     }
 
+    @Transactional
     public void updateVote(UpdateVoteServiceRequest request) {
         Vote vote = voteRepository.findById(request.getVoteId()).orElseThrow(VoteNotFoundException::new);
         isVoteOfUser(request.getUserId(), vote);
@@ -72,12 +75,14 @@ public class VoteService {
         if (!vote.isVoteOfUser(userId)) throw new UserNotAccessRightException();
     }
 
+    @Transactional
     public void deleteVote(Long voteId, Long userId) {
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         isVoteOfUser(userId, vote);
         voteRepository.delete(vote);
     }
 
+    @Transactional
     public void doVote(DoVoteInfo info) {
 
         Vote vote = voteRepository.findById(info.getVoteId()).orElseThrow(VoteNotFoundException::new);
@@ -138,7 +143,6 @@ public class VoteService {
 
     public List<String> getRecommendVoteList(String keyword) {
         return voteRepository.findByTitleContains(keyword).stream()
-                .limit(5)
                 .map(Vote::getTitle)
                 .collect(Collectors.toList());
     }
@@ -152,29 +156,5 @@ public class VoteService {
         return getIsUserVoted;
     }
 
-    public void bookmarkVote(Long userId, Long voteId) {
 
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-//        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
-
-//        Optional<Bookmark> byVoteAndUser = bookmarkRepository.findByVoteAndUser(vote, user);
-
-//        byVoteAndUser.ifPresentOrElse(
-//                bookmark -> {
-//                    //북마크를 눌렀는데 또 눌렀을 경우 북마크 취소
-//                    bookmarkRepository.delete(bookmark);
-//                    vote.removeBookmark(bookmark);
-//                },
-//                // 북마크가 없을 경우 북마크 추가
-//                () -> {
-//                    Bookmark bookmark = new Bookmark();
-//
-//                    bookmark.mappingVote(vote);
-//                    bookmark.mappingUser(user);
-//
-//                    bookmarkRepository.save(bookmark);
-//                }
-//        );
-
-    }
 }
