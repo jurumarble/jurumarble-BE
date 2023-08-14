@@ -63,10 +63,14 @@ CREATE TABLE vote_result
 
 CREATE TABLE vote_drink_content
 (
-    id      BIGINT NOT NULL AUTO_INCREMENT,
-    vote_id BIGINT NOT NULL,
-    drink_id_a BIGINT NOT NULL,
-    drink_id_b BIGINT NOT NULL,
+    id           BIGINT NOT NULL AUTO_INCREMENT,
+    vote_id      BIGINT NOT NULL,
+    drink_a_id   BIGINT NOT NULL,
+    drink_b_id   BIGINT NOT NULL,
+    drink_a_name VARCHAR(30) DEFAULT NULL,
+    drink_a_type VARCHAR(10) DEFAULT NULL,
+    drink_b_name VARCHAR(30) DEFAULT NULL,
+    drink_b_type VARCHAR(10) DEFAULT NULL,
     PRIMARY KEY (id)
 );
 

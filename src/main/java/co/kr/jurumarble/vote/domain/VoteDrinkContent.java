@@ -23,22 +23,39 @@ public class VoteDrinkContent {
     @Column(name = "vote_id")
     private Long voteId;
 
-    @Column(name = "drink_id_a")
-    private Long drinkIdA;
+    @Column(name = "drink_a_id")
+    private Long drinkAId;
 
-    @Column(name = "drink_id_b")
-    private Long drinkIdB;
+    @Column(name = "drink_b_id")
+    private Long drinkBId;
+
+    @Column(name = "drink_a_name")
+    private String drinkAName;
+
+    @Column(name = "drink_a_type")
+    private String drinkAType;
+
+    @Column(name = "drink_b_name")
+    private String drinkBName;
+
+    @Column(name = "drink_b_type")
+    private String drinkBType;
 
     @Builder
-    public VoteDrinkContent(Long voteId, Long drinkIdA, Long drinkIdB) {
-        validateDrinksDuplicated(drinkIdA, drinkIdB);
+    public VoteDrinkContent(Long voteId, Long drinkAId, Long drinkBId, String drinkAName, String drinkAType, String drinkBName, String drinkBType) {
+        validateDrinksDuplicated(drinkAId, drinkBId);
         this.voteId = voteId;
-        this.drinkIdA = drinkIdA;
-        this.drinkIdB = drinkIdB;
+        this.drinkAId = drinkAId;
+        this.drinkBId = drinkBId;
+        this.drinkAName = drinkAName;
+        this.drinkAType = drinkAType;
+        this.drinkBName = drinkBName;
+        this.drinkBType = drinkBType;
     }
 
-    private void validateDrinksDuplicated(Long drinkIdA, Long drinkIdB) {
-        if (Objects.equals(drinkIdA, drinkIdB)) {
+
+    private void validateDrinksDuplicated(Long drinkAId, Long drinkBId) {
+        if (Objects.equals(drinkAId, drinkBId)) {
             throw new VoteDrinksDuplicatedException();
         }
     }

@@ -60,6 +60,7 @@ public class VoteService {
         return new GetVoteData(vote, user, voteContent);
     }
 
+    @Transactional
     public void updateVote(UpdateVoteServiceRequest request) {
         Vote vote = voteRepository.findById(request.getVoteId()).orElseThrow(VoteNotFoundException::new);
         isVoteOfUser(request.getUserId(), vote);
@@ -72,12 +73,14 @@ public class VoteService {
         if (!vote.isVoteOfUser(userId)) throw new UserNotAccessRightException();
     }
 
+    @Transactional
     public void deleteVote(Long voteId, Long userId) {
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         isVoteOfUser(userId, vote);
         voteRepository.delete(vote);
     }
 
+    @Transactional
     public void doVote(DoVoteInfo info) {
 
         Vote vote = voteRepository.findById(info.getVoteId()).orElseThrow(VoteNotFoundException::new);
