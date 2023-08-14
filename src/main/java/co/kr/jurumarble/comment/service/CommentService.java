@@ -96,12 +96,12 @@ public class CommentService {
         doEmote(emotion, user, comment);
     }
 
-    public void addSnackToComment(Long voteId, Long commentId, Long userId, UpdateSnackRequest request) {
+    public void addRestaurantToComment(Long voteId, Long commentId, Long userId, UpdateSnackRequest request) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
 
-        comment.updateSnack(request);
+        comment.updateRestaurant(request);
 
     }
 
@@ -118,7 +118,7 @@ public class CommentService {
 
     }
 
-    public List<String> getSnackImage(Long voteId, Long commentId, Long userId, String contentId) {
+    public List<String> getRestaurantImage(Long voteId, Long commentId, Long userId, String contentId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);

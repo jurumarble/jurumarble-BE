@@ -83,6 +83,7 @@ public class Comment extends BaseTimeEntity {
         this.parent = parent;
         this.likeCount = 0;
         this.hateCount = 0;
+        this.restaurant = new Restaurant();
     }
 
     public void updateParent(Comment parent) {
@@ -112,7 +113,7 @@ public class Comment extends BaseTimeEntity {
     }
 
 
-    public void updateSnack(UpdateSnackRequest request) {
+    public void updateRestaurant(UpdateSnackRequest request) {
         if (request.getRestaurantName() != null && !request.getRestaurantName().isEmpty()) {
             this.restaurant.updateRestaurantName(request.getRestaurantName());
         }

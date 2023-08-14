@@ -27,13 +27,5 @@ public class Restaurant {
     public void updateRestaurantName(String restaurantName) {
         this.restaurantName = restaurantName;
     }
-
-
-    public Restaurant(UpdateSnackRequest updateSnackRequest) {
-        this.restaurantName = updateSnackRequest.getRestaurantName();
-        this.restaurantImage = updateSnackRequest.getRestaurantImage();
-        this.treatMenu = updateSnackRequest.getTreatMenu();
-    }
-
 }
 

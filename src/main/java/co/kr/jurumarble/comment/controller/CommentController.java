@@ -89,29 +89,29 @@ public class CommentController {
 
     @Operation(summary = "안주 추가", description = "헤더에 토큰 담고, 파라미터에 voteId, commentId 보내주시면 됩니다")
     @PatchMapping("/votes/{voteId}/comments/{commentId}/snack")
-    public ResponseEntity addSnackToComment(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Long userId, @RequestBody UpdateSnackRequest updateSnackRequest) {
+    public ResponseEntity addRestaurantToComment(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Long userId, @RequestBody UpdateSnackRequest updateSnackRequest) {
 
-        commentService.addSnackToComment(voteId, commentId, userId, updateSnackRequest);
+        commentService.addRestaurantToComment(voteId, commentId, userId, updateSnackRequest);
 
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @Operation(summary = "안주 검색", description = "헤더에 토큰 담고, 파라미터에 voteId, commentId 보내주시면 됩니다")
     @GetMapping("/votes/{voteId}/comments/{commentId}/snack")
-    public ResponseEntity<List<SearchSnackResponse>> searchSnack(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Long userId, @RequestParam(value = "keyword", required = false) String keyword, @RequestParam int page) {
+    public ResponseEntity<List<SearchSnackResponse>> searchRestaurant(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Long userId, @RequestParam(value = "keyword", required = false) String keyword, @RequestParam int page) {
 
-        List<SearchSnackResponse> searchSnackResponses = commentService.searchSnack(voteId, commentId, userId, keyword, page);
+        List<SearchSnackResponse> searchRestaurantResponses = commentService.searchSnack(voteId, commentId, userId, keyword, page);
 
-        return new ResponseEntity(searchSnackResponses, HttpStatus.OK);
+        return new ResponseEntity(searchRestaurantResponses, HttpStatus.OK);
     }
 
     @Operation(summary = "안주 이미지", description = "헤더에 토큰 담고, 파라미터에 voteId, commentId 보내주시면 됩니다")
     @GetMapping("/votes/{voteId}/comments/{commentId}/snack/{contentId}")
-    public ResponseEntity<List<String>> getSnackImage(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Long userId, @PathVariable String contentId) {
+    public ResponseEntity<List<String>> getRestaurantImage(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Long userId, @PathVariable String contentId) {
 
-        List<String> snackImage = commentService.getSnackImage(voteId, commentId, userId, contentId);
+        List<String> restaurantImage = commentService.getRestaurantImage(voteId, commentId, userId, contentId);
 
-        return new ResponseEntity(snackImage, HttpStatus.OK);
+        return new ResponseEntity(restaurantImage, HttpStatus.OK);
     }
 
 
