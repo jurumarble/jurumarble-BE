@@ -25,7 +25,7 @@ public class StatisticsController {
     private final StatisticsService statisticsService;
 
     @Operation(summary  = "투표 참여 인원 통계", description = "파라미터에 voteId 보내주시면 됩니다.")
-    @GetMapping("/vote/{voteId}/total-statistics")
+    @GetMapping("/votes/{voteId}/total-statistics")
     public ResponseEntity<TotalStatisticsResponse> getTotalStatistics(@PathVariable("voteId") Long voteId) {
 
         Long totalVoteCount = statisticsService.getTotalStatistics(voteId);
@@ -34,7 +34,7 @@ public class StatisticsController {
     }
 
     @Operation(summary = "A, B 투표 참여인원, 퍼센테이지 통계", description = "파라미터에 voteId, gender, age, mbti 보내주시면 됩니다.")
-    @GetMapping("/vote/{voteId}/select-statistics")
+    @GetMapping("/votes/{voteId}/select-statistics")
     public ResponseEntity<SelectStatisticsResponse> getSelectStatistics(@PathVariable("voteId") Long voteId, @RequestParam(required = false) GenderType gender, @RequestParam(required = false) AgeType age, @RequestParam(required = false) MbtiType mbti) {
 
         VoteSelectResultData voteSelectResultData  = statisticsService.getSelectedStatistics(voteId, gender, age, mbti);

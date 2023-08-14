@@ -1,4 +1,4 @@
-package co.kr.jurumarble.vote.dto.response;
+package co.kr.jurumarble.bookmark.dto.response;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

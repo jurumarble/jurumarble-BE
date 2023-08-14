@@ -1,6 +1,6 @@
-package co.kr.jurumarble.vote.repository;
+package co.kr.jurumarble.bookmark.repository;
 
-import co.kr.jurumarble.vote.domain.Bookmark;
+import co.kr.jurumarble.bookmark.domain.Bookmark;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

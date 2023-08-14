@@ -1,4 +1,4 @@
-package co.kr.jurumarble.vote.domain;
+package co.kr.jurumarble.bookmark.domain;
 
 import co.kr.jurumarble.common.domain.BaseTimeEntity;
 import lombok.Getter;
