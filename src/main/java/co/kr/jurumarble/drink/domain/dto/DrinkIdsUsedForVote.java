@@ -7,10 +7,8 @@ import java.util.List;
 
 @Getter
 public class DrinkIdsUsedForVote {
-
-    private Long drinkAId;
-
-    private Long drinkBId;
+    private final Long drinkAId;
+    private final Long drinkBId;
 
     public DrinkIdsUsedForVote(Long drinkAId, Long drinkBId) {
         validateDrinkIdsIsDuplicate(drinkAId, drinkBId);

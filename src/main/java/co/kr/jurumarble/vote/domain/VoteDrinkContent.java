@@ -1,6 +1,8 @@
 package co.kr.jurumarble.vote.domain;
 
 
+import co.kr.jurumarble.drink.domain.Drink;
+import co.kr.jurumarble.drink.domain.dto.DrinksUsedForVote;
 import co.kr.jurumarble.exception.vote.VoteDrinksDuplicatedException;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -74,5 +76,18 @@ public class VoteDrinkContent {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public static VoteDrinkContent createFromDrinks(DrinksUsedForVote drinksUsedForVote) {
+        Drink drinkA = drinksUsedForVote.getDrinkA();
+        Drink drinkB = drinksUsedForVote.getDrinkB();
+        return VoteDrinkContent.builder()
+                .drinkAId(drinkA.getId())
+                .drinkBId(drinkB.getId())
+                .drinkAName(drinkA.getName())
+                .drinkBName(drinkB.getName())
+                .drinkAType(drinkA.getType())
+                .drinkBType(drinkB.getType())
+                .build();
     }
 }

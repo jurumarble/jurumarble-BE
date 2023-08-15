@@ -1,6 +1,8 @@
 package co.kr.jurumarble.vote.service;
 
+import co.kr.jurumarble.drink.domain.Drink;
 import co.kr.jurumarble.drink.domain.DrinkFinder;
+import co.kr.jurumarble.drink.domain.dto.DrinksUsedForVote;
 import co.kr.jurumarble.exception.user.UserNotAccessRightException;
 import co.kr.jurumarble.exception.user.UserNotFoundException;
 import co.kr.jurumarble.exception.vote.AlreadyUserDoVoteException;
@@ -50,8 +52,9 @@ public class VoteService {
     @Transactional
     public Long createDrinkVote(CreateDrinkVoteServiceRequest request, Long userId) {
         userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        VoteDrinkContent voteDrinkContent = request.toVoteDrinkContent();
+        DrinksUsedForVote drinksUsedForVote = drinkFinder.findDrinksUsedForVote(request.extractDrinkIds());
         Vote vote = request.toVote(userId);
+        VoteDrinkContent voteDrinkContent = VoteDrinkContent.createFromDrinks(drinksUsedForVote);
         return voteGenerator.createDrinkVote(vote, voteDrinkContent);
     }
 

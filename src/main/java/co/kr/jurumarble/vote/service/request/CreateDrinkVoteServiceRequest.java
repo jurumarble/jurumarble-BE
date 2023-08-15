@@ -1,5 +1,6 @@
 package co.kr.jurumarble.vote.service.request;
 
+import co.kr.jurumarble.drink.domain.dto.DrinkIdsUsedForVote;
 import co.kr.jurumarble.exception.vote.VoteTypeNotMatchException;
 import co.kr.jurumarble.vote.domain.Vote;
 import co.kr.jurumarble.vote.domain.VoteDrinkContent;
@@ -33,11 +34,8 @@ public class CreateDrinkVoteServiceRequest {
         }
     }
 
-    public VoteDrinkContent toVoteDrinkContent() {
-        return VoteDrinkContent.builder()
-                .drinkAId(drinkAId)
-                .drinkBId(drinkBId)
-                .build();
+    public DrinkIdsUsedForVote extractDrinkIds() {
+        return new DrinkIdsUsedForVote(drinkAId, drinkBId);
     }
 
     public Vote toVote(Long userId) {
