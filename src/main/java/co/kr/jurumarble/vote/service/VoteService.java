@@ -140,7 +140,6 @@ public class VoteService {
 
     public List<String> getRecommendVoteList(String keyword) {
         return voteRepository.findByTitleContains(keyword).stream()
-                .limit(5)
                 .map(Vote::getTitle)
                 .collect(Collectors.toList());
     }
@@ -152,31 +151,5 @@ public class VoteService {
             getIsUserVoted.setUserChoice(voteResult.getChoice());
         });
         return getIsUserVoted;
-    }
-
-    public void bookmarkVote(Long userId, Long voteId) {
-
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-//        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
-
-//        Optional<Bookmark> byVoteAndUser = bookmarkRepository.findByVoteAndUser(vote, user);
-
-//        byVoteAndUser.ifPresentOrElse(
-//                bookmark -> {
-//                    //북마크를 눌렀는데 또 눌렀을 경우 북마크 취소
-//                    bookmarkRepository.delete(bookmark);
-//                    vote.removeBookmark(bookmark);
-//                },
-//                // 북마크가 없을 경우 북마크 추가
-//                () -> {
-//                    Bookmark bookmark = new Bookmark();
-//
-//                    bookmark.mappingVote(vote);
-//                    bookmark.mappingUser(user);
-//
-//                    bookmarkRepository.save(bookmark);
-//                }
-//        );
-
     }
 }
