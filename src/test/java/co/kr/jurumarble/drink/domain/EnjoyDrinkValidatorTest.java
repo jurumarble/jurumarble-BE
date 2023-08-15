@@ -8,13 +8,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class EnjoyDrinkValidatorTest {
@@ -29,12 +30,23 @@ class EnjoyDrinkValidatorTest {
     @Test
     void checkIsAlreadyEnjoyed() {
         // given
-        Mockito.when(enjoyDrinkRepository.findByUserIdAndDrinkId(anyLong(), anyLong()))
+        when(enjoyDrinkRepository.findByUserIdAndDrinkId(anyLong(), anyLong()))
                 .thenReturn(Optional.of(new EnjoyDrink(anyLong(), anyLong())));
 
         // when // then
         assertThrows(AlreadyEnjoyedDrinkException.class,
                 () -> enjoyDrinkValidator.checkIsAlreadyEnjoyed(1L, 1L));
+    }
+
+    @DisplayName("아직 즐기지 않은 전통주의 경우 에러를 터트리지 않는다.")
+    @Test
+    void checkIsAlreadyEnjoyedWithNotThrowException() {
+        // given
+        when(enjoyDrinkRepository.findByUserIdAndDrinkId(anyLong(), anyLong()))
+                .thenReturn(Optional.empty());
+
+        // when // then
+        assertDoesNotThrow(() -> enjoyDrinkValidator.checkIsAlreadyEnjoyed(1L, 1L));
     }
 
 }
