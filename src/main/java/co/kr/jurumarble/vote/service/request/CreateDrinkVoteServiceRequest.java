@@ -16,23 +16,15 @@ public class CreateDrinkVoteServiceRequest {
     private final Long voteId;
     private final Long drinkAId;
     private final Long drinkBId;
-    private final String drinkAName;
-    private final String drinkAType;
-    private final String drinkBName;
-    private final String drinkBType;
 
     @Builder
-    public CreateDrinkVoteServiceRequest(String title, VoteType voteType, Long voteId, Long drinkAId, Long drinkBId, String drinkAName, String drinkAType, String drinkBName, String drinkBType) {
+    public CreateDrinkVoteServiceRequest(String title, VoteType voteType, Long voteId, Long drinkAId, Long drinkBId) {
         validVoteType(voteType);
         this.title = title;
         this.voteType = voteType;
         this.voteId = voteId;
         this.drinkAId = drinkAId;
         this.drinkBId = drinkBId;
-        this.drinkAName = drinkAName;
-        this.drinkAType = drinkAType;
-        this.drinkBName = drinkBName;
-        this.drinkBType = drinkBType;
     }
 
     private void validVoteType(VoteType voteType) {
@@ -45,10 +37,6 @@ public class CreateDrinkVoteServiceRequest {
         return VoteDrinkContent.builder()
                 .drinkAId(drinkAId)
                 .drinkBId(drinkBId)
-                .drinkAName(drinkAName)
-                .drinkAType(drinkAType)
-                .drinkBName(drinkBName)
-                .drinkBType(drinkBType)
                 .build();
     }
 
