@@ -10,6 +10,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "enjoy_drink")
 public class EnjoyDrink extends BaseTimeEntity {
 
     @Id
@@ -21,4 +22,9 @@ public class EnjoyDrink extends BaseTimeEntity {
 
     @Column(name = "drink_id")
     private Long drinkId;
+
+    public EnjoyDrink(Long userId, Long drinkId) {
+        this.userId = userId;
+        this.drinkId = drinkId;
+    }
 }
