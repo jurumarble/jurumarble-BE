@@ -4,6 +4,7 @@ DROP TABLE if EXISTS users CASCADE;
 DROP TABLE if EXISTS vote_result;
 DROP TABLE if EXISTS drink;
 DROP TABLE if EXISTS vote_drink_content;
+DROP TABLE if EXISTS enjoy_drink;
 
 CREATE TABLE vote
 (
@@ -87,6 +88,16 @@ CREATE TABLE drink
     manufacture_address VARCHAR(255) DEFAULT NULL,
     price               INTEGER      DEFAULT NULL,
     image               VARCHAR(255) DEFAULT NULL,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE enjoy_drink
+(
+    id      BIGINT NOT NULL AUTO_INCREMENT,
+    user_id BIGINT NOT NULL,
+    vote_id BIGINT NOT NULL,
+    created_date    TIMESTAMP    DEFAULT NULL,
+    modified_date   TIMESTAMP    DEFAULT NULL,
     PRIMARY KEY (id)
 );
 
