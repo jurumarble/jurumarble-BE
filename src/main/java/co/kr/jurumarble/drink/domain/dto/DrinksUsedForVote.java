@@ -1,6 +1,6 @@
 package co.kr.jurumarble.drink.domain.dto;
 
-import co.kr.jurumarble.drink.domain.Drink;
+import co.kr.jurumarble.drink.domain.entity.Drink;
 import co.kr.jurumarble.exception.drink.DrinkIdDuplicatedException;
 import lombok.Getter;
 

@@ -2,6 +2,7 @@ package co.kr.jurumarble.drink.domain;
 
 import co.kr.jurumarble.drink.domain.dto.DrinkIdsUsedForVote;
 import co.kr.jurumarble.drink.domain.dto.DrinksUsedForVote;
+import co.kr.jurumarble.drink.domain.entity.Drink;
 import co.kr.jurumarble.drink.repository.DrinkRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

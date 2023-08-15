@@ -1,6 +1,6 @@
 package co.kr.jurumarble.vote.service;
 
-import co.kr.jurumarble.drink.domain.Drink;
+import co.kr.jurumarble.drink.domain.entity.Drink;
 import co.kr.jurumarble.drink.domain.DrinkFinder;
 import co.kr.jurumarble.drink.domain.dto.DrinkIdsUsedForVote;
 import co.kr.jurumarble.drink.domain.dto.DrinksUsedForVote;
@@ -21,7 +21,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;

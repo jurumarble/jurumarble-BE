@@ -1,6 +1,5 @@
-package co.kr.jurumarble.drink.domain;
+package co.kr.jurumarble.drink.domain.entity;
 
-import co.kr.jurumarble.common.domain.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

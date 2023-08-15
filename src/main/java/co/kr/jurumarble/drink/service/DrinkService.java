@@ -1,6 +1,6 @@
 package co.kr.jurumarble.drink.service;
 
-import co.kr.jurumarble.drink.domain.Drink;
+import co.kr.jurumarble.drink.domain.entity.Drink;
 import co.kr.jurumarble.drink.repository.DrinkRepository;
 import co.kr.jurumarble.drink.service.response.GetDrinkServiceResponse;
 import co.kr.jurumarble.exception.drink.DrinkNotFoundException;

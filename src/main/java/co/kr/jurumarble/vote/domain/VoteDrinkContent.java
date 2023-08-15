@@ -1,7 +1,7 @@
 package co.kr.jurumarble.vote.domain;
 
 
-import co.kr.jurumarble.drink.domain.Drink;
+import co.kr.jurumarble.drink.domain.entity.Drink;
 import co.kr.jurumarble.drink.domain.dto.DrinksUsedForVote;
 import co.kr.jurumarble.exception.vote.VoteDrinksDuplicatedException;
 import lombok.AccessLevel;

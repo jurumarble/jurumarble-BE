@@ -1,6 +1,5 @@
 package co.kr.jurumarble.vote.service;
 
-import co.kr.jurumarble.drink.domain.Drink;
 import co.kr.jurumarble.drink.domain.DrinkFinder;
 import co.kr.jurumarble.drink.domain.dto.DrinksUsedForVote;
 import co.kr.jurumarble.exception.user.UserNotAccessRightException;
