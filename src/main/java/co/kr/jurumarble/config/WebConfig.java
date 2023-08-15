@@ -25,7 +25,8 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/votes/{voteId}")
                 .addPathPatterns("/api/votes/{voteId}/vote")
                 .addPathPatterns("/api/votes/{voteId}/voted")
-                .addPathPatterns("/api/votes/{voteId}/bookmark");
+                .addPathPatterns("/api/votes/{voteId}/bookmark")
+                .addPathPatterns("/api/drinks/enjoys");
     }
 
     @Override

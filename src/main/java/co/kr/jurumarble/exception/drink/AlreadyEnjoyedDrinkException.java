@@ -1,16 +1,15 @@
-package co.kr.jurumarble.exception.vote;
+package co.kr.jurumarble.exception.drink;
 
 import co.kr.jurumarble.exception.StatusEnum;
 import co.kr.jurumarble.exception.common.CustomException;
 
-public class VoteTypeNotMatchException extends CustomException {
-
-    private static final String message = "투표 타입이 일치하지 않습니다.";
+public class AlreadyEnjoyedDrinkException extends CustomException {
+    private static final String message = "이미 즐겼어요 처리된 전통주 입니다.";
     private final StatusEnum status;
 
-    public VoteTypeNotMatchException() {
+    public AlreadyEnjoyedDrinkException() {
         super(message);
-        this.status = StatusEnum.VOTE_TYPE_NOT_MATCH;
+        this.status = StatusEnum.ALREADY_ENJOYED_DRINK;
     }
 
     @Override

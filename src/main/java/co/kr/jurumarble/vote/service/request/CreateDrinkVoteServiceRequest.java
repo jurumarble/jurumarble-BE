@@ -1,26 +1,28 @@
 package co.kr.jurumarble.vote.service.request;
 
+import co.kr.jurumarble.drink.domain.dto.DrinkIdsUsedForVote;
 import co.kr.jurumarble.exception.vote.VoteTypeNotMatchException;
 import co.kr.jurumarble.vote.domain.Vote;
-import co.kr.jurumarble.vote.domain.VoteDrinkContent;
 import co.kr.jurumarble.vote.enums.VoteType;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 public class CreateDrinkVoteServiceRequest {
-    private String title;
-    private Long drinkIdA;
-    private Long drinkIdB;
-    private VoteType voteType;
+    private final String title;
+    private final VoteType voteType;
+    private final Long voteId;
+    private final Long drinkAId;
+    private final Long drinkBId;
 
     @Builder
-    public CreateDrinkVoteServiceRequest(String title, Long drinkIdA, Long drinkIdB, VoteType voteType) {
+    public CreateDrinkVoteServiceRequest(String title, VoteType voteType, Long voteId, Long drinkAId, Long drinkBId) {
         validVoteType(voteType);
         this.title = title;
-        this.drinkIdA = drinkIdA;
-        this.drinkIdB = drinkIdB;
         this.voteType = voteType;
+        this.voteId = voteId;
+        this.drinkAId = drinkAId;
+        this.drinkBId = drinkBId;
     }
 
     private void validVoteType(VoteType voteType) {
@@ -29,11 +31,8 @@ public class CreateDrinkVoteServiceRequest {
         }
     }
 
-    public VoteDrinkContent toVoteDrinkContent() {
-        return VoteDrinkContent.builder()
-                .drinkIdA(drinkIdA)
-                .drinkIdB(drinkIdB)
-                .build();
+    public DrinkIdsUsedForVote extractDrinkIds() {
+        return new DrinkIdsUsedForVote(drinkAId, drinkBId);
     }
 
     public Vote toVote(Long userId) {

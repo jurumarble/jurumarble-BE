@@ -5,9 +5,8 @@ import co.kr.jurumarble.exception.common.CustomException;
 
 public class AlreadyDeletedUserException extends CustomException {
 
-    private final StatusEnum status;
-
     private static final String message = "유저의 정보가 이미 존재합니다";
+    private final StatusEnum status;
 
     public AlreadyDeletedUserException() {
         super(message);

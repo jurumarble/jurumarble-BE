@@ -11,18 +11,6 @@ import java.util.Objects;
 @Component
 public class NicknameGenerator {
 
-    /**
-     * 외부 api 호출해서 랜덤닉네임을 생성
-     * @return GetUserNickNameRequest
-     */
-    public String generateRandomNickName() {
-        URI uri = ofUri();
-        RestTemplate restTemplate = new RestTemplate();
-        GetUserNickNameRequest getUserNickNameRequest = restTemplate.getForObject(uri, GetUserNickNameRequest.class);
-        return Objects.requireNonNull(getUserNickNameRequest).getWords()[0];
-
-    }
-
     private static URI ofUri() {
         return UriComponentsBuilder
                 .fromUriString("https://nickname.hwanmoo.kr/")
@@ -32,5 +20,18 @@ public class NicknameGenerator {
                 .encode()
                 .build()
                 .toUri();
+    }
+
+    /**
+     * 외부 api 호출해서 랜덤닉네임을 생성
+     *
+     * @return GetUserNickNameRequest
+     */
+    public String generateRandomNickName() {
+        URI uri = ofUri();
+        RestTemplate restTemplate = new RestTemplate();
+        GetUserNickNameRequest getUserNickNameRequest = restTemplate.getForObject(uri, GetUserNickNameRequest.class);
+        return Objects.requireNonNull(getUserNickNameRequest).getWords()[0];
+
     }
 }

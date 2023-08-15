@@ -1,7 +1,7 @@
 package co.kr.jurumarble.drink.service.response;
 
 import co.kr.jurumarble.drink.controller.response.GetDrinkResponse;
-import co.kr.jurumarble.drink.domain.Drink;
+import co.kr.jurumarble.drink.domain.entity.Drink;
 import lombok.Getter;
 
 @Getter

@@ -30,7 +30,6 @@ public class UserControllerTest {
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
-    
 
 
 }

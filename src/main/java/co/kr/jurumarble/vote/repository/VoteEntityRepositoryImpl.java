@@ -12,7 +12,6 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Repository;
 
@@ -29,7 +28,6 @@ import static co.kr.jurumarble.user.domain.QUser.user;
 
 
 @Repository
-@Slf4j
 public class VoteEntityRepositoryImpl implements VoteEntityRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
@@ -37,7 +35,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
     public VoteEntityRepositoryImpl(EntityManager entityManager) {
         this.jpaQueryFactory = new JPAQueryFactory(entityManager);
     }
-  
+
     @Override
     public Slice<NormalVoteData> findNormalVoteDataWithPopularity(String keyword, Pageable pageable) {
 
@@ -110,7 +108,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                             .imageB(voteContent.getImageB())
                             .titleA(voteContent.getTitleA())
                             .titleB(voteContent.getTitleB())
-                            .votedCount(findVoteTuple.get(1,Long.class))
+                            .votedCount(findVoteTuple.get(1, Long.class))
                             .build();
                 }).collect(Collectors.toList());
     }
@@ -127,19 +125,19 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
     @Override
     public Optional<NormalVoteData> findNormalVoteDataByVoteId(Long voteId) {
         NormalVoteData normalVoteData = jpaQueryFactory.select(
-                Projections.bean(NormalVoteData.class,
-                        vote.id,
-                        vote.postedUserId,
-                        vote.title,
-                        vote.detail,
-                        vote.filteredGender,
-                        vote.filteredAge,
-                        vote.filteredMbti,
-                        voteContent.imageA,
-                        voteContent.imageB,
-                        voteContent.titleA,
-                        voteContent.titleB
-                ))
+                        Projections.bean(NormalVoteData.class,
+                                vote.id,
+                                vote.postedUserId,
+                                vote.title,
+                                vote.detail,
+                                vote.filteredGender,
+                                vote.filteredAge,
+                                vote.filteredMbti,
+                                voteContent.imageA,
+                                voteContent.imageB,
+                                voteContent.titleA,
+                                voteContent.titleB
+                        ))
                 .from(vote)
                 .innerJoin(voteContent)
                 .on(vote.id.eq(voteContent.voteId))

@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface VoteRepository extends JpaRepository<Vote, Long> , VoteEntityRepository{
+public interface VoteRepository extends JpaRepository<Vote, Long>, VoteEntityRepository {
 
 
 //    @Query("SELECT v FROM Vote v " +
@@ -29,7 +29,7 @@ public interface VoteRepository extends JpaRepository<Vote, Long> , VoteEntityRe
 //            "ORDER BY COUNT(vr) DESC")
 //    Slice<Vote> findSliceByTitleContainsPopularity(@Param("keyword") String keyword, Pageable pageable);
 
-//    @Query("SELECT v FROM Vote v " +
+    //    @Query("SELECT v FROM Vote v " +
 //            "left join FETCH v.voteResultList vr " +
 //            "WHERE (v.title LIKE :keyword%) " +
 //            "GROUP BY v.id, vr.id")

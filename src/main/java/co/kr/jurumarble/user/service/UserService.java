@@ -34,7 +34,6 @@ public class UserService {
 
     public LoginToken signupByThirdParty(ThirdPartySignupInfo signupInfo) {
         String providerId = requestProviderIdFromThirdParty(signupInfo);
-
         boolean isNewUser = userRegister.registerIfNeed(providerId, signupInfo.getProviderType());
         return tokenGenerator.generate(providerId, isNewUser);
     }
