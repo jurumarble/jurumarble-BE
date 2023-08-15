@@ -9,7 +9,7 @@ class VoteDrinkContentTest {
 
     @DisplayName("전통주 컨텐츠로 중복된 전통주를 입력하면 VoteDrinksDuplicatedException를 throw한다.")
     @Test
-    void validateDrinksDuplicated(){
+    void validateDrinksDuplicated() {
         // given // when
         Long duplicatedDrinkId = 2L;
 

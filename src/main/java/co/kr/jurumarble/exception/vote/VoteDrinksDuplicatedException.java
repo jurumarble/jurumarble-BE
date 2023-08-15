@@ -4,9 +4,8 @@ import co.kr.jurumarble.exception.StatusEnum;
 import co.kr.jurumarble.exception.common.CustomException;
 
 public class VoteDrinksDuplicatedException extends CustomException {
-    private final StatusEnum status;
-
     private static final String message = "투표 후보로 중복된 두개의 전통주가 입력되었습니다.";
+    private final StatusEnum status;
 
     public VoteDrinksDuplicatedException() {
         super(message);

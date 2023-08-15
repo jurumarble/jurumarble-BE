@@ -13,9 +13,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DrinkFinder {
 
-    private final DrinkRepository drinkRepository;
     private static final int DRINK_FIRST_INDEX_USED_FOR_VOTE = 0;
     private static final int DRINK_SECOND_INDEX_USED_FOR_VOTE = 1;
+    private final DrinkRepository drinkRepository;
 
     public DrinksUsedForVote findDrinksUsedForVote(DrinkIdsUsedForVote drinkIdsUsedForVote) {
         List<Drink> drinksByIdIn = drinkRepository.findDrinksByIdIn(drinkIdsUsedForVote.toDrinkIds());

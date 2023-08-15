@@ -13,7 +13,7 @@ class DrinkFinderTest {
 
     @DisplayName("전통주 투표에 사용할 투표들을 아이디 리스트로 조회한다.")
     @Test
-    void findDrinksUsedForVote(){
+    void findDrinksUsedForVote() {
         // given
         DrinkIdsUsedForVote drinkIdsUsedForVote = new DrinkIdsUsedForVote(1L, 2L);
 

@@ -65,7 +65,7 @@ public class VoteController {
     @GetMapping("/{voteId}")
     public ResponseEntity<GetVoteResponse> getVote(@PathVariable Long voteId) {
         GetVoteData data = voteService.getVote(voteId);
-        return new ResponseEntity(new GetVoteResponse(data),HttpStatus.OK);
+        return new ResponseEntity(new GetVoteResponse(data), HttpStatus.OK);
     }
 
     @Operation(summary = "투표 수정", description = "파라미터에 voteId, 바디에 {title, detail, titleA, titleB} json 형식으로 보내주시면 됩니다.")
@@ -107,7 +107,7 @@ public class VoteController {
     @GetMapping("/{voteId}/voted")
     public ResponseEntity<GetIsUserVotedResponse> getIsUserVoted(@PathVariable Long voteId, @RequestAttribute Long userId) {
         GetIsUserVoted userVoted = voteService.isUserVoted(voteId, userId);
-        return new ResponseEntity(new GetIsUserVotedResponse(userVoted),HttpStatus.OK);
+        return new ResponseEntity(new GetIsUserVotedResponse(userVoted), HttpStatus.OK);
     }
 //
 //    @Operation(summary = "북마크 여부 조회", description = "파라미어테 voteId, 헤더에 userId 보내주시면 됩니다.")

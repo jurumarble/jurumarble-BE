@@ -11,7 +11,7 @@ import java.util.Objects;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Drink{
+public class Drink {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,7 +40,7 @@ public class Drink{
     private String image;
 
     @Builder
-    public Drink(Long id,String name, String type, String productName, String alcoholicBeverage, String rawMaterial, int capacity, String manufactureAddress, int price, String image) {
+    public Drink(Long id, String name, String type, String productName, String alcoholicBeverage, String rawMaterial, int capacity, String manufactureAddress, int price, String image) {
         this.id = id;
         this.name = name;
         this.type = type;

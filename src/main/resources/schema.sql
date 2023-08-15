@@ -93,11 +93,11 @@ CREATE TABLE drink
 
 CREATE TABLE enjoy_drink
 (
-    id      BIGINT NOT NULL AUTO_INCREMENT,
-    user_id BIGINT NOT NULL,
-    vote_id BIGINT NOT NULL,
-    created_date    TIMESTAMP    DEFAULT NULL,
-    modified_date   TIMESTAMP    DEFAULT NULL,
+    id            BIGINT NOT NULL AUTO_INCREMENT,
+    user_id       BIGINT NOT NULL,
+    vote_id       BIGINT NOT NULL,
+    created_date  TIMESTAMP DEFAULT NULL,
+    modified_date TIMESTAMP DEFAULT NULL,
     PRIMARY KEY (id)
 );
 

@@ -3,12 +3,9 @@ package co.kr.jurumarble.vote.service.request;
 import co.kr.jurumarble.drink.domain.dto.DrinkIdsUsedForVote;
 import co.kr.jurumarble.exception.vote.VoteTypeNotMatchException;
 import co.kr.jurumarble.vote.domain.Vote;
-import co.kr.jurumarble.vote.domain.VoteDrinkContent;
 import co.kr.jurumarble.vote.enums.VoteType;
 import lombok.Builder;
 import lombok.Getter;
-
-import javax.persistence.Column;
 
 @Getter
 public class CreateDrinkVoteServiceRequest {
