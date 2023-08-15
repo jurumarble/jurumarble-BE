@@ -83,8 +83,8 @@ class VoteServiceTest {
 
         CreateDrinkVoteServiceRequest request = CreateDrinkVoteServiceRequest.builder()
                 .title("투표 제목")
-                .drinkIdA(1L)
-                .drinkIdB(2L)
+                .drinkAId(1L)
+                .drinkBId(2L)
                 .voteType(VoteType.DRINK)
                 .build();
         VoteDrinkContent voteDrinkContent = request.toVoteDrinkContent();

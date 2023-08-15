@@ -53,7 +53,6 @@ public class VoteDrinkContent {
         this.drinkBType = drinkBType;
     }
 
-
     private void validateDrinksDuplicated(Long drinkAId, Long drinkBId) {
         if (Objects.equals(drinkAId, drinkBId)) {
             throw new VoteDrinksDuplicatedException();

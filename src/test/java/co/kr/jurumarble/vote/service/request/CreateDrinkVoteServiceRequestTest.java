@@ -15,8 +15,8 @@ class CreateDrinkVoteServiceRequestTest {
         // given // when // then
         Assertions.assertThrows(VoteTypeNotMatchException.class, () -> {
             CreateDrinkVoteServiceRequest.builder()
-                    .drinkIdA(1L)
-                    .drinkIdB(2L)
+                    .drinkAId(1L)
+                    .drinkBId(2L)
                     .voteType(VoteType.NORMAL)
                     .build();
 

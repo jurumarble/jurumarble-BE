@@ -1,5 +1,6 @@
 package co.kr.jurumarble.vote.service;
 
+import co.kr.jurumarble.drink.domain.DrinkFinder;
 import co.kr.jurumarble.exception.user.UserNotAccessRightException;
 import co.kr.jurumarble.exception.user.UserNotFoundException;
 import co.kr.jurumarble.exception.vote.AlreadyUserDoVoteException;
@@ -36,6 +37,7 @@ public class VoteService {
     private final VoteRepository voteRepository;
     private final VoteContentRepository voteContentRepository;
     private final VoteResultRepository voteResultRepository;
+    private final DrinkFinder drinkFinder;
 
     @Transactional
     public Long createNormalVote(CreateNormalVoteServiceRequest request, Long userId) {

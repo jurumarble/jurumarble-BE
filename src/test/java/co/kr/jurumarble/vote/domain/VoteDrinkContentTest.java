@@ -17,8 +17,8 @@ class VoteDrinkContentTest {
         Assertions.assertThrows(VoteDrinksDuplicatedException.class, () -> {
             VoteDrinkContent.builder()
                     .voteId(1L)
-                    .drinkIdA(duplicatedDrinkId)
-                    .drinkIdB(duplicatedDrinkId)
+                    .drinkAId(duplicatedDrinkId)
+                    .drinkBId(duplicatedDrinkId)
                     .build();
         });
     }
