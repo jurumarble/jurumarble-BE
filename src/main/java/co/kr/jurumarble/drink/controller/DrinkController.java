@@ -17,7 +17,7 @@ public class DrinkController {
 
     private final DrinkService drinkService;
 
-    @Operation(summary = "전통주 정보 조회")
+    @Operation(summary = "전통주 정보 조회(단건 조회)")
     @GetMapping("/{drinkId}")
     public ResponseEntity<GetDrinkResponse> getDrinkData(@PathVariable Long drinkId) {
         GetDrinkServiceResponse drinkData = drinkService.getDrinkData(drinkId);
@@ -31,4 +31,10 @@ public class DrinkController {
         drinkService.enjoyDrink(userId, request.toServiceRequest());
         return ResponseEntity.ok().build();
     }
+
+//    @Operation(summary = "전통주 인기순 조회(핫 전통주 - 일주일동안 즐겼어요 많은 순)")
+//    @GetMapping("/hot")
+//    public ResponseEntity getHotDrinks() {
+//        drinkService.getHotDrinks()
+//    }
 }
