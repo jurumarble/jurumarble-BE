@@ -113,15 +113,6 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 }).collect(Collectors.toList());
     }
 
-    private long getVoteTotalCount() {
-        return jpaQueryFactory
-                .from(vote)
-                .innerJoin(voteResult).on(vote.id.eq(voteResult.voteId))
-                .groupBy(vote.id)
-                .fetchCount();
-    }
-
-
     @Override
     public Optional<NormalVoteData> findNormalVoteDataByVoteId(Long voteId) {
         NormalVoteData normalVoteData = jpaQueryFactory.select(
@@ -195,8 +186,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
     @Override
     public List<Vote> findByTitleContains(String keyword) {
         return jpaQueryFactory
-                .select(vote)
-                .from(vote)
+                .selectFrom(vote)
                 .innerJoin(voteContent)
                 .on(vote.id.eq(voteContent.voteId))
                 .innerJoin(voteResult)
@@ -204,7 +194,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .where(vote.title.like(keyword + "%"))
                 .groupBy(vote.id)
                 .orderBy(voteResult.id.count().desc())
-                .limit(5) // 최대 5개까지 제한
+                .limit(5)
                 .fetch();
     }
 
