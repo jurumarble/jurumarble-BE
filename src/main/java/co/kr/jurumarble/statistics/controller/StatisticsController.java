@@ -1,9 +1,9 @@
 package co.kr.jurumarble.statistics.controller;
 
-import co.kr.jurumarble.statistics.service.StatisticsService;
 import co.kr.jurumarble.statistics.dto.VoteSelectResultData;
 import co.kr.jurumarble.statistics.dto.response.SelectStatisticsResponse;
 import co.kr.jurumarble.statistics.dto.response.TotalStatisticsResponse;
+import co.kr.jurumarble.statistics.service.StatisticsService;
 import co.kr.jurumarble.user.enums.AgeType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;

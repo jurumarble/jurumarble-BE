@@ -1,5 +1,6 @@
 package co.kr.jurumarble.statistics.service;
 
+import co.kr.jurumarble.exception.vote.VoteNotFoundException;
 import co.kr.jurumarble.statistics.dto.VoteSelectResultData;
 import co.kr.jurumarble.user.enums.AgeType;
 import co.kr.jurumarble.user.enums.ChoiceType;
@@ -12,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import co.kr.jurumarble.exception.vote.VoteNotFoundException;
 
 
 @RequiredArgsConstructor

@@ -1,6 +1,5 @@
 package co.kr.jurumarble.vote.repository;
 
-import co.kr.jurumarble.user.enums.AgeType;
 import co.kr.jurumarble.user.enums.ChoiceType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
@@ -12,7 +11,9 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -21,10 +22,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static co.kr.jurumarble.user.domain.QUser.user;
 import static co.kr.jurumarble.vote.domain.QVote.vote;
 import static co.kr.jurumarble.vote.domain.QVoteContent.voteContent;
 import static co.kr.jurumarble.vote.domain.QVoteResult.voteResult;
-import static co.kr.jurumarble.user.domain.QUser.user;
 
 
 @Repository
