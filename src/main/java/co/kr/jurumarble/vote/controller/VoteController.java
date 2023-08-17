@@ -108,15 +108,6 @@ public class VoteController {
         return new ResponseEntity(new GetVoteRecommendListResponse(voteRecommendListData), HttpStatus.OK);
     }
 
-//    @Operation(summary = "투표 북마크", description = "헤더에 토큰 담고, 파라미터에 voteId 보내주시면 됩니다.")
-//    @PostMapping("/{voteId}/bookmark")
-//    public ResponseEntity bookmarkVote(@PathVariable Long voteId, @RequestAttribute Long userId) {
-//
-//        voteService.bookmarkVote(userId, voteId);
-//
-//        return new ResponseEntity(HttpStatus.OK);
-//    }
-
     @Operation(summary = "투표 참여 여부 조회", description = "파라미터에 voteId, 헤더에 userId 보내주시면 됩니다.")
     @GetMapping("/{voteId}/voted")
     public ResponseEntity<GetIsUserVotedResponse> getIsUserVoted(@PathVariable Long voteId, @RequestAttribute Long userId) {
@@ -124,12 +115,4 @@ public class VoteController {
         return new ResponseEntity(new GetIsUserVotedResponse(userVoted),HttpStatus.OK);
     }
 
-//    @Operation(summary = "북마크 여부 조회", description = "파라미어테 voteId, 헤더에 userId 보내주시면 됩니다.")
-//    @GetMapping("/{voteId}/bookmark")
-//    public ResponseEntity checkBookmarked(@PathVariable Long voteId, @RequestAttribute Long userId){
-//
-//        boolean result = voteService.checkBookmarked(userId, voteId);
-//
-//        return new ResponseEntity<>(new GetBookmarkedResponse(result), HttpStatus.OK);
-//    }
 }
