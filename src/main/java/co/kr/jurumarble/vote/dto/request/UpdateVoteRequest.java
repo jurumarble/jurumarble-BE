@@ -12,19 +12,19 @@ import javax.validation.constraints.NotBlank;
 public class UpdateVoteRequest {
 
     @Schema(description = "투표 제목", example = "A, B 중 어떤게 나을까요?")
-    @NotBlank
+    @NotBlank(message = "투표 제목은 필수입니다.")
     private String title;
 
     @Schema(description = "투표 상세글")
-    @NotBlank
+    @NotBlank(message = "투표 상세글은 필수입니다.")
     private String detail;
 
     @Schema(description = "A 항목의 제목")
-    @NotBlank
+    @NotBlank(message = "투표 A항목의 제목은 필수입니다.")
     private String titleA;
 
     @Schema(description = "B 항목의 제목")
-    @NotBlank
+    @NotBlank(message = "투표 B항목의 제목은 필수입니다.")
     private String titleB;
 
     @Builder
