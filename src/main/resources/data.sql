@@ -2131,7 +2131,8 @@ VALUES ('user1', 'user1@test.com', 'password1', 'https://picsum.photos/200/300',
         '2023-08-08 00:00:00', '2023-08-08 00:00:00', '2023-08-08 00:00:00', NULL),
        ('user9', 'user9@test.com', 'password9', 'https://picsum.photos/200/300', 31, 'MALE', 'ISTP', 'KAKAO', 'user9',
         '2023-08-09 00:00:00', '2023-08-09 00:00:00', '2023-08-09 00:00:00', NULL),
-       ('user10', 'user10@test.com', 'password10', 'https://picsum.photos/200/300', 27, 'FEMALE', 'ENFP', 'NAVER', 'user10',
+       ('user10', 'user10@test.com', 'password10', 'https://picsum.photos/200/300', 27, 'FEMALE', 'ENFP', 'NAVER',
+        'user10',
         '2023-08-10 00:00:00', '2023-08-10 00:00:00', '2023-08-10 00:00:00', NULL);
 
 

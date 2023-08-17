@@ -5,9 +5,8 @@ import co.kr.jurumarble.exception.common.CustomException;
 
 public class VoteNotFoundException extends CustomException {
 
-    private final StatusEnum status;
-
     private static final String message = "해당 id를 가진 투표가 없습니다. 아이디 값을 다시 한번 확인하세요.";
+    private final StatusEnum status;
 
     public VoteNotFoundException() {
         super(message);

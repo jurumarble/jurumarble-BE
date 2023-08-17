@@ -54,14 +54,14 @@ class VoteControllerTest {
 
         // 테스트용 사용자 토큰 생성
         Long userId = 1L;
-        String testToken = jwtTokenProvider.makeJwtToken(userId,TOKEN_VALID_TIME);
+        String testToken = jwtTokenProvider.makeJwtToken(userId, TOKEN_VALID_TIME);
 
         // when // then
         mockMvc.perform(
-                post("/api/votes/normal")
-                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + testToken) // 생성된 토큰을 헤더에 추가
-                        .content(objectMapper.writeValueAsString(request))
-                        .contentType(MediaType.APPLICATION_JSON)
+                        post("/api/votes/normal")
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer " + testToken) // 생성된 토큰을 헤더에 추가
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print()) // 요청에 대한 로그를 더 자세하게 확인 가능
                 .andExpect(status().isCreated());
@@ -105,13 +105,13 @@ class VoteControllerTest {
 
         // 테스트용 사용자 토큰 생성
         Long userId = 1L;
-        String testToken = jwtTokenProvider.makeJwtToken(userId,TOKEN_EXPIRED_TIME);
+        String testToken = jwtTokenProvider.makeJwtToken(userId, TOKEN_EXPIRED_TIME);
 
 
         // when // then
         mockMvc.perform(
                         post("/api/votes/normal")
-                                .header(HttpHeaders.AUTHORIZATION,"Bearer " + testToken) // 생성된 토큰을 헤더에 추가
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer " + testToken) // 생성된 토큰을 헤더에 추가
                                 .content(objectMapper.writeValueAsString(request))
                                 .contentType(MediaType.APPLICATION_JSON)
                 )

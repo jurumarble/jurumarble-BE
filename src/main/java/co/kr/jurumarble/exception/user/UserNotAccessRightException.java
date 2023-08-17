@@ -5,9 +5,8 @@ import co.kr.jurumarble.exception.common.CustomException;
 
 public class UserNotAccessRightException extends CustomException {
 
-    private final StatusEnum status;
-
     private static final String message = "접근권한이 없는 유저입니다";
+    private final StatusEnum status;
 
     public UserNotAccessRightException() {
         super(message);

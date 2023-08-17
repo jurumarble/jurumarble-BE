@@ -18,7 +18,7 @@ class UserTest {
 
     @DisplayName("삭제된 유저를 조회해서 생성시 AlreadyDeletedUserException를 throw한다.")
     @Test
-    void test(){
+    void test() {
         // given
         User user = User.builder()
                 .build();

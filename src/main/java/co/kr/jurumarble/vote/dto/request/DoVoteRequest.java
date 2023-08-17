@@ -11,15 +11,15 @@ public class DoVoteRequest {
 
     private ChoiceType choice;
 
+    public DoVoteRequest(ChoiceType choice) {
+        this.choice = choice;
+    }
+
     public DoVoteInfo toService(Long userId, Long voteId) {
         return DoVoteInfo.builder()
                 .userId(userId)
                 .voteId(voteId)
                 .choice(choice)
                 .build();
-    }
-
-    public DoVoteRequest(ChoiceType choice) {
-        this.choice = choice;
     }
 }

@@ -1,8 +1,13 @@
 package co.kr.jurumarble.vote.repository;
 
+import co.kr.jurumarble.user.enums.AgeType;
+import co.kr.jurumarble.user.enums.ChoiceType;
+import co.kr.jurumarble.user.enums.GenderType;
+import co.kr.jurumarble.user.enums.MbtiType;
 import co.kr.jurumarble.vote.domain.Vote;
 import co.kr.jurumarble.vote.domain.VoteContent;
 import co.kr.jurumarble.vote.dto.NormalVoteData;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -19,6 +24,8 @@ import java.util.stream.Collectors;
 import static co.kr.jurumarble.vote.domain.QVote.vote;
 import static co.kr.jurumarble.vote.domain.QVoteContent.voteContent;
 import static co.kr.jurumarble.vote.domain.QVoteResult.voteResult;
+import static co.kr.jurumarble.user.domain.QUser.user;
+
 
 @Repository
 public class VoteEntityRepositoryImpl implements VoteEntityRepository {
@@ -28,7 +35,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
     public VoteEntityRepositoryImpl(EntityManager entityManager) {
         this.jpaQueryFactory = new JPAQueryFactory(entityManager);
     }
-  
+
     @Override
     public Slice<NormalVoteData> findNormalVoteDataWithPopularity(String keyword, Pageable pageable) {
 
@@ -101,7 +108,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                             .imageB(voteContent.getImageB())
                             .titleA(voteContent.getTitleA())
                             .titleB(voteContent.getTitleB())
-                            .votedCount(findVoteTuple.get(1,Long.class))
+                            .votedCount(findVoteTuple.get(1, Long.class))
                             .build();
                 }).collect(Collectors.toList());
     }
@@ -118,19 +125,19 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
     @Override
     public Optional<NormalVoteData> findNormalVoteDataByVoteId(Long voteId) {
         NormalVoteData normalVoteData = jpaQueryFactory.select(
-                Projections.bean(NormalVoteData.class,
-                        vote.id,
-                        vote.postedUserId,
-                        vote.title,
-                        vote.detail,
-                        vote.filteredGender,
-                        vote.filteredAge,
-                        vote.filteredMbti,
-                        voteContent.imageA,
-                        voteContent.imageB,
-                        voteContent.titleA,
-                        voteContent.titleB
-                ))
+                        Projections.bean(NormalVoteData.class,
+                                vote.id,
+                                vote.postedUserId,
+                                vote.title,
+                                vote.detail,
+                                vote.filteredGender,
+                                vote.filteredAge,
+                                vote.filteredMbti,
+                                voteContent.imageA,
+                                voteContent.imageB,
+                                voteContent.titleA,
+                                voteContent.titleB
+                        ))
                 .from(vote)
                 .innerJoin(voteContent)
                 .on(vote.id.eq(voteContent.voteId))
@@ -197,7 +204,35 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .where(vote.title.like(keyword + "%"))
                 .groupBy(vote.id)
                 .orderBy(voteResult.id.count().desc())
+                .limit(5) // 최대 5개까지 제한
                 .fetch();
+    }
+
+    @Override
+    public Long countByVoteAndChoiceAndGenderAndAgeAndMBTI(Long voteId, ChoiceType choiceType, GenderType gender, Integer age, MbtiType mbti) {
+
+        BooleanBuilder whereClause = new BooleanBuilder();
+        whereClause.and(voteResult.choice.eq(choiceType)); // 항상 포함되는 조건
+        whereClause.and(vote.id.eq(voteId)); // 항상 포함되는 조건
+
+        if (gender != null) {
+            whereClause.and(user.gender.eq(gender));
+        }
+        if (age != null) {
+            whereClause.and(user.age.eq(age));
+        }
+        if (mbti != null) {
+            whereClause.and(user.mbti.eq(mbti));
+        }
+
+        return jpaQueryFactory
+                .selectFrom(vote)
+                .innerJoin(voteResult)
+                .on(vote.id.eq(voteResult.voteId))
+                .innerJoin(user)
+                .on(vote.postedUserId.eq(user.id))
+                .where(whereClause)
+                .fetchCount();
     }
 
 }

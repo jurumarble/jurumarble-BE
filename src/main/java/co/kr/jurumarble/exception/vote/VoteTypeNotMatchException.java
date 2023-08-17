@@ -5,9 +5,8 @@ import co.kr.jurumarble.exception.common.CustomException;
 
 public class VoteTypeNotMatchException extends CustomException {
 
-    private final StatusEnum status;
-
     private static final String message = "투표 타입이 일치하지 않습니다.";
+    private final StatusEnum status;
 
     public VoteTypeNotMatchException() {
         super(message);
