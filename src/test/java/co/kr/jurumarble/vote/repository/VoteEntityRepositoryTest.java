@@ -133,8 +133,6 @@ class VoteEntityRepositoryTest {
                         tuple("테스트 투표 5", "I1"),
                         tuple("테스트 투표 4", "G1")
                 );
-
-
     }
 
 }

@@ -85,18 +85,12 @@ public class VoteService {
     }
 
     @Transactional
-    // 책임 1. 투표, 유저 조회 2. 투표 유효성 검증 3. 유저 유효성 검증 4. 투표 결과 생성
     public void doVote(DoVoteInfo info) {
-
         Vote vote = voteRepository.findById(info.getVoteId()).orElseThrow(VoteNotFoundException::new);
         User user = userRepository.findById(info.getUserId()).orElseThrow(UserNotFoundException::new);
-
         voteValidator.validateParcitipateVote(vote, user);
-
         VoteResult voteResult = new VoteResult(vote.getId(), user.getId(), info.getChoice());
-
         voteResultRepository.save(voteResult);
-
     }
 
     public Slice<NormalVoteData> getVoteList(SortByType sortBy, Integer page, Integer size) {
