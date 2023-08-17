@@ -13,6 +13,11 @@ public class VoteValidator {
 
     private final VoteResultRepository voteResultRepository;
 
+    public void validateParcitipateVote(Vote vote, User user) {
+        validPostedUserWhenParcitipateVote(vote, user);
+        validAlreadyParcitipatedVote(vote, user);
+    }
+
     public void validPostedUserWhenParcitipateVote(Vote vote, User user) {
         if (vote.isVoteOfUser(user.getId())) throw new UserNotAccessRightException();
     }
