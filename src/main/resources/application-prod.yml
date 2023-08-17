@@ -21,6 +21,56 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5Dialect
 
+
+
+  ## feign
+  oauth2:
+    client:
+      registration:
+        kakao:
+          client-id: ${kakao.client.id}
+          client-secret: ${kakao.client.secret}
+        naver:
+          client-id: ${naver.client.id}
+          client-secret: ${naver.client.secret}
+
+
+auth.kakao.url: https://kauth.kakao.com/
+api.kakao.url: https://kapi.kakao.com/
+
+auth.naver.url: https://nid.naver.com/oauth2.0/
+api.naver.url: https://openapi.naver.com/
+
+feign:
+  client:
+    config:
+      auth-kakao:
+        connectTimeout: 3100
+        readTimeout: 10100
+        loggerLevel: full
+      api-kakao:
+        connectTimeout: 3100
+        readTimeout: 10100
+        loggerLevel: full
+      auth-naver:
+        connectTimeout: 3100
+        readTimeout: 10100
+        loggerLevel: full
+      api-naver:
+        connectTimeout: 3100
+        readTimeout: 10100
+        loggerLevel: full
+
+  compression:
+    response:
+      enabled: false
+      useGzipDecoder: false
+  httpclient:
+    max-connections: 2000
+    max-connections-per-route: 500
+
+
+
 logging:
   level:
     '[org.springframework.boot.web]': INFO

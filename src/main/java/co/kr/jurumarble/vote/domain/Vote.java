@@ -5,6 +5,8 @@ import co.kr.jurumarble.common.domain.BaseTimeEntity;
 import co.kr.jurumarble.user.enums.AgeType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
+import co.kr.jurumarble.vote.enums.VoteType;
+import co.kr.jurumarble.vote.service.UpdateVoteServiceRequest;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,6 +33,10 @@ public class Vote extends BaseTimeEntity {
     private String detail;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "vote_type")
+    private VoteType voteType;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "filtered_gender")
     private GenderType filteredGender;
 
@@ -43,11 +49,11 @@ public class Vote extends BaseTimeEntity {
     private MbtiType filteredMbti;
 
     @Builder
-    private Vote(Long id, Long postedUserId, String title, String detail, GenderType filteredGender, AgeType filteredAge, MbtiType filteredMbti) {
-        this.id = id;
+    public Vote(Long postedUserId, String title, String detail, VoteType voteType, GenderType filteredGender, AgeType filteredAge, MbtiType filteredMbti) {
         this.postedUserId = postedUserId;
         this.title = title;
         this.detail = detail;
+        this.voteType = voteType;
         this.filteredGender = filteredGender;
         this.filteredAge = filteredAge;
         this.filteredMbti = filteredMbti;
@@ -66,29 +72,15 @@ public class Vote extends BaseTimeEntity {
         return Objects.hash(id);
     }
 
-    //    public GetVoteResponse toDto(User user) {
-//
-//        GetVoteUserResponse getVoteUserResponse = GetVoteUserResponse.builder()
-//                .build();
-//
-//        return GetVoteResponse.builder()
-//                .writer(getVoteUserResponse)
-//                .voteCreatedDate(getCreatedDate())
-//                .title(title)
-//                .description(detail)
-//                .build();
-//
-//    }
 
-//    public boolean isVoteOfUser(Long userId) {
-//        return this.postedUserId.equals(userId);
-//    }
+    public boolean isVoteOfUser(Long userId) {
+        return this.postedUserId.equals(userId);
+    }
 
-//    public void update(UpdateVoteRequest request) {
-//        this.title = request.getTitle();
-//        this.detail = request.getDetail();
-//        this.getVoteContent().update(request.getTitleA(), request.getTitleB());
-//    }
+    public void update(UpdateVoteServiceRequest request) {
+        this.title = request.getTitle();
+        this.detail = request.getDetail();
+    }
 
 
 }

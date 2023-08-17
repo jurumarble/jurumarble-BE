@@ -5,15 +5,15 @@ import co.kr.jurumarble.exception.vote.VoteNotFoundException;
 import co.kr.jurumarble.user.enums.AgeType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
-import co.kr.jurumarble.vote.dto.VoteData;
+import co.kr.jurumarble.vote.dto.NormalVoteData;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.test.context.TestPropertySource;
 
 import javax.persistence.EntityManager;
@@ -24,7 +24,7 @@ import static org.assertj.core.groups.Tuple.tuple;
 
 @DataJpaTest
 @Import(JpaAuditionConfig.class)
-@TestPropertySource(locations = "classpath:application-test.yml")
+@TestPropertySource(locations = "classpath:application-dev.yml")
 class VoteEntityRepositoryTest {
 
     @Autowired
@@ -37,58 +37,104 @@ class VoteEntityRepositoryTest {
     @Autowired
     private EntityManager entityManager;
 
-    @DisplayName("인기순으로 투표를 조회한다.")
+    @DisplayName("키워드 없이 인기순으로 일반 투표를 조회한다.")
     @Test
-    void findWithVoteResult() {
+    void findVoteDataWithPopularity() {
         // given
-        PageRequest of = PageRequest.of(0, 7);
+        PageRequest of = PageRequest.of(0, 10);
 
         // when
-        Page<VoteData> actual = voteEntityRepository.findWithVoteWithPopular(of);
+        Slice<NormalVoteData> actual = voteEntityRepository.findNormalVoteDataWithPopularity(null, of);
 
         // then
-        assertThat(actual).hasSize(7)
-                .extracting("title", "votedNum")
+        assertThat(actual).hasSize(10)
+                .extracting("title", "votedCount", "titleA")
                 .containsExactly(
-                        tuple("테스트 투표 1", 10L),
-                        tuple("테스트 투표 3", 3L),
-                        tuple("테스트 투표 2", 2L),
-                        tuple("테스트 투표 4", 2L),
-                        tuple("테스트 투표 5", 1L),
-                        tuple("테스트 투표 6", 1L),
-                        tuple("테스트 투표 7", 1L)
+                        tuple("테스트 투표 1", 10L, "A1"),
+                        tuple("테스트 투표 3", 3L, "E1"),
+                        tuple("테스트 투표 2", 2L, "C1"),
+                        tuple("테스트 투표 4", 2L, "G1"),
+                        tuple("테스트 투표 5", 1L, "I1"),
+                        tuple("테스트 투표 6", 1L, "K1"),
+                        tuple("테스트 투표 7", 1L, "M1"),
+                        tuple("테스트 투표 8", 0L, "O1"),
+                        tuple("테스트 투표 9", 0L, "Q1"),
+                        tuple("테스트 투표 10", 0L, "S1")
                 );
+    }
 
-        // 각 투표안의 투표 컨텐츠 객체 검증
-        assertThat(actual.getContent())
-                .extracting(voteData -> voteData.getVoteContent().getTitleA())
-                .containsExactly("A1", "E1", "C1", "G1", "I1", "K1", "M1");
+    @DisplayName("인기순으로 일반 투표를 조회할때 키워드 검색을 한다.")
+    @Test
+    void findVoteDataWithPopularityAndKeyword() {
+        // given
+        PageRequest of = PageRequest.of(0, 10);
+
+        // when
+        Slice<NormalVoteData> actual = voteEntityRepository.findNormalVoteDataWithPopularity(null, of);
+
+        // then
+        assertThat(actual).hasSize(10)
+                .extracting("title", "votedCount", "titleA")
+                .containsExactly(
+                        tuple("테스트 투표 1", 10L, "A1"),
+                        tuple("테스트 투표 3", 3L, "E1"),
+                        tuple("테스트 투표 2", 2L, "C1"),
+                        tuple("테스트 투표 4", 2L, "G1"),
+                        tuple("테스트 투표 5", 1L, "I1"),
+                        tuple("테스트 투표 6", 1L, "K1"),
+                        tuple("테스트 투표 7", 1L, "M1"),
+                        tuple("테스트 투표 8", 0L, "O1"),
+                        tuple("테스트 투표 9", 0L, "Q1"),
+                        tuple("테스트 투표 10", 0L, "S1")
+                );
     }
 
 
-    @DisplayName("투표와 투표 컨텐츠를 같이 조회한다.")
+    @DisplayName("일반 투표와 투표 컨텐츠를 같이 조회한다.")
     @Test
     void findVoteDataByVoteId() {
         // given // when
-        VoteData voteData = voteEntityRepository.findVoteDataByVoteId(1L).orElseThrow(VoteNotFoundException::new);
+        NormalVoteData normalVoteData = voteEntityRepository.findNormalVoteDataByVoteId(1L).orElseThrow(VoteNotFoundException::new);
 
         // then
-        assertThat(Collections.singletonList(voteData)).extracting(
+        assertThat(Collections.singletonList(normalVoteData)).extracting(
                 "title",
                 "detail",
                 "filteredAge",
                 "filteredGender",
-                "filteredMbti"
+                "filteredMbti",
+                "imageA",
+                "titleA"
         ).contains(
-                tuple("테스트 투표 1", "테스트 투표 상세 설명 1", AgeType.twenties, GenderType.FEMALE, MbtiType.INFP)
+                tuple("테스트 투표 1", "테스트 투표 상세 설명 1", AgeType.twenties, GenderType.FEMALE, MbtiType.INFP, "https://picsum.photos/200/300", "A1")
         );
 
-        // 투표안의 투표 컨텐츠 객체 검증
-        assertThat(Collections.singletonList(voteData.getVoteContent()))
-                .extracting("imageA", "titleA")
-                .contains(
-                        tuple("https://picsum.photos/200/300", "A1")
+
+    }
+
+    @DisplayName("키워드 없이 시간순으로 일반 투표를 조회한다.")
+    @Test
+    void findVoteDataWithTime() {
+        // given
+        PageRequest of = PageRequest.of(0, 7);
+
+        // when
+        Slice<NormalVoteData> actual = voteEntityRepository.findNormalVoteDataWithTime(null, of);
+
+        // then
+        assertThat(actual).hasSize(7)
+                .extracting("title", "titleA")
+                .containsExactly(
+                        tuple("테스트 투표 10", "S1"),
+                        tuple("테스트 투표 9", "Q1"),
+                        tuple("테스트 투표 8", "O1"),
+                        tuple("테스트 투표 7", "M1"),
+                        tuple("테스트 투표 6", "K1"),
+                        tuple("테스트 투표 5", "I1"),
+                        tuple("테스트 투표 4", "G1")
                 );
+
+
     }
 
 }

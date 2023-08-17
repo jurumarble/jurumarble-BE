@@ -1,5 +1,6 @@
 package co.kr.jurumarble.vote.domain;
 
+import co.kr.jurumarble.vote.service.UpdateVoteServiceRequest;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,7 +13,7 @@ import java.util.Objects;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Table(name = "vote_content")
-public class VoteContent{
+public class VoteContent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,9 +40,9 @@ public class VoteContent{
         this.voteId = voteId;
     }
 
-    public void update(String titleA, String titleB) {
-        this.titleA = titleA;
-        this.titleB = titleB;
+    public void update(UpdateVoteServiceRequest request) {
+        this.titleA = request.getTitleA();
+        this.titleB = request.getTitleB();
     }
 
     public void mappingVote(Long voteId) {

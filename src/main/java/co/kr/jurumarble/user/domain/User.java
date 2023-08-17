@@ -1,29 +1,27 @@
 package co.kr.jurumarble.user.domain;
 
 import co.kr.jurumarble.common.domain.BaseTimeEntity;
-import co.kr.jurumarble.exception.StatusEnum;
 import co.kr.jurumarble.exception.user.AlreadyDeletedUserException;
 import co.kr.jurumarble.user.dto.AddUserInfo;
 import co.kr.jurumarble.user.enums.AgeType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
 import co.kr.jurumarble.user.enums.ProviderType;
-import co.kr.jurumarble.vote.domain.Bookmark;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "users")
+@Where(clause = "deleted_date IS NULL")
 public class User extends BaseTimeEntity {
 
     @Id
@@ -57,20 +55,32 @@ public class User extends BaseTimeEntity {
     @Column(name = "modified_mbti_date")
     private LocalDateTime modifiedMbtiDate;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
-    private List<Bookmark> bookmarkList = new ArrayList<>();
-
     @Column(name = "deleted_date")
     private LocalDateTime deletedDate;
 
 
+    @Builder
+    private User(Long id, String nickname, String email, String imageUrl, String password, ProviderType providerType, String providerId, Integer age, GenderType gender, MbtiType mbti, LocalDateTime modifiedMbtiDate) {
+        validIsUserDeleted();
+        this.id = id;
+        this.nickname = nickname;
+        this.email = email;
+        this.imageUrl = imageUrl;
+        this.password = password;
+        this.providerType = providerType;
+        this.providerId = providerId;
+        this.age = age;
+        this.gender = gender;
+        this.mbti = mbti;
+        this.modifiedMbtiDate = modifiedMbtiDate;
+    }
 
-    public AgeType classifyAge(Integer age){
+    public AgeType classifyAge() {
         if (age == null) {
             return AgeType.NULL; // 혹은 원하는 다른 동작 수행
         }
         AgeType ageGroup;
-        switch (age/10){
+        switch (age / 10) {
             case 1:
                 ageGroup = AgeType.teenager;
                 break;
@@ -99,29 +109,13 @@ public class User extends BaseTimeEntity {
         this.gender = addUserInfo.getGender();
     }
 
-    @Builder
-    private User(Long id, String nickname, String email, String imageUrl, String password, ProviderType providerType, String providerId, Integer age, GenderType gender, MbtiType mbti, LocalDateTime modifiedMbtiDate) {
-        vaildIsDeletedUser();
-        this.id = id;
-        this.nickname = nickname;
-        this.email = email;
-        this.imageUrl = imageUrl;
-        this.password = password;
-        this.providerType = providerType;
-        this.providerId = providerId;
-        this.age = age;
-        this.gender = gender;
-        this.mbti = mbti;
-        this.modifiedMbtiDate = modifiedMbtiDate;
-    }
+//    public void mappingBookmark(Bookmark bookmark) {
+//        this.bookmarkList.add(bookmark);
+//    }
 
-    public void mappingBookmark(Bookmark bookmark) {
-        this.bookmarkList.add(bookmark);
-    }
-
-    private void vaildIsDeletedUser() {
+    private void validIsUserDeleted() {
         if (!(deletedDate == null)) {
-            throw new AlreadyDeletedUserException(StatusEnum.BAD_REQUEST);
+            throw new AlreadyDeletedUserException();
         }
     }
 
