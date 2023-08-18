@@ -37,7 +37,7 @@ public class StatisticsService {
 
         Integer classifyAge = null;
 
-        if(age != null)
+        if (age != null)
             classifyAge = Integer.valueOf(age.getValue().substring(0, 2));
 
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
@@ -47,8 +47,8 @@ public class StatisticsService {
 
         float totalVoteCount = totalCountA + totalCountB;
 
-        int percentA = (int) (((float)totalCountA / totalVoteCount) * 100);
-        int percentB = (int) (((float)totalCountB / totalVoteCount) * 100);
+        int percentA = (int) (((float) totalCountA / totalVoteCount) * 100);
+        int percentB = (int) (((float) totalCountB / totalVoteCount) * 100);
 
         VoteSelectResultData voteSelectResultData = new VoteSelectResultData(totalCountA, totalCountB, percentA, percentB);
 

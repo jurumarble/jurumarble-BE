@@ -38,18 +38,19 @@ public class DrinkEntityRepositoryImpl implements DrinkEntityRepository {
 
         List<HotDrinkData> hotDrinkDataList = jpaQueryFactory.select(
                         Projections.bean(HotDrinkData.class,
-                                drink.id,
+                                drink.id.as("drinkId"),
                                 drink.name,
                                 drink.manufactureAddress,
                                 drink.image,
-                                drink.id.count()
+                                drink.id.count().as("enjoyedCount"),
+                                enjoyDrink.createdDate.max().as("enjoyedDate")
                         ))
                 .from(drink)
                 .leftJoin(enjoyDrink)
                 .on(drink.id.eq(enjoyDrink.drinkId))
                 .groupBy(drink.id)
                 .where(enjoyDrink.createdDate.goe(aWeekAgoTime).and(enjoyDrink.createdDate.loe(descendingHourTime)))
-                .orderBy(drink.id.count().desc())
+                .orderBy(drink.id.count().desc(), drink.name.asc())
                 .offset(pageNo * pageSize)
                 .limit(pageSize)
                 .fetch();
@@ -57,7 +58,7 @@ public class DrinkEntityRepositoryImpl implements DrinkEntityRepository {
         boolean hasNext = false;
         if (hotDrinkDataList.size() > pageSize) {
             hasNext = true;
-            hotDrinkDataList = hotDrinkDataList.subList(0, pageSize); // 조회된 결과에서 실제 페이지의 데이터만 가져옴
+            hotDrinkDataList = hotDrinkDataList.subList(0, pageSize);
         }
 
         return new SliceImpl<>(hotDrinkDataList, pageable, hasNext);
