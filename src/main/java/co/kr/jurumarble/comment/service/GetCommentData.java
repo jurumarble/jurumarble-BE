@@ -1,4 +1,4 @@
-package co.kr.jurumarble.comment.dto.response;
+package co.kr.jurumarble.comment.service;
 
 
 import co.kr.jurumarble.comment.domain.Comment;
@@ -7,63 +7,30 @@ import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Setter
-public class GetCommentResponse {
-
+public class GetCommentData {
     private Long id;
-
     private Long userId;
-
     private String nickName;
-
     private Long parentId;
-
     private String content;
-
     private String imageUrl;
-
     private GenderType gender;
-
     private AgeType age;
-
     private MbtiType mbti;
-
     private LocalDateTime createdDate;
-
-    private List<GetCommentResponse> children;
-
+    private List<GetCommentData> children;
     private Integer likeCount;
-
     private Integer hateCount;
 
 
-
     @Builder
-    public GetCommentResponse(Long id, Long userId, String nickName, Long parentId, String content, String imageUrl, GenderType gender, AgeType age, MbtiType mbti, LocalDateTime createdDate, List<GetCommentResponse> children, Integer likeCount, Integer hateCount) {
-        this.id = id;
-        this.userId = userId;
-        this.nickName = nickName;
-        this.parentId = parentId;
-        this.content = content;
-        this.imageUrl = imageUrl;
-        this.gender = gender;
-        this.age = age;
-        this.mbti = mbti;
-        this.createdDate = createdDate;
-        this.children = children;
-        this.likeCount = likeCount;
-        this.hateCount = hateCount;
-    }
-
-    @Builder
-    public GetCommentResponse(Comment comment) {
+    public GetCommentData(Comment comment) {
         this.id = comment.getId();
         this.userId = comment.getUser().getId();
         this.content = comment.getContent();

@@ -1,6 +1,5 @@
 package co.kr.jurumarble.comment.domain;
 
-import co.kr.jurumarble.comment.dto.request.UpdateSnackRequest;
 import lombok.*;
 
 import javax.persistence.Embeddable;

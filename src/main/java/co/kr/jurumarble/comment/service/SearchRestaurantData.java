@@ -1,10 +1,9 @@
-package co.kr.jurumarble.comment.dto;
+package co.kr.jurumarble.comment.service;
 
 import lombok.*;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class SearchRestaurantResponse {
+public class SearchRestaurantData {
 
     private String contentId;
 
@@ -14,7 +13,7 @@ public class SearchRestaurantResponse {
 
     private String treatMenu;
 
-    public SearchRestaurantResponse(String contentId, String restaurantName, String restaurantImage, String treatMenu) {
+    public SearchRestaurantData(String contentId, String restaurantName, String restaurantImage, String treatMenu) {
         this.contentId = contentId;
         this.restaurantName = restaurantName;
         this.restaurantImage = restaurantImage;

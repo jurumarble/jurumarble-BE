@@ -4,15 +4,13 @@ import co.kr.jurumarble.client.tourApi.RestaurantInfoDto;
 import co.kr.jurumarble.client.tourApi.TourApiService;
 import co.kr.jurumarble.comment.domain.Comment;
 import co.kr.jurumarble.comment.domain.CommentEmotion;
-import co.kr.jurumarble.comment.dto.SearchRestaurantResponse;
-import co.kr.jurumarble.comment.dto.request.CreateCommentRequest;
-import co.kr.jurumarble.comment.dto.request.GetCommentRequest;
-import co.kr.jurumarble.comment.dto.request.UpdateCommentRequest;
-import co.kr.jurumarble.comment.dto.request.UpdateSnackRequest;
-import co.kr.jurumarble.comment.dto.response.GetCommentResponse;
 import co.kr.jurumarble.comment.enums.Emotion;
 import co.kr.jurumarble.comment.repository.CommentEmotionRepository;
 import co.kr.jurumarble.comment.repository.CommentRepository;
+import co.kr.jurumarble.comment.service.request.CreateCommentServiceRequest;
+import co.kr.jurumarble.comment.service.request.GetCommentServiceRequest;
+import co.kr.jurumarble.comment.service.request.UpdateCommentServiceRequest;
+import co.kr.jurumarble.comment.service.request.UpdateRestaurantServiceRequest;
 import co.kr.jurumarble.exception.comment.CommentNotFoundException;
 import co.kr.jurumarble.exception.comment.InvalidSortingMethodException;
 import co.kr.jurumarble.exception.comment.NestedCommentNotAllowedException;
@@ -43,7 +41,7 @@ public class CommentService {
     private final CommentEmotionRepository commentEmotionRepository;
     private final TourApiService tourApiService;
 
-    public void createComment(Long voteId, Long userId, CreateCommentRequest request) {
+    public void createComment(Long voteId, Long userId, CreateCommentServiceRequest request) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment parentComment = checkParentComment(request);  // 부모댓글이 있는지 없는지 확인
@@ -54,24 +52,22 @@ public class CommentService {
 
     }
 
-    public Slice<GetCommentResponse> getComments(Long voteId, GetCommentRequest request) {
+    public Slice<GetCommentData> getComments(Long voteId, GetCommentServiceRequest request) {
         Pageable pageable = PageRequest.of(request.getPage(), request.getSize());
         List<Comment> comments = findCommentsBySortType(voteId, request, pageable); //정렬방식에 따라 Pageable 적용하여 부모댓글 가져오기
         getChildCommentByParentComment(comments);  //부모댓글에 속한 대댓글들 다가져오기
-        List<GetCommentResponse> getCommentResponse = convertToGetCommentResponseList(comments); // 댓글 목록을 매개 변수로 받아, GetCommentResponse 목록을 반환
-        Slice<GetCommentResponse> slice = convertToSlice(voteId, request, pageable, getCommentResponse); // Response 리스트를 Slice 객체로 만들어주기
+        List<GetCommentData> getCommentData = convertToCommentDataList(comments); // 댓글 목록을 매개 변수로 받아, GetCommentData 목록을 반환
+        Slice<GetCommentData> slice = convertToSlice(voteId, request, pageable, getCommentData); // Response 리스트를 Slice 객체로 만들어주기
 
         return slice;
 
     }
 
 
-    public void updateComment(Long voteId, Long commentId, Long userId, UpdateCommentRequest request) {
+    public void updateComment(Long voteId, Long commentId, Long userId, UpdateCommentServiceRequest request) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
-//        boolean b = commentRepository.existsByCommentAndUser(comment, user);
-//        System.out.println("b = " + b);
         comment.updateContent(request);
     }
 
@@ -79,8 +75,6 @@ public class CommentService {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
-//        boolean b = commentRepository.existsByCommentAndUser(comment, user);
-//        System.out.println("b = " + b);
         commentRepository.delete(comment);
     }
 
@@ -91,7 +85,7 @@ public class CommentService {
         doEmote(emotion, user, comment);
     }
 
-    public void addRestaurantToComment(Long voteId, Long commentId, Long userId, UpdateSnackRequest request) {
+    public void addRestaurantToComment(Long voteId, Long commentId, Long userId, UpdateRestaurantServiceRequest request) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
@@ -99,7 +93,7 @@ public class CommentService {
 
     }
 
-    public List<SearchRestaurantResponse> searchRestaurant(Long voteId, Long commentId, Long userId, String keyword, int page) {
+    public List<SearchRestaurantData> searchRestaurant(Long voteId, Long commentId, Long userId, String keyword, int page) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
@@ -124,7 +118,7 @@ public class CommentService {
     }
 
 
-    private Comment checkParentComment(CreateCommentRequest request) {
+    private Comment checkParentComment(CreateCommentServiceRequest request) {
         if (request.getParentId() == null) {
             return null;
         }
@@ -138,7 +132,7 @@ public class CommentService {
         }
     }
 
-    private List<Comment> findCommentsBySortType(Long voteId, GetCommentRequest request, Pageable pageable) {
+    private List<Comment> findCommentsBySortType(Long voteId, GetCommentServiceRequest request, Pageable pageable) {
         List<Comment> comments;
         switch (request.getSortBy()) {
             case ByTime:
@@ -163,29 +157,29 @@ public class CommentService {
     }
 
 
-    private List<GetCommentResponse> convertToGetCommentResponseList(List<Comment> parentComments) {
-        List<GetCommentResponse> getCommentResponse = new ArrayList<>();
-        Map<Long, GetCommentResponse> map = new HashMap<>();
+    private List<GetCommentData> convertToCommentDataList(List<Comment> parentComments) {
+        List<GetCommentData> getCommentData = new ArrayList<>();
+        Map<Long, GetCommentData> map = new HashMap<>();
 
         for (Comment comment : parentComments) {
-            GetCommentResponse response = new GetCommentResponse(comment);
+            GetCommentData response = new GetCommentData(comment);
             map.put(response.getId(), response);
 
             if (response.getParentId() != null) {
                 map.get(response.getParentId()).getChildren().add(response);
             } else {
-                getCommentResponse.add(response);
+                getCommentData.add(response);
             }
         }
-        return getCommentResponse;
+        return getCommentData;
     }
 
-    private Slice<GetCommentResponse> convertToSlice(Long voteId, GetCommentRequest request, Pageable pageable, List<GetCommentResponse> getCommentResponse) {
+    private Slice<GetCommentData> convertToSlice(Long voteId, GetCommentServiceRequest request, Pageable pageable, List<GetCommentData> getCommentData) {
         int countComments = commentRepository.countByVoteIdAndParentIsNull(voteId);   //투표에 속한 부모 댓글수 전부 가져오기
         int lastPageNumber = (int) Math.ceil((double) countComments / request.getSize());
         boolean hasNext = request.getPage() < lastPageNumber - 1;
 
-        Slice<GetCommentResponse> slice = new SliceImpl<>(getCommentResponse, pageable, hasNext);
+        Slice<GetCommentData> slice = new SliceImpl<>(getCommentData, pageable, hasNext);
         return slice;
     }
 
@@ -235,9 +229,9 @@ public class CommentService {
                 : tourApiService.getRestaurantInfo(1, page);
     }
 
-    private List<SearchRestaurantResponse> convertToSearchSnackResponseList(List<RestaurantInfoDto> restaurantInfo) {
+    private List<SearchRestaurantData> convertToSearchSnackResponseList(List<RestaurantInfoDto> restaurantInfo) {
         return restaurantInfo.stream()
-                .map(restaurant -> new SearchRestaurantResponse(
+                .map(restaurant -> new SearchRestaurantData(
                         restaurant.getContentId(),
                         restaurant.getTitle(),
                         restaurant.getFirstImage(),

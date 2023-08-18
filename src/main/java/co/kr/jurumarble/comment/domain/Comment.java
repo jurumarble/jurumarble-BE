@@ -1,9 +1,9 @@
 package co.kr.jurumarble.comment.domain;
 
-import co.kr.jurumarble.comment.dto.request.CreateCommentRequest;
-import co.kr.jurumarble.comment.dto.request.UpdateCommentRequest;
-import co.kr.jurumarble.comment.dto.request.UpdateSnackRequest;
 import co.kr.jurumarble.comment.enums.Emotion;
+import co.kr.jurumarble.comment.service.request.CreateCommentServiceRequest;
+import co.kr.jurumarble.comment.service.request.UpdateCommentServiceRequest;
+import co.kr.jurumarble.comment.service.request.UpdateRestaurantServiceRequest;
 import co.kr.jurumarble.common.domain.BaseTimeEntity;
 import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.user.enums.AgeType;
@@ -73,7 +73,7 @@ public class Comment extends BaseTimeEntity {
     private Restaurant restaurant;
 
 
-    public Comment(CreateCommentRequest request, Comment parent, User user, Long voteId) {
+    public Comment(CreateCommentServiceRequest request, Comment parent, User user, Long voteId) {
         this.user = user;
         this.voteId = voteId;
         this.content = request.getContent();
@@ -104,7 +104,7 @@ public class Comment extends BaseTimeEntity {
                 .count();
     }
 
-    public void updateContent(UpdateCommentRequest updateCommentRequest) {
+    public void updateContent(UpdateCommentServiceRequest updateCommentRequest) {
         this.content = updateCommentRequest.getContent();
     }
 
@@ -113,7 +113,7 @@ public class Comment extends BaseTimeEntity {
     }
 
 
-    public void updateRestaurant(UpdateSnackRequest request) {
+    public void updateRestaurant(UpdateRestaurantServiceRequest request) {
         if (request.getRestaurantName() != null && !request.getRestaurantName().isEmpty()) {
             this.restaurant.updateRestaurantName(request.getRestaurantName());
         }
