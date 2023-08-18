@@ -70,6 +70,8 @@ public class CommentService {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
+//        boolean b = commentRepository.existsByCommentAndUser(comment, user);
+//        System.out.println("b = " + b);
         comment.updateContent(request);
     }
 
@@ -77,6 +79,8 @@ public class CommentService {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
+//        boolean b = commentRepository.existsByCommentAndUser(comment, user);
+//        System.out.println("b = " + b);
         commentRepository.delete(comment);
     }
 

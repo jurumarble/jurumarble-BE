@@ -52,9 +52,6 @@ public class User extends BaseTimeEntity {
     @Column
     private LocalDateTime modifiedMbtiDate;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
-    private List<CommentEmotion> commentEmotionList = new ArrayList<>();
-
 
     public AgeType classifyAge(Integer age) {
         AgeType ageGroup;
@@ -113,11 +110,6 @@ public class User extends BaseTimeEntity {
     @Override
     public int hashCode() {
         return Objects.hash(id);
-    }
-
-
-    public void mappingCommentLike(CommentEmotion commentEmotion) {
-        this.commentEmotionList.add(commentEmotion);
     }
 
 

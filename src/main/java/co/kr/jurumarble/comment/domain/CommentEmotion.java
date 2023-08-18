@@ -43,7 +43,6 @@ public class CommentEmotion {
 
     public void mappingUser(User user) {
         this.user = user;
-        user.mappingCommentLike(this);
     }
 
     public void setEmote(Emotion emotion) {
