@@ -4,7 +4,7 @@ import lombok.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class SearchSnackResponse {
+public class SearchRestaurantResponse {
 
     private String contentId;
 
@@ -14,7 +14,7 @@ public class SearchSnackResponse {
 
     private String treatMenu;
 
-    public SearchSnackResponse(String contentId, String restaurantName, String restaurantImage, String treatMenu) {
+    public SearchRestaurantResponse(String contentId, String restaurantName, String restaurantImage, String treatMenu) {
         this.contentId = contentId;
         this.restaurantName = restaurantName;
         this.restaurantImage = restaurantImage;
