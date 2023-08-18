@@ -19,7 +19,7 @@ public class DrinkController {
 
     private final DrinkService drinkService;
 
-    @Operation(summary = "전통주 정보 조회(단건 조회)",description = "쿼리 파라미터로 전통주 아이디를 넣어서 보내주세요. 예시) /api/drinks/100")
+    @Operation(summary = "전통주 정보 조회(단건 조회)", description = "쿼리 파라미터로 전통주 아이디를 넣어서 보내주세요. 예시) /api/drinks/100")
     @GetMapping("/{drinkId}")
     public ResponseEntity<GetDrinkResponse> getDrinkData(@PathVariable Long drinkId) {
         GetDrinkServiceResponse drinkData = drinkService.getDrinkData(drinkId);
