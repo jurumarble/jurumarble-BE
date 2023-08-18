@@ -4,7 +4,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(value = "tour-service", url = "${tour.api.url}")
+@FeignClient(value = "tour-service", url = "${tour.api.url}", configuration = TourApiClientConfig.class)
 public interface TourApiClient {
 
     //소개 정보 조회

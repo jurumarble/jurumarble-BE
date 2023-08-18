@@ -18,19 +18,14 @@ public class TourApiService {
 
     @Value("${tour.api.servicekey}")
     private String serviceKey;
-
     @Value("${tour.api.mobile.os}")
     private String mobileOS;
-
     @Value("${tour.api.mobile.app}")
     private String mobileApp;
-
     @Value("${tour.api.response.type}")
     private String responseType;
-
     @Value("${tour.api.content-type-id}")
     private int contentTypeId;
-
     @Value("${tour.api.image-yn}")
     private String imageYN;
     @Value("${tour.api.subimage-yn}")
@@ -107,7 +102,7 @@ public class TourApiService {
     }
 
 
-    public List<RestaurantInfoDto> getRestaurantInfoByKeyWord(String keyWord,int areaCode, int pageNo) {
+    public List<RestaurantInfoDto> getRestaurantInfoByKeyWord(String keyWord, int areaCode, int pageNo) {
         String decodedServiceKey = decodeServiceKey(serviceKey);
 
         TourSearchKeyWordResponse restaurantList = tourApiClient.getRestaurantListByKeyWord(
