@@ -1,10 +1,10 @@
 INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
                    image)
-VALUES ('이강주', '리큐르', '전주 이강주', '19%', '쌀, 소맥분, 정맥, 배, 생강, 계피, 울금, 꿀', '375', '전주시 덕진구 매암길 28', '5', '');
+VALUES ('이강주', '리큐르', '전주 이강주', '19%', '쌀, 소맥분, 정맥, 배, 생강, 계피, 울금, 꿀', '375', '전주시 덕진구 매암길 28', '5', 'https://shopping-phinf.pstatic.net/main_8204301/82043013300.5.jpg?type=f140');
 INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
                    image)
 VALUES ('인천 생 소성주', '탁주', '인천탁주', '6%', '쌀, 팽화미, 정제수, 국, 효모, 아스파탐, 효소, 이소말토 올리고당', '750', '인천광역시 부평구 안남로 433번길 14', '1',
-        '');
+        'https://www.maxpo.co.kr/data/editor/2304/thumb-17bc953d6f9ef9ba4f3d73db8a1a931d_1681452136_1696_600x1624.jpg');
 INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
                    image)
 VALUES ('송명섭 막걸리', '탁주', '태인합동주조', '6%', '국내산쌀, 곡자, 정제수', '900', '전북 정읍시 태인면 태흥리 392-1', '3',
@@ -27,9 +27,6 @@ VALUES ('죽력고', '일반증류주', '태인합동주조', '32%', '국내산�
         'https://shopping-phinf.pstatic.net/main_8541313/85413135876.jpg');
 INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
                    image)
-VALUES ('지장수 생막걸리', '탁주', '낙천', '6%', '정제수(지장수), 쌀, 효모, 누룩, 과당 등', '750', '강원도 동해시 공단2로 73', '1', '');
-INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
-                   image)
 VALUES ('고소리 술', '소주', '제주샘영농조합법인', '40%', '쌀, 차조, 입국, 누룩, 효모, 효소, 정제수, 스테비올 배당체', '700', '제주특별자치도 제주시 애월읍 애원로 283',
         '45', 'https://shopping-phinf.pstatic.net/main_1316520/13165203536.5.jpg');
 INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
@@ -44,9 +41,6 @@ INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, c
                    image)
 VALUES ('느린마을 막걸리', '탁주', '배상면주가 포천LB', '6%', '쌀, 국, 효모, 정제수', '750', '경기도 포천시 화현면 화동로 432번길 25', '3',
         'https://shopping-phinf.pstatic.net/main_3277380/32773809619.20220606142045.jpg');
-INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
-                   image)
-VALUES ('풍정사계 춘_500ml', '약주', '농업회사법인(유)화양', '15%', '국내산찹살, 향온곡', '500', '충북 청주시 청원구 내수읍 풍정1길 8-4', '30', '');
 INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
                    image)
 VALUES ('문경바람 오크 40도', '일반증류주', '농업회사법인(주)제이엘', '40%', '사과(문경산)', '750', '경북 문경시 문경읍 새재로 609', '44',
@@ -93,9 +87,6 @@ VALUES ('강쇠_370ml', '살균약주', '농업회사법인(유)술소리', '13%
         'https://shopping-phinf.pstatic.net/main_8140545/81405453146.1.jpg');
 INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
                    image)
-VALUES ('1000억 막걸리 프리바이오', '탁주', '(주)국순당', '5%', '쌀(국내산), 밀(국내산), 누룩, 정제수', '750', '강원도 횡성군 둔내면 강변로 975', '3', '');
-INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
-                   image)
 VALUES ('추사40', '일반증류주', '예산사과와인(주)', '40%', '사과(국내산)', '500', '충남 예산군 고덕면 대몽로 107-25', '60',
         'https://shopping-phinf.pstatic.net/main_3496226/34962263619.20220929170618.jpg');
 INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
@@ -104,19 +95,12 @@ VALUES ('오메기 맑은술', '약주', '제주술익는집', '16%', '좁쌀, �
         'https://shopping-phinf.pstatic.net/main_2885829/28858293590.20210915155516.jpg');
 INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
                    image)
-VALUES ('The 찾을수록 시리즈', '과실주', '(주)한국애플리즈', '피치 14%, 모스카토 14%, 애플 16%, 감귤 16%, 생강 16%, 아메리카노 14%',
-        '사과와인, 정제수, 정제주정 외 제품별 농축액(복숭아, 포도, 사과, 감귤, 생강, 커피향 등)', '360', '경북 의성군 단촌면 일직점곡로 755', '9', '');
-INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
-                   image)
 VALUES ('선호 생막걸리', '탁주', '김포금쌀탁주영농조합법인', '6%', '국내산 쌀, 누룩, 효모, 정제효소, 천연감미료, 정제수', '750', '경기도 김포시 하성면 하성로 622', '1',
         'https://shopping-phinf.pstatic.net/main_2941334/29413342619.20211026152529.jpg');
 INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
                    image)
 VALUES ('호랑이 생 막걸리', '탁주', '배혜정 도가', '6%', '쌀, 정제수, 국, 효모, 젖산 등', '750', '경기도 화성시 정남면 문학리 674-23', '2',
         'https://shopping-phinf.pstatic.net/main_2403967/24039675522.20210625143352.jpg');
-INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
-                   image)
-VALUES ('지평 생 옛막걸리', '탁주', '지평주조', '5%', '밀, 정제수, 국, 분말종국, 효모, 정제효소 등', '1', '경기 양평군 지평면 지평의병로62번길 27', '2', '');
 INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
                    image)
 VALUES ('대통대잎술 십오야', '약주', '추성고을', '15%', '쌀, 누룩, 갈근, 구기자, 솔잎, 진피 등', '700', '전남 담양군 용명 추령로 29', '16',
@@ -152,22 +136,12 @@ VALUES ('제주샘주 오메기술', '약주', '제주샘영농조합법인', '1
         '제주특별자치도 제주시 애월읍 애원로 283', '7', 'https://shopping-phinf.pstatic.net/main_8431561/84315616378.jpg');
 INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
                    image)
-VALUES ('녹고의눈물_700ml', '기타주류', '농업회사법인(주)토향', '16%', '섬오가피', '500', '제주특별자치도 제주시 한경면 연명로 372', '23', '');
-INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
-                   image)
-VALUES ('산막 생유 막걸리_750ml', '탁주', '농업회사법인신탄진주조(주)', '6%', '국내산 쌀, 소맥분, 종국, 효모', '750', '대전시 대덕구 신탄진로 738번길 128', '1',
-        '');
-INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
-                   image)
 VALUES ('1000억 유산균막걸리', '탁주', '(주)국순당', '5%', '쌀(국내산), 밀(국내산), 누룩, 정제수', '750', '강원도 횡성군 둔내면 강변로 975', '3',
         'https://shopping-phinf.pstatic.net/main_4062137/40621376528.jpg');
 INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
                    image)
 VALUES ('샤토미소 스위트 로제', '과실주', '도란원', '12%', '포도, 산화방지제, 효모, 설탕 등', '375', '충북 영동군 매곡면 유전 장척길 143', '20',
         'https://shopping-phinf.pstatic.net/main_2599696/25996965409.1.jpg');
-INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
-                   image)
-VALUES ('설궁_700ml', '기타주류', '솔래원', '30%', '자연산 송이버섯, 산양산삼, 토종벌꿀', '700', '강원도 양구군 방산면 칠전길 12-7', '0', '');
 INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
                    image)
 VALUES ('문경바람 백자 40도', '일반증류주', '농업회사법인(주)제이엘', '40%', '사과(문경산)', '750', '경북 문경시 문경읍 새재로 609', '40',
@@ -192,10 +166,6 @@ INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, c
                    image)
 VALUES ('금정산성 막걸리_750ml', '탁주', '(유)금정산성토산주', '8%', '백미, 밀누룩, 정제수, 아스파탐', '750', '부산시 금정구 산성로 453(금성동)', '19',
         'https://shopping-phinf.pstatic.net/main_1909275/19092758909.20190506141625.jpg');
-INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
-                   image)
-VALUES ('청송 주왕 사과막걸리', '탁주', '청송양조장', '6%', '쌀(국내산), 밀가루, 누룩, 입국, 효모, 아스파탐, 청송사과액즙, 정제수', '750', '경북 청송군 부남면 대전로 121-1',
-        '1', '');
 INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
                    image)
 VALUES ('세우리', '일반증류주', '제주샘영농조합법인', '45%', '산양삼, 하수오, 구기자, 쌀', '700', '제주특별자치도 제주시 애월읍 애원로 283', '250',
@@ -246,21 +216,12 @@ VALUES ('혼디주', '과실주', '농업회사법인(주)시트러스', '12%', 
         '8', 'https://shopping-phinf.pstatic.net/main_2406701/24067016531.20200907122748.jpg');
 INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
                    image)
-VALUES ('까메오 막걸리', '살균탁주', '낙천', '6%', '정제수(지장수), 쌀, 효모, 누룩, 과당 등', '550', '강원도 동해시 공단2로 73', '5', '');
-INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
-                   image)
 VALUES ('안동소주 일품 21도_350ml', '증류식소주', '안동소주일품', '21%', '국내산 쌀, 입국', '350', '경북 안동시 풍산읍 괴정리 926-5번지', '13',
         'https://shopping-phinf.pstatic.net/main_1211608/12116084874.20220817101130.jpg');
 INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
                    image)
-VALUES ('지평 생 쌀막걸리', '탁주', '지평주조', '5%', '쌀(국내산), 정제수, 국, 효모, 정제효소 등', '1', '경기 양평군 지평면 지평의병로62번길 27', '2', '');
-INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
-                   image)
 VALUES ('만강에 비친 달', '탁주', '예술', '10%', '홍천 쌀, 정제수, 단호박, 곡자(밀 누룩)', '500', '강원도 홍천군 내촌면 물걸리 508-2', '12',
         'https://shopping-phinf.pstatic.net/main_1219695/12196952114.20170919174953.jpg');
-INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
-                   image)
-VALUES ('풍정사계 추_500ml', '탁주', '농업회사법인(유)화양', '12%', '국내산찹살, 향온곡', '500', '충북 청주시 청원구 내수읍 풍정1길 8-4', '15', '');
 INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
                    image)
 VALUES ('회곡 생 막걸리', '탁주', '회곡양조장', '6%', '쌀, 입국, 누룩, 아스파탐, 효모, 정제수, 아세설팜칼륨', '750', '경상북도 안동시 풍산읍 산업단지 5길 39', '1',
@@ -273,10 +234,6 @@ INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, c
                    image)
 VALUES ('운암1945', '약주', '농업회사법인 우포의아침 주식회사', '12%', '쌀(국내산), 누룩, 정제수', '750', '경상남도 창녕군 대지면 대지농공단지길 40', '28',
         'https://shopping-phinf.pstatic.net/main_8396478/83964785562.jpg');
-INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
-                   image)
-VALUES ('한산소곡주', '살균약주', '한산소곡주', '18%', '찹쌀, 누룩, 백미, 정제수, 야국, 메주콩, 생강, 홍고추', '360', '충청남도 서천군 한산면 충절로 1118번지', '6',
-        '');
 INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
                    image)
 VALUES ('옛날 막걸리 古', '탁주', '국순당', '7.8%', '배정제수, 쌀(국산), 국(밀), 과당, 효모 / 에탄올 함량 : 7.8%', '750', '강원도 횡성군 둔내면 강변로 975',
@@ -315,9 +272,6 @@ VALUES ('병영소주', '증류식소주', '병영주조장', '40%', '정제수,
         'https://shopping-phinf.pstatic.net/main_8530832/85308326956.jpg');
 INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
                    image)
-VALUES ('톡 쏘는 알밤동동', '기타주류', '가평 우리술', '6%', '쌀, 정제수, 입국, 밤 농축액, 밤 추출물 등', '350', '경기도 가평군 조종면 대보간선로 26, 29', '1', '');
-INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
-                   image)
 VALUES ('술취한 원숭이', '생탁주', '술샘', '10.8%', '쌀(국내산 경기미 100%), 누룩, 홍국, 정제수', '375', '경기도 용인시 처인구 양지면 죽양대로 2298-1', '7',
         'https://shopping-phinf.pstatic.net/main_1211592/12115929782.20220808143207.jpg');
 INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
@@ -336,12 +290,6 @@ INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, c
                    image)
 VALUES ('황진이_375ml', '살균약주', '농업회사법인(유)술소리', '12%', '쌀, 오미자, 산수유', '375', '전라북도 남원시 시묘길 130(오암동)', '3',
         'https://shopping-phinf.pstatic.net/main_1909443/19094430920.20190506160333.jpg');
-INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
-                   image)
-VALUES ('천매_600ml', '리큐르', '더한주류', '30%', '매실주원액, 발효주정, 정제수, 꿀', '600', '서울시 은평구 증산로7길 28-13', '130', '');
-INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
-                   image)
-VALUES ('김천과하주 16도_700ml', '약주', '김천 과하주', '16%', '찹쌀, 누룩, 샘물, 황국잎', '700', '경북 김천시 대항면 괘방령로 1178-4', '20', '');
 INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
                    image)
 VALUES ('문경바람 백자 25도', '일반증류주', '농업회사법인(주)제이엘', '25%', '사과(문경산)', '750', '경북 문경시 문경읍 새재로 609', '30',
@@ -378,10 +326,6 @@ INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, c
                    image)
 VALUES ('이화백주', '탁주', '이화백주 순탁주', '6%', '국내산 햅쌀, 전통 누룩, 정제수', '940', '경남 양산시 상북면 충렬로 941', '12',
         'https://shopping-phinf.pstatic.net/main_2867026/28670266557.20230404123654.jpg');
-INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
-                   image)
-VALUES ('천안 연미주_360ml', '살균약주', '농업회사법인 입장주조㈜', '13%', '백미 100%(국내산), 한약재 홍삼외 6가지', '360', '충남 천안시 서북구 입장면 성진로 808',
-        '5', '');
 INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, price,
                    image)
 VALUES ('백운 복분자 와인_300ml', '기타주류', '농업회사법인(주)백운주가', '11%', '쌀, 토종 복분자과즙', '360', '전라남도 광양시 옥룡면 신재로 946-18', '7',

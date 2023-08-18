@@ -47,9 +47,9 @@ class DrinkEntityRepositoryImplTest {
         assertThat(hotDrinks).hasSize(3)
                 .extracting("drinkId", "name", "enjoyedCount")
                 .containsExactly(
-                        tuple(12L, "느린마을 막걸리", 3L),
-                        tuple(2L, "인천 생 소성주", 2L),
-                        tuple(30L, "호랑이 생 막걸리", 2L)
+                        tuple(12L, "문경바람 오크 40도", 3L),
+                        tuple(30L, "52C", 2L),
+                        tuple(15L, "니모메", 2L)
                 );
     }
 
@@ -67,9 +67,9 @@ class DrinkEntityRepositoryImplTest {
         assertThat(hotDrinks).hasSize(3)
                 .extracting("drinkId", "name", "enjoyedCount")
                 .containsExactly(
+                        tuple(11L, "느린마을 막걸리", 2L),
                         tuple(3L, "송명섭 막걸리", 2L),
-                        tuple(11L, "월매 쌀막걸리", 2L),
-                        tuple(20L, "장수 생 막걸리_750ml", 2L)
+                        tuple(20L, "이상헌 탁주", 2L)
                 );
     }
 }
