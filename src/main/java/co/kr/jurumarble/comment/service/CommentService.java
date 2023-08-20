@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class CommentService {
     private final UserRepository userRepository;
     private final VoteRepository voteRepository;
@@ -41,6 +41,7 @@ public class CommentService {
     private final CommentEmotionRepository commentEmotionRepository;
     private final TourApiService tourApiService;
 
+    @Transactional(readOnly = false)
     public void createComment(Long voteId, Long userId, CreateCommentServiceRequest request) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
@@ -63,7 +64,7 @@ public class CommentService {
 
     }
 
-
+    @Transactional(readOnly = false)
     public void updateComment(Long voteId, Long commentId, Long userId, UpdateCommentServiceRequest request) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
@@ -71,6 +72,7 @@ public class CommentService {
         comment.updateContent(request);
     }
 
+    @Transactional(readOnly = false)
     public void deleteComment(Long voteId, Long commentId, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
@@ -78,6 +80,7 @@ public class CommentService {
         commentRepository.delete(comment);
     }
 
+    @Transactional(readOnly = false)
     public void emoteComment(Long voteId, Long commentId, Long userId, Emotion emotion) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
@@ -85,6 +88,7 @@ public class CommentService {
         doEmote(emotion, user, comment);
     }
 
+    @Transactional(readOnly = false)
     public void addRestaurantToComment(Long voteId, Long commentId, Long userId, UpdateRestaurantServiceRequest request) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
