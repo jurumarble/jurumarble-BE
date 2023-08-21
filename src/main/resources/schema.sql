@@ -4,6 +4,7 @@ DROP TABLE if EXISTS users CASCADE;
 DROP TABLE if EXISTS vote_result;
 DROP TABLE if EXISTS drink;
 DROP TABLE if EXISTS vote_drink_content;
+DROP TABLE if EXISTS bookmark;
 
 CREATE TABLE vote
 (
@@ -70,7 +71,6 @@ CREATE TABLE vote_drink_content
     PRIMARY KEY (id)
 );
 
-
 CREATE TABLE drink
 (
     id                  BIGINT NOT NULL AUTO_INCREMENT,
@@ -86,3 +86,10 @@ CREATE TABLE drink
     PRIMARY KEY (id)
 );
 
+CREATE TABLE bookmark
+(
+    id            BIGINT NOT NULL AUTO_INCREMENT,
+    user_id       BIGINT NOT NULL,
+    vote_id       BIGINT NOT NULL,
+    PRIMARY KEY (id)
+);
