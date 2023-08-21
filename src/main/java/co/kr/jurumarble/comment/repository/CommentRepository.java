@@ -9,7 +9,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
@@ -24,7 +23,5 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     int countByVoteIdAndParentIsNull(Long voteId);
 
     List<Comment> findByParent(Comment parent);
-
-    @Query("SELECT COUNT(c) > 0 FROM Comment c WHERE c.id = :commentId AND c.user = :user")
-    boolean existsByCommentAndUser(Comment comment, User user);
+    boolean existsByIdAndUser(Long commentId, User user);
 }

@@ -68,7 +68,6 @@ public class Comment extends BaseTimeEntity {
     @AttributeOverrides({
             @AttributeOverride(name = "restaurantName", column = @Column(name = "restaurant_image")),
             @AttributeOverride(name = "restaurantImage", column = @Column(name = "restaurant_name")),
-            @AttributeOverride(name = "treatMenu", column = @Column(name = "treat_menu"))
     })
     private Restaurant restaurant;
 
@@ -114,16 +113,9 @@ public class Comment extends BaseTimeEntity {
 
 
     public void updateRestaurant(UpdateRestaurantServiceRequest request) {
-        if (request.getRestaurantName() != null && !request.getRestaurantName().isEmpty()) {
-            this.restaurant.updateRestaurantName(request.getRestaurantName());
+        if (restaurant == null) {
+            restaurant = new Restaurant();
         }
-
-        if (request.getRestaurantImage() != null && !request.getRestaurantImage().isEmpty()) {
-            this.restaurant.updateRestaurantImage(request.getRestaurantImage());
-        }
-
-        if (request.getTreatMenu() != null && !request.getTreatMenu().isEmpty()) {
-            this.restaurant.updateTreatMenu(request.getTreatMenu());
-        }
+        restaurant.updateRestaurant(request.getRestaurantName(), request.getRestaurantImage());
     }
 }

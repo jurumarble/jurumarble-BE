@@ -13,18 +13,15 @@ public class Restaurant {
 
     private String restaurantImage;
 
-    private String treatMenu;
 
-    public void updateRestaurantImage(String restaurantImage) {
-        this.restaurantImage = restaurantImage;
+    public void updateRestaurant(String restaurantName, String restaurantImage) {
+        if (restaurantName != null) {
+            this.restaurantName = restaurantName;
+        }
+        if (restaurantImage != null) {
+            this.restaurantImage = restaurantImage;
+        }
     }
 
-    public void updateTreatMenu(String treatMenu) {
-        this.treatMenu = treatMenu;
-    }
-
-    public void updateRestaurantName(String restaurantName) {
-        this.restaurantName = restaurantName;
-    }
 }
 

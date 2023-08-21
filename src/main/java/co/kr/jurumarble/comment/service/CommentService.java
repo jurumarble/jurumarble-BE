@@ -97,6 +97,7 @@ public class CommentService {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
+        validateCommentBelongsToUser(comment, user);
         comment.updateRestaurant(request);
 
     }
@@ -124,7 +125,7 @@ public class CommentService {
     }
 
     private void validateCommentBelongsToUser(Comment comment, User user) {
-        if (!commentRepository.existsByCommentAndUser(comment, user)) {
+        if (!commentRepository.existsByIdAndUser(comment.getId(), user)) {
             throw new CommentNotBelongToUserException();
         }
     }
