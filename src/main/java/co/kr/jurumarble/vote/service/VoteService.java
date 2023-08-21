@@ -11,7 +11,6 @@ import co.kr.jurumarble.vote.dto.DoVoteInfo;
 import co.kr.jurumarble.vote.dto.GetIsUserVoted;
 import co.kr.jurumarble.vote.dto.NormalVoteData;
 import co.kr.jurumarble.vote.enums.SortByType;
-import co.kr.jurumarble.bookmark.repository.BookmarkRepository;
 import co.kr.jurumarble.vote.repository.VoteContentRepository;
 import co.kr.jurumarble.vote.repository.VoteRepository;
 import co.kr.jurumarble.vote.repository.VoteResultRepository;
@@ -37,7 +36,6 @@ public class VoteService {
     private final VoteRepository voteRepository;
     private final VoteContentRepository voteContentRepository;
     private final VoteResultRepository voteResultRepository;
-    private final BookmarkRepository bookmarkRepository;
 
     @Transactional
     public Long createNormalVote(CreateNormalVoteServiceRequest request, Long userId) {
@@ -99,46 +97,31 @@ public class VoteService {
 
     }
 
-    public Slice<NormalVoteData> getVoteList(SortByType sortBy, Integer page, Integer size) {
+    public Slice<NormalVoteData> getVoteList(String keyword, SortByType sortBy, Integer page, Integer size) {
 
-        return getVoteListData(sortBy, page, size);
+        return getVoteListData(keyword, sortBy, page, size);
     }
 
-    private Slice<NormalVoteData> getVoteListData(SortByType sortBy, Integer page, Integer size) {
+    private Slice<NormalVoteData> getVoteListData(String keyword, SortByType sortBy, Integer page, Integer size) {
         Slice<NormalVoteData> voteListData;
         if (sortBy.equals(SortByType.ByTime)) {
             PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
-            voteListData = getVoteSortByTime(pageRequest);
+            voteListData = getVoteSortByTime(keyword, pageRequest);
         } else if (sortBy.equals(SortByType.ByPopularity)) {
             PageRequest pageRequest = PageRequest.of(page, size);
-            voteListData = getVoteByPopularity(pageRequest);
+            voteListData = getVoteByPopularity(keyword, pageRequest);
         } else {
             throw new RuntimeException("잘못된 요청입니다.");
         }
         return voteListData;
     }
 
-    private Slice<NormalVoteData> getVoteSortByTime(PageRequest pageRequest) {
-        return voteRepository.findNormalVoteDataWithTime(null,pageRequest);
+    private Slice<NormalVoteData> getVoteSortByTime(String keyword, PageRequest pageRequest) {
+        return voteRepository.findNormalVoteDataWithTime(keyword,pageRequest);
     }
 
-    private Slice<NormalVoteData> getVoteByPopularity(PageRequest pageRequest) {
-        return voteRepository.findNormalVoteDataWithPopularity(null, pageRequest);
-    }
-
-    public Slice<NormalVoteData> getSearchVoteList(String keyword, SortByType sortBy, int page, int size) {
-
-        if (sortBy.equals(SortByType.ByTime)) {
-            PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
-            return voteRepository.findNormalVoteDataWithTime(keyword, pageRequest);
-        }
-
-        if (sortBy.equals(SortByType.ByPopularity)) {
-            PageRequest pageRequest = PageRequest.of(page, size);
-            return voteRepository.findNormalVoteDataWithPopularity(keyword, pageRequest);
-        }
-
-        return null;
+    private Slice<NormalVoteData> getVoteByPopularity(String keyword, PageRequest pageRequest) {
+        return voteRepository.findNormalVoteDataWithPopularity(keyword, pageRequest);
     }
 
     public List<String> getRecommendVoteList(String keyword) {
