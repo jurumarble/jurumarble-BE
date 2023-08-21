@@ -46,7 +46,7 @@ public class CommentService {
     public void createComment(Long voteId, Long userId, CreateCommentServiceRequest request) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
-        Comment parentComment = checkParentComment(request);  // 부모댓글이 있는지 없는지 확인
+        Comment parentComment = checkParentComment(request);
         checkNestedCommentAllowed(parentComment);
         Comment comment = new Comment(request, parentComment, user, voteId);
 
@@ -101,14 +101,13 @@ public class CommentService {
 
     }
 
-    public List<SearchRestaurantData> searchRestaurant(Long voteId, Long commentId, Long userId, String keyword, int page) {
+    public List<SearchRestaurantData> searchRestaurant(Long voteId, Long commentId, Long userId, String keyword, int areaCode, int page) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
 
         //vote의 지역이 있으면 받아오고 없으면 선택받은 지역
-
-        List<RestaurantInfoDto> restaurantInfo = getRestaurantInfoList(keyword, page);
+        List<RestaurantInfoDto> restaurantInfo = getRestaurantInfoList(keyword, areaCode, page);
 
         return convertToSearchSnackResponseList(restaurantInfo);
 
@@ -118,7 +117,6 @@ public class CommentService {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
-
         List<String> detailImages = tourApiService.getDetailImages(contentId);
 
         return detailImages;
@@ -236,10 +234,10 @@ public class CommentService {
         commentEmotionRepository.save(newEmotion);
     }
 
-    private List<RestaurantInfoDto> getRestaurantInfoList(String keyword, int page) {
+    private List<RestaurantInfoDto> getRestaurantInfoList(String keyword, int areaCode, int page) {
         return (keyword != null)
-                ? tourApiService.getRestaurantInfoByKeyWord(keyword, page, 1)
-                : tourApiService.getRestaurantInfo(1, page);
+                ? tourApiService.getRestaurantInfoByKeyWord(keyword, areaCode, page)
+                : tourApiService.getRestaurantInfo(areaCode, page);
     }
 
     private List<SearchRestaurantData> convertToSearchSnackResponseList(List<RestaurantInfoDto> restaurantInfo) {

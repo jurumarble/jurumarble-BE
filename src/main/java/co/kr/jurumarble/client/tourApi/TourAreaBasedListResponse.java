@@ -4,9 +4,7 @@ import co.kr.jurumarble.exception.comment.NoDataFoundException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Data
