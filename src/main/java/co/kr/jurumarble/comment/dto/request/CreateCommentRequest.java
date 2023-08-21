@@ -23,7 +23,7 @@ public class CreateCommentRequest {
         this.content = content;
     }
 
-    public CreateCommentServiceRequest toServiceRequest(){
+    public CreateCommentServiceRequest toServiceRequest() {
         return CreateCommentServiceRequest.builder()
                 .parentId(parentId)
                 .content(content)

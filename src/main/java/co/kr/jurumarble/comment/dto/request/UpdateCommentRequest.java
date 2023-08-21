@@ -21,7 +21,7 @@ public class UpdateCommentRequest {
         this.content = content;
     }
 
-    public UpdateCommentServiceRequest toServiceRequest(){
+    public UpdateCommentServiceRequest toServiceRequest() {
         return UpdateCommentServiceRequest.builder()
                 .content(content)
                 .build();

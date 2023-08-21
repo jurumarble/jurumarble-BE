@@ -18,7 +18,7 @@ public class UpdateRestaurantRequest {
         this.treatMenu = treatMenu;
     }
 
-    public UpdateRestaurantServiceRequest toServiceRequest(){
+    public UpdateRestaurantServiceRequest toServiceRequest() {
         return UpdateRestaurantServiceRequest.builder()
                 .restaurantName(restaurantName)
                 .restaurantImage(restaurantImage)

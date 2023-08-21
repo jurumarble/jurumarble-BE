@@ -34,7 +34,7 @@ public class GetCommentRequest {
         this.size = size;
     }
 
-    public GetCommentServiceRequest toServiceRequest(){
+    public GetCommentServiceRequest toServiceRequest() {
         return GetCommentServiceRequest.builder()
                 .sortBy(sortBy)
                 .page(page)
