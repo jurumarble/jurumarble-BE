@@ -87,7 +87,7 @@ public class CommentController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @Operation(summary = "음식점 추가", description = "헤더에 토큰을 포함하고, URL 파라미터에 'voteId'와 'commentId'를 전달하며, 요청 바디에 업데이트할 음식점 정보를 JSON 형식으로 전달하여 댓글에 추가하는 기능입니다.")
+    @Operation(summary = "식당 추가", description = "헤더에 토큰을 포함하고, URL 파라미터에 'voteId'와 'commentId'를 전달하며, 요청 바디에 업데이트할 음식점 정보를 JSON 형식으로 전달하여 댓글에 추가하는 기능입니다.")
     @PatchMapping("/votes/{voteId}/comments/{commentId}/snack")
     public ResponseEntity addRestaurantToComment(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Long userId, @RequestBody UpdateRestaurantRequest updateRestaurantRequest) {
 
@@ -96,7 +96,7 @@ public class CommentController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @Operation(summary = "음식점 검색", description = "헤더에 토큰을 포함하고, URL 파라미터에 'voteId'와 'commentId'를 전달하며, 요청 쿼리에 'keyword'(검색 키워드 - 선택)과 'page'(요청 페이지 인덱스)를 전달하여 음식점을 검색하는 기능입니다.")
+    @Operation(summary = "식당 검색", description = "헤더에 토큰을 포함하고, URL 파라미터에 'voteId'와 'commentId'를 전달하며, 요청 쿼리에 'keyword'(검색 키워드 - 선택)과 'page'(요청 페이지 인덱스)를 전달하여 음식점을 검색하는 기능입니다.")
     @GetMapping("/votes/{voteId}/comments/{commentId}/snack")
     public ResponseEntity<List<SearchRestaurantData>> searchRestaurant(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Long userId, @RequestParam(value = "keyword", required = false) String keyword, @RequestParam(value = "areaCode", required = false) int areaCode, @RequestParam int page) {
 
@@ -105,7 +105,7 @@ public class CommentController {
         return new ResponseEntity(searchRestaurantRespons, HttpStatus.OK);
     }
 
-    @Operation(summary = "음식점 이미지 조회", description = "헤더에 토큰을 포함하고, URL 파라미터에 'voteId', 'commentId'와 'contentId'를 전달하여 특정 음식점의 이미지를 가져오는 기능입니다.")
+    @Operation(summary = "식당 이미지 조회", description = "헤더에 토큰을 포함하고, URL 파라미터에 'voteId', 'commentId'와 'contentId'를 전달하여 특정 음식점의 이미지를 가져오는 기능입니다.")
     @GetMapping("/votes/{voteId}/comments/{commentId}/snack/{contentId}")
     public ResponseEntity<List<String>> getRestaurantImage(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Long userId, @PathVariable String contentId) {
 
