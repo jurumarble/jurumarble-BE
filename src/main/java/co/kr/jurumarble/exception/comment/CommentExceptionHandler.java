@@ -42,4 +42,10 @@ public class CommentExceptionHandler {
         return ResponseEntity.status(e.getStatus().getStatusCode())
                 .body(ExceptionMessage.of(e.getStatus(), e.getMessage()));
     }
+
+    @ExceptionHandler(CommentNotBelongToUserException.class)
+    public ResponseEntity<ExceptionMessage> handle(CommentNotBelongToUserException e) {
+        return ResponseEntity.status(e.getStatus().getStatusCode())
+                .body(ExceptionMessage.of(e.getStatus(), e.getMessage()));
+    }
 }

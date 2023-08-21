@@ -11,6 +11,7 @@ import co.kr.jurumarble.comment.service.request.CreateCommentServiceRequest;
 import co.kr.jurumarble.comment.service.request.GetCommentServiceRequest;
 import co.kr.jurumarble.comment.service.request.UpdateCommentServiceRequest;
 import co.kr.jurumarble.comment.service.request.UpdateRestaurantServiceRequest;
+import co.kr.jurumarble.exception.comment.CommentNotBelongToUserException;
 import co.kr.jurumarble.exception.comment.CommentNotFoundException;
 import co.kr.jurumarble.exception.comment.InvalidSortingMethodException;
 import co.kr.jurumarble.exception.comment.NestedCommentNotAllowedException;
@@ -41,7 +42,7 @@ public class CommentService {
     private final CommentEmotionRepository commentEmotionRepository;
     private final TourApiService tourApiService;
 
-    @Transactional(readOnly = false)
+    @Transactional
     public void createComment(Long voteId, Long userId, CreateCommentServiceRequest request) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
@@ -64,23 +65,26 @@ public class CommentService {
 
     }
 
-    @Transactional(readOnly = false)
+    @Transactional
     public void updateComment(Long voteId, Long commentId, Long userId, UpdateCommentServiceRequest request) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
+        validateCommentBelongsToUser(comment, user);
         comment.updateContent(request);
     }
 
-    @Transactional(readOnly = false)
+
+    @Transactional
     public void deleteComment(Long voteId, Long commentId, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
+        validateCommentBelongsToUser(comment, user);
         commentRepository.delete(comment);
     }
 
-    @Transactional(readOnly = false)
+    @Transactional
     public void emoteComment(Long voteId, Long commentId, Long userId, Emotion emotion) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
@@ -88,7 +92,7 @@ public class CommentService {
         doEmote(emotion, user, comment);
     }
 
-    @Transactional(readOnly = false)
+    @Transactional
     public void addRestaurantToComment(Long voteId, Long commentId, Long userId, UpdateRestaurantServiceRequest request) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
@@ -121,6 +125,11 @@ public class CommentService {
 
     }
 
+    private void validateCommentBelongsToUser(Comment comment, User user) {
+        if (!commentRepository.existsByCommentAndUser(comment, user)) {
+            throw new CommentNotBelongToUserException();
+        }
+    }
 
     private Comment checkParentComment(CreateCommentServiceRequest request) {
         if (request.getParentId() == null) {
