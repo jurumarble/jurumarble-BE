@@ -4,6 +4,7 @@ import co.kr.jurumarble.exception.user.UserNotAccessRightException;
 import co.kr.jurumarble.exception.user.UserNotFoundException;
 import co.kr.jurumarble.exception.vote.AlreadyUserDoVoteException;
 import co.kr.jurumarble.exception.vote.VoteNotFoundException;
+import co.kr.jurumarble.exception.vote.VoteSortByNotFountException;
 import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.user.repository.UserRepository;
 import co.kr.jurumarble.vote.domain.*;
@@ -111,7 +112,7 @@ public class VoteService {
             PageRequest pageRequest = PageRequest.of(page, size);
             voteListData = getVoteByPopularity(keyword, pageRequest);
         } else {
-            throw new RuntimeException("잘못된 요청입니다.");
+            throw new VoteSortByNotFountException();
         }
         return voteListData;
     }
