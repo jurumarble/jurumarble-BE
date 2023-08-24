@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GetDrinkResponse {
 
+    @Schema(description = "전통주 아이디", example = "102")
+    private Long drinkId;
+
     @Schema(description = "전통주 이름", example = "꿀 막걸리")
     private String name;
 
@@ -34,7 +37,8 @@ public class GetDrinkResponse {
     private String image;
 
     @Builder
-    private GetDrinkResponse(String name, String type, String productName, String alcoholicBeverage, String rawMaterial, int capacity, String manufactureAddress, String image) {
+    private GetDrinkResponse(Long drinkId, String name, String type, String productName, String alcoholicBeverage, String rawMaterial, int capacity, String manufactureAddress, String image) {
+        this.drinkId = drinkId;
         this.name = name;
         this.type = type;
         this.productName = productName;

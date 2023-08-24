@@ -1,9 +1,9 @@
 package co.kr.jurumarble.statistics.controller;
 
-import co.kr.jurumarble.statistics.service.StatisticsService;
 import co.kr.jurumarble.statistics.dto.VoteSelectResultData;
 import co.kr.jurumarble.statistics.dto.response.SelectStatisticsResponse;
 import co.kr.jurumarble.statistics.dto.response.TotalStatisticsResponse;
+import co.kr.jurumarble.statistics.service.StatisticsService;
 import co.kr.jurumarble.user.enums.AgeType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
@@ -24,7 +24,7 @@ public class StatisticsController {
 
     private final StatisticsService statisticsService;
 
-    @Operation(summary  = "투표 참여 인원 통계", description = "파라미터에 voteId 보내주시면 됩니다.")
+    @Operation(summary = "투표 참여 인원 통계", description = "파라미터에 voteId 보내주시면 됩니다.")
     @GetMapping("/votes/{voteId}/total-statistics")
     public ResponseEntity<TotalStatisticsResponse> getTotalStatistics(@PathVariable("voteId") Long voteId) {
 
@@ -37,7 +37,7 @@ public class StatisticsController {
     @GetMapping("/votes/{voteId}/select-statistics")
     public ResponseEntity<SelectStatisticsResponse> getSelectStatistics(@PathVariable("voteId") Long voteId, @RequestParam(required = false) GenderType gender, @RequestParam(required = false) AgeType age, @RequestParam(required = false) MbtiType mbti) {
 
-        VoteSelectResultData voteSelectResultData  = statisticsService.getSelectedStatistics(voteId, gender, age, mbti);
+        VoteSelectResultData voteSelectResultData = statisticsService.getSelectedStatistics(voteId, gender, age, mbti);
 
         return new ResponseEntity(new SelectStatisticsResponse(voteId, voteSelectResultData), HttpStatus.OK);
     }

@@ -13,27 +13,15 @@ import lombok.*;
 public class NormalVoteData {
 
     private Long voteId;
-
     private Long postedUserId;
-
     private String title;
-
     private String detail;
-
     private GenderType filteredGender;
-
     private AgeType filteredAge;
-
     private MbtiType filteredMbti;
-
     private String imageA;
-
     private String imageB;
-
     private String titleA;
-
     private String titleB;
-
     private Long votedCount;
-
 }
