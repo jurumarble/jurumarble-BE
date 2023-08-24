@@ -2,6 +2,7 @@ package co.kr.jurumarble.comment.domain;
 
 import co.kr.jurumarble.comment.enums.Emotion;
 import co.kr.jurumarble.user.domain.User;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,11 +11,12 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@Table(name = "comment_emotion")
 public class CommentEmotion {
+
     @Id
-    @GeneratedValue
-    @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
