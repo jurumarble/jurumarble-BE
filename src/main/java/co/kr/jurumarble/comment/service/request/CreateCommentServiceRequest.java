@@ -27,7 +27,7 @@ public class CreateCommentServiceRequest {
                 .user(user)
                 .voteId(voteId)
                 .content(content)
-                .age(user.classifyAge(user.getAge()))
+                .age(user.classifyAge())
                 .mbti(user.getMbti())
                 .gender(user.getGender())
                 .parent(parentComment)
