@@ -39,7 +39,7 @@ public class CommentController {
     }
 
 
-    @Operation(summary = "댓글 조회", description = "헤더에 토큰(`Authorization`)을 포함하고, URL 파라미터에 'voteId'를, 요청 쿼리에 'age'(연령 필터 - 선택), 'mbti'(MBTI 필터 - 선택), 'gender'(성별 필터 - 선택), 'sortBy'(정렬 기준 - ByTime, ByPopularity), 'page'(페이지 번호)와 'size'(페이지 내의 데이터 수)를 JSON 형식으로 보내 주십시오.")
+    @Operation(summary = "댓글 조회", description = "헤더에 토큰을 포함하고, URL 파라미터에 'voteId'를, 요청 쿼리에 'age'(연령 필터 - 선택), 'mbti'(MBTI 필터 - 선택), 'gender'(성별 필터 - 선택), 'sortBy'(정렬 기준 - ByTime, ByPopularity), 'page'(페이지 번호)와 'size'(페이지 내의 데이터 수)를 JSON 형식으로 보내 주십시오.")
     @GetMapping("/votes/{voteId}/comments")
     public ResponseEntity<Slice<GetCommentData>> getComment(@PathVariable Long voteId, @ModelAttribute GetCommentRequest getCommentRequest) {
 
