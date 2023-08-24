@@ -50,7 +50,7 @@ public class VoteController {
 
     @Operation(summary = "투표 리스트 검색, 조회", description = "파라미터에 keyeword, sortBy, page, size, category 보내주시면 됩니다. 검색이 아니면 keyword = 에 값 없이 ")
     @GetMapping("")
-    public ResponseEntity<GetVoteListResponse> getVoteList2(@RequestParam(required = false) String keyword, @RequestParam SortByType sortBy, @RequestParam int page, @RequestParam int size) {
+    public ResponseEntity<GetVoteListResponse> getVoteList(@RequestParam(required = false) String keyword, @RequestParam SortByType sortBy, @RequestParam int page, @RequestParam int size) {
         Slice<NormalVoteData> voteListData = voteService.getVoteList(keyword, sortBy, page, size);
         return new ResponseEntity(new GetVoteListResponse(voteListData), HttpStatus.OK);
     }
