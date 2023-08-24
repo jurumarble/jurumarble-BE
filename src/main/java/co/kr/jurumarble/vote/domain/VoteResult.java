@@ -1,7 +1,7 @@
 package co.kr.jurumarble.vote.domain;
 
+import co.kr.jurumarble.common.domain.BaseTimeEntity;
 import co.kr.jurumarble.user.enums.ChoiceType;
-import co.kr.jurumarble.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,36 +11,26 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class VoteResult {
+@Table(name = "vote_result")
+public class VoteResult extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue
-    @Column(name = "VOTE_RESULT_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /**
-     * Vote 와의 연관관계 주인
-     */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "VOTE_ID")
-    private Vote vote;
+    @Column(name = "vote_id")
+    private Long voteId;
 
-    /**
-     * User 와의 연관관계 주인
-     */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
-    private User votedUser;
+    @Column(name = "voted_user_id")
+    private Long votedUserId;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ChoiceType choice;
 
-    public void doVote(Vote vote, User user, ChoiceType choice) {
-        this.vote = vote;
-        vote.addVoteResult(this);
-        this.votedUser = user;
+    public VoteResult(Long voteId, Long votedUserId, ChoiceType choice) {
+        this.voteId = voteId;
+        this.votedUserId = votedUserId;
         this.choice = choice;
     }
-
 }

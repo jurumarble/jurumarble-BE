@@ -1,9 +1,6 @@
 package co.kr.jurumarble.vote.dto.response;
 
-import co.kr.jurumarble.user.enums.AgeType;
-import co.kr.jurumarble.user.enums.GenderType;
-import co.kr.jurumarble.user.enums.MbtiType;
-import lombok.Builder;
+import co.kr.jurumarble.vote.service.GetVoteData;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,30 +20,21 @@ public class GetVoteResponse {
 
     private String imageB;
 
-    private GenderType filteredGender;
-
-    private AgeType filteredAge;
-
-    private MbtiType filteredMbti;
-
     private String titleA;
 
     private String titleB;
 
     private String description;
 
-    @Builder
-    public GetVoteResponse(GetVoteUserResponse writer, LocalDateTime voteCreatedDate, String title, String imageA, String imageB, GenderType filteredGender, AgeType filteredAge, MbtiType filteredMbti, String titleA, String titleB, String description) {
-        this.writer = writer;
-        this.voteCreatedDate = voteCreatedDate;
-        this.title = title;
-        this.imageA = imageA;
-        this.imageB = imageB;
-        this.filteredGender = filteredGender;
-        this.filteredAge = filteredAge;
-        this.filteredMbti = filteredMbti;
-        this.titleA = titleA;
-        this.titleB = titleB;
-        this.description = description;
+
+    public GetVoteResponse(GetVoteData data) {
+        this.writer = data.getWriter();
+        this.voteCreatedDate = data.getVoteCreatedDate();
+        this.title = data.getTitle();
+        this.imageA = data.getImageA();
+        this.imageB = data.getImageB();
+        this.titleA = data.getTitleA();
+        this.titleB = data.getTitleB();
+        this.description = data.getDescription();
     }
 }

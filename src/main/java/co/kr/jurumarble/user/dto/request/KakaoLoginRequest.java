@@ -1,7 +1,7 @@
 package co.kr.jurumarble.user.dto.request;
 
-import co.kr.jurumarble.user.enums.ProviderType;
 import co.kr.jurumarble.user.dto.ThirdPartySignupInfo;
+import co.kr.jurumarble.user.enums.ProviderType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 

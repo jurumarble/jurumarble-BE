@@ -19,17 +19,20 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(tokenInterceptor)
                 .order(1)
                 .addPathPatterns("/api/users/additional-info")
-                .addPathPatterns("/api/votes")
+                .addPathPatterns("/api/users")
+                .addPathPatterns("/api/votes/normal")
+                .addPathPatterns("/api/votes/drink")
                 .addPathPatterns("/api/votes/{voteId}")
                 .addPathPatterns("/api/votes/{voteId}/vote")
+                .addPathPatterns("/api/votes/{voteId}/voted")
+                .addPathPatterns("/api/votes/{voteId}/bookmark")
+                .addPathPatterns("/api/drinks/enjoys")
                 .addPathPatterns("/api/votes/{voteId}/comments")
                 .addPathPatterns("/api/votes/{voteId}/comments/{commentId}")
                 .addPathPatterns("/api/votes/{voteId}/comments/{commentId}/likers")
                 .addPathPatterns("/api/votes/{voteId}/comments/{commentId}/haters")
                 .addPathPatterns("/api/votes/{voteId}/comments/{commentId}/snack")
                 .addPathPatterns("/api/votes/{voteId}/comments/{commentId}/snack/{contentId}");
-
-
     }
 
     @Override

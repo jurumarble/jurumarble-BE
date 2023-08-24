@@ -12,7 +12,12 @@ public class UserManager {
     private final UserRepository userRepository;
 
     public void addUserInfo(Long userId, AddUserInfo addUserInfo) {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findByIdAndDeletedDate(userId, null).orElseThrow(UserNotFoundException::new);
         user.addInfo(addUserInfo);
+    }
+
+    public void deleteUser(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        user.deleteUser();
     }
 }

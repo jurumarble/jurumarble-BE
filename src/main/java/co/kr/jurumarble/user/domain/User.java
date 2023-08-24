@@ -1,47 +1,43 @@
 package co.kr.jurumarble.user.domain;
 
-import co.kr.jurumarble.comment.domain.CommentEmotion;
 import co.kr.jurumarble.common.domain.BaseTimeEntity;
+import co.kr.jurumarble.exception.user.AlreadyDeletedUserException;
 import co.kr.jurumarble.user.dto.AddUserInfo;
 import co.kr.jurumarble.user.enums.AgeType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
 import co.kr.jurumarble.user.enums.ProviderType;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "users")
+@Where(clause = "deleted_date IS NULL")
 public class User extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue
-    @Column(name = "USER_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
     private String nickname;
 
-    @Column
     private String email;
 
     private String password;
 
+    @Column(name = "image_url")
     private String imageUrl;
 
     private Integer age;
-
-    @Enumerated(EnumType.STRING)
-    private ProviderType providerType;    // oauth2를 이용할 경우 어떤 플랫폼을 이용하는지
-
-    private String providerId;  // oauth2를 이용할 경우 아이디값
 
     @Enumerated(EnumType.STRING)
     private GenderType gender;
@@ -49,11 +45,40 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private MbtiType mbti;
 
-    @Column
+    @Enumerated(EnumType.STRING)
+    @Column(name = "provider_type")
+    private ProviderType providerType;    // oauth2를 이용할 경우 어떤 플랫폼을 이용하는지
+
+    @Column(name = "provider_id")
+    private String providerId;  // oauth2를 이용할 경우 아이디값
+
+    @Column(name = "modified_mbti_date")
     private LocalDateTime modifiedMbtiDate;
 
+    @Column(name = "deleted_date")
+    private LocalDateTime deletedDate;
 
-    public AgeType classifyAge(Integer age) {
+
+    @Builder
+    private User(Long id, String nickname, String email, String imageUrl, String password, ProviderType providerType, String providerId, Integer age, GenderType gender, MbtiType mbti, LocalDateTime modifiedMbtiDate) {
+        validIsUserDeleted();
+        this.id = id;
+        this.nickname = nickname;
+        this.email = email;
+        this.imageUrl = imageUrl;
+        this.password = password;
+        this.providerType = providerType;
+        this.providerId = providerId;
+        this.age = age;
+        this.gender = gender;
+        this.mbti = mbti;
+        this.modifiedMbtiDate = modifiedMbtiDate;
+    }
+
+    public AgeType classifyAge() {
+        if (age == null) {
+            return AgeType.NULL; // 혹은 원하는 다른 동작 수행
+        }
         AgeType ageGroup;
         switch (age / 10) {
             case 1:
@@ -84,19 +109,14 @@ public class User extends BaseTimeEntity {
         this.gender = addUserInfo.getGender();
     }
 
-    @Builder
-    private User(Long id, String nickname, String email, String imageUrl, String password, ProviderType providerType, String providerId, Integer age, GenderType gender, MbtiType mbti, LocalDateTime modifiedMbtiDate) {
-        this.id = id;
-        this.nickname = nickname;
-        this.email = email;
-        this.imageUrl = imageUrl;
-        this.password = password;
-        this.providerType = providerType;
-        this.providerId = providerId;
-        this.age = age;
-        this.gender = gender;
-        this.mbti = mbti;
-        this.modifiedMbtiDate = modifiedMbtiDate;
+//    public void mappingBookmark(Bookmark bookmark) {
+//        this.bookmarkList.add(bookmark);
+//    }
+
+    private void validIsUserDeleted() {
+        if (!(deletedDate == null)) {
+            throw new AlreadyDeletedUserException();
+        }
     }
 
     @Override
@@ -112,5 +132,7 @@ public class User extends BaseTimeEntity {
         return Objects.hash(id);
     }
 
-
+    public void deleteUser() {
+        this.deletedDate = LocalDateTime.now();
+    }
 }

@@ -5,19 +5,15 @@ import co.kr.jurumarble.common.domain.BaseTimeEntity;
 import co.kr.jurumarble.user.enums.AgeType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
-import co.kr.jurumarble.user.domain.User;
-import co.kr.jurumarble.vote.dto.request.CreateVoteRequest;
-import co.kr.jurumarble.vote.dto.request.UpdateVoteRequest;
-import co.kr.jurumarble.vote.dto.response.GetVoteResponse;
-import co.kr.jurumarble.vote.dto.response.GetVoteUserResponse;
+import co.kr.jurumarble.vote.enums.VoteType;
+import co.kr.jurumarble.vote.service.UpdateVoteServiceRequest;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
 
 @Entity
@@ -26,105 +22,65 @@ import java.util.List;
 public class Vote extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue
-    @Column(name = "VOTE_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /**
-     * User 와의 연관관계 주인
-     */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
-    private User postedUser;
+    @Column(name = "posted_user_id")
+    private Long postedUserId;
 
-
-    @BatchSize(size = 1000)
-    @OneToMany(mappedBy = "vote", fetch = FetchType.LAZY)
-    private List<VoteResult> voteResultList = new ArrayList<>();
-
-    @Column
     private String title;
 
-    @Column
     private String detail;
 
-    @Column
     @Enumerated(EnumType.STRING)
+    @Column(name = "vote_type")
+    private VoteType voteType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "filtered_gender")
     private GenderType filteredGender;
 
-    @Column
     @Enumerated(EnumType.STRING)
+    @Column(name = "filtered_age")
     private AgeType filteredAge;
 
-    @Column
     @Enumerated(EnumType.STRING)
+    @Column(name = "filtered_mbti")
     private MbtiType filteredMbti;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "VOTE_CONTENT_ID")
-    private VoteContent voteContent;
-
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "vote", cascade = CascadeType.REMOVE)
-//    private List<Bookmark> bookmarkList = new ArrayList<>();
-
-//    public void removeBookmark(Bookmark bookmark) {
-//        this.bookmarkList.remove(bookmark);
-//    }
-
-    public Vote(CreateVoteRequest request, User user, VoteContent voteContent) {
-        this.postedUser = user;
-        this.title = request.getTitle();
-        this.voteContent = voteContent;
-        this.filteredGender = request.getFilteredGender();
-        this.filteredAge = request.getFilteredAge();
-        this.filteredMbti = request.getFilteredMbti();
+    @Builder
+    public Vote(Long postedUserId, String title, String detail, VoteType voteType, GenderType filteredGender, AgeType filteredAge, MbtiType filteredMbti) {
+        this.postedUserId = postedUserId;
+        this.title = title;
+        this.detail = detail;
+        this.voteType = voteType;
+        this.filteredGender = filteredGender;
+        this.filteredAge = filteredAge;
+        this.filteredMbti = filteredMbti;
     }
 
-    public void addVoteResult(VoteResult voteResult) {
-        this.voteResultList.add(voteResult);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Vote)) return false;
+        Vote vote = (Vote) o;
+        return Objects.equals(id, vote.id);
     }
 
-    public GetVoteResponse toDto() {
-
-        GetVoteUserResponse getVoteUserResponse = GetVoteUserResponse.builder()
-                .userImage(postedUser.getImageUrl())
-                .userGender(postedUser.getGender())
-                .userAge(postedUser.classifyAge(postedUser.getAge()))
-                .userMbti(postedUser.getMbti())
-                .nickName(postedUser.getNickname())
-                .build();
-
-        return GetVoteResponse.builder()
-                .writer(getVoteUserResponse)
-                .voteCreatedDate(getCreatedDate())
-                .title(title)
-                .imageA(voteContent.getImageA())
-                .imageB(voteContent.getImageB())
-                .filteredGender(filteredGender)
-                .filteredAge(filteredAge)
-                .filteredMbti(filteredMbti)
-                .titleA(voteContent.getTitleA())
-                .titleB(voteContent.getTitleB())
-                .description(detail)
-                .build();
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
-    public boolean isUsersVote(Long userId) {
 
-        return this.postedUser.getId().equals(userId);
-
+    public boolean isVoteOfUser(Long userId) {
+        return this.postedUserId.equals(userId);
     }
 
-    public void update(UpdateVoteRequest request) {
+    public void update(UpdateVoteServiceRequest request) {
         this.title = request.getTitle();
         this.detail = request.getDetail();
-        this.getVoteContent().update(request.getTitleA(), request.getTitleB());
     }
-//
-//    public void mappingBookmark(Bookmark bookmark) {
-//        this.bookmarkList.add(bookmark);
-//    }
 
 
 }
