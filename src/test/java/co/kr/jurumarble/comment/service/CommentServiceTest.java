@@ -42,19 +42,14 @@ class CommentServiceTest {
         Long userId = 1L;
         Long voteId = 1L;
 
-        User user = User.builder()
-                .age(30)
-                .build();
+        User user = User.builder().age(30).build();
 
         Vote vote = new Vote();
 
-        CreateCommentServiceRequest request = CreateCommentServiceRequest.builder()
-                .content("댓글 내용")
-                .parentId(null)
-                .build();
+        CreateCommentServiceRequest request = CreateCommentServiceRequest.builder().content("댓글 내용").parentId(null).build();
 
         Comment parentComment = null;
-        Comment comment = new Comment(request, parentComment, user, voteId);
+        Comment comment = request.toComment(parentComment,user,voteId);
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         when(voteRepository.findById(voteId)).thenReturn(Optional.of(vote));
@@ -81,16 +76,13 @@ class CommentServiceTest {
         Long voteId = 1L;
         Long commentId = 1L;
 
-        User user = User.builder()
-                .build();
+        User user = User.builder().build();
 
         Vote vote = new Vote();
 
-        Comment comment = new Comment();
+        Comment comment = Comment.builder().build();
 
-        UpdateCommentServiceRequest request = UpdateCommentServiceRequest.builder()
-                .content("변경된 댓글 내용")
-                .build();
+        UpdateCommentServiceRequest request = UpdateCommentServiceRequest.builder().content("변경된 댓글 내용").build();
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         when(voteRepository.findById(voteId)).thenReturn(Optional.of(vote));
