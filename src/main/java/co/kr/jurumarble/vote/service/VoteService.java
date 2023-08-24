@@ -5,6 +5,7 @@ import co.kr.jurumarble.drink.domain.dto.DrinksUsedForVote;
 import co.kr.jurumarble.exception.user.UserNotAccessRightException;
 import co.kr.jurumarble.exception.user.UserNotFoundException;
 import co.kr.jurumarble.exception.vote.VoteNotFoundException;
+import co.kr.jurumarble.exception.vote.VoteSortByNotFountException;
 import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.user.repository.UserRepository;
 import co.kr.jurumarble.vote.domain.*;
@@ -93,41 +94,26 @@ public class VoteService {
         voteResultRepository.save(voteResult);
     }
 
-    public Slice<NormalVoteData> getVoteList(SortByType sortBy, Integer page, Integer size) {
+    public Slice<NormalVoteData> getVoteList(String keyword, SortByType sortBy, Integer page, Integer size) {
         if (sortBy.equals(SortByType.ByTime)) {
             PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
-            return getVoteSortByTime(pageRequest);
+            return getVoteSortByTime(keyword, pageRequest);
         }
 
         if (sortBy.equals(SortByType.ByPopularity)) {
             PageRequest pageRequest = PageRequest.of(page, size);
-            return getVoteByPopularity(pageRequest);
+            return getVoteByPopularity(keyword, pageRequest);
         }
 
-        throw new RuntimeException("잘못된 요청입니다.");
+            throw new VoteSortByNotFountException();
     }
 
-    private Slice<NormalVoteData> getVoteSortByTime(PageRequest pageRequest) {
-        return voteRepository.findNormalVoteDataWithTime(null, pageRequest);
+    private Slice<NormalVoteData> getVoteSortByTime(String keyword, PageRequest pageRequest) {
+        return voteRepository.findNormalVoteDataWithTime(keyword, pageRequest);
     }
-
-    private Slice<NormalVoteData> getVoteByPopularity(PageRequest pageRequest) {
-        return voteRepository.findNormalVoteDataWithPopularity(null, pageRequest);
-    }
-
-    public Slice<NormalVoteData> getSearchVoteList(String keyword, SortByType sortBy, int page, int size) {
-
-        if (sortBy.equals(SortByType.ByTime)) {
-            PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
-            return voteRepository.findNormalVoteDataWithTime(keyword, pageRequest);
-        }
-
-        if (sortBy.equals(SortByType.ByPopularity)) {
-            PageRequest pageRequest = PageRequest.of(page, size);
-            return voteRepository.findNormalVoteDataWithPopularity(keyword, pageRequest);
-        }
-
-        throw new RuntimeException("잘못된 요청입니다.");
+  
+    private Slice<NormalVoteData> getVoteByPopularity(String keyword, PageRequest pageRequest) {
+        return voteRepository.findNormalVoteDataWithPopularity(keyword, pageRequest);
     }
 
     public List<String> getRecommendVoteList(String keyword) {

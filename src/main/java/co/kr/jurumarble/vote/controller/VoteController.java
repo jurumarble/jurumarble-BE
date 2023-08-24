@@ -46,18 +46,11 @@ public class VoteController {
         voteService.createDrinkVote(request.toServiceRequest(), userId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-
-    @Operation(summary = "투표 리스트 조회", description = "파라미터에 sortBy, page, size, category 보내주시면 됩니다.")
+  
+    @Operation(summary = "투표 리스트 검색, 조회", description = "파라미터에 keyeword, sortBy, page, size, category 보내주시면 됩니다. 검색이 아니면 keyword = 에 값 없이 ")
     @GetMapping("")
-    public ResponseEntity<GetVoteListResponse> getVoteList(@RequestParam SortByType sortBy, @RequestParam int page, @RequestParam int size) {
-        Slice<NormalVoteData> voteListData = voteService.getVoteList(sortBy, page, size);
-        return new ResponseEntity(new GetVoteListResponse(voteListData), HttpStatus.OK);
-    }
-
-    @Operation(summary = "투표 리스트 검색", description = "파라미터에 keyeword, sortBy, page, size, category 보내주시면 됩니다.")
-    @GetMapping("/search")
-    public ResponseEntity<GetVoteListResponse> getVoteSearchList(@RequestParam String keyword, @RequestParam SortByType sortBy, @RequestParam int page, @RequestParam int size) {
-        Slice<NormalVoteData> voteListData = voteService.getSearchVoteList(keyword, sortBy, page, size);
+    public ResponseEntity<GetVoteListResponse> getVoteList(@RequestParam(required = false) String keyword, @RequestParam SortByType sortBy, @RequestParam int page, @RequestParam int size) {
+        Slice<NormalVoteData> voteListData = voteService.getVoteList(keyword, sortBy, page, size);
         return new ResponseEntity(new GetVoteListResponse(voteListData), HttpStatus.OK);
     }
 
@@ -95,17 +88,7 @@ public class VoteController {
         List<String> voteRecommendListData = voteService.getRecommendVoteList(keyword);
         return new ResponseEntity(new GetVoteRecommendListResponse(voteRecommendListData), HttpStatus.OK);
     }
-
-
-//    @Operation(summary = "투표 북마크", description = "헤더에 토큰 담고, 파라미터에 voteId 보내주시면 됩니다.")
-//    @PostMapping("/{voteId}/bookmark")
-//    public ResponseEntity bookmarkVote(@PathVariable Long voteId, @RequestAttribute Long userId) {
-//
-//        voteService.bookmarkVote(userId, voteId);
-//
-//        return new ResponseEntity(HttpStatus.OK);
-//    }
-
+  
     @Operation(summary = "투표 참여 여부 조회", description = "파라미터에 voteId, 헤더에 userId 보내주시면 됩니다.")
     @GetMapping("/{voteId}/voted")
     public ResponseEntity<GetIsUserVotedResponse> getIsUserVoted(@PathVariable Long voteId, @RequestAttribute Long userId) {
@@ -113,12 +96,4 @@ public class VoteController {
         return new ResponseEntity(new GetIsUserVotedResponse(userVoted), HttpStatus.OK);
     }
 
-//    @Operation(summary = "북마크 여부 조회", description = "파라미어테 voteId, 헤더에 userId 보내주시면 됩니다.")
-//    @GetMapping("/{voteId}/bookmark")
-//    public ResponseEntity checkBookmarked(@PathVariable Long voteId, @RequestAttribute Long userId){
-//
-//        boolean result = voteService.checkBookmarked(userId, voteId);
-//
-//        return new ResponseEntity<>(new GetBookmarkedResponse(result), HttpStatus.OK);
-//    }
 }
