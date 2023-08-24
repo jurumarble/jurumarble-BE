@@ -8,7 +8,7 @@ public class UpdateRestaurantServiceRequest {
     private String restaurantImage;
 
     @Builder
-    public UpdateRestaurantServiceRequest(String restaurantName, String restaurantImage, String treatMenu) {
+    public UpdateRestaurantServiceRequest(String restaurantName, String restaurantImage) {
         this.restaurantName = restaurantName;
         this.restaurantImage = restaurantImage;
     }

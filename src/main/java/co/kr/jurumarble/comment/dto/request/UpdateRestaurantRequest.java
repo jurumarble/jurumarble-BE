@@ -9,20 +9,17 @@ import lombok.*;
 public class UpdateRestaurantRequest {
     private String restaurantName;
     private String restaurantImage;
-    private String treatMenu;
 
     @Builder
-    public UpdateRestaurantRequest(String restaurantName, String restaurantImage, String treatMenu) {
+    public UpdateRestaurantRequest(String restaurantName, String restaurantImage) {
         this.restaurantName = restaurantName;
         this.restaurantImage = restaurantImage;
-        this.treatMenu = treatMenu;
     }
 
     public UpdateRestaurantServiceRequest toServiceRequest() {
         return UpdateRestaurantServiceRequest.builder()
                 .restaurantName(restaurantName)
                 .restaurantImage(restaurantImage)
-                .treatMenu(treatMenu)
                 .build();
     }
 }
