@@ -24,39 +24,34 @@ public class Comment extends BaseTimeEntity {
     private static final int INITIAL_COUNT = 0;
 
     @Id
-    @GeneratedValue
-    @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @Column
+    @Column(name = "vote_id")
     private Long voteId;
-    @Column
+
     private String content;
 
     @Enumerated(EnumType.STRING)
-    @Column
     private AgeType age;
 
     @Enumerated(EnumType.STRING)
-    @Column
     private MbtiType mbti;
 
     @Enumerated(EnumType.STRING)
-    @Column
     private GenderType gender;
 
-    @Column
+    @Column(name = "like_count")
     private Integer likeCount = INITIAL_COUNT;
-
-    @Column
+    @Column(name = "hate_count")
     private Integer hateCount = INITIAL_COUNT;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PARENT_ID")
+    @JoinColumn(name = "parent_id")
     private Comment parent;
 
     @OneToMany(mappedBy = "parent", orphanRemoval = true)
@@ -73,7 +68,7 @@ public class Comment extends BaseTimeEntity {
     private Restaurant restaurant = new Restaurant();
 
     @Builder
-    public Comment(User user, Long voteId, String content, AgeType age, MbtiType mbti, GenderType gender,Comment parent) {
+    public Comment(User user, Long voteId, String content, AgeType age, MbtiType mbti, GenderType gender, Comment parent) {
         this.user = user;
         this.voteId = voteId;
         this.content = content;
