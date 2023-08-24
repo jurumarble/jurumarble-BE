@@ -1,20 +1,15 @@
 package co.kr.jurumarble.comment.service;
 
 import co.kr.jurumarble.client.tourApi.RestaurantInfoDto;
-import co.kr.jurumarble.client.tourApi.TourApiService;
 import co.kr.jurumarble.comment.domain.Comment;
-import co.kr.jurumarble.comment.domain.CommentEmotion;
 import co.kr.jurumarble.comment.enums.Emotion;
-import co.kr.jurumarble.comment.repository.CommentEmotionRepository;
 import co.kr.jurumarble.comment.repository.CommentRepository;
 import co.kr.jurumarble.comment.service.request.CreateCommentServiceRequest;
 import co.kr.jurumarble.comment.service.request.GetCommentServiceRequest;
 import co.kr.jurumarble.comment.service.request.UpdateCommentServiceRequest;
 import co.kr.jurumarble.comment.service.request.UpdateRestaurantServiceRequest;
-import co.kr.jurumarble.exception.comment.CommentNotBelongToUserException;
 import co.kr.jurumarble.exception.comment.CommentNotFoundException;
 import co.kr.jurumarble.exception.comment.InvalidSortingMethodException;
-import co.kr.jurumarble.exception.comment.NestedCommentNotAllowedException;
 import co.kr.jurumarble.exception.user.UserNotFoundException;
 import co.kr.jurumarble.exception.vote.VoteNotFoundException;
 import co.kr.jurumarble.user.domain.User;
@@ -29,8 +24,10 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -39,15 +36,16 @@ public class CommentService {
     private final UserRepository userRepository;
     private final VoteRepository voteRepository;
     private final CommentRepository commentRepository;
-    private final CommentEmotionRepository commentEmotionRepository;
-    private final TourApiService tourApiService;
+    private final CommentEmoteManager commentEmoteManager;
+    private final TourApiDataManager tourApiDataManager;
+    private final CommentValidator commentValidator;
 
     @Transactional
     public void createComment(Long voteId, Long userId, CreateCommentServiceRequest request) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
-        Comment parentComment = checkParentComment(request);
-        checkNestedCommentAllowed(parentComment);
+        Comment parentComment = commentValidator.checkParentComment(request);
+        commentValidator.checkNestedCommentAllowed(parentComment);
         Comment comment = new Comment(request, parentComment, user, voteId);
 
         commentRepository.save(comment);
@@ -70,7 +68,7 @@ public class CommentService {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
-        validateCommentBelongsToUser(comment, user);
+        commentValidator.validateCommentBelongsToUser(comment, user);
         comment.updateContent(request);
     }
 
@@ -80,7 +78,7 @@ public class CommentService {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
-        validateCommentBelongsToUser(comment, user);
+        commentValidator.validateCommentBelongsToUser(comment, user);
         commentRepository.delete(comment);
     }
 
@@ -89,7 +87,7 @@ public class CommentService {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
-        doEmote(emotion, user, comment);
+        commentEmoteManager.doEmote(emotion, user, comment);
     }
 
     @Transactional
@@ -97,7 +95,7 @@ public class CommentService {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
-        validateCommentBelongsToUser(comment, user);
+        commentValidator.validateCommentBelongsToUser(comment, user);
         comment.updateRestaurant(request);
 
     }
@@ -106,11 +104,10 @@ public class CommentService {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
-
         //vote의 지역이 있으면 받아오고 없으면 선택받은 지역
-        List<RestaurantInfoDto> restaurantInfo = getRestaurantInfoList(keyword, areaCode, page);
+        List<RestaurantInfoDto> restaurantInfo = tourApiDataManager.getRestaurantInfoList(keyword, areaCode, page);
 
-        return convertToSearchSnackResponseList(restaurantInfo);
+        return tourApiDataManager.convertToSearchRestaurantDataList(restaurantInfo);
 
     }
 
@@ -118,30 +115,10 @@ public class CommentService {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
-        List<String> detailImages = tourApiService.getDetailImages(contentId);
+        List<String> detailImages = tourApiDataManager.fetchDetailImages(contentId);
 
         return detailImages;
 
-    }
-
-    private void validateCommentBelongsToUser(Comment comment, User user) {
-        if (!commentRepository.existsByIdAndUser(comment.getId(), user)) {
-            throw new CommentNotBelongToUserException();
-        }
-    }
-
-    private Comment checkParentComment(CreateCommentServiceRequest request) {
-        if (request.getParentId() == null) {
-            return null;
-        }
-        return commentRepository.findById(request.getParentId())
-                .orElseThrow(() -> new CommentNotFoundException());
-    }
-
-    private void checkNestedCommentAllowed(Comment parentComment) {
-        if (parentComment != null && parentComment.getParent() != null) {
-            throw new NestedCommentNotAllowedException();
-        }
     }
 
     private List<Comment> findCommentsBySortType(Long voteId, GetCommentServiceRequest request, Pageable pageable) {
@@ -194,64 +171,6 @@ public class CommentService {
         Slice<GetCommentData> slice = new SliceImpl<>(getCommentData, pageable, hasNext);
         return slice;
     }
-
-
-    private void doEmote(Emotion emotion, User user, Comment comment) {
-        Optional<CommentEmotion> byCommentAndUser = commentEmotionRepository.findByCommentAndUser(comment, user);
-
-        byCommentAndUser.ifPresentOrElse(
-                commentEmotion -> {
-                    if (emotion == commentEmotion.getEmotion()) {
-                        //좋아요(싫어요)를 기존에 눌렀는데 또 눌렀을 경우 좋아요(싫어요) 취소
-                        cancelEmotion(commentEmotion, comment);
-                    } else {
-                        //싫어요(좋아요)를 기존에 누른 상태로 좋아요(싫어요)를 누른 경우 싫어요(좋아요) 취소 후 좋아요(싫어요)로 등록
-                        changeEmotion(commentEmotion, emotion, user, comment);
-                    }
-                },
-                // 좋아요(싫어요)가 없을 경우 좋아요(싫어요) 추가
-                () -> addEmotion(emotion, user, comment));
-    }
-
-
-    private void cancelEmotion(CommentEmotion commentEmotion, Comment comment) {
-        commentEmotionRepository.delete(commentEmotion);
-        comment.removeEmotion(commentEmotion);
-        comment.updateLikeHateCount();
-    }
-
-    private void changeEmotion(CommentEmotion existingEmotion, Emotion newEmotion, User user, Comment comment) {
-        commentEmotionRepository.delete(existingEmotion);
-        comment.removeEmotion(existingEmotion);
-        addEmotion(newEmotion, user, comment);
-    }
-
-    private void addEmotion(Emotion emotion, User user, Comment comment) {
-        CommentEmotion newEmotion = new CommentEmotion();
-        newEmotion.setEmote(emotion);
-        newEmotion.mappingComment(comment);
-        newEmotion.mappingUser(user);
-        comment.updateLikeHateCount();
-        commentEmotionRepository.save(newEmotion);
-    }
-
-    private List<RestaurantInfoDto> getRestaurantInfoList(String keyword, int areaCode, int page) {
-        return (keyword != null)
-                ? tourApiService.getRestaurantInfoByKeyWord(keyword, areaCode, page)
-                : tourApiService.getRestaurantInfo(areaCode, page);
-    }
-
-    private List<SearchRestaurantData> convertToSearchSnackResponseList(List<RestaurantInfoDto> restaurantInfo) {
-        return restaurantInfo.stream()
-                .map(restaurant -> new SearchRestaurantData(
-                        restaurant.getContentId(),
-                        restaurant.getTitle(),
-                        restaurant.getFirstImage(),
-                        tourApiService.getTreatMenu(restaurant.getContentId())
-                ))
-                .collect(Collectors.toList());
-    }
-
 
 }
 
