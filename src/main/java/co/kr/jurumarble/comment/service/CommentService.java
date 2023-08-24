@@ -46,7 +46,7 @@ public class CommentService {
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment parentComment = commentValidator.checkParentComment(request);
         commentValidator.checkNestedCommentAllowed(parentComment);
-        Comment comment = new Comment(request, parentComment, user, voteId);
+        Comment comment = request.toComment(parentComment, user, voteId);
 
         commentRepository.save(comment);
 
@@ -69,7 +69,7 @@ public class CommentService {
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
         commentValidator.validateCommentBelongsToUser(comment, user);
-        comment.updateContent(request);
+        comment.updateContent(request.getContent());
     }
 
 

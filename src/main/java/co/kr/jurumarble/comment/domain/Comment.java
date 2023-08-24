@@ -1,8 +1,6 @@
 package co.kr.jurumarble.comment.domain;
 
 import co.kr.jurumarble.comment.enums.Emotion;
-import co.kr.jurumarble.comment.service.request.CreateCommentServiceRequest;
-import co.kr.jurumarble.comment.service.request.UpdateCommentServiceRequest;
 import co.kr.jurumarble.comment.service.request.UpdateRestaurantServiceRequest;
 import co.kr.jurumarble.common.domain.BaseTimeEntity;
 import co.kr.jurumarble.user.domain.User;
@@ -10,6 +8,7 @@ import co.kr.jurumarble.user.enums.AgeType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,6 +20,8 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment extends BaseTimeEntity {
+
+    private static final int INITIAL_COUNT = 0;
 
     @Id
     @GeneratedValue
@@ -49,10 +50,10 @@ public class Comment extends BaseTimeEntity {
     private GenderType gender;
 
     @Column
-    private Integer likeCount;
+    private Integer likeCount = INITIAL_COUNT;
 
     @Column
-    private Integer hateCount;
+    private Integer hateCount = INITIAL_COUNT;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PARENT_ID")
@@ -69,20 +70,17 @@ public class Comment extends BaseTimeEntity {
             @AttributeOverride(name = "restaurantName", column = @Column(name = "restaurant_image")),
             @AttributeOverride(name = "restaurantImage", column = @Column(name = "restaurant_name")),
     })
-    private Restaurant restaurant;
+    private Restaurant restaurant = new Restaurant();
 
-
-    public Comment(CreateCommentServiceRequest request, Comment parent, User user, Long voteId) {
+    @Builder
+    public Comment(User user, Long voteId, String content, AgeType age, MbtiType mbti, GenderType gender,Comment parent) {
         this.user = user;
         this.voteId = voteId;
-        this.content = request.getContent();
-        this.age = user.classifyAge(user.getAge());
-        this.mbti = user.getMbti();
-        this.gender = user.getGender();
+        this.content = content;
+        this.age = age;
+        this.mbti = mbti;
+        this.gender = gender;
         this.parent = parent;
-        this.likeCount = 0;
-        this.hateCount = 0;
-        this.restaurant = new Restaurant();
     }
 
     public void updateParent(Comment parent) {
@@ -103,8 +101,8 @@ public class Comment extends BaseTimeEntity {
                 .count();
     }
 
-    public void updateContent(UpdateCommentServiceRequest updateCommentRequest) {
-        this.content = updateCommentRequest.getContent();
+    public void updateContent(String content) {
+        this.content = content;
     }
 
     public void removeEmotion(CommentEmotion commentEmotion) {
