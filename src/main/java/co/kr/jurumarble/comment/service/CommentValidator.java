@@ -6,7 +6,9 @@ import co.kr.jurumarble.comment.service.request.CreateCommentServiceRequest;
 import co.kr.jurumarble.exception.comment.CommentNotBelongToUserException;
 import co.kr.jurumarble.exception.comment.CommentNotFoundException;
 import co.kr.jurumarble.exception.comment.NestedCommentNotAllowedException;
+import co.kr.jurumarble.exception.comment.ParentCommentNotBelongToVoteException;
 import co.kr.jurumarble.user.domain.User;
+import co.kr.jurumarble.vote.domain.Vote;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +23,13 @@ public class CommentValidator {
             throw new CommentNotBelongToUserException();
         }
     }
+
+    public void validateParentCommentBelongsToVote(Comment parent, Vote vote) {
+        if (parent != null && !commentRepository.existsByIdAndVoteId(parent.getId(), vote.getId())) {
+            throw new ParentCommentNotBelongToVoteException();
+        }
+    }
+
 
     public Comment checkParentComment(CreateCommentServiceRequest request) {
         if (request.getParentId() == null) {

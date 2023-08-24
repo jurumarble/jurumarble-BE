@@ -46,6 +46,7 @@ public class CommentService {
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment parentComment = commentValidator.checkParentComment(request);
         commentValidator.checkNestedCommentAllowed(parentComment);
+        commentValidator.validateParentCommentBelongsToVote(parentComment, vote);
         Comment comment = request.toComment(parentComment, user, voteId);
 
         commentRepository.save(comment);

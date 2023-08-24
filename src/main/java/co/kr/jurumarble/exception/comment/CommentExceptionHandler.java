@@ -48,4 +48,10 @@ public class CommentExceptionHandler {
         return ResponseEntity.status(e.getStatus().getStatusCode())
                 .body(ExceptionMessage.of(e.getStatus(), e.getMessage()));
     }
+
+    @ExceptionHandler(ParentCommentNotBelongToVoteException.class)
+    public ResponseEntity<ExceptionMessage> handle(ParentCommentNotBelongToVoteException e) {
+        return ResponseEntity.status(e.getStatus().getStatusCode())
+                .body(ExceptionMessage.of(e.getStatus(), e.getMessage()));
+    }
 }

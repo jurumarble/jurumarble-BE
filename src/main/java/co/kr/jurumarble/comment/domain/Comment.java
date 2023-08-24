@@ -62,7 +62,7 @@ public class Comment extends BaseTimeEntity {
     @OneToMany(mappedBy = "parent", orphanRemoval = true)
     private List<Comment> children = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "comment")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "comment", cascade = CascadeType.REMOVE)
     private List<CommentEmotion> commentEmotionList = new ArrayList<>();
 
     @Embedded
