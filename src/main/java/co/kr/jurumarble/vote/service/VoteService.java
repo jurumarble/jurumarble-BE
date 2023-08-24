@@ -99,26 +99,21 @@ public class VoteService {
     }
 
     public Slice<NormalVoteData> getVoteList(String keyword, SortByType sortBy, Integer page, Integer size) {
-
-        return getVoteListData(keyword, sortBy, page, size);
-    }
-
-    private Slice<NormalVoteData> getVoteListData(String keyword, SortByType sortBy, Integer page, Integer size) {
-        Slice<NormalVoteData> voteListData;
         if (sortBy.equals(SortByType.ByTime)) {
             PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
-            voteListData = getVoteSortByTime(keyword, pageRequest);
-        } else if (sortBy.equals(SortByType.ByPopularity)) {
-            PageRequest pageRequest = PageRequest.of(page, size);
-            voteListData = getVoteByPopularity(keyword, pageRequest);
-        } else {
-            throw new VoteSortByNotFountException();
+            return getVoteSortByTime(keyword, pageRequest);
         }
-        return voteListData;
+
+        if (sortBy.equals(SortByType.ByPopularity)) {
+            PageRequest pageRequest = PageRequest.of(page, size);
+            return getVoteByPopularity(keyword, pageRequest);
+        }
+
+            throw new VoteSortByNotFountException();
     }
 
     private Slice<NormalVoteData> getVoteSortByTime(String keyword, PageRequest pageRequest) {
-        return voteRepository.findNormalVoteDataWithTime(keyword,pageRequest);
+        return voteRepository.findNormalVoteDataWithTime(keyword, pageRequest);
     }
 
     private Slice<NormalVoteData> getVoteByPopularity(String keyword, PageRequest pageRequest) {
