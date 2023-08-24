@@ -16,15 +16,15 @@ public class DoVoteRequest {
     @NotBlank(message = "선택 사항을 필수 입니다.")
     private ChoiceType choice;
 
+    public DoVoteRequest(ChoiceType choice) {
+        this.choice = choice;
+    }
+
     public DoVoteInfo toService(Long userId, Long voteId) {
         return DoVoteInfo.builder()
                 .userId(userId)
                 .voteId(voteId)
                 .choice(choice)
                 .build();
-    }
-
-    public DoVoteRequest(ChoiceType choice) {
-        this.choice = choice;
     }
 }

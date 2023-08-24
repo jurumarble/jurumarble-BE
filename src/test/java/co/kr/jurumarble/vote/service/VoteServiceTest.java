@@ -1,5 +1,9 @@
 package co.kr.jurumarble.vote.service;
 
+import co.kr.jurumarble.drink.domain.DrinkFinder;
+import co.kr.jurumarble.drink.domain.dto.DrinkIdsUsedForVote;
+import co.kr.jurumarble.drink.domain.dto.DrinksUsedForVote;
+import co.kr.jurumarble.drink.domain.entity.Drink;
 import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.user.repository.UserRepository;
 import co.kr.jurumarble.vote.domain.Vote;
@@ -21,6 +25,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -39,6 +44,9 @@ class VoteServiceTest {
     private BookmarkRepository bookmarkRepository;
     @Mock
     private VoteGenerator voteGenerator;
+
+    @Mock
+    private DrinkFinder drinkFinder;
 
     @DisplayName("일반 투표를 생성한다.")
     @Test
@@ -77,22 +85,34 @@ class VoteServiceTest {
     void createDrinkVote() {
         // given
         Long userId = 1L;
+        Long drinkAId = 1L;
+        Long drinkBId = 2L;
 
         User user = User.builder()
                 .build();
 
         CreateDrinkVoteServiceRequest request = CreateDrinkVoteServiceRequest.builder()
                 .title("투표 제목")
-                .drinkIdA(1L)
-                .drinkIdB(2L)
+                .drinkAId(drinkAId)
+                .drinkBId(drinkBId)
                 .voteType(VoteType.DRINK)
                 .build();
-        VoteDrinkContent voteDrinkContent = request.toVoteDrinkContent();
 
-        Vote vote = request.toVote(userId);
+        Drink drinkA = Drink.builder()
+                .id(drinkAId)
+                .build();
+        Drink drinkB = Drink.builder()
+                .id(drinkBId)
+                .build();
 
+        DrinksUsedForVote drinksUsedForVote = new DrinksUsedForVote(drinkA, drinkB);
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(drinkFinder.findDrinksUsedForVote(any(DrinkIdsUsedForVote.class)))
+                .thenReturn(drinksUsedForVote);
+
+        VoteDrinkContent voteDrinkContent = VoteDrinkContent.createFromDrinks(drinksUsedForVote);
+        Vote vote = request.toVote(userId);
 
         // when
         voteService.createDrinkVote(request, userId);

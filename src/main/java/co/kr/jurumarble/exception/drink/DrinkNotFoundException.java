@@ -5,9 +5,8 @@ import co.kr.jurumarble.exception.common.CustomException;
 
 public class DrinkNotFoundException extends CustomException {
 
-    private final StatusEnum status;
-
     private static final String message = "전통주 아이디와 일치하는 술이 없습니다. 아이디를 다시 한번 확인하세요.";
+    private final StatusEnum status;
 
     public DrinkNotFoundException() {
         super(message);

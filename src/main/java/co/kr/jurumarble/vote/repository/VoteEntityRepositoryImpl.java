@@ -12,7 +12,6 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Repository;
 
@@ -29,7 +28,6 @@ import static co.kr.jurumarble.user.domain.QUser.user;
 
 
 @Repository
-@Slf4j
 public class VoteEntityRepositoryImpl implements VoteEntityRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
@@ -37,7 +35,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
     public VoteEntityRepositoryImpl(EntityManager entityManager) {
         this.jpaQueryFactory = new JPAQueryFactory(entityManager);
     }
-  
+
     @Override
     public Slice<NormalVoteData> findNormalVoteDataWithPopularity(String keyword, Pageable pageable) {
 
@@ -110,36 +108,27 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                             .imageB(voteContent.getImageB())
                             .titleA(voteContent.getTitleA())
                             .titleB(voteContent.getTitleB())
-                            .votedCount(findVoteTuple.get(1,Long.class))
+                            .votedCount(findVoteTuple.get(1, Long.class))
                             .build();
                 }).collect(Collectors.toList());
     }
 
-    private long getVoteTotalCount() {
-        return jpaQueryFactory
-                .from(vote)
-                .innerJoin(voteResult).on(vote.id.eq(voteResult.voteId))
-                .groupBy(vote.id)
-                .fetchCount();
-    }
-
-
     @Override
     public Optional<NormalVoteData> findNormalVoteDataByVoteId(Long voteId) {
         NormalVoteData normalVoteData = jpaQueryFactory.select(
-                Projections.bean(NormalVoteData.class,
-                        vote.id,
-                        vote.postedUserId,
-                        vote.title,
-                        vote.detail,
-                        vote.filteredGender,
-                        vote.filteredAge,
-                        vote.filteredMbti,
-                        voteContent.imageA,
-                        voteContent.imageB,
-                        voteContent.titleA,
-                        voteContent.titleB
-                ))
+                        Projections.bean(NormalVoteData.class,
+                                vote.id,
+                                vote.postedUserId,
+                                vote.title,
+                                vote.detail,
+                                vote.filteredGender,
+                                vote.filteredAge,
+                                vote.filteredMbti,
+                                voteContent.imageA,
+                                voteContent.imageB,
+                                voteContent.titleA,
+                                voteContent.titleB
+                        ))
                 .from(vote)
                 .innerJoin(voteContent)
                 .on(vote.id.eq(voteContent.voteId))
@@ -197,8 +186,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
     @Override
     public List<Vote> findByTitleContains(String keyword) {
         return jpaQueryFactory
-                .select(vote)
-                .from(vote)
+                .selectFrom(vote)
                 .innerJoin(voteContent)
                 .on(vote.id.eq(voteContent.voteId))
                 .innerJoin(voteResult)
@@ -206,7 +194,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .where(vote.title.like(keyword + "%"))
                 .groupBy(vote.id)
                 .orderBy(voteResult.id.count().desc())
-                .limit(5) // 최대 5개까지 제한
+                .limit(5)
                 .fetch();
     }
 

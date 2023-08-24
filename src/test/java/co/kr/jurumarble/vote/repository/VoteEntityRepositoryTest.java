@@ -44,7 +44,7 @@ class VoteEntityRepositoryTest {
         PageRequest of = PageRequest.of(0, 10);
 
         // when
-        Slice<NormalVoteData> actual = voteEntityRepository.findNormalVoteDataWithPopularity(null,of);
+        Slice<NormalVoteData> actual = voteEntityRepository.findNormalVoteDataWithPopularity(null, of);
 
         // then
         assertThat(actual).hasSize(10)
@@ -70,7 +70,7 @@ class VoteEntityRepositoryTest {
         PageRequest of = PageRequest.of(0, 10);
 
         // when
-        Slice<NormalVoteData> actual = voteEntityRepository.findNormalVoteDataWithPopularity(null,of);
+        Slice<NormalVoteData> actual = voteEntityRepository.findNormalVoteDataWithPopularity(null, of);
 
         // then
         assertThat(actual).hasSize(10)
@@ -119,7 +119,7 @@ class VoteEntityRepositoryTest {
         PageRequest of = PageRequest.of(0, 7);
 
         // when
-        Slice<NormalVoteData> actual = voteEntityRepository.findNormalVoteDataWithTime(null,of);
+        Slice<NormalVoteData> actual = voteEntityRepository.findNormalVoteDataWithTime(null, of);
 
         // then
         assertThat(actual).hasSize(7)
@@ -133,8 +133,6 @@ class VoteEntityRepositoryTest {
                         tuple("테스트 투표 5", "I1"),
                         tuple("테스트 투표 4", "G1")
                 );
-
-
     }
 
 }

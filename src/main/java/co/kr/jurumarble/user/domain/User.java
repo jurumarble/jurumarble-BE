@@ -1,7 +1,6 @@
 package co.kr.jurumarble.user.domain;
 
 import co.kr.jurumarble.common.domain.BaseTimeEntity;
-import co.kr.jurumarble.exception.StatusEnum;
 import co.kr.jurumarble.exception.user.AlreadyDeletedUserException;
 import co.kr.jurumarble.user.dto.AddUserInfo;
 import co.kr.jurumarble.user.enums.AgeType;
@@ -60,13 +59,28 @@ public class User extends BaseTimeEntity {
     private LocalDateTime deletedDate;
 
 
+    @Builder
+    private User(Long id, String nickname, String email, String imageUrl, String password, ProviderType providerType, String providerId, Integer age, GenderType gender, MbtiType mbti, LocalDateTime modifiedMbtiDate) {
+        validIsUserDeleted();
+        this.id = id;
+        this.nickname = nickname;
+        this.email = email;
+        this.imageUrl = imageUrl;
+        this.password = password;
+        this.providerType = providerType;
+        this.providerId = providerId;
+        this.age = age;
+        this.gender = gender;
+        this.mbti = mbti;
+        this.modifiedMbtiDate = modifiedMbtiDate;
+    }
 
-    public AgeType classifyAge(){
+    public AgeType classifyAge() {
         if (age == null) {
             return AgeType.NULL; // 혹은 원하는 다른 동작 수행
         }
         AgeType ageGroup;
-        switch (age/10){
+        switch (age / 10) {
             case 1:
                 ageGroup = AgeType.teenager;
                 break;
@@ -93,22 +107,6 @@ public class User extends BaseTimeEntity {
         this.mbti = addUserInfo.getMbti();
         this.age = addUserInfo.getAge();
         this.gender = addUserInfo.getGender();
-    }
-
-    @Builder
-    private User(Long id, String nickname, String email, String imageUrl, String password, ProviderType providerType, String providerId, Integer age, GenderType gender, MbtiType mbti, LocalDateTime modifiedMbtiDate) {
-        validIsUserDeleted();
-        this.id = id;
-        this.nickname = nickname;
-        this.email = email;
-        this.imageUrl = imageUrl;
-        this.password = password;
-        this.providerType = providerType;
-        this.providerId = providerId;
-        this.age = age;
-        this.gender = gender;
-        this.mbti = mbti;
-        this.modifiedMbtiDate = modifiedMbtiDate;
     }
 
 //    public void mappingBookmark(Bookmark bookmark) {

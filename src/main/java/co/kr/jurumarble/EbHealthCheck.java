@@ -19,6 +19,7 @@ public class EbHealthCheck {
     public RedirectView redirectToSwagger() {
         return new RedirectView(swaggerUrl);
     }
+
     @GetMapping("/api/swagger-check3")
     public String swagger() {
         return "<h1>되는지 확인용</h1>";

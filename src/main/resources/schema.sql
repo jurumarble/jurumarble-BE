@@ -5,6 +5,8 @@ DROP TABLE if EXISTS vote_result;
 DROP TABLE if EXISTS drink;
 DROP TABLE if EXISTS vote_drink_content;
 DROP TABLE if EXISTS bookmark;
+DROP TABLE if EXISTS enjoy_drink;
+
 
 CREATE TABLE vote
 (
@@ -64,10 +66,14 @@ CREATE TABLE vote_result
 
 CREATE TABLE vote_drink_content
 (
-    id      BIGINT NOT NULL AUTO_INCREMENT,
-    vote_id BIGINT NOT NULL,
-    drink_id_a BIGINT NOT NULL,
-    drink_id_b BIGINT NOT NULL,
+    id           BIGINT NOT NULL AUTO_INCREMENT,
+    vote_id      BIGINT NOT NULL,
+    drink_a_id   BIGINT NOT NULL,
+    drink_b_id   BIGINT NOT NULL,
+    drink_a_name VARCHAR(30) DEFAULT NULL,
+    drink_a_type VARCHAR(10) DEFAULT NULL,
+    drink_b_name VARCHAR(30) DEFAULT NULL,
+    drink_b_type VARCHAR(10) DEFAULT NULL,
     PRIMARY KEY (id)
 );
 
@@ -91,5 +97,15 @@ CREATE TABLE bookmark
     id            BIGINT NOT NULL AUTO_INCREMENT,
     user_id       BIGINT NOT NULL,
     vote_id       BIGINT NOT NULL,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE enjoy_drink
+(
+    id            BIGINT NOT NULL AUTO_INCREMENT,
+    user_id       BIGINT NOT NULL,
+    drink_id      BIGINT NOT NULL,
+    created_date  TIMESTAMP DEFAULT NULL,
+    modified_date TIMESTAMP DEFAULT NULL,
     PRIMARY KEY (id)
 );

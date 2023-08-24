@@ -13,7 +13,7 @@ import java.util.Objects;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Table(name = "vote_content")
-public class VoteContent{
+public class VoteContent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
