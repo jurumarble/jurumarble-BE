@@ -69,6 +69,24 @@ feign:
     max-connections: 2000
     max-connections-per-route: 500
 
+## tourApi 환경변수 설정
+tour:
+  api:
+    url: http://apis.data.go.kr/B551011/KorService1/
+    servicekey: ${tour.api.servicekey}
+    mobile:
+      os: ETC
+      app: jurumarble
+    response:
+      type: json
+    image-yn: Y
+    content-type-id: 39
+    subimage-yn: Y
+    num-of-rows: 10
+    list-yn: Y
+    arrange: O
+    cat1: A05
+    cat2: A0502
 
 
 logging:
@@ -91,22 +109,3 @@ springdoc:
   default-produces-media-type: application/json
 
 swagger.url: ${swagger.url}
-
-## tourApi 환경변수 설정
-tour:
-  api:
-    url: http://apis.data.go.kr/B551011/KorService1/
-    servicekey: ${tour.api.servicekey}
-    mobile:
-      os: ETC
-      app: jurumarble
-    response:
-      type: json
-    image-yn: Y
-    content-type-id: 39
-    subimage-yn: Y
-    num-of-rows: 10
-    list-yn: Y
-    arrange: O
-    cat1: A05
-    cat2: A0502
