@@ -40,14 +40,37 @@ public class DrinkEntityRepositoryImpl implements DrinkEntityRepository {
                                 drink.name,
                                 drink.manufactureAddress,
                                 drink.image,
-                                drink.id.count().as("enjoyedCount"),
-                                enjoyDrink.createdDate.max().as("enjoyedDate")
+                                drink.id.count().as("enjoyedCount")
                         ))
                 .from(drink)
                 .leftJoin(enjoyDrink)
                 .on(drink.id.eq(enjoyDrink.drinkId))
                 .groupBy(drink.id)
                 .where(enjoyDrink.createdDate.goe(aWeekAgoTime).and(enjoyDrink.createdDate.loe(descendingHourTime)))
+                .orderBy(drink.id.count().desc(), drink.name.asc())
+                .offset(pageNo * pageSize)
+                .limit(pageSize)
+                .fetch();
+    }
+
+    @Override
+    public List<HotDrinkData> findDrinksByPopular(Pageable pageable) {
+
+        int pageNo = pageable.getPageNumber();
+        int pageSize = pageable.getPageSize();
+
+        return jpaQueryFactory.select(
+                        Projections.bean(HotDrinkData.class,
+                                drink.id.as("drinkId"),
+                                drink.name,
+                                drink.manufactureAddress,
+                                drink.image,
+                                drink.id.count().as("enjoyedCount")
+                        ))
+                .from(drink)
+                .leftJoin(enjoyDrink)
+                .on(drink.id.eq(enjoyDrink.drinkId))
+                .groupBy(drink.id)
                 .orderBy(drink.id.count().desc(), drink.name.asc())
                 .offset(pageNo * pageSize)
                 .limit(pageSize)

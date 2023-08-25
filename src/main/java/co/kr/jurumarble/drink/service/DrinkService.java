@@ -47,9 +47,15 @@ public class DrinkService {
 
     public List<GetHotDrinksResponse> getHotDrinks() {
         PageRequest pageRequest = PageRequest.of(FIXED_INDEX_OF_GETTING_HOT_DRINKS, NUMBER_OF_HOT_DRINK);
-        List<HotDrinkData> hotDrinks = drinkRepository.getHotDrinks(pageRequest, LocalDateTime.now());
-        return getGetHotDrinksResponses(hotDrinks);
+        List<HotDrinkData> hotDrinkData = drinkRepository.getHotDrinks(pageRequest, LocalDateTime.now());
+//        makeHotDrinkDataHasTenData(hotDrinkData);
+        return getGetHotDrinksResponses(hotDrinkData);
     }
+//    private List<HotDrinkData> makeHotDrinkDataHasTenData(List<HotDrinkData> hotDrinkData) {
+//        if (hotDrinkData.size() < NUMBER_OF_HOT_DRINK) {
+////            drinkRepository.
+//        }
+//    }
 
     private List<GetHotDrinksResponse> getGetHotDrinksResponses(List<HotDrinkData> hotDrinks) {
         return hotDrinks.stream()
@@ -57,7 +63,4 @@ public class DrinkService {
                 .collect(Collectors.toList());
     }
 
-//    private List<HotDrinkData> makeHotDrinkDataHasTenData() {
-//
-//    }
 }

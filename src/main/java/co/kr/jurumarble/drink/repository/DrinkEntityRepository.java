@@ -12,4 +12,6 @@ import java.util.List;
 public interface DrinkEntityRepository {
 
     List<HotDrinkData> getHotDrinks(Pageable pageable, LocalDateTime nowTime);
+
+    List<HotDrinkData> findDrinksByPopular(Pageable pageable);
 }
