@@ -10,7 +10,7 @@ import org.springframework.web.servlet.view.RedirectView;
 @RestController
 @RequiredArgsConstructor
 @Controller
-public class EbHealthCheck {
+public class    EbHealthCheck {
 
     @Value("${swagger.url}")
     private String swaggerUrl;

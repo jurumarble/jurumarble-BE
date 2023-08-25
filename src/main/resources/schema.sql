@@ -5,6 +5,8 @@ DROP TABLE if EXISTS vote_result;
 DROP TABLE if EXISTS drink;
 DROP TABLE if EXISTS vote_drink_content;
 DROP TABLE if EXISTS enjoy_drink;
+DROP TABLE if EXISTS comment_emotion;
+DROP TABLE if EXISTS comment;
 
 CREATE TABLE vote
 (
@@ -99,5 +101,37 @@ CREATE TABLE enjoy_drink
     created_date  TIMESTAMP DEFAULT NULL,
     modified_date TIMESTAMP DEFAULT NULL,
     PRIMARY KEY (id)
+);
+
+CREATE TABLE comment
+(
+    id               BIGINT       NOT NULL AUTO_INCREMENT,
+    user_id          BIGINT       NOT NULL,
+    vote_id          BIGINT       NOT NULL,
+    content          VARCHAR(255) NOT NULL,
+    age              VARCHAR(255) DEFAULT NULL,
+    mbti             VARCHAR(4)   DEFAULT NULL,
+    gender           VARCHAR(6)   DEFAULT NULL,
+    like_count       INTEGER      DEFAULT NULL,
+    hate_count       INTEGER      DEFAULT NULL,
+    parent_id        BIGINT       DEFAULT NULL,
+    restaurant_image VARCHAR(255) DEFAULT NULL,
+    restaurant_name  VARCHAR(255) DEFAULT NULL,
+    created_date     TIMESTAMP,
+    modified_date    TIMESTAMP,
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (parent_id) REFERENCES comment (id)
+);
+
+CREATE TABLE comment_emotion
+(
+    id         BIGINT      NOT NULL AUTO_INCREMENT,
+    user_id    BIGINT      NOT NULL,
+    comment_id BIGINT      NOT NULL,
+    emotion    VARCHAR(20) NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (comment_id) REFERENCES comment (id)
 );
 
