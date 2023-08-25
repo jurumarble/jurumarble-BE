@@ -6,6 +6,7 @@ import co.kr.jurumarble.drink.controller.response.GetHotDrinksResponse;
 import co.kr.jurumarble.drink.service.DrinkService;
 import co.kr.jurumarble.drink.service.response.GetDrinkServiceResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/drinks")
+@Tag(name = "drink", description = "drink api")
 public class DrinkController {
 
     private final DrinkService drinkService;
