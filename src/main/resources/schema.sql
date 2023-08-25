@@ -90,6 +90,8 @@ CREATE TABLE drink
     region              VARCHAR(10)  DEFAULT NULL,
     price               VARCHAR(50)      DEFAULT NULL,
     image               VARCHAR(255) DEFAULT NULL,
+    latitude            DECIMAL(9, 6) DEFAULT NULL,
+    longitude           DECIMAL(9, 6) DEFAULT,
     PRIMARY KEY (id)
 );
 
