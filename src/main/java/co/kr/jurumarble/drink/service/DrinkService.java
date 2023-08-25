@@ -27,10 +27,12 @@ import java.util.stream.Collectors;
 public class DrinkService {
 
     private static final int FIXED_INDEX_OF_GETTING_HOT_DRINKS = 0;
+    private static final int NUMBER_OF_HOT_DRINK = 10;
 
     private final DrinkRepository drinkRepository;
     private final EnjoyDrinkRepository enjoyDrinkRepository;
     private final EnjoyDrinkValidator enjoyDrinkValidator;
+
 
     public GetDrinkServiceResponse getDrinkData(Long drinkId) {
         Drink drink = drinkRepository.findById(drinkId).orElseThrow(DrinkNotFoundException::new);
@@ -43,15 +45,19 @@ public class DrinkService {
         enjoyDrinkRepository.save(enjoyDrink);
     }
 
-    public Slice<GetHotDrinksResponse> getHotDrinks(int size) {
-        PageRequest pageRequest = PageRequest.of(FIXED_INDEX_OF_GETTING_HOT_DRINKS, size);
-        Slice<HotDrinkData> hotDrinks = drinkRepository.getHotDrinks(pageRequest, LocalDateTime.now());
-        return new SliceImpl<>(getGetHotDrinksResponses(hotDrinks), hotDrinks.getPageable(), hotDrinks.hasNext());
+    public List<GetHotDrinksResponse> getHotDrinks() {
+        PageRequest pageRequest = PageRequest.of(FIXED_INDEX_OF_GETTING_HOT_DRINKS, NUMBER_OF_HOT_DRINK);
+        List<HotDrinkData> hotDrinks = drinkRepository.getHotDrinks(pageRequest, LocalDateTime.now());
+        return getGetHotDrinksResponses(hotDrinks);
     }
 
-    private List<GetHotDrinksResponse> getGetHotDrinksResponses(Slice<HotDrinkData> hotDrinks) {
+    private List<GetHotDrinksResponse> getGetHotDrinksResponses(List<HotDrinkData> hotDrinks) {
         return hotDrinks.stream()
                 .map(HotDrinkData::toHotDrinksResponse)
                 .collect(Collectors.toList());
     }
+
+//    private List<HotDrinkData> makeHotDrinkDataHasTenData() {
+//
+//    }
 }

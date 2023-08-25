@@ -14,6 +14,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
@@ -41,7 +42,7 @@ class DrinkEntityRepositoryImplTest {
         LocalDateTime testTime = LocalDateTime.of(2023, 8, 10, 7, 15);
 
         // when
-        Slice<HotDrinkData> hotDrinks = drinkEntityRepository.getHotDrinks(of, testTime);
+        List<HotDrinkData> hotDrinks = drinkEntityRepository.getHotDrinks(of, testTime);
 
         // then
         assertThat(hotDrinks).hasSize(3)
@@ -61,7 +62,7 @@ class DrinkEntityRepositoryImplTest {
         LocalDateTime testTime = LocalDateTime.of(2023, 8, 3, 7, 15);
 
         // when
-        Slice<HotDrinkData> hotDrinks = drinkEntityRepository.getHotDrinks(of, testTime);
+        List<HotDrinkData> hotDrinks = drinkEntityRepository.getHotDrinks(of, testTime);
 
         // then
         assertThat(hotDrinks).hasSize(3)
@@ -81,7 +82,7 @@ class DrinkEntityRepositoryImplTest {
         LocalDateTime testTime = LocalDateTime.of(2023, 9, 20, 7, 15);
 
         // when
-        Slice<HotDrinkData> hotDrinks = drinkEntityRepository.getHotDrinks(of, testTime);
+        List<HotDrinkData> hotDrinks = drinkEntityRepository.getHotDrinks(of, testTime);
 
         // then
         assertThat(hotDrinks).hasSize(0);

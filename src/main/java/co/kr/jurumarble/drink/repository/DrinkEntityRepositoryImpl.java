@@ -4,8 +4,6 @@ import co.kr.jurumarble.drink.repository.dto.HotDrinkData;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -29,14 +27,14 @@ public class DrinkEntityRepositoryImpl implements DrinkEntityRepository {
      * 지금 시간 기준으로 부터 7일간 즐겼어요가 많은 순으로 전통주 조회
      */
     @Override
-    public Slice<HotDrinkData> getHotDrinks(Pageable pageable, LocalDateTime nowTime) {
+    public List<HotDrinkData> getHotDrinks(Pageable pageable, LocalDateTime nowTime) {
         int pageNo = pageable.getPageNumber();
         int pageSize = pageable.getPageSize();
 
         LocalDateTime descendingHourTime = nowTime.withMinute(0);
         LocalDateTime aWeekAgoTime = descendingHourTime.minus(7, ChronoUnit.DAYS);
 
-        List<HotDrinkData> hotDrinkDataList = jpaQueryFactory.select(
+        return jpaQueryFactory.select(
                         Projections.bean(HotDrinkData.class,
                                 drink.id.as("drinkId"),
                                 drink.name,
@@ -54,13 +52,5 @@ public class DrinkEntityRepositoryImpl implements DrinkEntityRepository {
                 .offset(pageNo * pageSize)
                 .limit(pageSize)
                 .fetch();
-
-        boolean hasNext = false;
-        if (hotDrinkDataList.size() > pageSize) {
-            hasNext = true;
-            hotDrinkDataList = hotDrinkDataList.subList(0, pageSize);
-        }
-
-        return new SliceImpl<>(hotDrinkDataList, pageable, hasNext);
     }
 }
