@@ -151,7 +151,7 @@ INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, c
 VALUES ('고운달 오크', '일반증류주', '농업회사법인(주)제이엘', '52%', '오미자(문경산)', '500ml / 200ml', '경북 문경시 문경읍 새재로 609', '경북', '360,000(500ml), ￦180,000(200ml)',
         'https://shopping-phinf.pstatic.net/main_3405663/34056638628.jpg', '36.736133308451798', '128.09134747187099');
 INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, region,
-                   price, image, latitude, longitude)ㅋ
+                   price, image, latitude, longitude)
 VALUES ('황금보리소주25', '증류식소주', '황금보리(유)농업회사법인', '25%', '보리, 누룩, 정제수', '375ml', '충남 홍성군 서부면 서부로 696', '충남', '42,500(375ml*5병)',
     'https://shopping-phinf.pstatic.net/main_3306300/33063009619.20220621163903.jpg', '36.593712808577799', '126.511906219501');
 INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, region,
@@ -240,7 +240,7 @@ VALUES ('한산소곡주', '살균약주', '한산소곡주', '18%', '찹쌀, �
         'https://shopping-phinf.pstatic.net/main_1195683/11956838281.20180327164858.jpg', '36.0800411361503', '126.80234354141');
 INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, region,
                    price, image, latitude, longitude)
- ('옛날 막걸리 古', '탁주', '국순당', '7.8%', '배정제수, 쌀(국산), 국(밀), 과당, 효모 / 에탄올 함량 : 7.8%', '750ml', '강원도 횡성군 둔내면 강변로 975', '강원', '2700',
+VALUES ('옛날 막걸리 古', '탁주', '국순당', '7.8%', '배정제수, 쌀(국산), 국(밀), 과당, 효모 / 에탄올 함량 : 7.8%', '750ml', '강원도 횡성군 둔내면 강변로 975', '강원', '2700',
      'https://shopping-phinf.pstatic.net/main_8639598/86395989854.1.jpg', '37.488285940926602', '128.19734659608801');
 INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, region,
                    price, image, latitude, longitude)
