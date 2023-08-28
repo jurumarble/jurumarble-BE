@@ -88,10 +88,10 @@ CREATE TABLE drink
     capacity            VARCHAR(50)  DEFAULT NULL,
     manufacture_address VARCHAR(255) DEFAULT NULL,
     region              VARCHAR(10)  DEFAULT NULL,
-    price               VARCHAR(50)      DEFAULT NULL,
+    price               VARCHAR(50)  DEFAULT NULL,
     image               VARCHAR(255) DEFAULT NULL,
-    latitude            DECIMAL(9, 6) DEFAULT NULL,
-    longitude           DECIMAL(9, 6) DEFAULT,
+    latitude            DECIMAL(18, 15) DEFAULT NULL,
+    longitude           DECIMAL(18, 15) DEFAULT NULL,
     PRIMARY KEY (id)
 );
 
