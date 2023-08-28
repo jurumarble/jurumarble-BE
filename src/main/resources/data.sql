@@ -589,7 +589,7 @@ VALUES ('양촌 우렁이쌀 손 막걸리', '탁주', '양촌양조', '7.5%', '
 INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, region,
                    price, image, latitude, longitude)
 VALUES ('진도홍주 루비콘', '리큐르', '대대로영농조합법인', '40%', '쌀, 누룩, 지초, 정제수', '375ml', '전남 진도군 군내면 명량대첩로288-23', '전남', '10,000',
-        'https://shopping-phinf.pstatic.net/main_3536976/35369769142.jpg', '34.5524630981744', '126.303581332932', );
+        'https://shopping-phinf.pstatic.net/main_3536976/35369769142.jpg', '34.5524630981744', '126.303581332932');
 INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, region,
                    price, image, latitude, longitude)
 VALUES ('무주 구천동 머루와인', '과실주', '덕유양조', '12%', '국내산 산머루', '750ml', '전북 무주군 안성면 장무로 1375-7', '전북', '25,000',
