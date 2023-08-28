@@ -1,6 +1,5 @@
 package co.kr.jurumarble.vote.repository;
 
-import co.kr.jurumarble.user.enums.AgeType;
 import co.kr.jurumarble.user.enums.ChoiceType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;

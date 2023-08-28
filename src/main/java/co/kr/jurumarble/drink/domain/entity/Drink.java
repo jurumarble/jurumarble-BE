@@ -35,12 +35,15 @@ public class Drink {
     @Column(name = "manufacture_address")
     private String manufactureAddress;
 
+    private String region;
+
     private int price;
 
     private String image;
 
+
     @Builder
-    public Drink(Long id, String name, String type, String productName, String alcoholicBeverage, String rawMaterial, int capacity, String manufactureAddress, int price, String image) {
+    public Drink(Long id, String name, String type, String productName, String alcoholicBeverage, String rawMaterial, int capacity, String manufactureAddress, String region, int price, String image) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -49,9 +52,12 @@ public class Drink {
         this.rawMaterial = rawMaterial;
         this.capacity = capacity;
         this.manufactureAddress = manufactureAddress;
+        this.region = region;
         this.price = price;
         this.image = image;
     }
+
+
 
     @Override
     public boolean equals(Object o) {

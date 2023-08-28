@@ -1,6 +1,5 @@
 package co.kr.jurumarble.vote.repository;
 
-import co.kr.jurumarble.user.enums.AgeType;
 import co.kr.jurumarble.user.enums.ChoiceType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
@@ -12,7 +11,9 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -21,10 +22,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static co.kr.jurumarble.user.domain.QUser.user;
 import static co.kr.jurumarble.vote.domain.QVote.vote;
 import static co.kr.jurumarble.vote.domain.QVoteContent.voteContent;
 import static co.kr.jurumarble.vote.domain.QVoteResult.voteResult;
-import static co.kr.jurumarble.user.domain.QUser.user;
 
 
 @Repository
@@ -113,15 +114,6 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 }).collect(Collectors.toList());
     }
 
-    private long getVoteTotalCount() {
-        return jpaQueryFactory
-                .from(vote)
-                .innerJoin(voteResult).on(vote.id.eq(voteResult.voteId))
-                .groupBy(vote.id)
-                .fetchCount();
-    }
-
-
     @Override
     public Optional<NormalVoteData> findNormalVoteDataByVoteId(Long voteId) {
         NormalVoteData normalVoteData = jpaQueryFactory.select(
@@ -195,8 +187,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
     @Override
     public List<Vote> findByTitleContains(String keyword) {
         return jpaQueryFactory
-                .select(vote)
-                .from(vote)
+                .selectFrom(vote)
                 .innerJoin(voteContent)
                 .on(vote.id.eq(voteContent.voteId))
                 .innerJoin(voteResult)
@@ -204,7 +195,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .where(vote.title.like(keyword + "%"))
                 .groupBy(vote.id)
                 .orderBy(voteResult.id.count().desc())
-                .limit(5) // 최대 5개까지 제한
+                .limit(5)
                 .fetch();
     }
 

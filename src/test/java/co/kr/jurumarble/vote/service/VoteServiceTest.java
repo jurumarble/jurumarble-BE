@@ -1,5 +1,6 @@
 package co.kr.jurumarble.vote.service;
 
+import co.kr.jurumarble.bookmark.repository.BookmarkRepository;
 import co.kr.jurumarble.drink.domain.DrinkFinder;
 import co.kr.jurumarble.drink.domain.dto.DrinkIdsUsedForVote;
 import co.kr.jurumarble.drink.domain.dto.DrinksUsedForVote;
@@ -11,7 +12,6 @@ import co.kr.jurumarble.vote.domain.VoteContent;
 import co.kr.jurumarble.vote.domain.VoteDrinkContent;
 import co.kr.jurumarble.vote.domain.VoteGenerator;
 import co.kr.jurumarble.vote.enums.VoteType;
-import co.kr.jurumarble.bookmark.repository.BookmarkRepository;
 import co.kr.jurumarble.vote.repository.VoteRepository;
 import co.kr.jurumarble.vote.repository.VoteResultRepository;
 import co.kr.jurumarble.vote.service.request.CreateDrinkVoteServiceRequest;

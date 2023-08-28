@@ -6,6 +6,7 @@ import lombok.Getter;
 
 @Getter
 public class GetDrinkServiceResponse {
+    private final Long drinkId;
     private final String name;
     private final String type;
     private final String productName;
@@ -16,6 +17,7 @@ public class GetDrinkServiceResponse {
     private final String image;
 
     public GetDrinkServiceResponse(Drink drink) {
+        this.drinkId = drink.getId();
         this.name = drink.getName();
         this.type = drink.getType();
         this.productName = drink.getProductName();
@@ -28,6 +30,7 @@ public class GetDrinkServiceResponse {
 
     public GetDrinkResponse toControllerResponse() {
         return GetDrinkResponse.builder()
+                .drinkId(drinkId)
                 .name(name)
                 .type(type)
                 .productName(productName)
