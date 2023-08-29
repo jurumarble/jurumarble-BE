@@ -3,6 +3,7 @@ package co.kr.jurumarble.drink.controller;
 import co.kr.jurumarble.drink.controller.request.EnjoyDrinkRequest;
 import co.kr.jurumarble.drink.controller.response.GetDrinkResponse;
 import co.kr.jurumarble.drink.controller.response.GetHotDrinksResponse;
+import co.kr.jurumarble.drink.controller.response.GetMapInDrinksResponse;
 import co.kr.jurumarble.drink.service.DrinkService;
 import co.kr.jurumarble.drink.service.response.GetDrinkServiceResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,4 +41,12 @@ public class DrinkController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(drinkService.getHotDrinks(size));
     }
+
+    @Operation(summary = "전통주 지도 조회", description = "요청시 쿼리 파라미터로 좌측상단 좌표, 우측상단 좌표 보내주세요")
+    @GetMapping("/map")
+    public ResponseEntity<Slice<GetMapInDrinksResponse>> getMapInDrinks(@RequestParam Double startX, @RequestParam Double startY, @RequestParam Double endX, @RequestParam Double endY, @RequestParam int page, @RequestParam int size) {
+        Slice<GetMapInDrinksResponse> drinks = drinkService.getMapInDrinks(startX, startY, endX, endY, page, size);
+        return new ResponseEntity(drinks, HttpStatus.OK);
+    }
+
 }
