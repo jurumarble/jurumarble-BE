@@ -16,6 +16,7 @@ import co.kr.jurumarble.vote.enums.SortByType;
 import co.kr.jurumarble.vote.repository.VoteContentRepository;
 import co.kr.jurumarble.vote.repository.VoteRepository;
 import co.kr.jurumarble.vote.repository.VoteResultRepository;
+import co.kr.jurumarble.vote.repository.dto.HotDrinkVoteData;
 import co.kr.jurumarble.vote.service.request.CreateDrinkVoteServiceRequest;
 import co.kr.jurumarble.vote.service.request.CreateNormalVoteServiceRequest;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -153,7 +155,8 @@ public class VoteService {
         return getIsUserVoted;
     }
 
-    public void getHotDrinkVote() {
-
+    public HotDrinkVoteData getHotDrinkVote() {
+        return voteRepository.getHotDrinkVote(LocalDateTime.now())
+                .orElseGet(voteRepository::findOneDrinkVoteByPopular);
     }
 }

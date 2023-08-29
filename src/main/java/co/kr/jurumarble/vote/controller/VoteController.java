@@ -11,6 +11,7 @@ import co.kr.jurumarble.vote.dto.response.GetVoteListResponse;
 import co.kr.jurumarble.vote.dto.response.GetVoteRecommendListResponse;
 import co.kr.jurumarble.vote.dto.response.GetVoteResponse;
 import co.kr.jurumarble.vote.enums.SortByType;
+import co.kr.jurumarble.vote.repository.dto.HotDrinkVoteData;
 import co.kr.jurumarble.vote.service.GetVoteData;
 import co.kr.jurumarble.vote.service.VoteService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -102,6 +103,13 @@ public class VoteController {
     public ResponseEntity<GetIsUserVotedResponse> getIsUserVoted(@PathVariable Long voteId, @RequestAttribute Long userId) {
         GetIsUserVoted userVoted = voteService.isUserVoted(voteId, userId);
         return new ResponseEntity(new GetIsUserVotedResponse(userVoted), HttpStatus.OK);
+    }
+
+    @Operation(summary = "핫 전통주 투표", description = "현재 시간 기준 일주일간 핫한 전통주 투표 조회")
+    @GetMapping("/drinks/hot")
+    public ResponseEntity<HotDrinkVoteData> getHotDrinkVote() {
+        HotDrinkVoteData hotDrinkVote = voteService.getHotDrinkVote();
+        return ResponseEntity.ok().body(hotDrinkVote);
     }
 
 }

@@ -243,12 +243,12 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
     }
 
     @Override
-    public HotDrinkVoteData getHotDrinkVote(LocalDateTime nowTime) {
+    public Optional<HotDrinkVoteData> getHotDrinkVote(LocalDateTime nowTime) {
 
         LocalDateTime descendingHourTime = nowTime.withMinute(0);
         LocalDateTime aWeekAgoTime = descendingHourTime.minus(7, ChronoUnit.DAYS);
 
-        return jpaQueryFactory.select(
+        HotDrinkVoteData hotDrinkVoteData = jpaQueryFactory.select(
                         Projections.bean(HotDrinkVoteData.class,
                                 vote.id.as("voteId"),
                                 vote.title.as("voteTitle"),
@@ -265,6 +265,25 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                                 .and(vote.createdDate.goe(aWeekAgoTime))
                                 .and(vote.createdDate.loe(descendingHourTime))
                 )
+                .groupBy(vote.id)
+                .orderBy(vote.id.count().desc(), vote.title.asc())
+                .limit(COUNT_OF_HOT_DRINK_VOTE)
+                .fetchOne();
+
+        return Optional.ofNullable(hotDrinkVoteData);
+    }
+
+    @Override
+    public HotDrinkVoteData findOneDrinkVoteByPopular() {
+        return jpaQueryFactory.select(Projections.bean(HotDrinkVoteData.class,
+                        vote.id.as("voteId"),
+                        vote.title.as("voteTitle"),
+                        voteDrinkContent.drinkAImage,
+                        voteDrinkContent.drinkBImage
+                ))
+                .from(vote)
+                .innerJoin(voteDrinkContent)
+                .on(vote.id.eq(voteDrinkContent.voteId))
                 .groupBy(vote.id)
                 .orderBy(vote.id.count().desc(), vote.title.asc())
                 .limit(COUNT_OF_HOT_DRINK_VOTE)

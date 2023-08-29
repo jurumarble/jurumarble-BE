@@ -27,5 +27,7 @@ public interface VoteEntityRepository {
 
     Long countByVoteAndChoiceAndGenderAndAgeAndMBTI(Long voteId, ChoiceType choiceType, GenderType gender, Integer classifyAge, MbtiType mbti);
 
-    HotDrinkVoteData getHotDrinkVote(LocalDateTime nowTime);
+    Optional<HotDrinkVoteData> getHotDrinkVote(LocalDateTime nowTime);
+
+    HotDrinkVoteData findOneDrinkVoteByPopular();
 }

@@ -21,6 +21,7 @@ import org.springframework.test.context.TestPropertySource;
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -146,7 +147,7 @@ class VoteEntityRepositoryTest {
         LocalDateTime testTime = LocalDateTime.of(2023, 8, 4, 0, 0);
 
         // when
-        HotDrinkVoteData hotDrinkVote = voteEntityRepository.getHotDrinkVote(testTime);
+        HotDrinkVoteData hotDrinkVote = voteEntityRepository.getHotDrinkVote(testTime).get();
 
         // then
         assertThat(hotDrinkVote).extracting("voteTitle", "drinkAImage", "drinkBImage")
