@@ -43,9 +43,15 @@ public class VoteDrinkContent {
     @Column(name = "drink_b_type")
     private String drinkBType;
 
+    @Column(name = "drink_a_image")
+    private String drinkAImage;
+
+    @Column(name = "drink_b_image")
+    private String drinkBImage;
+
     @Builder
-    public VoteDrinkContent(Long voteId, Long drinkAId, Long drinkBId, String drinkAName, String drinkAType, String drinkBName, String drinkBType) {
-        validateDrinksDuplicated(drinkAId, drinkBId);
+    public VoteDrinkContent(Long id, Long voteId, Long drinkAId, Long drinkBId, String drinkAName, String drinkAType, String drinkBName, String drinkBType, String drinkAImage, String drinkBImage) {
+        this.id = id;
         this.voteId = voteId;
         this.drinkAId = drinkAId;
         this.drinkBId = drinkBId;
@@ -53,7 +59,10 @@ public class VoteDrinkContent {
         this.drinkAType = drinkAType;
         this.drinkBName = drinkBName;
         this.drinkBType = drinkBType;
+        this.drinkAImage = drinkAImage;
+        this.drinkBImage = drinkBImage;
     }
+
 
     public static VoteDrinkContent createFromDrinks(DrinksUsedForVote drinksUsedForVote) {
         Drink drinkA = drinksUsedForVote.getDrinkA();
@@ -65,6 +74,8 @@ public class VoteDrinkContent {
                 .drinkBName(drinkB.getName())
                 .drinkAType(drinkA.getType())
                 .drinkBType(drinkB.getType())
+                .drinkAImage(drinkA.getImage())
+                .drinkBImage(drinkB.getImage())
                 .build();
     }
 

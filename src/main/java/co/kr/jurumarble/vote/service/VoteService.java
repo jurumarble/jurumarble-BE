@@ -152,4 +152,8 @@ public class VoteService {
         });
         return getIsUserVoted;
     }
+
+    public void getHotDrinkVote() {
+
+    }
 }
