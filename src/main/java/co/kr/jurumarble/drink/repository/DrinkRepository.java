@@ -16,9 +16,9 @@ public interface DrinkRepository extends JpaRepository<Drink, Long>, DrinkEntity
 
     List<Drink> findDrinksByIdIn(List<Long> drinkIds);
 
-    @Query("SELECT new co.kr.jurumarble.drink.domain.dto.MapInDrinkData(d.id, d.productName, d.region, d.latitude, d.longitude) FROM Drink d " +
+    @Query("SELECT new co.kr.jurumarble.drink.domain.dto.MapInDrinkData(d.id, d.name, d.region, d.latitude, d.longitude) FROM Drink d " +
             "WHERE (d.latitude BETWEEN :startX AND :endX AND d.longitude BETWEEN :startY AND :endY) " +
-            "ORDER BY d.productName")
+            "ORDER BY d.name")
     Slice<MapInDrinkData> findDrinksByCoordinate(PageRequest pageRequest, @Param("startX") Double startX, @Param("startY") Double startY, @Param("endX") Double endX, @Param("endY") Double endY);
 
 }
