@@ -91,9 +91,9 @@ tour:
 
 logging:
   level:
-    '[org.springframework.boot.web]': ERROR
+    '[org.springframework.boot.web]': INFO
   file:
-    name: /var/log/myapp.log
+    name: /var/app/current/jurumarble.log
 
 
 ## JWT 환경변수 설정
