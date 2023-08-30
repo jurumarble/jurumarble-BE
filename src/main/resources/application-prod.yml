@@ -120,7 +120,7 @@ cloud:
       access-key: ${aws.credentials.access.key}
       secret-key: ${aws.credentials.secret.key}
     s3:
-      bucket: elasticbeanstalk-ap-northeast-2-319210348301 //숨겨야 됨
+      bucket: ${aws.s3.bucket}
     region:
       static: ap-northeast-2
     stack:
