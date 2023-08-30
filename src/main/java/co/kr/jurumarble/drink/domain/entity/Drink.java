@@ -41,9 +41,12 @@ public class Drink {
 
     private String image;
 
+    private Double latitude;
+
+    private Double longitude;
 
     @Builder
-    public Drink(Long id, String name, String type, String productName, String alcoholicBeverage, String rawMaterial, int capacity, String manufactureAddress, String region, int price, String image) {
+    public Drink(Long id, String name, String type, String productName, String alcoholicBeverage, String rawMaterial, int capacity, String manufactureAddress, String region, int price, String image, Double latitude, Double longitude) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -55,9 +58,9 @@ public class Drink {
         this.region = region;
         this.price = price;
         this.image = image;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
-
-
 
     @Override
     public boolean equals(Object o) {
