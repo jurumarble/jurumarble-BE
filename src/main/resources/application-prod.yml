@@ -109,3 +109,17 @@ springdoc:
   default-produces-media-type: application/json
 
 swagger.url: ${swagger.url}
+
+
+#s3
+cloud:
+  aws:
+    credentials:
+      access-key: ${aws.credentials.access.key}
+      secret-key: ${aws.credentials.secret.key}
+    s3:
+      bucket: elasticbeanstalk-ap-northeast-2-319210348301
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: 'false'
