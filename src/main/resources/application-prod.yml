@@ -91,7 +91,9 @@ tour:
 
 logging:
   level:
-    '[org.springframework.boot.web]': INFO
+    '[org.springframework.boot.web]': ERROR
+  file:
+    name: /var/log/myapp.log
 
 
 ## JWT 환경변수 설정
