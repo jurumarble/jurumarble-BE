@@ -19,6 +19,7 @@ import java.util.Objects;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
+@Table(name = "vote")
 public class Vote extends BaseTimeEntity {
 
     @Id
