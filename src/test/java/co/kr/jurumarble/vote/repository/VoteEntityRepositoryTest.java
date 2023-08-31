@@ -7,7 +7,6 @@ import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
 import co.kr.jurumarble.vote.dto.NormalVoteData;
 import co.kr.jurumarble.vote.repository.dto.HotDrinkVoteData;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +20,7 @@ import org.springframework.test.context.TestPropertySource;
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
 
@@ -142,7 +139,7 @@ class VoteEntityRepositoryTest {
 
     @DisplayName("일주일 동안 투표 결과가 가장 많은 전통주 투표를 조회한다.")
     @Test
-    void getHotDrinkVote(){
+    void getHotDrinkVote() {
         // given
         LocalDateTime testTime = LocalDateTime.of(2023, 8, 4, 0, 0);
 

@@ -4,9 +4,9 @@ import co.kr.jurumarble.drink.domain.DrinkFinder;
 import co.kr.jurumarble.drink.domain.dto.DrinksUsedForVote;
 import co.kr.jurumarble.exception.user.UserNotAccessRightException;
 import co.kr.jurumarble.exception.user.UserNotFoundException;
-import co.kr.jurumarble.exception.vote.AlreadyUserDoVoteException;
 import co.kr.jurumarble.exception.vote.VoteContentNotFoundException;
 import co.kr.jurumarble.exception.vote.VoteNotFoundException;
+import co.kr.jurumarble.exception.vote.VoteSortByNotFountException;
 import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.user.repository.UserRepository;
 import co.kr.jurumarble.vote.domain.*;
@@ -42,6 +42,7 @@ public class NormalVoteService {
     private final VoteContentRepository voteContentRepository;
     private final VoteResultRepository voteResultRepository;
     private final DrinkFinder drinkFinder;
+    private final VoteValidator voteValidator;
 
     @Transactional
     public Long createNormalVote(CreateNormalVoteServiceRequest request, Long userId) {
@@ -91,56 +92,34 @@ public class NormalVoteService {
 
     @Transactional
     public void doVote(DoVoteInfo info) {
-
         Vote vote = voteRepository.findById(info.getVoteId()).orElseThrow(VoteNotFoundException::new);
         User user = userRepository.findById(info.getUserId()).orElseThrow(UserNotFoundException::new);
-
-        if (vote.isVoteOfUser(user.getId())) throw new UserNotAccessRightException();
-
-        if (voteResultRepository.existsByVoteIdAndVotedUserId(vote.getId(), user.getId()))
-            throw new AlreadyUserDoVoteException();
-
+        voteValidator.validateParcitipateVote(vote, user);
         VoteResult voteResult = new VoteResult(vote.getId(), user.getId(), info.getChoice());
-
         voteResultRepository.save(voteResult);
-
     }
 
-    public Slice<NormalVoteData> getNormalVoteList(SortByType sortBy, Integer page, Integer size) {
+    public Slice<NormalVoteData> getNormalVoteList(String keyword, SortByType sortBy, Integer page, Integer size) {
         if (sortBy.equals(SortByType.ByTime)) {
             PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
-            return getNormalVoteSortByTime(pageRequest);
+            return getNormalVoteSortByTime(keyword, pageRequest);
         }
 
         if (sortBy.equals(SortByType.ByPopularity)) {
             PageRequest pageRequest = PageRequest.of(page, size);
-            return getNormalVoteByPopularity(pageRequest);
+            return getNormalVoteByPopularity(keyword, pageRequest);
         }
 
-        throw new RuntimeException("잘못된 요청입니다.");
+        throw new VoteSortByNotFountException();
     }
 
-    private Slice<NormalVoteData> getNormalVoteSortByTime(PageRequest pageRequest) {
-        return voteRepository.findNormalVoteDataWithTime(null, pageRequest);
+
+    private Slice<NormalVoteData> getNormalVoteSortByTime(String keyword, PageRequest pageRequest) {
+        return voteRepository.findNormalVoteDataWithTime(keyword, pageRequest);
     }
 
-    private Slice<NormalVoteData> getNormalVoteByPopularity(PageRequest pageRequest) {
-        return voteRepository.findNormalVoteDataWithPopularity(null, pageRequest);
-    }
-
-    public Slice<NormalVoteData> getSearchVoteList(String keyword, SortByType sortBy, int page, int size) {
-
-        if (sortBy.equals(SortByType.ByTime)) {
-            PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
-            return voteRepository.findNormalVoteDataWithTime(keyword, pageRequest);
-        }
-
-        if (sortBy.equals(SortByType.ByPopularity)) {
-            PageRequest pageRequest = PageRequest.of(page, size);
-            return voteRepository.findNormalVoteDataWithPopularity(keyword, pageRequest);
-        }
-
-        throw new RuntimeException("잘못된 요청입니다.");
+    private Slice<NormalVoteData> getNormalVoteByPopularity(String keyword, PageRequest pageRequest) {
+        return voteRepository.findNormalVoteDataWithPopularity(keyword, pageRequest);
     }
 
     public List<String> getRecommendVoteList(String keyword) {
