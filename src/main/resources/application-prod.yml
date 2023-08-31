@@ -6,7 +6,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://${rds.hostname}:${rds.port}/${rds.db.name}?serverTimezone=UTC&characterEncoding=UTF-8
+    url: jdbc:mysql://${rds.hostname}:${rds.port}/${rds.db.name}
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${rds.username}
     password: ${rds.password}
@@ -19,7 +19,7 @@ spring:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL5Dialect
+        dialect: org.hibernate.dialect.MySQL8Dialect
 
 
 
@@ -69,11 +69,31 @@ feign:
     max-connections: 2000
     max-connections-per-route: 500
 
+## tourApi 환경변수 설정
+tour:
+  api:
+    url: http://apis.data.go.kr/B551011/KorService1/
+    servicekey: ${tour.api.servicekey}
+    mobile:
+      os: ETC
+      app: jurumarble
+    response:
+      type: json
+    image-yn: Y
+    content-type-id: 39
+    subimage-yn: Y
+    num-of-rows: 10
+    list-yn: Y
+    arrange: O
+    cat1: A05
+    cat2: A0502
 
 
 logging:
   level:
     '[org.springframework.boot.web]': INFO
+  file:
+    name: /var/app/current/jurumarble.log
 
 
 ## JWT 환경변수 설정
@@ -91,3 +111,17 @@ springdoc:
   default-produces-media-type: application/json
 
 swagger.url: ${swagger.url}
+
+
+#s3
+cloud:
+  aws:
+    credentials:
+      access-key: ${aws.credentials.access.key}
+      secret-key: ${aws.credentials.secret.key}
+    s3:
+      bucket: ${aws.s3.bucket}
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: 'false'

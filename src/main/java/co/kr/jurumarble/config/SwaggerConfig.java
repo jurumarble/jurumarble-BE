@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @OpenAPIDefinition(servers = {
-        @Server(url = "http://jurumarble-env.eba-tv8jafay.ap-northeast-2.elasticbeanstalk.com/swagger-ui/index.html"),
+        @Server(url = "https://jurumarble.site"),
         @Server(url = "http://localhost:8080/")
 })
 @Configuration

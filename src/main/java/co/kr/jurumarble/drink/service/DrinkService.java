@@ -1,7 +1,9 @@
 package co.kr.jurumarble.drink.service;
 
 import co.kr.jurumarble.drink.controller.response.GetHotDrinksResponse;
+import co.kr.jurumarble.drink.controller.response.GetMapInDrinksResponse;
 import co.kr.jurumarble.drink.domain.EnjoyDrinkValidator;
+import co.kr.jurumarble.drink.domain.dto.MapInDrinkData;
 import co.kr.jurumarble.drink.domain.entity.Drink;
 import co.kr.jurumarble.drink.domain.entity.EnjoyDrink;
 import co.kr.jurumarble.drink.repository.DrinkRepository;
@@ -66,4 +68,16 @@ public class DrinkService {
                 .collect(Collectors.toList());
     }
 
+    public Slice<GetMapInDrinksResponse> getMapInDrinks(Double startX, Double startY, Double endX, Double endY, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Slice<MapInDrinkData> drinkData = drinkRepository.findDrinksByCoordinate(pageRequest, startX, startY, endX, endY);
+        return new SliceImpl<>(getGetMapInDrinksResponses(drinkData), drinkData.getPageable(), drinkData.hasNext());
+
+    }
+
+    private List<GetMapInDrinksResponse> getGetMapInDrinksResponses(Slice<MapInDrinkData> drinkData) {
+        return drinkData.stream()
+                .map(MapInDrinkData::toMapInDrinksResponse)
+                .collect(Collectors.toList());
+    }
 }
