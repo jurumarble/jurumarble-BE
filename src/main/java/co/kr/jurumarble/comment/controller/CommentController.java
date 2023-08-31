@@ -100,9 +100,9 @@ public class CommentController {
     @GetMapping("/votes/{voteId}/comments/{commentId}/restaurant")
     public ResponseEntity<List<SearchRestaurantData>> searchRestaurant(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Long userId, @RequestParam(value = "keyword", required = false) String keyword, @RequestParam(value = "areaCode", required = false) int areaCode, @RequestParam int page) {
 
-        List<SearchRestaurantData> searchRestaurantRespons = commentService.searchRestaurant(voteId, commentId, userId, keyword, areaCode, page);
+        List<SearchRestaurantData> searchRestaurantResponse = commentService.searchRestaurant(voteId, commentId, userId, keyword, areaCode, page);
 
-        return new ResponseEntity(searchRestaurantRespons, HttpStatus.OK);
+        return new ResponseEntity(searchRestaurantResponse, HttpStatus.OK);
     }
 
     @Operation(summary = "식당 이미지 조회", description = "헤더에 토큰을 포함하고, URL 파라미터에 'voteId', 'commentId'와 'contentId'를 전달하여 특정 음식점의 이미지를 가져오는 기능입니다.")
