@@ -2,7 +2,7 @@ package co.kr.jurumarble.vote.controller;
 
 import co.kr.jurumarble.token.domain.JwtTokenProvider;
 import co.kr.jurumarble.vote.dto.request.CreateNormalVoteRequest;
-import co.kr.jurumarble.vote.service.VoteService;
+import co.kr.jurumarble.vote.service.NormalVoteService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,10 +20,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = VoteController.class)
+@WebMvcTest(controllers = NormalVoteController.class)
 @Import(JwtTokenProvider.class)
 @TestPropertySource(locations = "classpath:application-test.yml")
-class VoteControllerTest {
+class NormalVoteControllerTest {
     private static final int TOKEN_VALID_TIME = 30;
     private static final int TOKEN_EXPIRED_TIME = 0;
 
@@ -34,7 +34,7 @@ class VoteControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private VoteService voteService;
+    private NormalVoteService normalVoteService;
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;

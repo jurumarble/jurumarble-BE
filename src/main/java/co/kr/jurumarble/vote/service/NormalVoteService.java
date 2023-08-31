@@ -4,6 +4,7 @@ import co.kr.jurumarble.drink.domain.DrinkFinder;
 import co.kr.jurumarble.drink.domain.dto.DrinksUsedForVote;
 import co.kr.jurumarble.exception.user.UserNotAccessRightException;
 import co.kr.jurumarble.exception.user.UserNotFoundException;
+import co.kr.jurumarble.exception.vote.VoteContentNotFoundException;
 import co.kr.jurumarble.exception.vote.VoteNotFoundException;
 import co.kr.jurumarble.exception.vote.VoteSortByNotFountException;
 import co.kr.jurumarble.user.domain.User;
@@ -16,6 +17,7 @@ import co.kr.jurumarble.vote.enums.SortByType;
 import co.kr.jurumarble.vote.repository.VoteContentRepository;
 import co.kr.jurumarble.vote.repository.VoteRepository;
 import co.kr.jurumarble.vote.repository.VoteResultRepository;
+import co.kr.jurumarble.vote.repository.dto.HotDrinkVoteData;
 import co.kr.jurumarble.vote.service.request.CreateDrinkVoteServiceRequest;
 import co.kr.jurumarble.vote.service.request.CreateNormalVoteServiceRequest;
 import lombok.RequiredArgsConstructor;
@@ -25,13 +27,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
-public class VoteService {
+public class NormalVoteService {
 
     private final UserRepository userRepository;
     private final VoteGenerator voteGenerator;
@@ -79,10 +82,12 @@ public class VoteService {
     }
 
     @Transactional
-    public void deleteVote(Long voteId, Long userId) {
+    public void deleteNormalVote(Long voteId, Long userId) {
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         isVoteOfUser(userId, vote);
+        VoteContent voteContent = voteContentRepository.findByVoteId(voteId).orElseThrow(VoteContentNotFoundException::new);
         voteRepository.delete(vote);
+        voteContentRepository.delete(voteContent);
     }
 
     @Transactional
@@ -94,25 +99,26 @@ public class VoteService {
         voteResultRepository.save(voteResult);
     }
 
-    public Slice<NormalVoteData> getVoteList(String keyword, SortByType sortBy, Integer page, Integer size) {
+    public Slice<NormalVoteData> getNormalVoteList(String keyword, SortByType sortBy, Integer page, Integer size) {
         if (sortBy.equals(SortByType.ByTime)) {
             PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
-            return getVoteSortByTime(keyword, pageRequest);
+            return getNormalVoteSortByTime(keyword, pageRequest);
         }
 
         if (sortBy.equals(SortByType.ByPopularity)) {
             PageRequest pageRequest = PageRequest.of(page, size);
-            return getVoteByPopularity(keyword, pageRequest);
+            return getNormalVoteByPopularity(keyword, pageRequest);
         }
 
-            throw new VoteSortByNotFountException();
+        throw new VoteSortByNotFountException();
     }
 
-    private Slice<NormalVoteData> getVoteSortByTime(String keyword, PageRequest pageRequest) {
+
+    private Slice<NormalVoteData> getNormalVoteSortByTime(String keyword, PageRequest pageRequest) {
         return voteRepository.findNormalVoteDataWithTime(keyword, pageRequest);
     }
-  
-    private Slice<NormalVoteData> getVoteByPopularity(String keyword, PageRequest pageRequest) {
+
+    private Slice<NormalVoteData> getNormalVoteByPopularity(String keyword, PageRequest pageRequest) {
         return voteRepository.findNormalVoteDataWithPopularity(keyword, pageRequest);
     }
 
@@ -129,5 +135,10 @@ public class VoteService {
             getIsUserVoted.setUserChoice(voteResult.getChoice());
         });
         return getIsUserVoted;
+    }
+
+    public HotDrinkVoteData getHotDrinkVote() {
+        return voteRepository.getHotDrinkVote(LocalDateTime.now())
+                .orElseGet(voteRepository::findOneDrinkVoteByPopular);
     }
 }

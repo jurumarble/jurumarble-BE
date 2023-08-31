@@ -19,7 +19,6 @@ public class HotDrinkData {
     private String manufactureAddress;
     private String image;
     private Long enjoyedCount;
-    private LocalDateTime enjoyedDate;
 
     public GetHotDrinksResponse toHotDrinksResponse() {
         return new GetHotDrinksResponse(drinkId, name, manufactureAddress, image);

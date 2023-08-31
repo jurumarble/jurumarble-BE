@@ -82,5 +82,4 @@ public class Vote extends BaseTimeEntity {
         this.detail = request.getDetail();
     }
 
-
 }

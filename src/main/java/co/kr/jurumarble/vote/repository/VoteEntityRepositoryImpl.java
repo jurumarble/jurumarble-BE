@@ -6,6 +6,8 @@ import co.kr.jurumarble.user.enums.MbtiType;
 import co.kr.jurumarble.vote.domain.Vote;
 import co.kr.jurumarble.vote.domain.VoteContent;
 import co.kr.jurumarble.vote.dto.NormalVoteData;
+import co.kr.jurumarble.vote.enums.VoteType;
+import co.kr.jurumarble.vote.repository.dto.HotDrinkVoteData;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
@@ -17,6 +19,8 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -25,12 +29,14 @@ import java.util.stream.Collectors;
 import static co.kr.jurumarble.user.domain.QUser.user;
 import static co.kr.jurumarble.vote.domain.QVote.vote;
 import static co.kr.jurumarble.vote.domain.QVoteContent.voteContent;
+import static co.kr.jurumarble.vote.domain.QVoteDrinkContent.voteDrinkContent;
 import static co.kr.jurumarble.vote.domain.QVoteResult.voteResult;
 
 
 @Repository
 public class VoteEntityRepositoryImpl implements VoteEntityRepository {
 
+    private static final int COUNT_OF_HOT_DRINK_VOTE = 1;
     private final JPAQueryFactory jpaQueryFactory;
 
     public VoteEntityRepositoryImpl(EntityManager entityManager) {
@@ -224,6 +230,54 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .on(vote.postedUserId.eq(user.id))
                 .where(whereClause)
                 .fetchCount();
+    }
+
+    @Override
+    public Optional<HotDrinkVoteData> getHotDrinkVote(LocalDateTime nowTime) {
+
+        LocalDateTime descendingHourTime = nowTime.withMinute(0);
+        LocalDateTime aWeekAgoTime = descendingHourTime.minus(7, ChronoUnit.DAYS);
+
+        HotDrinkVoteData hotDrinkVoteData = jpaQueryFactory.select(
+                        Projections.bean(HotDrinkVoteData.class,
+                                vote.id.as("voteId"),
+                                vote.title.as("voteTitle"),
+                                voteDrinkContent.drinkAImage,
+                                voteDrinkContent.drinkBImage
+                        ))
+                .from(vote)
+                .innerJoin(voteDrinkContent)
+                .on(vote.id.eq(voteDrinkContent.voteId))
+                .innerJoin(voteResult)
+                .on(vote.id.eq(voteResult.voteId))
+                .where(
+                        vote.voteType.eq(VoteType.DRINK)
+                                .and(vote.createdDate.goe(aWeekAgoTime))
+                                .and(vote.createdDate.loe(descendingHourTime))
+                )
+                .groupBy(vote.id)
+                .orderBy(vote.id.count().desc(), vote.title.asc())
+                .limit(COUNT_OF_HOT_DRINK_VOTE)
+                .fetchOne();
+
+        return Optional.ofNullable(hotDrinkVoteData);
+    }
+
+    @Override
+    public HotDrinkVoteData findOneDrinkVoteByPopular() {
+        return jpaQueryFactory.select(Projections.bean(HotDrinkVoteData.class,
+                        vote.id.as("voteId"),
+                        vote.title.as("voteTitle"),
+                        voteDrinkContent.drinkAImage,
+                        voteDrinkContent.drinkBImage
+                ))
+                .from(vote)
+                .innerJoin(voteDrinkContent)
+                .on(vote.id.eq(voteDrinkContent.voteId))
+                .groupBy(vote.id)
+                .orderBy(vote.id.count().desc(), vote.title.asc())
+                .limit(COUNT_OF_HOT_DRINK_VOTE)
+                .fetchOne();
     }
 
 }
