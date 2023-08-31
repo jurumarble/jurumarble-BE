@@ -13,7 +13,6 @@ import java.util.List;
 
 @Repository
 public interface DrinkRepository extends JpaRepository<Drink, Long>, DrinkEntityRepository {
-
     List<Drink> findDrinksByIdIn(List<Long> drinkIds);
 
     @Query("SELECT new co.kr.jurumarble.drink.domain.dto.MapInDrinkData(d.id, d.name, d.region, d.latitude, d.longitude) FROM Drink d " +

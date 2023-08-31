@@ -14,6 +14,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
@@ -41,7 +42,7 @@ class DrinkEntityRepositoryImplTest {
         LocalDateTime testTime = LocalDateTime.of(2023, 8, 10, 7, 15);
 
         // when
-        Slice<HotDrinkData> hotDrinks = drinkEntityRepository.getHotDrinks(of, testTime);
+        List<HotDrinkData> hotDrinks = drinkEntityRepository.getHotDrinks(of, testTime);
 
         // then
         assertThat(hotDrinks).hasSize(3)
@@ -49,7 +50,7 @@ class DrinkEntityRepositoryImplTest {
                 .containsExactly(
                         tuple(12L, "화주", 3L),
                         tuple(15L, "나루 생막걸리 6%", 2L),
-                        tuple(2L, "송명섭 막걸리", 2L)
+                        tuple(30L, "붉은 원숭이", 2L)
                 );
     }
 
@@ -61,7 +62,7 @@ class DrinkEntityRepositoryImplTest {
         LocalDateTime testTime = LocalDateTime.of(2023, 8, 3, 7, 15);
 
         // when
-        Slice<HotDrinkData> hotDrinks = drinkEntityRepository.getHotDrinks(of, testTime);
+        List<HotDrinkData> hotDrinks = drinkEntityRepository.getHotDrinks(of, testTime);
 
         // then
         assertThat(hotDrinks).hasSize(3)
@@ -81,9 +82,30 @@ class DrinkEntityRepositoryImplTest {
         LocalDateTime testTime = LocalDateTime.of(2023, 9, 20, 7, 15);
 
         // when
-        Slice<HotDrinkData> hotDrinks = drinkEntityRepository.getHotDrinks(of, testTime);
+        List<HotDrinkData> hotDrinks = drinkEntityRepository.getHotDrinks(of, testTime);
 
         // then
         assertThat(hotDrinks).hasSize(0);
+    }
+
+    @DisplayName("전통주를 즐겼어요가 많은 순서로 조회한다.")
+    @Test
+    void findDrinksByPopular(){
+        // given
+        PageRequest of = PageRequest.of(0, 5);
+        // when
+        List<HotDrinkData> actual = drinkEntityRepository.findDrinksByPopular(of);
+
+        // then
+        assertThat(actual).hasSize(5)
+                .extracting("drinkId", "name", "enjoyedCount")
+                .containsExactly(
+                        tuple(2L, "송명섭 막걸리", 3L),
+                        tuple(3L, "제주 고소리술", 3L),
+                        tuple(12L, "화주", 3L),
+                        tuple(8L, "김포예주 프리미엄", 2L),
+                        tuple(15L, "나루 생막걸리 6%", 2L)
+                );
+
     }
 }
