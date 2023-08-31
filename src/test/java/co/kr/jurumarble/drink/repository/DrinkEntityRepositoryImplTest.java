@@ -50,7 +50,7 @@ class DrinkEntityRepositoryImplTest {
                 .containsExactly(
                         tuple(12L, "화주", 3L),
                         tuple(15L, "나루 생막걸리 6%", 2L),
-                        tuple(2L, "송명섭 막걸리", 2L)
+                        tuple(30L, "붉은 원숭이", 2L)
                 );
     }
 
