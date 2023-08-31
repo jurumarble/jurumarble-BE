@@ -76,7 +76,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .select(vote, voteResult.id.count())
                 .from(vote)
                 .leftJoin(voteResult).on(vote.id.eq(voteResult.voteId))
-                .where(keywordExpression)
+                .where(vote.voteType.eq(VoteType.NORMAL).and(keywordExpression))
                 .groupBy(vote.id)
                 .orderBy(voteResult.id.count().desc())
                 .offset(pageNo * pageSize)
