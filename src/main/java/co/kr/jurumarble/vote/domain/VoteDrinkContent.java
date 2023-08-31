@@ -53,6 +53,7 @@ public class VoteDrinkContent {
 
     @Builder
     public VoteDrinkContent(Long id, Long voteId, Long drinkAId, Long drinkBId, String drinkAName, String drinkAType, String drinkBName, String drinkBType, String drinkAImage, String drinkBImage, String region) {
+        validateDrinksDuplicated(drinkAId, drinkBId);
         this.id = id;
         this.voteId = voteId;
         this.drinkAId = drinkAId;
