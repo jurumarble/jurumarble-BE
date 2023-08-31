@@ -74,6 +74,8 @@ CREATE TABLE vote_drink_content
     drink_a_type VARCHAR(10) DEFAULT NULL,
     drink_b_name VARCHAR(30) DEFAULT NULL,
     drink_b_type VARCHAR(10) DEFAULT NULL,
+    drink_a_image VARCHAR(255) DEFAULT NULL,
+    drink_b_image VARCHAR(255) DEFAULT NULL,
     PRIMARY KEY (id)
 );
 

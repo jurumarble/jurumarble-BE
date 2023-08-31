@@ -6,9 +6,12 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 public interface DrinkEntityRepository {
 
-    Slice<HotDrinkData> getHotDrinks(Pageable pageable, LocalDateTime nowTime);
+    List<HotDrinkData> getHotDrinks(Pageable pageable, LocalDateTime nowTime);
+
+    List<HotDrinkData> findDrinksByPopular(Pageable pageable);
 }

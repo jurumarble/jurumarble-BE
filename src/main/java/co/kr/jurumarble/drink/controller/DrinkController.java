@@ -6,15 +6,19 @@ import co.kr.jurumarble.drink.controller.response.GetHotDrinksResponse;
 import co.kr.jurumarble.drink.service.DrinkService;
 import co.kr.jurumarble.drink.service.response.GetDrinkServiceResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/drinks")
+@Tag(name = "drink", description = "drink api")
 public class DrinkController {
 
     private final DrinkService drinkService;
@@ -34,10 +38,10 @@ public class DrinkController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "전통주 인기순 조회(핫 전통주 - 일주일동안 즐겼어요 많은 순)", description = "요청시 쿼리 파라미터로 size를 같이 넣어서 보내주세요")
+    @Operation(summary = "전통주 인기순 조회(핫 전통주 10 - 일주일동안 즐겼어요 많은 순)", description = "항상 10개의 데이터가 고정으로 나오고 데이터가 부족하면 즐겼어요 누적으로 나옵니다.")
     @GetMapping("/hot")
-    public ResponseEntity<Slice<GetHotDrinksResponse>> getHotDrinks(@RequestParam int size) {
+    public ResponseEntity<List<GetHotDrinksResponse>> getHotDrinks() {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(drinkService.getHotDrinks(size));
+                .body(drinkService.getHotDrinks());
     }
 }
