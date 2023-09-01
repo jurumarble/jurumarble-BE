@@ -1,15 +1,17 @@
 package co.kr.jurumarble.vote.repository;
 
+import co.kr.jurumarble.exception.vote.IllegalVoteTypeException;
 import co.kr.jurumarble.user.enums.ChoiceType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
 import co.kr.jurumarble.vote.domain.Vote;
 import co.kr.jurumarble.vote.domain.VoteContent;
+import co.kr.jurumarble.vote.domain.VoteDrinkContent;
 import co.kr.jurumarble.vote.dto.VoteData;
 import co.kr.jurumarble.vote.enums.VoteType;
 import co.kr.jurumarble.vote.repository.dto.HotDrinkVoteData;
+import co.kr.jurumarble.vote.repository.dto.VoteCommonData;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -43,15 +45,27 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
         this.jpaQueryFactory = new JPAQueryFactory(entityManager);
     }
 
+    // 1. 원하는 조건을 걸어서 투표 컨텐츠 없이 투표를 찾는다.
+    // 2. 찾은 투표의 아이디와 타입으로 투표 컨텐츠를 찾는다.
+    // 3. 찾은 투표 컨텐츠와 투표 데이터를 이어서 완전하게 만든다.
     @Override
     public Slice<VoteData> findVoteDataWithPopularity(String keyword, Pageable pageable) {
 
-        List<Tuple> findVotesOrderByPopularTuples = getVotesTupleOrderByPopular(keyword, pageable);
-        List<Long> voteIds = getVoteIdsFromFindVotes(findVotesOrderByPopularTuples);
-        List<VoteContent> voteContents = findVoteContentsByVoteIds(voteIds); //각 vote에서 voteContent 찾아야 함
+        List<VoteCommonData> voteCommonDataList = getVoteCommonDataByPopular(keyword, pageable);
+
+        List<Long> normalVoteIds = getNormalVoteIdsFromFindVoteCommonDataList(voteCommonDataList);
+        List<VoteContent> voteContents = findVoteContentsByNormalVoteIds(normalVoteIds);
+
+        List<Long> drinkVoteIds = getDrinkVoteIdsFromFindVoteCommonDataList(voteCommonDataList);
+        List<VoteDrinkContent> voteDrinkContents = findVoteContentsByDrinkVoteIds(drinkVoteIds);
+
         Map<Long, VoteContent> voteContentsMap = voteContents.stream()  // List를 순회하면 성능이 안나오므로 <voteId, VoteConent> 로 이루어진 Map을 만듬
                 .collect(Collectors.toMap(VoteContent::getVoteId, voteContent -> voteContent));// ex) <1, {voteContent}>
-        List<VoteData> voteData = getFindVoteListDatas(findVotesOrderByPopularTuples, voteContentsMap);
+
+        Map<Long, VoteDrinkContent> voteDrinkContentMap = voteDrinkContents.stream()
+                .collect(Collectors.toMap(VoteDrinkContent::getVoteId, voteDrinkContent -> voteDrinkContent));
+
+        List<VoteData> voteData = getFindVoteDataList(voteCommonDataList, voteContentsMap, voteDrinkContentMap);
 
         return getSlice(voteData, pageable.getPageSize(), pageable.getPageSize(), pageable);
     }
@@ -67,17 +81,29 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
         return new SliceImpl<>(voteData, pageable2, hasNext);
     }
 
-    private List<Tuple> getVotesTupleOrderByPopular(String keyword, Pageable pageable) {
+    private List<VoteCommonData> getVoteCommonDataByPopular(String keyword, Pageable pageable) {
         int pageNo = pageable.getPageNumber();
         int pageSize = pageable.getPageSize();
 
         BooleanExpression keywordExpression = getKeywordExpression(keyword);
 
         return jpaQueryFactory
-                .select(vote, voteResult.id.count())
+                .select(
+                        Projections.bean(
+                                VoteCommonData.class,
+                                vote.id.as("voteId"),
+                                vote.postedUserId,
+                                vote.title,
+                                vote.detail,
+                                vote.filteredGender,
+                                vote.filteredAge,
+                                vote.filteredMbti,
+                                voteResult.id.count().as("votedCount"),
+                                vote.voteType)
+                )
                 .from(vote)
                 .leftJoin(voteResult).on(vote.id.eq(voteResult.voteId))
-                .where(vote.voteType.eq(VoteType.NORMAL).and(keywordExpression))
+                .where(keywordExpression)
                 .groupBy(vote.id)
                 .orderBy(voteResult.id.count().desc())
                 .offset(pageNo * pageSize)
@@ -85,40 +111,80 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .fetch();
     }
 
-    private List<Long> getVoteIdsFromFindVotes(List<Tuple> findVotesOrderByPopularTuples) {
-        return findVotesOrderByPopularTuples.stream()
-                .map(findVoteTuple ->
-                        findVoteTuple.get(0, Vote.class).getId())
-                .collect(Collectors.toList()
-                );
+    private List<Long> getNormalVoteIdsFromFindVoteCommonDataList(List<VoteCommonData> voteCommonDataList) {
+        return voteCommonDataList.stream()
+                .filter(voteCommonData -> voteCommonData.getVoteType().equals(VoteType.NORMAL))
+                .map(VoteCommonData::getVoteId)
+                .collect(Collectors.toList());
     }
 
-    private List<VoteContent> findVoteContentsByVoteIds(List<Long> voteIds) {
+    private List<Long> getDrinkVoteIdsFromFindVoteCommonDataList(List<VoteCommonData> voteCommonDataList) {
+        return voteCommonDataList.stream()
+                .filter(voteCommonData -> voteCommonData.getVoteType().equals(VoteType.DRINK))
+                .map(VoteCommonData::getVoteId)
+                .collect(Collectors.toList());
+    }
+
+    private List<VoteContent> findVoteContentsByNormalVoteIds(List<Long> normalVoteIds) {
         return jpaQueryFactory
                 .selectFrom(voteContent)
-                .where(voteContent.voteId.in(voteIds))
+                .where(voteContent.voteId.in(normalVoteIds))
                 .fetch();
     }
 
-    private List<VoteData> getFindVoteListDatas(List<Tuple> findVotesOrderByPopularTuples, Map<Long, VoteContent> voteContentsMap) {
-        return findVotesOrderByPopularTuples.stream()
-                .map(findVoteTuple -> {
-                    Vote vote = findVoteTuple.get(0, Vote.class);
-                    VoteContent voteContent = voteContentsMap.get(vote.getId());
-                    return VoteData.builder()
-                            .voteId(vote.getId())
-                            .postedUserId(vote.getPostedUserId())
-                            .title(vote.getTitle())
-                            .detail(vote.getDetail())
-                            .filteredGender(vote.getFilteredGender())
-                            .filteredAge(vote.getFilteredAge())
-                            .imageA(voteContent.getImageA())
-                            .imageB(voteContent.getImageB())
-                            .titleA(voteContent.getTitleA())
-                            .titleB(voteContent.getTitleB())
-                            .votedCount(findVoteTuple.get(1, Long.class))
-                            .build();
+    private List<VoteDrinkContent> findVoteContentsByDrinkVoteIds(List<Long> drinkVoteIds) {
+        return jpaQueryFactory
+                .selectFrom(voteDrinkContent)
+                .where(voteDrinkContent.voteId.in(drinkVoteIds))
+                .fetch();
+    }
+
+    private List<VoteData> getFindVoteDataList(List<VoteCommonData> voteCommonDataList, Map<Long, VoteContent> voteContentsMap, Map<Long, VoteDrinkContent> voteDrinkContentMap) {
+        return voteCommonDataList.stream()
+                .map(voteCommonData -> {
+                    if (voteCommonData.getVoteType().equals(VoteType.NORMAL)) {
+                        VoteContent voteContent = voteContentsMap.get(voteCommonData.getVoteId());
+                        return generateNormalVoteData(voteCommonData, voteContent);
+                    }
+                    if (voteCommonData.getVoteType().equals(VoteType.DRINK)) {
+                        VoteDrinkContent voteDrinkContent = voteDrinkContentMap.get(voteCommonData.getVoteId());
+                        return generateDrinkVoteData(voteCommonData, voteDrinkContent);
+                    }
+                    throw new IllegalVoteTypeException();
                 }).collect(Collectors.toList());
+    }
+
+    private static VoteData generateDrinkVoteData(VoteCommonData voteCommonData, VoteDrinkContent voteDrinkContent) {
+        return VoteData.builder()
+                .voteId(voteCommonData.getVoteId())
+                .postedUserId(voteCommonData.getPostedUserId())
+                .title(voteCommonData.getTitle())
+                .detail(voteCommonData.getDetail())
+                .filteredGender(voteCommonData.getFilteredGender())
+                .filteredAge(voteCommonData.getFilteredAge())
+                .imageA(voteDrinkContent.getDrinkAImage())
+                .imageB(voteDrinkContent.getDrinkBImage())
+                .titleA(voteDrinkContent.getDrinkAName())
+                .titleB(voteDrinkContent.getDrinkBName())
+                .votedCount(voteCommonData.getVotedCount())
+                .region(voteDrinkContent.getRegion())
+                .build();
+    }
+
+    private VoteData generateNormalVoteData(VoteCommonData voteCommonData, VoteContent voteContent) {
+        return VoteData.builder()
+                .voteId(voteCommonData.getVoteId())
+                .postedUserId(voteCommonData.getPostedUserId())
+                .title(voteCommonData.getTitle())
+                .detail(voteCommonData.getDetail())
+                .filteredGender(voteCommonData.getFilteredGender())
+                .filteredAge(voteCommonData.getFilteredAge())
+                .imageA(voteContent.getImageA())
+                .imageB(voteContent.getImageB())
+                .titleA(voteContent.getTitleA())
+                .titleB(voteContent.getTitleB())
+                .votedCount(voteCommonData.getVotedCount())
+                .build();
     }
 
     @Override
