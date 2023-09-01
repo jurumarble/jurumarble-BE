@@ -47,23 +47,24 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
     public Slice<VoteData> findVoteDataWithPopularity(String keyword, Pageable pageable) {
 
         List<Tuple> findVotesOrderByPopularTuples = getVotesTupleOrderByPopular(keyword, pageable);
-
         List<Long> voteIds = getVoteIdsFromFindVotes(findVotesOrderByPopularTuples);
-
         List<VoteContent> voteContents = findVoteContentsByVoteIds(voteIds); //각 vote에서 voteContent 찾아야 함
-
         Map<Long, VoteContent> voteContentsMap = voteContents.stream()  // List를 순회하면 성능이 안나오므로 <voteId, VoteConent> 로 이루어진 Map을 만듬
                 .collect(Collectors.toMap(VoteContent::getVoteId, voteContent -> voteContent));// ex) <1, {voteContent}>
-
         List<VoteData> voteData = getFindVoteListDatas(findVotesOrderByPopularTuples, voteContentsMap);
 
+        return getSlice(voteData, pageable.getPageSize(), pageable.getPageSize(), pageable);
+    }
+
+    private SliceImpl<VoteData> getSlice(List<VoteData> voteData, int pageable, int pageable1, Pageable pageable2) {
         boolean hasNext = false;
-        if (voteData.size() > pageable.getPageSize()) {
+
+        if (voteData.size() > pageable) {
             hasNext = true;
-            voteData = voteData.subList(0, pageable.getPageSize()); // 조회된 결과에서 실제 페이지의 데이터만 가져옴
+            voteData = voteData.subList(0, pageable1); // 조회된 결과에서 실제 페이지의 데이터만 가져옴
         }
 
-        return new SliceImpl<>(voteData, pageable, hasNext);
+        return new SliceImpl<>(voteData, pageable2, hasNext);
     }
 
     private List<Tuple> getVotesTupleOrderByPopular(String keyword, Pageable pageable) {
@@ -168,13 +169,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .limit(pageSize)
                 .fetch();
 
-        boolean hasNext = false;
-        if (voteData.size() > pageSize) {
-            hasNext = true;
-            voteData = voteData.subList(0, pageSize); // 조회된 결과에서 실제 페이지의 데이터만 가져옴
-        }
-
-        return new SliceImpl<>(voteData, pageable, hasNext);
+        return getSlice(voteData, pageSize, pageSize, pageable);
     }
 
     private BooleanExpression getKeywordExpression(String keyword) {

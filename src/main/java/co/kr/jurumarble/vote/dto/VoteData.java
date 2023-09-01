@@ -24,4 +24,5 @@ public class VoteData {
     private String imageB;
     private String titleA;
     private String titleB;
+    private String region;
 }
