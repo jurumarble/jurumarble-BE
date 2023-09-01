@@ -44,7 +44,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
     }
 
     @Override
-    public Slice<NormalVoteData> findNormalVoteDataWithPopularity(String keyword, Pageable pageable) {
+    public Slice<NormalVoteData> findVoteDataWithPopularity(String keyword, Pageable pageable) {
 
         List<Tuple> findVotesOrderByPopularTuples = getVotesTupleOrderByPopular(keyword, pageable);
 
@@ -121,7 +121,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
     }
 
     @Override
-    public Optional<NormalVoteData> findNormalVoteDataByVoteId(Long voteId) {
+    public Optional<NormalVoteData> findVoteDataByVoteId(Long voteId) {
         NormalVoteData normalVoteData = jpaQueryFactory.select(
                         Projections.bean(NormalVoteData.class,
                                 vote.id,
@@ -145,7 +145,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
     }
 
     @Override
-    public Slice<NormalVoteData> findNormalVoteDataWithTime(String keyword, Pageable pageable) {
+    public Slice<NormalVoteData> findVoteDataWithTime(String keyword, Pageable pageable) {
         int pageNo = pageable.getPageNumber();
         int pageSize = pageable.getPageSize();
 

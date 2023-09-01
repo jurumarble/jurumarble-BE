@@ -17,11 +17,11 @@ import java.util.Optional;
 @Repository
 public interface VoteEntityRepository {
 
-    Slice<NormalVoteData> findNormalVoteDataWithPopularity(String keyword, Pageable pageable);
+    Slice<NormalVoteData> findVoteDataWithPopularity(String keyword, Pageable pageable);
 
-    Slice<NormalVoteData> findNormalVoteDataWithTime(String keyword, Pageable pageable);
+    Slice<NormalVoteData> findVoteDataWithTime(String keyword, Pageable pageable);
 
-    Optional<NormalVoteData> findNormalVoteDataByVoteId(Long voteId);
+    Optional<NormalVoteData> findVoteDataByVoteId(Long voteId);
 
     List<Vote> findByTitleContains(String keyword);
 

@@ -72,7 +72,7 @@ public class VoteController {
     @Operation(summary = "일반 투표 삭제", description = "헤더에 토큰 담고, 파라미터에 voteId 보내주시면 됩니다")
     @DeleteMapping("/{voteId}")
     public ResponseEntity deleteVote(@PathVariable("voteId") Long voteId, @RequestAttribute Long userId) {
-        voteService.deleteNormalVote(voteId, userId);
+        voteService.deleteVote(voteId, userId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 

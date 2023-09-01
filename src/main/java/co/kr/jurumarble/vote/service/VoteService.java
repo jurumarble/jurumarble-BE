@@ -82,7 +82,7 @@ public class VoteService {
     }
 
     @Transactional
-    public void deleteNormalVote(Long voteId, Long userId) {
+    public void deleteVote(Long voteId, Long userId) {
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         isVoteOfUser(userId, vote);
         VoteContent voteContent = voteContentRepository.findByVoteId(voteId).orElseThrow(VoteContentNotFoundException::new);
@@ -115,11 +115,11 @@ public class VoteService {
 
 
     private Slice<NormalVoteData> getVoteSortByTime(String keyword, PageRequest pageRequest) {
-        return voteRepository.findNormalVoteDataWithTime(keyword, pageRequest);
+        return voteRepository.findVoteDataWithTime(keyword, pageRequest);
     }
 
     private Slice<NormalVoteData> getVoteByPopularity(String keyword, PageRequest pageRequest) {
-        return voteRepository.findNormalVoteDataWithPopularity(keyword, pageRequest);
+        return voteRepository.findVoteDataWithPopularity(keyword, pageRequest);
     }
 
     public List<String> getRecommendVoteList(String keyword) {
