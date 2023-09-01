@@ -75,4 +75,8 @@ public class Drink {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    public boolean hasSameRegion(Drink drink) {
+        return region.equals(drink.getRegion());
+    }
 }
