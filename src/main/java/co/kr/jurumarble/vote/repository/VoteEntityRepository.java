@@ -4,7 +4,7 @@ import co.kr.jurumarble.user.enums.ChoiceType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
 import co.kr.jurumarble.vote.domain.Vote;
-import co.kr.jurumarble.vote.dto.NormalVoteData;
+import co.kr.jurumarble.vote.dto.VoteData;
 import co.kr.jurumarble.vote.repository.dto.HotDrinkVoteData;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -17,11 +17,11 @@ import java.util.Optional;
 @Repository
 public interface VoteEntityRepository {
 
-    Slice<NormalVoteData> findVoteDataWithPopularity(String keyword, Pageable pageable);
+    Slice<VoteData> findVoteDataWithPopularity(String keyword, Pageable pageable);
 
-    Slice<NormalVoteData> findVoteDataWithTime(String keyword, Pageable pageable);
+    Slice<VoteData> findVoteDataWithTime(String keyword, Pageable pageable);
 
-    Optional<NormalVoteData> findVoteDataByVoteId(Long voteId);
+    Optional<VoteData> findVoteDataByVoteId(Long voteId);
 
     List<Vote> findByTitleContains(String keyword);
 

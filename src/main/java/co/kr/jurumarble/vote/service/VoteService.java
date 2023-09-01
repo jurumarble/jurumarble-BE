@@ -12,7 +12,7 @@ import co.kr.jurumarble.user.repository.UserRepository;
 import co.kr.jurumarble.vote.domain.*;
 import co.kr.jurumarble.vote.dto.DoVoteInfo;
 import co.kr.jurumarble.vote.dto.GetIsUserVoted;
-import co.kr.jurumarble.vote.dto.NormalVoteData;
+import co.kr.jurumarble.vote.dto.VoteData;
 import co.kr.jurumarble.vote.enums.SortByType;
 import co.kr.jurumarble.vote.repository.VoteContentRepository;
 import co.kr.jurumarble.vote.repository.VoteRepository;
@@ -99,7 +99,7 @@ public class VoteService {
         voteResultRepository.save(voteResult);
     }
 
-    public Slice<NormalVoteData> getVoteList(String keyword, SortByType sortBy, Integer page, Integer size) {
+    public Slice<VoteData> getVoteList(String keyword, SortByType sortBy, Integer page, Integer size) {
         if (sortBy.equals(SortByType.ByTime)) {
             PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
             return getVoteSortByTime(keyword, pageRequest);
@@ -114,11 +114,11 @@ public class VoteService {
     }
 
 
-    private Slice<NormalVoteData> getVoteSortByTime(String keyword, PageRequest pageRequest) {
+    private Slice<VoteData> getVoteSortByTime(String keyword, PageRequest pageRequest) {
         return voteRepository.findVoteDataWithTime(keyword, pageRequest);
     }
 
-    private Slice<NormalVoteData> getVoteByPopularity(String keyword, PageRequest pageRequest) {
+    private Slice<VoteData> getVoteByPopularity(String keyword, PageRequest pageRequest) {
         return voteRepository.findVoteDataWithPopularity(keyword, pageRequest);
     }
 
