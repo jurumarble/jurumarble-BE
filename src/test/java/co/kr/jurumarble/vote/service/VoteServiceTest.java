@@ -29,10 +29,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class NormalVoteServiceTest {
+class VoteServiceTest {
 
     @InjectMocks
-    private NormalVoteService normalVoteService;
+    private VoteService voteService;
 
     @Mock
     private UserRepository userRepository;
@@ -73,7 +73,7 @@ class NormalVoteServiceTest {
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
         // when
-        normalVoteService.createNormalVote(request, userId);
+        voteService.createNormalVote(request, userId);
 
         // then
         verify(voteGenerator, times(1)).createNormalVote(vote, voteContent);
@@ -115,7 +115,7 @@ class NormalVoteServiceTest {
         Vote vote = request.toVote(userId);
 
         // when
-        normalVoteService.createDrinkVote(request, userId);
+        voteService.createDrinkVote(request, userId);
 
         // then
         verify(voteGenerator, times(1)).createDrinkVote(vote, voteDrinkContent);

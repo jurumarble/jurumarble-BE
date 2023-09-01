@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
-public class NormalVoteService {
+public class VoteService {
 
     private final UserRepository userRepository;
     private final VoteGenerator voteGenerator;
@@ -99,26 +99,26 @@ public class NormalVoteService {
         voteResultRepository.save(voteResult);
     }
 
-    public Slice<NormalVoteData> getNormalVoteList(String keyword, SortByType sortBy, Integer page, Integer size) {
+    public Slice<NormalVoteData> getVoteList(String keyword, SortByType sortBy, Integer page, Integer size) {
         if (sortBy.equals(SortByType.ByTime)) {
             PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
-            return getNormalVoteSortByTime(keyword, pageRequest);
+            return getVoteSortByTime(keyword, pageRequest);
         }
 
         if (sortBy.equals(SortByType.ByPopularity)) {
             PageRequest pageRequest = PageRequest.of(page, size);
-            return getNormalVoteByPopularity(keyword, pageRequest);
+            return getVoteByPopularity(keyword, pageRequest);
         }
 
         throw new VoteSortByNotFountException();
     }
 
 
-    private Slice<NormalVoteData> getNormalVoteSortByTime(String keyword, PageRequest pageRequest) {
+    private Slice<NormalVoteData> getVoteSortByTime(String keyword, PageRequest pageRequest) {
         return voteRepository.findNormalVoteDataWithTime(keyword, pageRequest);
     }
 
-    private Slice<NormalVoteData> getNormalVoteByPopularity(String keyword, PageRequest pageRequest) {
+    private Slice<NormalVoteData> getVoteByPopularity(String keyword, PageRequest pageRequest) {
         return voteRepository.findNormalVoteDataWithPopularity(keyword, pageRequest);
     }
 
