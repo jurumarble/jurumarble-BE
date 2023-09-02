@@ -88,7 +88,7 @@ public class CommentController {
     }
 
     @Operation(summary = "식당 추가", description = "헤더에 토큰을 포함하고, URL 파라미터에 'voteId'와 'commentId'를 전달하며, 요청 바디에 업데이트할 음식점 정보를 JSON 형식으로 전달하여 댓글에 추가하는 기능입니다.")
-    @PatchMapping("/votes/{voteId}/comments/{commentId}/restaurant")
+    @PutMapping("/votes/{voteId}/comments/{commentId}/restaurant")
     public ResponseEntity addRestaurantToComment(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Long userId, @RequestBody UpdateRestaurantRequest updateRestaurantRequest) {
 
         commentService.addRestaurantToComment(voteId, commentId, userId, updateRestaurantRequest.toServiceRequest());
