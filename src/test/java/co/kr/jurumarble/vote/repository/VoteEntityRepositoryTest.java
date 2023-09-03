@@ -13,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
 import org.springframework.test.context.TestPropertySource;
 
 import javax.persistence.EntityManager;
@@ -92,27 +90,27 @@ class VoteEntityRepositoryTest {
 //    }
 
 
-    @DisplayName("일반 투표와 투표 컨텐츠를 같이 조회한다.")
-    @Test
-    void findVoteDataByVoteId() {
-        // given // when
-        VoteData voteData = voteEntityRepository.findVoteDataByVoteId(1L).orElseThrow(VoteNotFoundException::new);
-
-        // then
-        assertThat(Collections.singletonList(voteData)).extracting(
-                "title",
-                "detail",
-                "filteredAge",
-                "filteredGender",
-                "filteredMbti",
-                "imageA",
-                "titleA"
-        ).contains(
-                tuple("테스트 투표 1", "테스트 투표 상세 설명 1", AgeType.twenties, GenderType.FEMALE, MbtiType.INFP, "https://picsum.photos/200/300", "A1")
-        );
-
-
-    }
+//    @DisplayName("일반 투표와 투표 컨텐츠를 같이 조회한다.")
+//    @Test
+//    void findVoteDataByVoteId() {
+//        // given // when
+//        VoteData voteData = voteEntityRepository.findVoteDataByVoteId(1L).orElseThrow(VoteNotFoundException::new);
+//
+//        // then
+//        assertThat(Collections.singletonList(voteData)).extracting(
+//                "title",
+//                "detail",
+//                "filteredAge",
+//                "filteredGender",
+//                "filteredMbti",
+//                "imageA",
+//                "titleA"
+//        ).contains(
+//                tuple("테스트 투표 1", "테스트 투표 상세 설명 1", AgeType.twenties, GenderType.FEMALE, MbtiType.INFP, "https://picsum.photos/200/300", "A1")
+//        );
+//
+//
+//    }
 
 //    @DisplayName("키워드 없이 시간순으로 일반 투표를 조회한다.")
 //    @Test

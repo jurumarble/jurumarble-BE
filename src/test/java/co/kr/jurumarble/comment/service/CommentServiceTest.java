@@ -49,7 +49,7 @@ class CommentServiceTest {
         CreateCommentServiceRequest request = CreateCommentServiceRequest.builder().content("댓글 내용").parentId(null).build();
 
         Comment parentComment = null;
-        Comment comment = request.toComment(parentComment,user,voteId);
+        Comment comment = request.toComment(parentComment, user, voteId);
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         when(voteRepository.findById(voteId)).thenReturn(Optional.of(vote));

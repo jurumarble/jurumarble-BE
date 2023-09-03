@@ -15,7 +15,6 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -70,18 +69,6 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .offset(pageNo * pageSize)
                 .limit(pageSize)
                 .fetch();
-    }
-
-
-    private SliceImpl<VoteData> getSlice(List<VoteData> voteData, int pageable, int pageable1, Pageable pageable2) {
-        boolean hasNext = false;
-
-        if (voteData.size() > pageable) {
-            hasNext = true;
-            voteData = voteData.subList(0, pageable1); // 조회된 결과에서 실제 페이지의 데이터만 가져옴
-        }
-
-        return new SliceImpl<>(voteData, pageable2, hasNext);
     }
 
 

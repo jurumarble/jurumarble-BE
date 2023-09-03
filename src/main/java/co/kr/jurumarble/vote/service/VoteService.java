@@ -104,13 +104,13 @@ public class VoteService {
 
     public Slice<VoteData> sortFindVotes(String keyword, SortByType sortBy, Integer page, Integer size) {
 
-        if (sortBy.equals(SortByType.ByTime)) {
+        if (SortByType.ByTime == sortBy) {
             PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
             return findVotesByTime(keyword, pageRequest);
         }
 
-        if (sortBy.equals(SortByType.ByPopularity)) {
-            PageRequest pageRequest = PageRequest.of(page, size);
+        if (SortByType.ByPopularity == sortBy) {
+            PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
             return findVotesByPopularity(keyword, pageRequest);
         }
 

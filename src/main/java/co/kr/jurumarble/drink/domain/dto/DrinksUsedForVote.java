@@ -5,8 +5,6 @@ import co.kr.jurumarble.exception.drink.DrinkIdDuplicatedException;
 import co.kr.jurumarble.exception.vote.DrinkVoteHasOtherRegionException;
 import lombok.Getter;
 
-import java.util.List;
-
 @Getter
 public class DrinksUsedForVote {
     private final Drink drinkA;

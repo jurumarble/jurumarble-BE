@@ -11,7 +11,7 @@ class DrinksUsedForVoteTest {
 
     @DisplayName("전통주 투표에 들어가는 전통주가 같으면 DrinkIdDuplicatedException를 throw 한다.")
     @Test
-    void validDrinkIsDuplicated(){
+    void validDrinkIsDuplicated() {
         // given // when
         Long drinkId = 1L;
 
@@ -33,7 +33,7 @@ class DrinksUsedForVoteTest {
 
     @DisplayName("전통주 투표에 들어가는 전통주의 지역이 다르면 DrinkVoteHasOtherRegionException을 throw 한다.")
     @Test
-    void validateDrinksForVoteHaveSameRegion(){
+    void validateDrinksForVoteHaveSameRegion() {
         // given // when
 
         Drink drinkA = Drink.builder()

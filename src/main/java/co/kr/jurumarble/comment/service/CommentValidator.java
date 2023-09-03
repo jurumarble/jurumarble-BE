@@ -4,9 +4,9 @@ import co.kr.jurumarble.comment.domain.Comment;
 import co.kr.jurumarble.comment.repository.CommentRepository;
 import co.kr.jurumarble.comment.service.request.CreateCommentServiceRequest;
 import co.kr.jurumarble.exception.comment.CommentNotBelongToUserException;
+import co.kr.jurumarble.exception.comment.CommentNotBelongToVoteException;
 import co.kr.jurumarble.exception.comment.CommentNotFoundException;
 import co.kr.jurumarble.exception.comment.NestedCommentNotAllowedException;
-import co.kr.jurumarble.exception.comment.CommentNotBelongToVoteException;
 import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.vote.domain.Vote;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +44,6 @@ public class CommentValidator {
             throw new NestedCommentNotAllowedException();
         }
     }
-
 
 
 }

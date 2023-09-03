@@ -70,7 +70,7 @@ public class CommentService {
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
         commentValidator.validateCommentBelongsToUser(comment, user);
-        commentValidator.validateCommentBelongsToVote(comment,vote);
+        commentValidator.validateCommentBelongsToVote(comment, vote);
         comment.updateContent(request.getContent());
     }
 
@@ -81,7 +81,7 @@ public class CommentService {
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
         commentValidator.validateCommentBelongsToUser(comment, user);
-        commentValidator.validateCommentBelongsToVote(comment,vote);
+        commentValidator.validateCommentBelongsToVote(comment, vote);
         commentRepository.delete(comment);
     }
 

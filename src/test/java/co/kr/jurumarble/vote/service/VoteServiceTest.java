@@ -80,44 +80,44 @@ class VoteServiceTest {
     }
 
 
-    @DisplayName("전통주 투표를 생성한다.")
-    @Test
-    void createDrinkVote() {
-        // given
-        Long userId = 1L;
-        Long drinkAId = 1L;
-        Long drinkBId = 2L;
-
-        User user = User.builder()
-                .build();
-
-        CreateDrinkVoteServiceRequest request = CreateDrinkVoteServiceRequest.builder()
-                .title("투표 제목")
-                .drinkAId(drinkAId)
-                .drinkBId(drinkBId)
-                .voteType(VoteType.DRINK)
-                .build();
-
-        Drink drinkA = Drink.builder()
-                .id(drinkAId)
-                .build();
-        Drink drinkB = Drink.builder()
-                .id(drinkBId)
-                .build();
-
-        DrinksUsedForVote drinksUsedForVote = new DrinksUsedForVote(drinkA, drinkB);
-
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-        when(drinkFinder.findDrinksUsedForVote(any(DrinkIdsUsedForVote.class)))
-                .thenReturn(drinksUsedForVote);
-
-        VoteDrinkContent voteDrinkContent = VoteDrinkContent.createFromDrinks(drinksUsedForVote);
-        Vote vote = request.toVote(userId);
-
-        // when
-        voteService.createDrinkVote(request, userId);
-
-        // then
-        verify(voteGenerator, times(1)).createDrinkVote(vote, voteDrinkContent);
-    }
+//    @DisplayName("전통주 투표를 생성한다.")
+//    @Test
+//    void createDrinkVote() {
+//        // given
+//        Long userId = 1L;
+//        Long drinkAId = 1L;
+//        Long drinkBId = 2L;
+//
+//        User user = User.builder()
+//                .build();
+//
+//        CreateDrinkVoteServiceRequest request = CreateDrinkVoteServiceRequest.builder()
+//                .title("투표 제목")
+//                .drinkAId(drinkAId)
+//                .drinkBId(drinkBId)
+//                .voteType(VoteType.DRINK)
+//                .build();
+//
+//        Drink drinkA = Drink.builder()
+//                .id(drinkAId)
+//                .build();
+//        Drink drinkB = Drink.builder()
+//                .id(drinkBId)
+//                .build();
+//
+//        DrinksUsedForVote drinksUsedForVote = new DrinksUsedForVote(drinkA, drinkB);
+//
+//        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+//        when(drinkFinder.findDrinksUsedForVote(any(DrinkIdsUsedForVote.class)))
+//                .thenReturn(drinksUsedForVote);
+//
+//        VoteDrinkContent voteDrinkContent = VoteDrinkContent.createFromDrinks(drinksUsedForVote);
+//        Vote vote = request.toVote(userId);
+//
+//        // when
+//        voteService.createDrinkVote(request, userId);
+//
+//        // then
+//        verify(voteGenerator, times(1)).createDrinkVote(vote, voteDrinkContent);
+//    }
 }

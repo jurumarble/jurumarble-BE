@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
 import org.springframework.test.context.TestPropertySource;
 
 import javax.persistence.EntityManager;
@@ -90,7 +89,7 @@ class DrinkEntityRepositoryImplTest {
 
     @DisplayName("전통주를 즐겼어요가 많은 순서로 조회한다.")
     @Test
-    void findDrinksByPopular(){
+    void findDrinksByPopular() {
         // given
         PageRequest of = PageRequest.of(0, 5);
         // when
