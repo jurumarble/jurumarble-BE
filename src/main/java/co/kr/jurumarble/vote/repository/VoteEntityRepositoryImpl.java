@@ -141,28 +141,19 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
 //                .fetch();
 //    }
 
-    private List<Long> getNormalVoteIdsFromFindVoteCommonDataList(List<VoteCommonData> voteCommonDataList) {
-        return voteCommonDataList.stream()
-                .filter(voteCommonData -> voteCommonData.getVoteType().equals(VoteType.NORMAL))
-                .map(VoteCommonData::getVoteId)
-                .collect(Collectors.toList());
-    }
 
-    private List<Long> getDrinkVoteIdsFromFindVoteCommonDataList(List<VoteCommonData> voteCommonDataList) {
-        return voteCommonDataList.stream()
-                .filter(voteCommonData -> voteCommonData.getVoteType().equals(VoteType.DRINK))
-                .map(VoteCommonData::getVoteId)
-                .collect(Collectors.toList());
-    }
 
-    private List<VoteContent> findVoteContentsByNormalVoteIds(List<Long> normalVoteIds) {
+
+    @Override
+    public List<VoteContent> findVoteContentsByNormalVoteIds(List<Long> normalVoteIds) {
         return jpaQueryFactory
                 .selectFrom(voteContent)
                 .where(voteContent.voteId.in(normalVoteIds))
                 .fetch();
     }
 
-    private List<VoteDrinkContent> findVoteContentsByDrinkVoteIds(List<Long> drinkVoteIds) {
+    @Override
+    public List<VoteDrinkContent> findVoteContentsByDrinkVoteIds(List<Long> drinkVoteIds) {
         return jpaQueryFactory
                 .selectFrom(voteDrinkContent)
                 .where(voteDrinkContent.voteId.in(drinkVoteIds))

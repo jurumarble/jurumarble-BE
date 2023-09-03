@@ -44,6 +44,8 @@ public class VoteService {
     private final VoteResultRepository voteResultRepository;
     private final DrinkFinder drinkFinder;
     private final VoteValidator voteValidator;
+    private final VoteFinder voteFinder;
+
 
     @Transactional
     public Long createNormalVote(CreateNormalVoteServiceRequest request, Long userId) {
@@ -108,7 +110,7 @@ public class VoteService {
 
         if (sortBy.equals(SortByType.ByPopularity)) {
             PageRequest pageRequest = PageRequest.of(page, size);
-            return getVoteByPopularity(keyword, pageRequest);
+            return voteFinder.getVoteByPopularity(keyword, pageRequest);
         }
 
         throw new VoteSortByNotFountException();
@@ -119,9 +121,7 @@ public class VoteService {
         return voteRepository.findVoteDataWithTime(keyword, pageRequest);
     }
 
-    private Slice<VoteData> getVoteByPopularity(String keyword, PageRequest pageRequest) {
-        Slice<VoteCommonData> voteCommonDataByPopularity = voteRepository.findVoteCommonDataByPopularity(keyword, pageRequest);
-    }
+
 
     public List<String> getRecommendVoteList(String keyword) {
         return voteRepository.findByTitleContains(keyword).stream()

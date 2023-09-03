@@ -4,6 +4,8 @@ import co.kr.jurumarble.user.enums.ChoiceType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
 import co.kr.jurumarble.vote.domain.Vote;
+import co.kr.jurumarble.vote.domain.VoteContent;
+import co.kr.jurumarble.vote.domain.VoteDrinkContent;
 import co.kr.jurumarble.vote.dto.VoteData;
 import co.kr.jurumarble.vote.repository.dto.HotDrinkVoteData;
 import co.kr.jurumarble.vote.repository.dto.VoteCommonData;
@@ -19,6 +21,10 @@ import java.util.Optional;
 public interface VoteEntityRepository {
 
     List<VoteCommonData> findVoteCommonDataByPopularity(String keyword, Pageable pageable);
+
+    List<VoteContent> findVoteContentsByNormalVoteIds(List<Long> normalVoteIds);
+
+    List<VoteDrinkContent> findVoteContentsByDrinkVoteIds(List<Long> drinkVoteIds);
 
     Slice<VoteData> findVoteDataWithTime(String keyword, Pageable pageable);
 
