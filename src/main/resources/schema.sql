@@ -67,16 +67,17 @@ CREATE TABLE vote_result
 
 CREATE TABLE vote_drink_content
 (
-    id           BIGINT NOT NULL AUTO_INCREMENT,
-    vote_id      BIGINT NOT NULL,
-    drink_a_id   BIGINT NOT NULL,
-    drink_b_id   BIGINT NOT NULL,
-    drink_a_name VARCHAR(30) DEFAULT NULL,
-    drink_a_type VARCHAR(10) DEFAULT NULL,
-    drink_b_name VARCHAR(30) DEFAULT NULL,
-    drink_b_type VARCHAR(10) DEFAULT NULL,
+    id            BIGINT NOT NULL AUTO_INCREMENT,
+    vote_id       BIGINT NOT NULL,
+    drink_a_id    BIGINT NOT NULL,
+    drink_b_id    BIGINT NOT NULL,
+    drink_a_name  VARCHAR(30)  DEFAULT NULL,
+    drink_a_type  VARCHAR(10)  DEFAULT NULL,
+    drink_b_name  VARCHAR(30)  DEFAULT NULL,
+    drink_b_type  VARCHAR(10)  DEFAULT NULL,
     drink_a_image VARCHAR(255) DEFAULT NULL,
     drink_b_image VARCHAR(255) DEFAULT NULL,
+    region        VARCHAR(10)  DEFAULT NULL,
     PRIMARY KEY (id)
 );
 
@@ -84,16 +85,16 @@ CREATE TABLE vote_drink_content
 CREATE TABLE drink
 (
     id                  BIGINT NOT NULL AUTO_INCREMENT,
-    name                VARCHAR(30)  DEFAULT NULL,
-    type                VARCHAR(10)  DEFAULT NULL,
-    product_name        VARCHAR(50)  DEFAULT NULL,
-    alcoholic_beverage  VARCHAR(100) DEFAULT NULL,
-    raw_material        VARCHAR(255) DEFAULT NULL,
-    capacity            VARCHAR(50)  DEFAULT NULL,
-    manufacture_address VARCHAR(255) DEFAULT NULL,
-    region              VARCHAR(10)  DEFAULT NULL,
-    price               VARCHAR(50)  DEFAULT NULL,
-    image               VARCHAR(255) DEFAULT NULL,
+    name                VARCHAR(30)     DEFAULT NULL,
+    type                VARCHAR(10)     DEFAULT NULL,
+    product_name        VARCHAR(50)     DEFAULT NULL,
+    alcoholic_beverage  VARCHAR(100)    DEFAULT NULL,
+    raw_material        VARCHAR(255)    DEFAULT NULL,
+    capacity            VARCHAR(50)     DEFAULT NULL,
+    manufacture_address VARCHAR(255)    DEFAULT NULL,
+    region              VARCHAR(10)     DEFAULT NULL,
+    price               VARCHAR(50)     DEFAULT NULL,
+    image               VARCHAR(255)    DEFAULT NULL,
     latitude            DECIMAL(18, 15) DEFAULT NULL,
     longitude           DECIMAL(18, 15) DEFAULT NULL,
     PRIMARY KEY (id)
@@ -101,9 +102,9 @@ CREATE TABLE drink
 
 CREATE TABLE bookmark
 (
-    id            BIGINT NOT NULL AUTO_INCREMENT,
-    user_id       BIGINT NOT NULL,
-    vote_id       BIGINT NOT NULL,
+    id      BIGINT NOT NULL AUTO_INCREMENT,
+    user_id BIGINT NOT NULL,
+    vote_id BIGINT NOT NULL,
     PRIMARY KEY (id)
 );
 

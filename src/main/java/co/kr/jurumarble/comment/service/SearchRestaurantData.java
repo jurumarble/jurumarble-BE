@@ -1,6 +1,6 @@
 package co.kr.jurumarble.comment.service;
 
-import lombok.*;
+import lombok.Getter;
 
 @Getter
 public class SearchRestaurantData {

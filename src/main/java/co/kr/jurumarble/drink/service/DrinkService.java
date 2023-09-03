@@ -53,6 +53,7 @@ public class DrinkService {
         makeHotDrinkDataHasTenData(hotDrinkData);
         return getGetHotDrinksResponses(hotDrinkData);
     }
+
     private void makeHotDrinkDataHasTenData(List<HotDrinkData> hotDrinkData) {
         if (hotDrinkData.size() < NUMBER_OF_HOT_DRINK) {
             int shortageOfDrink = NUMBER_OF_HOT_DRINK - hotDrinkData.size();

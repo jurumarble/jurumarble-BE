@@ -6,8 +6,8 @@ import lombok.Getter;
 @Getter
 public class CommentNotBelongToUserException extends RuntimeException {
 
-    private final StatusEnum status;
     private static final String message = "본인이 작성한 댓글이 아닙니다.";
+    private final StatusEnum status;
 
     public CommentNotBelongToUserException() {
         super(message);

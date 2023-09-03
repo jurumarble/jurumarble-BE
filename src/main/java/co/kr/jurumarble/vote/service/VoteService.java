@@ -12,12 +12,13 @@ import co.kr.jurumarble.user.repository.UserRepository;
 import co.kr.jurumarble.vote.domain.*;
 import co.kr.jurumarble.vote.dto.DoVoteInfo;
 import co.kr.jurumarble.vote.dto.GetIsUserVoted;
-import co.kr.jurumarble.vote.dto.NormalVoteData;
+import co.kr.jurumarble.vote.dto.VoteData;
 import co.kr.jurumarble.vote.enums.SortByType;
 import co.kr.jurumarble.vote.repository.VoteContentRepository;
 import co.kr.jurumarble.vote.repository.VoteRepository;
 import co.kr.jurumarble.vote.repository.VoteResultRepository;
 import co.kr.jurumarble.vote.repository.dto.HotDrinkVoteData;
+import co.kr.jurumarble.vote.repository.dto.VoteCommonData;
 import co.kr.jurumarble.vote.service.request.CreateDrinkVoteServiceRequest;
 import co.kr.jurumarble.vote.service.request.CreateNormalVoteServiceRequest;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
-public class NormalVoteService {
+public class VoteService {
 
     private final UserRepository userRepository;
     private final VoteGenerator voteGenerator;
@@ -43,6 +44,8 @@ public class NormalVoteService {
     private final VoteResultRepository voteResultRepository;
     private final DrinkFinder drinkFinder;
     private final VoteValidator voteValidator;
+    private final VoteFinder voteFinder;
+
 
     @Transactional
     public Long createNormalVote(CreateNormalVoteServiceRequest request, Long userId) {
@@ -82,7 +85,7 @@ public class NormalVoteService {
     }
 
     @Transactional
-    public void deleteNormalVote(Long voteId, Long userId) {
+    public void deleteVote(Long voteId, Long userId) {
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         isVoteOfUser(userId, vote);
         VoteContent voteContent = voteContentRepository.findByVoteId(voteId).orElseThrow(VoteContentNotFoundException::new);
@@ -99,27 +102,29 @@ public class NormalVoteService {
         voteResultRepository.save(voteResult);
     }
 
-    public Slice<NormalVoteData> getNormalVoteList(String keyword, SortByType sortBy, Integer page, Integer size) {
-        if (sortBy.equals(SortByType.ByTime)) {
+    public Slice<VoteData> sortFindVotes(String keyword, SortByType sortBy, Integer page, Integer size) {
+
+        if (SortByType.ByTime == sortBy) {
             PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
-            return getNormalVoteSortByTime(keyword, pageRequest);
+            return findVotesByTime(keyword, pageRequest);
         }
 
-        if (sortBy.equals(SortByType.ByPopularity)) {
-            PageRequest pageRequest = PageRequest.of(page, size);
-            return getNormalVoteByPopularity(keyword, pageRequest);
+        if (SortByType.ByPopularity == sortBy) {
+            PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
+            return findVotesByPopularity(keyword, pageRequest);
         }
 
         throw new VoteSortByNotFountException();
     }
 
-
-    private Slice<NormalVoteData> getNormalVoteSortByTime(String keyword, PageRequest pageRequest) {
-        return voteRepository.findNormalVoteDataWithTime(keyword, pageRequest);
+    public Slice<VoteData> findVotesByTime(String keyword, PageRequest pageable) {
+        List<VoteCommonData> voteCommonDataByTime = voteRepository.findVoteCommonDataByTime(keyword, pageable);
+        return voteFinder.getVoteData(pageable, voteCommonDataByTime);
     }
 
-    private Slice<NormalVoteData> getNormalVoteByPopularity(String keyword, PageRequest pageRequest) {
-        return voteRepository.findNormalVoteDataWithPopularity(keyword, pageRequest);
+    public Slice<VoteData> findVotesByPopularity(String keyword, PageRequest pageable) {
+        List<VoteCommonData> voteCommonDataByPopularity = voteRepository.findVoteCommonDataByPopularity(keyword, pageable);
+        return voteFinder.getVoteData(pageable, voteCommonDataByPopularity);
     }
 
     public List<String> getRecommendVoteList(String keyword) {
