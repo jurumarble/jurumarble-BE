@@ -18,6 +18,7 @@ import co.kr.jurumarble.vote.repository.VoteContentRepository;
 import co.kr.jurumarble.vote.repository.VoteRepository;
 import co.kr.jurumarble.vote.repository.VoteResultRepository;
 import co.kr.jurumarble.vote.repository.dto.HotDrinkVoteData;
+import co.kr.jurumarble.vote.repository.dto.VoteCommonData;
 import co.kr.jurumarble.vote.service.request.CreateDrinkVoteServiceRequest;
 import co.kr.jurumarble.vote.service.request.CreateNormalVoteServiceRequest;
 import lombok.RequiredArgsConstructor;
@@ -119,7 +120,7 @@ public class VoteService {
     }
 
     private Slice<VoteData> getVoteByPopularity(String keyword, PageRequest pageRequest) {
-        return voteRepository.findVoteDataWithPopularity(keyword, pageRequest);
+        Slice<VoteCommonData> voteCommonDataByPopularity = voteRepository.findVoteCommonDataByPopularity(keyword, pageRequest);
     }
 
     public List<String> getRecommendVoteList(String keyword) {

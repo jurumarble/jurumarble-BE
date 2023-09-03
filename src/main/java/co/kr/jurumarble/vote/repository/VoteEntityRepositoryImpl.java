@@ -45,10 +45,40 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
         this.jpaQueryFactory = new JPAQueryFactory(entityManager);
     }
 
+    @Override
+    public List<VoteCommonData> findVoteCommonDataByPopularity(String keyword, Pageable pageable) {
+        int pageNo = pageable.getPageNumber();
+        int pageSize = pageable.getPageSize();
+
+        BooleanExpression keywordExpression = getKeywordExpression(keyword);
+
+        return jpaQueryFactory
+                .select(
+                        Projections.bean(
+                                VoteCommonData.class,
+                                vote.id.as("voteId"),
+                                vote.postedUserId,
+                                vote.title,
+                                vote.detail,
+                                vote.filteredGender,
+                                vote.filteredAge,
+                                vote.filteredMbti,
+                                voteResult.id.count().as("votedCount"),
+                                vote.voteType)
+                )
+                .from(vote)
+                .leftJoin(voteResult).on(vote.id.eq(voteResult.voteId))
+                .where(keywordExpression)
+                .groupBy(vote.id)
+                .orderBy(voteResult.id.count().desc())
+                .offset(pageNo * pageSize)
+                .limit(pageSize)
+                .fetch();
+    }
+
     // 1. 원하는 조건을 걸어서 투표 컨텐츠 없이 투표를 찾는다.
     // 2. 찾은 투표의 아이디와 타입으로 투표 컨텐츠를 찾는다.
     // 3. 찾은 투표 컨텐츠와 투표 데이터를 이어서 완전하게 만든다.
-    @Override
     public Slice<VoteData> findVoteDataWithPopularity(String keyword, Pageable pageable) {
 
         List<VoteCommonData> voteCommonDataList = getVoteCommonDataByPopular(keyword, pageable);
@@ -81,35 +111,35 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
         return new SliceImpl<>(voteData, pageable2, hasNext);
     }
 
-    private List<VoteCommonData> getVoteCommonDataByPopular(String keyword, Pageable pageable) {
-        int pageNo = pageable.getPageNumber();
-        int pageSize = pageable.getPageSize();
-
-        BooleanExpression keywordExpression = getKeywordExpression(keyword);
-
-        return jpaQueryFactory
-                .select(
-                        Projections.bean(
-                                VoteCommonData.class,
-                                vote.id.as("voteId"),
-                                vote.postedUserId,
-                                vote.title,
-                                vote.detail,
-                                vote.filteredGender,
-                                vote.filteredAge,
-                                vote.filteredMbti,
-                                voteResult.id.count().as("votedCount"),
-                                vote.voteType)
-                )
-                .from(vote)
-                .leftJoin(voteResult).on(vote.id.eq(voteResult.voteId))
-                .where(keywordExpression)
-                .groupBy(vote.id)
-                .orderBy(voteResult.id.count().desc())
-                .offset(pageNo * pageSize)
-                .limit(pageSize)
-                .fetch();
-    }
+//    private List<VoteCommonData> getVoteCommonDataByPopular(String keyword, Pageable pageable) {
+//        int pageNo = pageable.getPageNumber();
+//        int pageSize = pageable.getPageSize();
+//
+//        BooleanExpression keywordExpression = getKeywordExpression(keyword);
+//
+//        return jpaQueryFactory
+//                .select(
+//                        Projections.bean(
+//                                VoteCommonData.class,
+//                                vote.id.as("voteId"),
+//                                vote.postedUserId,
+//                                vote.title,
+//                                vote.detail,
+//                                vote.filteredGender,
+//                                vote.filteredAge,
+//                                vote.filteredMbti,
+//                                voteResult.id.count().as("votedCount"),
+//                                vote.voteType)
+//                )
+//                .from(vote)
+//                .leftJoin(voteResult).on(vote.id.eq(voteResult.voteId))
+//                .where(keywordExpression)
+//                .groupBy(vote.id)
+//                .orderBy(voteResult.id.count().desc())
+//                .offset(pageNo * pageSize)
+//                .limit(pageSize)
+//                .fetch();
+//    }
 
     private List<Long> getNormalVoteIdsFromFindVoteCommonDataList(List<VoteCommonData> voteCommonDataList) {
         return voteCommonDataList.stream()
