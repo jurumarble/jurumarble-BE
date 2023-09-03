@@ -15,7 +15,6 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
@@ -86,7 +85,6 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
     }
 
 
-
     @Override
     public List<VoteContent> findVoteContentsByNormalVoteIds(List<Long> normalVoteIds) {
         return jpaQueryFactory
@@ -129,14 +127,14 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
     }
 
     @Override
-    public Slice<VoteData> findVoteDataWithTime(String keyword, Pageable pageable) {
+    public List<VoteCommonData> findVoteCommonDataByTime(String keyword, Pageable pageable) {
         int pageNo = pageable.getPageNumber();
         int pageSize = pageable.getPageSize();
 
         BooleanExpression keywordExpression = getKeywordExpression(keyword);
 
-        List<VoteData> voteData = jpaQueryFactory.select(
-                        Projections.bean(VoteData.class,
+        return jpaQueryFactory.select(
+                        Projections.bean(VoteCommonData.class,
                                 vote.id,
                                 vote.postedUserId,
                                 vote.title,
@@ -152,7 +150,6 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .limit(pageSize)
                 .fetch();
 
-        return getSlice(voteData, pageSize, pageSize, pageable);
     }
 
     private BooleanExpression getKeywordExpression(String keyword) {

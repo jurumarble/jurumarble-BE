@@ -102,25 +102,31 @@ public class VoteService {
         voteResultRepository.save(voteResult);
     }
 
-    public Slice<VoteData> getVoteList(String keyword, SortByType sortBy, Integer page, Integer size) {
+    public Slice<VoteData> sortFindVotes(String keyword, SortByType sortBy, Integer page, Integer size) {
+
         if (sortBy.equals(SortByType.ByTime)) {
             PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
-            return getVoteSortByTime(keyword, pageRequest);
+            return findVotesByTime(keyword, pageRequest);
         }
 
         if (sortBy.equals(SortByType.ByPopularity)) {
             PageRequest pageRequest = PageRequest.of(page, size);
-            return voteFinder.getVoteByPopularity(keyword, pageRequest);
+            return findVotesByPopularity(keyword, pageRequest);
         }
 
         throw new VoteSortByNotFountException();
     }
 
-
-    private Slice<VoteData> getVoteSortByTime(String keyword, PageRequest pageRequest) {
-        return voteRepository.findVoteDataWithTime(keyword, pageRequest);
+    public Slice<VoteData> findVotesByTime(String keyword, PageRequest pageable) {
+        List<VoteCommonData> voteCommonDataByTime = voteRepository.findVoteCommonDataByTime(keyword, pageable);
+        return voteFinder.getVoteData(pageable, voteCommonDataByTime);
     }
 
+
+    public Slice<VoteData> findVotesByPopularity(String keyword, PageRequest pageable) {
+        List<VoteCommonData> voteCommonDataByPopularity = voteRepository.findVoteCommonDataByPopularity(keyword, pageable);
+        return voteFinder.getVoteData(pageable, voteCommonDataByPopularity);
+    }
 
 
     public List<String> getRecommendVoteList(String keyword) {

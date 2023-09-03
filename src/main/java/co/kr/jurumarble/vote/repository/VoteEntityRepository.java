@@ -26,7 +26,7 @@ public interface VoteEntityRepository {
 
     List<VoteDrinkContent> findVoteContentsByDrinkVoteIds(List<Long> drinkVoteIds);
 
-    Slice<VoteData> findVoteDataWithTime(String keyword, Pageable pageable);
+    List<VoteCommonData> findVoteCommonDataByTime(String keyword, Pageable pageable);
 
     Optional<VoteData> findVoteDataByVoteId(Long voteId);
 
