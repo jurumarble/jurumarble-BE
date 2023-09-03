@@ -98,7 +98,7 @@ public class CommentController {
 
     @Operation(summary = "식당 검색", description = "헤더에 토큰을 포함하고, URL 파라미터에 'voteId'와 'commentId'를 전달하며, 요청 쿼리에 'keyword'(검색 키워드 - 선택)과 'page'(요청 페이지 인덱스)를 전달하여 음식점을 검색하는 기능입니다.")
     @GetMapping("/votes/{voteId}/comments/{commentId}/restaurant")
-    public ResponseEntity<List<SearchRestaurantData>> searchRestaurant(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Long userId, @RequestParam(value = "keyword", required = false) String keyword, @RequestParam(value = "areaCode", required = false) int areaCode, @RequestParam int page) {
+    public ResponseEntity<List<SearchRestaurantData>> searchRestaurant(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Long userId, @RequestParam(value = "keyword", required = false) String keyword, @RequestParam(required = false) Integer areaCode, @RequestParam int page) {
 
         List<SearchRestaurantData> searchRestaurantResponse = commentService.searchRestaurant(voteId, commentId, userId, keyword, areaCode, page);
 

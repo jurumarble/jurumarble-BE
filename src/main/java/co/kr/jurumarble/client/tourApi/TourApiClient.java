@@ -33,7 +33,7 @@ public interface TourApiClient {
     @GetMapping(value = "/areaBasedList1")
     TourAreaBasedListResponse getRestaurantList(@RequestParam("ServiceKey") String serviceKey,
                                                 @RequestParam("contentTypeId") int contentTypeId,
-                                                @RequestParam("areaCode") int areaCode,
+                                                @RequestParam(value = "areaCode", required = false) Integer areaCode,
                                                 @RequestParam("MobileOS") String mobileOS,
                                                 @RequestParam("MobileApp") String mobileApp,
                                                 @RequestParam("numOfRows") int numOfRows,
