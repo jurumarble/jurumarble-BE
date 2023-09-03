@@ -28,7 +28,7 @@ public class GetDrinkResponse {
     private String rawMaterial;
 
     @Schema(description = "전통주 용량(ml)", example = "500")
-    private int capacity;
+    private String capacity;
 
     @Schema(description = "제조 주소", example = "진라남도 진도군...")
     private String manufactureAddress;
@@ -37,7 +37,7 @@ public class GetDrinkResponse {
     private String image;
 
     @Builder
-    private GetDrinkResponse(Long drinkId, String name, String type, String productName, String alcoholicBeverage, String rawMaterial, int capacity, String manufactureAddress, String image) {
+    private GetDrinkResponse(Long drinkId, String name, String type, String productName, String alcoholicBeverage, String rawMaterial, String capacity, String manufactureAddress, String image) {
         this.drinkId = drinkId;
         this.name = name;
         this.type = type;

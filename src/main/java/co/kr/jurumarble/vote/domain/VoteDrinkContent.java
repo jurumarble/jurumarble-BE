@@ -80,6 +80,7 @@ public class VoteDrinkContent {
                 .drinkBType(drinkB.getType())
                 .drinkAImage(drinkA.getImage())
                 .drinkBImage(drinkB.getImage())
+                .region(drinkA.getRegion())
                 .build();
     }
 

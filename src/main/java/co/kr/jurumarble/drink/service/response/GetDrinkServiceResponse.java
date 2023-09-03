@@ -12,7 +12,7 @@ public class GetDrinkServiceResponse {
     private final String productName;
     private final String alcoholicBeverage;
     private final String rawMaterial;
-    private final int capacity;
+    private final String capacity;
     private final String manufactureAddress;
     private final String image;
 

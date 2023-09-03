@@ -19,6 +19,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "comment")
 public class Comment extends BaseTimeEntity {
 
     private static final int INITIAL_COUNT = 0;

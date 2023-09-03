@@ -1,8 +1,9 @@
-package co.kr.jurumarble.vote.dto;
+package co.kr.jurumarble.vote.repository.dto;
 
 import co.kr.jurumarble.user.enums.AgeType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
+import co.kr.jurumarble.vote.enums.VoteType;
 import lombok.*;
 
 @Getter
@@ -10,7 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class NormalVoteData {
+public class VoteCommonData {
 
     private Long voteId;
     private Long postedUserId;
@@ -19,9 +20,6 @@ public class NormalVoteData {
     private GenderType filteredGender;
     private AgeType filteredAge;
     private MbtiType filteredMbti;
-    private String imageA;
-    private String imageB;
-    private String titleA;
-    private String titleB;
     private Long votedCount;
+    private VoteType voteType;
 }
