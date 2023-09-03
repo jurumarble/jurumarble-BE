@@ -69,7 +69,7 @@ public class VoteFinder {
                 .map(voteCommonData -> {
                     if (voteCommonData.getVoteType().equals(VoteType.NORMAL)) {
                         VoteContent voteContent = voteContentsMap.get(voteCommonData.getVoteId());
-                        return generateNormalVoteData(voteCommonData, voteContent);
+                        return VoteData.generateNormalVoteData(voteCommonData, voteContent);
                     }
                     if (voteCommonData.getVoteType().equals(VoteType.DRINK)) {
                         VoteDrinkContent voteDrinkContent = voteDrinkContentMap.get(voteCommonData.getVoteId());
@@ -78,23 +78,7 @@ public class VoteFinder {
                     throw new IllegalVoteTypeException();
                 }).collect(Collectors.toList());
     }
-
-    private VoteData generateNormalVoteData(VoteCommonData voteCommonData, VoteContent voteContent) {
-        return VoteData.builder()
-                .voteId(voteCommonData.getVoteId())
-                .postedUserId(voteCommonData.getPostedUserId())
-                .title(voteCommonData.getTitle())
-                .detail(voteCommonData.getDetail())
-                .filteredGender(voteCommonData.getFilteredGender())
-                .filteredAge(voteCommonData.getFilteredAge())
-                .imageA(voteContent.getImageA())
-                .imageB(voteContent.getImageB())
-                .titleA(voteContent.getTitleA())
-                .titleB(voteContent.getTitleB())
-                .votedCount(voteCommonData.getVotedCount())
-                .build();
-    }
-
+    
     private static VoteData generateDrinkVoteData(VoteCommonData voteCommonData, VoteDrinkContent voteDrinkContent) {
         return VoteData.builder()
                 .voteId(voteCommonData.getVoteId())
