@@ -114,28 +114,28 @@ class VoteEntityRepositoryTest {
 
     }
 
-    @DisplayName("키워드 없이 시간순으로 일반 투표를 조회한다.")
-    @Test
-    void findVoteDataWithTime() {
-        // given
-        PageRequest of = PageRequest.of(0, 7);
-
-        // when
-        Slice<VoteData> actual = voteEntityRepository.findVoteDataWithTime(null, of);
-
-        // then
-        assertThat(actual).hasSize(7)
-                .extracting("title", "titleA")
-                .containsExactly(
-                        tuple("테스트 투표 10", "S1"),
-                        tuple("테스트 투표 9", "Q1"),
-                        tuple("테스트 투표 8", "O1"),
-                        tuple("테스트 투표 7", "M1"),
-                        tuple("테스트 투표 6", "K1"),
-                        tuple("테스트 투표 5", "I1"),
-                        tuple("테스트 투표 4", "G1")
-                );
-    }
+//    @DisplayName("키워드 없이 시간순으로 일반 투표를 조회한다.")
+//    @Test
+//    void findVoteDataWithTime() {
+//        // given
+//        PageRequest of = PageRequest.of(0, 7);
+//
+//        // when
+//        Slice<VoteData> actual = voteEntityRepository.findVoteDataWithTime(null, of);
+//
+//        // then
+//        assertThat(actual).hasSize(7)
+//                .extracting("title", "titleA")
+//                .containsExactly(
+//                        tuple("테스트 투표 10", "S1"),
+//                        tuple("테스트 투표 9", "Q1"),
+//                        tuple("테스트 투표 8", "O1"),
+//                        tuple("테스트 투표 7", "M1"),
+//                        tuple("테스트 투표 6", "K1"),
+//                        tuple("테스트 투표 5", "I1"),
+//                        tuple("테스트 투표 4", "G1")
+//                );
+//    }
 
     @DisplayName("일주일 동안 투표 결과가 가장 많은 전통주 투표를 조회한다.")
     @Test

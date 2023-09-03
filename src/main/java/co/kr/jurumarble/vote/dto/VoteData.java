@@ -37,10 +37,12 @@ public class VoteData {
                 .detail(voteCommonData.getDetail())
                 .filteredGender(voteCommonData.getFilteredGender())
                 .filteredAge(voteCommonData.getFilteredAge())
+                .filteredMbti(voteCommonData.getFilteredMbti())
                 .imageA(voteContent.getImageA())
                 .imageB(voteContent.getImageB())
                 .titleA(voteContent.getTitleA())
                 .titleB(voteContent.getTitleB())
+                .voteType(voteCommonData.getVoteType())
                 .votedCount(voteCommonData.getVotedCount())
                 .build();
     }
@@ -54,11 +56,13 @@ public class VoteData {
                 .detail(voteCommonData.getDetail())
                 .filteredGender(voteCommonData.getFilteredGender())
                 .filteredAge(voteCommonData.getFilteredAge())
+                .filteredMbti(voteCommonData.getFilteredMbti())
                 .imageA(voteDrinkContent.getDrinkAImage())
                 .imageB(voteDrinkContent.getDrinkBImage())
                 .titleA(voteDrinkContent.getDrinkAName())
                 .titleB(voteDrinkContent.getDrinkBName())
                 .votedCount(voteCommonData.getVotedCount())
+                .voteType(voteCommonData.getVoteType())
                 .region(voteDrinkContent.getRegion())
                 .build();
     }

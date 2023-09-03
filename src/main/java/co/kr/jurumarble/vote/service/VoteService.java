@@ -122,12 +122,10 @@ public class VoteService {
         return voteFinder.getVoteData(pageable, voteCommonDataByTime);
     }
 
-
     public Slice<VoteData> findVotesByPopularity(String keyword, PageRequest pageable) {
         List<VoteCommonData> voteCommonDataByPopularity = voteRepository.findVoteCommonDataByPopularity(keyword, pageable);
         return voteFinder.getVoteData(pageable, voteCommonDataByPopularity);
     }
-
 
     public List<String> getRecommendVoteList(String keyword) {
         return voteRepository.findByTitleContains(keyword).stream()

@@ -106,7 +106,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
     public Optional<VoteData> findVoteDataByVoteId(Long voteId) {
         VoteData voteData = jpaQueryFactory.select(
                         Projections.bean(VoteData.class,
-                                vote.id,
+                                vote.id.as("voteId"),
                                 vote.postedUserId,
                                 vote.title,
                                 vote.detail,
@@ -135,13 +135,14 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
 
         return jpaQueryFactory.select(
                         Projections.bean(VoteCommonData.class,
-                                vote.id,
+                                vote.id.as("voteId"),
                                 vote.postedUserId,
                                 vote.title,
                                 vote.detail,
                                 vote.filteredGender,
                                 vote.filteredAge,
-                                vote.filteredMbti
+                                vote.filteredMbti,
+                                vote.voteType
                         ))
                 .from(vote)
                 .where(keywordExpression)

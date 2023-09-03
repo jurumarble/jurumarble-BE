@@ -31,14 +31,14 @@ public class Drink {
     @Column(name = "raw_material")
     private String rawMaterial;
 
-    private int capacity;
+    private String capacity;
 
     @Column(name = "manufacture_address")
     private String manufactureAddress;
 
     private String region;
 
-    private int price;
+    private String price;
 
     private String image;
 
@@ -47,7 +47,7 @@ public class Drink {
     private Double longitude;
 
     @Builder
-    public Drink(Long id, String name, String type, String productName, String alcoholicBeverage, String rawMaterial, int capacity, String manufactureAddress, String region, int price, String image, Double latitude, Double longitude) {
+    public Drink(Long id, String name, String type, String productName, String alcoholicBeverage, String rawMaterial, String capacity, String manufactureAddress, String region, String price, String image, Double latitude, Double longitude) {
         this.id = id;
         this.name = name;
         this.type = type;

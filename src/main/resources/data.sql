@@ -2254,6 +2254,20 @@ values (11, 1, 2, 'https://shopping-phinf.pstatic.net/main_8204301/82043013300.5
        (12, 1, 3, 'https://shopping-phinf.pstatic.net/main_8204301/82043013300.5.jpg',
         'https://shopping-phinf.pstatic.net/main_1316520/13165203536.5.jpg', '경기'),
        (13, 2, 4, 'https://shopping-phinf.pstatic.net/main_8475981/84759812651.1.jpg',
+        'https://shopping-phinf.pstatic.net/main_2403950/24039509524.20200904124411.jpg', '부산'),
+       (14, 6, 8, 'https://shopping-phinf.pstatic.net/main_8204301/82043013300.5.jpg',
+        'https://shopping-phinf.pstatic.net/main_8475981/84759812651.1.jpg', '서울'),
+       (15, 9, 25, 'https://shopping-phinf.pstatic.net/main_8204301/82043013300.5.jpg',
+        'https://shopping-phinf.pstatic.net/main_1316520/13165203536.5.jpg', '경기'),
+       (16, 2, 3, 'https://shopping-phinf.pstatic.net/main_8475981/84759812651.1.jpg',
+        'https://shopping-phinf.pstatic.net/main_2403950/24039509524.20200904124411.jpg', '부산'),
+       (17, 2, 23, 'https://shopping-phinf.pstatic.net/main_8204301/82043013300.5.jpg',
+        'https://shopping-phinf.pstatic.net/main_8475981/84759812651.1.jpg', '서울'),
+       (18, 1, 10, 'https://shopping-phinf.pstatic.net/main_8204301/82043013300.5.jpg',
+        'https://shopping-phinf.pstatic.net/main_1316520/13165203536.5.jpg', '경기'),
+       (19, 10, 9, 'https://shopping-phinf.pstatic.net/main_8475981/84759812651.1.jpg',
+        'https://shopping-phinf.pstatic.net/main_2403950/24039509524.20200904124411.jpg', '부산'),
+       (20, 10, 9, 'https://shopping-phinf.pstatic.net/main_8475981/84759812651.1.jpg',
         'https://shopping-phinf.pstatic.net/main_2403950/24039509524.20200904124411.jpg', '부산');
 
 
