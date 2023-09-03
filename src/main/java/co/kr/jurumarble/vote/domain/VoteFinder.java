@@ -73,27 +73,10 @@ public class VoteFinder {
                     }
                     if (voteCommonData.getVoteType().equals(VoteType.DRINK)) {
                         VoteDrinkContent voteDrinkContent = voteDrinkContentMap.get(voteCommonData.getVoteId());
-                        return generateDrinkVoteData(voteCommonData, voteDrinkContent);
+                        return VoteData.generateDrinkVoteData(voteCommonData, voteDrinkContent);
                     }
                     throw new IllegalVoteTypeException();
                 }).collect(Collectors.toList());
-    }
-    
-    private static VoteData generateDrinkVoteData(VoteCommonData voteCommonData, VoteDrinkContent voteDrinkContent) {
-        return VoteData.builder()
-                .voteId(voteCommonData.getVoteId())
-                .postedUserId(voteCommonData.getPostedUserId())
-                .title(voteCommonData.getTitle())
-                .detail(voteCommonData.getDetail())
-                .filteredGender(voteCommonData.getFilteredGender())
-                .filteredAge(voteCommonData.getFilteredAge())
-                .imageA(voteDrinkContent.getDrinkAImage())
-                .imageB(voteDrinkContent.getDrinkBImage())
-                .titleA(voteDrinkContent.getDrinkAName())
-                .titleB(voteDrinkContent.getDrinkBName())
-                .votedCount(voteCommonData.getVotedCount())
-                .region(voteDrinkContent.getRegion())
-                .build();
     }
 
     private SliceImpl<VoteData> getSlice(List<VoteData> voteData, int pageable, int pageable1, Pageable pageable2) {

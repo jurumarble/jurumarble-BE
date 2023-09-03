@@ -4,6 +4,7 @@ import co.kr.jurumarble.user.enums.AgeType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
 import co.kr.jurumarble.vote.domain.VoteContent;
+import co.kr.jurumarble.vote.domain.VoteDrinkContent;
 import co.kr.jurumarble.vote.enums.VoteType;
 import co.kr.jurumarble.vote.repository.dto.VoteCommonData;
 import lombok.*;
@@ -41,6 +42,24 @@ public class VoteData {
                 .titleA(voteContent.getTitleA())
                 .titleB(voteContent.getTitleB())
                 .votedCount(voteCommonData.getVotedCount())
+                .build();
+    }
+
+
+    public static VoteData generateDrinkVoteData(VoteCommonData voteCommonData, VoteDrinkContent voteDrinkContent) {
+        return VoteData.builder()
+                .voteId(voteCommonData.getVoteId())
+                .postedUserId(voteCommonData.getPostedUserId())
+                .title(voteCommonData.getTitle())
+                .detail(voteCommonData.getDetail())
+                .filteredGender(voteCommonData.getFilteredGender())
+                .filteredAge(voteCommonData.getFilteredAge())
+                .imageA(voteDrinkContent.getDrinkAImage())
+                .imageB(voteDrinkContent.getDrinkBImage())
+                .titleA(voteDrinkContent.getDrinkAName())
+                .titleB(voteDrinkContent.getDrinkBName())
+                .votedCount(voteCommonData.getVotedCount())
+                .region(voteDrinkContent.getRegion())
                 .build();
     }
 }
