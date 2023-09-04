@@ -61,7 +61,7 @@ class VoteServiceTest {
                 .build();
         VoteContent voteContent = request.toVoteContent();
 
-        Vote vote = request.toVote(userId);
+        Vote vote = request.toVote(userId, request.getDetail());
 
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));

@@ -46,6 +46,7 @@ class VoteControllerTest {
         // given
         CreateNormalVoteRequest request = CreateNormalVoteRequest.builder()
                 .title("투표 제목")
+                .detail("투표 상세")
                 .titleA("A 항목 제목")
                 .titleB("B 항목 제목")
                 .imageA("A 항목 이미지")
@@ -73,6 +74,7 @@ class VoteControllerTest {
         // given
         CreateNormalVoteRequest request = CreateNormalVoteRequest.builder()
                 .title("투표 제목")
+                .detail("투표 상세")
                 .titleA("A 항목 제목")
                 .titleB("B 항목 제목")
                 .imageA("A 항목 이미지")
@@ -97,6 +99,7 @@ class VoteControllerTest {
         // given
         CreateNormalVoteRequest request = CreateNormalVoteRequest.builder()
                 .title("투표 제목")
+                .detail("투표 상세")
                 .titleA("A 항목 제목")
                 .titleB("B 항목 제목")
                 .imageA("A 항목 이미지")

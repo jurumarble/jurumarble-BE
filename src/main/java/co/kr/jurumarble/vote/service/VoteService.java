@@ -57,7 +57,7 @@ public class VoteService {
     public Long createNormalVote(CreateNormalVoteServiceRequest request, Long userId) {
         userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         VoteContent voteContent = request.toVoteContent();
-        Vote vote = request.toVote(userId);
+        Vote vote = request.toVote(userId, request.getDetail());
         return voteGenerator.createNormalVote(vote, voteContent);
     }
 
