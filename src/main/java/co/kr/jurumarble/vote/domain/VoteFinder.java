@@ -33,7 +33,7 @@ public class VoteFinder {
         Map<Long, VoteDrinkContent> voteDrinkContentMap = makeVoteDrinkContentsMap(voteDrinkContents);
 
         List<VoteData> voteData = generateVoteDataFromContents(voteCommonDataList, voteContentsMap, voteDrinkContentMap);
-        return pageableConverter.convertListToSlice(voteData, pageable.getPageSize(), pageable.getPageSize(), pageable);
+        return pageableConverter.convertListToSlice(voteData, pageable.getPageNumber(), pageable.getPageSize());
     }
 
 
