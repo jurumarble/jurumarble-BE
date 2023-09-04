@@ -142,7 +142,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
 
     private BooleanExpression getKeywordExpression(String keyword) {
         return keyword != null
-                ? vote.title.like(keyword + "%")
+                ? vote.title.like("%" + keyword + "%")
                 : null;
     }
 
@@ -155,7 +155,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .on(vote.id.eq(voteContent.voteId))
                 .innerJoin(voteResult)
                 .on(vote.id.eq(voteResult.voteId))
-                .where(vote.title.like(keyword + "%"))
+                .where(vote.title.like( "%" + keyword + "%"))
                 .groupBy(vote.id)
                 .orderBy(voteResult.id.count().desc())
                 .limit(5)
