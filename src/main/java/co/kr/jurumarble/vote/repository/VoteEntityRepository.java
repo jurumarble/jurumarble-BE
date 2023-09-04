@@ -29,7 +29,7 @@ public interface VoteEntityRepository {
 
     List<VoteData> findDrinkVotesByTime(String keyword, String region, int pageNum, int pageSize);
 
-    List<VoteData> findDrinkVotesByPopularity(String keyword, String region,  int pageNum, int pageSize);
+    List<VoteData> findDrinkVotesByPopularity(String keyword, String region, int pageNum, int pageSize);
 
     Optional<VoteData> findVoteDataByVoteId(Long voteId);
 
