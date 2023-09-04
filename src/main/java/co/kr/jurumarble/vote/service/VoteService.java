@@ -78,7 +78,7 @@ public class VoteService {
     }
 
     @Transactional
-    public void updateVote(UpdateVoteServiceRequest request) {
+    public void updateNormalVote(UpdateNormalVoteServiceRequest request) {
         Vote vote = voteRepository.findById(request.getVoteId()).orElseThrow(VoteNotFoundException::new);
         isVoteOfUser(request.getUserId(), vote);
         VoteContent voteContent = voteContentRepository.findByVoteId(vote.getId()).orElseThrow(VoteNotFoundException::new);
@@ -177,5 +177,9 @@ public class VoteService {
         }
 
         throw new VoteSortByNotFountException();
+    }
+
+    public void updateDrinkVote(UpdateNormalVoteServiceRequest serviceRequest) {
+
     }
 }
