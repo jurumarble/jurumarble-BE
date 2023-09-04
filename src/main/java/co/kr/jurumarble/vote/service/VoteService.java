@@ -5,6 +5,7 @@ import co.kr.jurumarble.drink.domain.dto.DrinksUsedForVote;
 import co.kr.jurumarble.exception.user.UserNotAccessRightException;
 import co.kr.jurumarble.exception.user.UserNotFoundException;
 import co.kr.jurumarble.exception.vote.VoteContentNotFoundException;
+import co.kr.jurumarble.exception.vote.VoteDrinkContentNotFoundException;
 import co.kr.jurumarble.exception.vote.VoteNotFoundException;
 import co.kr.jurumarble.exception.vote.VoteSortByNotFountException;
 import co.kr.jurumarble.user.domain.User;
@@ -15,7 +16,9 @@ import co.kr.jurumarble.vote.dto.DoVoteInfo;
 import co.kr.jurumarble.vote.dto.GetIsUserVoted;
 import co.kr.jurumarble.vote.dto.VoteData;
 import co.kr.jurumarble.vote.enums.SortByType;
+import co.kr.jurumarble.vote.enums.VoteType;
 import co.kr.jurumarble.vote.repository.VoteContentRepository;
+import co.kr.jurumarble.vote.repository.VoteDrinkContentRepository;
 import co.kr.jurumarble.vote.repository.VoteRepository;
 import co.kr.jurumarble.vote.repository.VoteResultRepository;
 import co.kr.jurumarble.vote.repository.dto.HotDrinkVoteData;
@@ -47,6 +50,7 @@ public class VoteService {
     private final VoteValidator voteValidator;
     private final VoteFinder voteFinder;
     private final PageableConverter pageableConverter;
+    private final VoteDrinkContentRepository voteDrinkContentRepository;
 
 
     @Transactional
@@ -90,9 +94,20 @@ public class VoteService {
     public void deleteVote(Long voteId, Long userId) {
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         isVoteOfUser(userId, vote);
-        VoteContent voteContent = voteContentRepository.findByVoteId(voteId).orElseThrow(VoteContentNotFoundException::new);
+        deleteVoteContent(vote);
         voteRepository.delete(vote);
-        voteContentRepository.delete(voteContent);
+    }
+
+    private void deleteVoteContent(Vote vote) {
+        if (VoteType.DRINK == vote.getVoteType()) {
+            VoteDrinkContent voteDrinkContent = voteDrinkContentRepository.findByVoteId(vote.getId()).orElseThrow(VoteDrinkContentNotFoundException::new);
+            voteDrinkContentRepository.delete(voteDrinkContent);
+        }
+
+        if (VoteType.NORMAL == vote.getVoteType()) {
+            VoteContent voteContent = voteContentRepository.findByVoteId(vote.getId()).orElseThrow(VoteContentNotFoundException::new);
+            voteContentRepository.delete(voteContent);
+        }
     }
 
     @Transactional
