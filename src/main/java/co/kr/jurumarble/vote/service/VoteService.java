@@ -9,6 +9,7 @@ import co.kr.jurumarble.exception.vote.VoteNotFoundException;
 import co.kr.jurumarble.exception.vote.VoteSortByNotFountException;
 import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.user.repository.UserRepository;
+import co.kr.jurumarble.utils.PageableConverter;
 import co.kr.jurumarble.vote.domain.*;
 import co.kr.jurumarble.vote.dto.DoVoteInfo;
 import co.kr.jurumarble.vote.dto.GetIsUserVoted;
@@ -45,6 +46,7 @@ public class VoteService {
     private final DrinkFinder drinkFinder;
     private final VoteValidator voteValidator;
     private final VoteFinder voteFinder;
+    private final PageableConverter pageableConverter;
 
 
     @Transactional
@@ -145,5 +147,20 @@ public class VoteService {
     public HotDrinkVoteData getHotDrinkVote() {
         return voteRepository.getHotDrinkVote(LocalDateTime.now())
                 .orElseGet(voteRepository::findOneDrinkVoteByPopular);
+    }
+
+    public Slice<VoteData> findDrinkVotes(String keyword, String region, SortByType sortBy, Integer pageNum, Integer pageSize) {
+
+        if (SortByType.ByTime == sortBy) {
+            List<VoteData> drinkVotesByTime = voteRepository.findDrinkVotesByTime(keyword, region, pageNum, pageSize);
+            return pageableConverter.convertListToSlice(drinkVotesByTime, pageNum, pageSize);
+        }
+
+        if (SortByType.ByPopularity == sortBy) {
+            List<VoteData> drinkVotesByPopularity = voteRepository.findDrinkVotesByPopularity(keyword, region, pageNum, pageSize);
+            return pageableConverter.convertListToSlice(drinkVotesByPopularity, pageNum, pageSize);
+        }
+
+        throw new VoteSortByNotFountException();
     }
 }

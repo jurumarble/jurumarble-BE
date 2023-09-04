@@ -1,5 +1,6 @@
 package co.kr.jurumarble.vote.controller;
 
+import co.kr.jurumarble.comment.enums.Region;
 import co.kr.jurumarble.vote.dto.GetIsUserVoted;
 import co.kr.jurumarble.vote.dto.VoteData;
 import co.kr.jurumarble.vote.dto.request.CreateDrinkVoteRequest;
@@ -57,8 +58,9 @@ public class VoteController {
 
     @Operation(summary = "전통주 투표 리스트 검색, 조회", description = "파라미터에 keyeword, sortBy, page, size, category 보내주시면 됩니다. 검색이 아니면 keyword = 에 값 없이 ")
     @GetMapping("/drinks")
-    public ResponseEntity<GetVoteListResponse> getDrinkVotes(@RequestParam(required = false) String keyword, @RequestParam SortByType sortBy, @RequestParam int page, @RequestParam int size) {
-        Slice<VoteData> voteListData = voteService.sortFindVotes(keyword, sortBy, page, size);
+    public ResponseEntity<GetVoteListResponse> getDrinkVotes(@RequestParam(required = false) String keyword, @RequestParam(required = false) Region region, @RequestParam SortByType sortBy, @RequestParam int page, @RequestParam int size) {
+        String regionName = (region != null) ? region.getName() : null;
+        Slice<VoteData> voteListData = voteService.findDrinkVotes(keyword, regionName, sortBy, page, size);
         return new ResponseEntity(new GetVoteListResponse(voteListData), HttpStatus.OK);
     }
 

@@ -23,6 +23,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
+import static co.kr.jurumarble.drink.domain.entity.QDrink.drink;
 import static co.kr.jurumarble.user.domain.QUser.user;
 import static co.kr.jurumarble.vote.domain.QVote.vote;
 import static co.kr.jurumarble.vote.domain.QVoteContent.voteContent;
@@ -140,6 +141,90 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
 
     }
 
+    @Override
+    public List<VoteData> findDrinkVotesByTime(String keyword, String region, int pageNum, int pageSize) {
+
+        BooleanBuilder searchConditions = new BooleanBuilder();
+        setSearchConditions(keyword, region, searchConditions);
+
+        return jpaQueryFactory.select(
+                        Projections.bean(VoteData.class,
+                                vote.id.as("voteId"),
+                                vote.postedUserId,
+                                vote.title,
+                                vote.detail,
+                                vote.filteredGender,
+                                vote.filteredAge,
+                                vote.filteredMbti,
+                                vote.voteType,
+                                voteDrinkContent.drinkAImage.as("imageA"),
+                                voteDrinkContent.drinkBImage.as("imageB"),
+                                voteDrinkContent.drinkAName.as("titleA"),
+                                voteDrinkContent.drinkBName.as("titleB"),
+                                voteDrinkContent.region
+                        ))
+                .from(vote)
+                .innerJoin(voteDrinkContent)
+                .on(voteDrinkContent.voteId.eq(vote.id))
+                .where(
+                        vote.voteType.eq(VoteType.DRINK)
+                                .and(searchConditions)
+                )
+                .groupBy(vote.id)
+                .orderBy(vote.createdDate.desc())
+                .offset(pageNum * pageSize)
+                .limit(pageSize)
+                .fetch();
+    }
+
+    @Override
+    public List<VoteData> findDrinkVotesByPopularity(String keyword, String region, int pageNum, int pageSize) {
+        BooleanBuilder searchConditions = new BooleanBuilder();
+        setSearchConditions(keyword, region, searchConditions);
+
+        return jpaQueryFactory.select(
+                        Projections.bean(VoteData.class,
+                                vote.id.as("voteId"),
+                                vote.postedUserId,
+                                vote.title,
+                                vote.detail,
+                                vote.filteredGender,
+                                vote.filteredAge,
+                                vote.filteredMbti,
+                                vote.id.count().as("votedCount"),
+                                vote.voteType,
+                                voteDrinkContent.drinkAImage.as("imageA"),
+                                voteDrinkContent.drinkBImage.as("imageB"),
+                                voteDrinkContent.drinkAName.as("titleA"),
+                                voteDrinkContent.drinkBName.as("titleB"),
+                                voteDrinkContent.region
+                        ))
+                .from(vote)
+                .innerJoin(voteDrinkContent)
+                .on(voteDrinkContent.voteId.eq(vote.id))
+                .leftJoin(voteResult)
+                .on(voteResult.voteId.eq(vote.id))
+                .where(
+                        vote.voteType.eq(VoteType.DRINK)
+                                .and(searchConditions)
+                )
+                .groupBy(vote.id)
+                .orderBy(vote.id.count().desc())
+                .offset(pageNum * pageSize)
+                .limit(pageSize)
+                .fetch();
+    }
+
+    private void setSearchConditions(String keyword, String region, BooleanBuilder builder) {
+        if (keyword != null && !keyword.isEmpty()) {
+            builder.and(vote.title.like("%" + keyword + "%"));
+        }
+
+        if (region != null && !region.isEmpty()) {
+            builder.and(voteDrinkContent.region.eq(region));
+        }
+    }
+
     private BooleanExpression getKeywordExpression(String keyword) {
         return keyword != null
                 ? vote.title.like("%" + keyword + "%")
@@ -236,5 +321,4 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .limit(COUNT_OF_HOT_DRINK_VOTE)
                 .fetchOne();
     }
-
 }
