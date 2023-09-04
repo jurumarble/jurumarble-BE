@@ -30,7 +30,7 @@ public class CommentController {
     private final CommentService commentService;
 
     @Operation(summary = "댓글 생성", description = "헤더에 토큰을 포함하고, URL 파라미터에 'voteId'를, 요청 바디에 'parentId'(댓글의 부모 아이디. 대댓글일 경우 부모 댓글 아이디, 없으면 빈 문자열)와 'content'(댓글 내용)을 JSON 형식으로 보내주세요.")
-    @PostMapping("/votes/{voteId}/comments")
+    @PostMapping("/votes/{voteId}/comments/create")
     public ResponseEntity createComment(@PathVariable Long voteId, @RequestAttribute Long userId, @RequestBody @Valid CreateCommentRequest createCommentRequest) {
 
         commentService.createComment(voteId, userId, createCommentRequest.toServiceRequest());
