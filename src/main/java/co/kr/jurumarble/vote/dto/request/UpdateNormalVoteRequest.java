@@ -1,6 +1,6 @@
 package co.kr.jurumarble.vote.dto.request;
 
-import co.kr.jurumarble.vote.service.UpdateVoteServiceRequest;
+import co.kr.jurumarble.vote.service.UpdateNormalVoteServiceRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -35,9 +35,9 @@ public class UpdateNormalVoteRequest {
         this.titleB = titleB;
     }
 
-    public UpdateVoteServiceRequest toServiceRequest(Long voteId, Long userId, UpdateNormalVoteRequest request) {
+    public UpdateNormalVoteServiceRequest toServiceRequest(Long voteId, Long userId, UpdateNormalVoteRequest request) {
 
-        return UpdateVoteServiceRequest.builder()
+        return UpdateNormalVoteServiceRequest.builder()
                 .voteId(voteId)
                 .userId(userId)
                 .title(request.getTitle())
