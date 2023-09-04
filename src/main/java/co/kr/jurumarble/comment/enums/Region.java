@@ -8,16 +8,16 @@ public enum Region {
     GWANGJU(5, "광주"),
     BUSAN(6, "부산"),
     ULSAN(7, "울산"),
-    SEJONG(8, "세종특별자치시"),
-    GYEONGGI(31, "경기도"),
-    GANGWON(32, "강원도"),
-    CHUNGBUK(33, "충청북도"),
-    CHUNGNAM(34, "충청남도"),
-    GYEONGBUK(35, "경상북도"),
-    GYEONGNAM(36, "경상남도"),
-    JEONBUK(37, "전라북도"),
-    JEONNAM(38, "전라남도"),
-    JEJU(39, "제주도");
+    SEJONG(8, "세종"),
+    GYEONGGI(31, "경기"),
+    GANGWON(32, "강원"),
+    CHUNGBUK(33, "충북"),
+    CHUNGNAM(34, "충남"),
+    GYEONGBUK(35, "경북"),
+    GYEONGNAM(36, "경남"),
+    JEONBUK(37, "전북"),
+    JEONNAM(38, "전남"),
+    JEJU(39, "제주");
 
     private final int code;
     private final String name;
