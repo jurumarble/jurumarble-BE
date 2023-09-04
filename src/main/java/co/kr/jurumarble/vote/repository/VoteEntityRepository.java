@@ -31,7 +31,7 @@ public interface VoteEntityRepository {
 
     List<VoteData> findDrinkVotesByPopularity(String keyword, String region, int pageNum, int pageSize);
 
-    Optional<VoteData> findVoteDataByVoteId(Long voteId);
+    Optional<VoteCommonData> findVoteCommonDataByVoteId(Long voteId);
 
     List<Vote> findByTitleContains(String keyword);
 

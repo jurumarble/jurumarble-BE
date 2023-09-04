@@ -4,10 +4,7 @@ import co.kr.jurumarble.drink.domain.DrinkFinder;
 import co.kr.jurumarble.drink.domain.dto.DrinksUsedForVote;
 import co.kr.jurumarble.exception.user.UserNotAccessRightException;
 import co.kr.jurumarble.exception.user.UserNotFoundException;
-import co.kr.jurumarble.exception.vote.VoteContentNotFoundException;
-import co.kr.jurumarble.exception.vote.VoteDrinkContentNotFoundException;
-import co.kr.jurumarble.exception.vote.VoteNotFoundException;
-import co.kr.jurumarble.exception.vote.VoteSortByNotFountException;
+import co.kr.jurumarble.exception.vote.*;
 import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.user.repository.UserRepository;
 import co.kr.jurumarble.utils.PageableConverter;
@@ -70,11 +67,20 @@ public class VoteService {
         return voteGenerator.createDrinkVote(vote, voteDrinkContent);
     }
 
-    public GetVoteData getVote(Long voteId) {
-        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
-        User user = userRepository.findById(vote.getPostedUserId()).orElseThrow(UserNotFoundException::new);
-        VoteContent voteContent = voteContentRepository.findByVoteId(voteId).orElseThrow(VoteNotFoundException::new);
-        return new GetVoteData(vote, user, voteContent);
+    public VoteData getVote(Long voteId) {
+        VoteCommonData voteCommonData = voteRepository.findVoteCommonDataByVoteId(voteId).orElseThrow(VoteNotFoundException::new);
+
+        if (VoteType.NORMAL == voteCommonData.getVoteType()) {
+            VoteContent voteContent = voteContentRepository.findByVoteId(voteId).orElseThrow(VoteContentNotFoundException::new);
+            return VoteData.generateNormalVoteData(voteCommonData, voteContent);
+        }
+
+        if (VoteType.DRINK == voteCommonData.getVoteType()) {
+            VoteDrinkContent voteDrinkContent = voteDrinkContentRepository.findByVoteId(voteId).orElseThrow(VoteDrinkContentNotFoundException::new);
+            return VoteData.generateDrinkVoteData(voteCommonData, voteDrinkContent);
+        }
+
+        throw new VoteTypeNotMatchException();
     }
 
     @Transactional
