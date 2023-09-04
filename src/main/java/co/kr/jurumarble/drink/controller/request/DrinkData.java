@@ -1,7 +1,10 @@
 package co.kr.jurumarble.drink.controller.request;
 
 import co.kr.jurumarble.drink.domain.entity.Drink;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter

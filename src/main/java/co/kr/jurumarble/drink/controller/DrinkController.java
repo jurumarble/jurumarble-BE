@@ -59,7 +59,7 @@ public class DrinkController {
 
     @Operation(summary = "즐긴 술 리스트 조회", description = "파라미터에 keyeword, sortBy, page, size, category 보내주시면 됩니다. 검색이 아니면 keyword = 에 값 없이 보내주시고, 필터로 지역을 추가해서 조회 가능하고 지역없이 조회하면 전체 전통주 이름순으로 나옵니다.")
     @GetMapping("/enjoys")
-    public ResponseEntity<Slice<DrinkData>> getEnjoyDrinks(@RequestAttribute Long userId ,@RequestParam int page, @RequestParam int size) {
+    public ResponseEntity<Slice<DrinkData>> getEnjoyDrinks(@RequestAttribute Long userId, @RequestParam int page, @RequestParam int size) {
         Slice<DrinkData> drinkList = drinkService.getEnjoyDrinks(userId, page, size);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(drinkList);

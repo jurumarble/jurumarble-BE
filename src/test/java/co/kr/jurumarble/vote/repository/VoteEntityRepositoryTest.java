@@ -1,11 +1,6 @@
 package co.kr.jurumarble.vote.repository;
 
 import co.kr.jurumarble.config.JpaAuditionConfig;
-import co.kr.jurumarble.exception.vote.VoteNotFoundException;
-import co.kr.jurumarble.user.enums.AgeType;
-import co.kr.jurumarble.user.enums.GenderType;
-import co.kr.jurumarble.user.enums.MbtiType;
-import co.kr.jurumarble.vote.dto.VoteData;
 import co.kr.jurumarble.vote.repository.dto.HotDrinkVoteData;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,10 +12,8 @@ import org.springframework.test.context.TestPropertySource;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
-import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.groups.Tuple.tuple;
 
 @DataJpaTest
 @Import(JpaAuditionConfig.class)
