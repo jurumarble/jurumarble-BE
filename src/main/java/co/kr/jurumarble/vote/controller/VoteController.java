@@ -65,21 +65,21 @@ public class VoteController {
     }
 
     @Operation(summary = "일반 투표 단건 조회", description = "파라미터에 voteId 보내주시면 됩니다.")
-    @GetMapping("/{voteId}")
+    @GetMapping("/{voteId}/")
     public ResponseEntity<GetVoteResponse> getVote(@PathVariable Long voteId) {
         GetVoteData data = voteService.getVote(voteId);
         return new ResponseEntity(new GetVoteResponse(data), HttpStatus.OK);
     }
 
     @Operation(summary = "일반 투표 수정", description = "파라미터에 voteId, 바디에 {title, detail, titleA, titleB} json 형식으로 보내주시면 됩니다.")
-    @PutMapping("/{voteId}")
+    @PutMapping("/{voteId}/")
     public ResponseEntity updateVote(@PathVariable("voteId") Long voteId, @RequestBody UpdateVoteRequest request, @RequestAttribute Long userId) {
         voteService.updateVote(request.toServiceRequest(voteId, userId, request));
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @Operation(summary = "투표 삭제", description = "헤더에 토큰 담고, 파라미터에 voteId 보내주시면 됩니다")
-    @DeleteMapping("/{voteId}")
+    @DeleteMapping("/{voteId}/")
     public ResponseEntity deleteVote(@PathVariable("voteId") Long voteId, @RequestAttribute Long userId) {
         voteService.deleteVote(voteId, userId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
