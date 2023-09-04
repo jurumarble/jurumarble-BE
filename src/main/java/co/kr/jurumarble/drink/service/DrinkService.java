@@ -83,8 +83,27 @@ public class DrinkService {
                 .collect(Collectors.toList());
     }
 
-    public Slice<DrinkData> getDrinkList(String keyword, String region, int pageNum, int pageSize) {
+    public Slice<DrinkData> getDrinks(String keyword, String region, int pageNum, int pageSize) {
         List<DrinkData> drinks = drinkRepository.getDrinks(keyword, region, pageNum, pageSize);
         return pageableConverter.convertListToSlice(drinks, pageNum, pageSize);
+    }
+
+    public Slice<DrinkData> getEnjoyDrinks(Long userId, int pageNum, int pageSize) {
+        List<EnjoyDrink> enjoyDrinks = enjoyDrinkRepository.findByUserId(userId);
+        List<Long> drinkIds = extractDrinkIds(enjoyDrinks);
+        List<DrinkData> drinksByEnjoyed = findDrinksByDrinkIds(drinkIds);
+        return pageableConverter.convertListToSlice(drinksByEnjoyed, pageNum, pageSize);
+    }
+
+    private List<Long> extractDrinkIds(List<EnjoyDrink> enjoyDrinks) {
+        return enjoyDrinks.stream()
+                .map(EnjoyDrink::getDrinkId)
+                .collect(Collectors.toList());
+    }
+
+    private List<DrinkData> findDrinksByDrinkIds(List<Long> drinkIds) {
+        return drinkRepository.findDrinksByIdIn(drinkIds).stream()
+                .map(DrinkData::new)
+                .collect(Collectors.toList());
     }
 }
