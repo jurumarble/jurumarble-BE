@@ -88,5 +88,4 @@ public class VoteFinder {
         throw new IllegalVoteTypeException();
     }
 
-
 }
