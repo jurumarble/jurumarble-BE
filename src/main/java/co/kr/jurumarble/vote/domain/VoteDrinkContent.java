@@ -90,6 +90,21 @@ public class VoteDrinkContent {
         }
     }
 
+    public void updateFromDrinks(DrinksUsedForVote drinksUsedForVote) {
+        Drink drinkA = drinksUsedForVote.getDrinkA();
+        Drink drinkB = drinksUsedForVote.getDrinkB();
+        this.drinkAId = drinkA.getId();
+        this.drinkBId = drinkB.getId();
+        this.drinkAImage = drinkA.getImage();
+        this.drinkBImage = drinkB.getImage();
+        this.drinkAName = drinkA.getName();
+        this.drinkBName = drinkB.getName();
+        this.drinkAType = drinkA.getType();
+        this.drinkBType = drinkB.getType();
+        this.region = drinkA.getRegion();
+    }
+
+
     public void mappingVote(Long voteId) {
         this.voteId = voteId;
     }
