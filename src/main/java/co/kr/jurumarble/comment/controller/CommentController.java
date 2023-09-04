@@ -30,7 +30,7 @@ public class CommentController {
     private final CommentService commentService;
 
     @Operation(summary = "댓글 생성", description = "헤더에 토큰을 포함하고, URL 파라미터에 'voteId'를, 요청 바디에 'parentId'(댓글의 부모 아이디. 대댓글일 경우 부모 댓글 아이디, 없으면 빈 문자열)와 'content'(댓글 내용)을 JSON 형식으로 보내주세요.")
-    @PostMapping("/votes/{voteId}/comments")
+    @PostMapping("/votes/{voteId}/comments/create")
     public ResponseEntity createComment(@PathVariable Long voteId, @RequestAttribute Long userId, @RequestBody @Valid CreateCommentRequest createCommentRequest) {
 
         commentService.createComment(voteId, userId, createCommentRequest.toServiceRequest());
@@ -88,7 +88,7 @@ public class CommentController {
     }
 
     @Operation(summary = "식당 추가", description = "헤더에 토큰을 포함하고, URL 파라미터에 'voteId'와 'commentId'를 전달하며, 요청 바디에 업데이트할 음식점 정보를 JSON 형식으로 전달하여 댓글에 추가하는 기능입니다.")
-    @PatchMapping("/votes/{voteId}/comments/{commentId}/restaurant")
+    @PutMapping("/votes/{voteId}/comments/{commentId}/restaurant")
     public ResponseEntity addRestaurantToComment(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Long userId, @RequestBody UpdateRestaurantRequest updateRestaurantRequest) {
 
         commentService.addRestaurantToComment(voteId, commentId, userId, updateRestaurantRequest.toServiceRequest());
@@ -98,11 +98,11 @@ public class CommentController {
 
     @Operation(summary = "식당 검색", description = "헤더에 토큰을 포함하고, URL 파라미터에 'voteId'와 'commentId'를 전달하며, 요청 쿼리에 'keyword'(검색 키워드 - 선택)과 'page'(요청 페이지 인덱스)를 전달하여 음식점을 검색하는 기능입니다.")
     @GetMapping("/votes/{voteId}/comments/{commentId}/restaurant")
-    public ResponseEntity<List<SearchRestaurantData>> searchRestaurant(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Long userId, @RequestParam(value = "keyword", required = false) String keyword, @RequestParam(value = "areaCode", required = false) int areaCode, @RequestParam int page) {
+    public ResponseEntity<List<SearchRestaurantData>> searchRestaurant(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Long userId, @RequestParam(value = "keyword", required = false) String keyword, @RequestParam(required = false) Integer areaCode, @RequestParam int page) {
 
-        List<SearchRestaurantData> searchRestaurantRespons = commentService.searchRestaurant(voteId, commentId, userId, keyword, areaCode, page);
+        List<SearchRestaurantData> searchRestaurantResponse = commentService.searchRestaurant(voteId, commentId, userId, keyword, areaCode, page);
 
-        return new ResponseEntity(searchRestaurantRespons, HttpStatus.OK);
+        return new ResponseEntity(searchRestaurantResponse, HttpStatus.OK);
     }
 
     @Operation(summary = "식당 이미지 조회", description = "헤더에 토큰을 포함하고, URL 파라미터에 'voteId', 'commentId'와 'contentId'를 전달하여 특정 음식점의 이미지를 가져오는 기능입니다.")

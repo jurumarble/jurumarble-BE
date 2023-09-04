@@ -103,7 +103,7 @@ public class CommentService {
 
     }
 
-    public List<SearchRestaurantData> searchRestaurant(Long voteId, Long commentId, Long userId, String keyword, int areaCode, int page) {
+    public List<SearchRestaurantData> searchRestaurant(Long voteId, Long commentId, Long userId, String keyword, Integer areaCode, int page) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);

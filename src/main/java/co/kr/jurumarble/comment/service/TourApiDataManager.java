@@ -15,7 +15,7 @@ public class TourApiDataManager {
     private final TourApiService tourApiService;
 
 
-    public List<RestaurantInfoDto> getRestaurantInfoList(String keyword, int areaCode, int page) {
+    public List<RestaurantInfoDto> getRestaurantInfoList(String keyword, Integer areaCode, int page) {
         return (keyword != null)
                 ? tourApiService.getRestaurantInfoByKeyWord(keyword, areaCode, page)
                 : tourApiService.getRestaurantInfo(areaCode, page);
