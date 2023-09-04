@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class UpdateVoteRequest {
+public class UpdateNormalVoteRequest {
 
     @Schema(description = "투표 제목", example = "A, B 중 어떤게 나을까요?")
     @NotBlank(message = "투표 제목은 필수입니다.")
@@ -28,14 +28,14 @@ public class UpdateVoteRequest {
     private String titleB;
 
     @Builder
-    public UpdateVoteRequest(String title, String detail, String titleA, String titleB) {
+    public UpdateNormalVoteRequest(String title, String detail, String titleA, String titleB) {
         this.title = title;
         this.detail = detail;
         this.titleA = titleA;
         this.titleB = titleB;
     }
 
-    public UpdateVoteServiceRequest toServiceRequest(Long voteId, Long userId, UpdateVoteRequest request) {
+    public UpdateVoteServiceRequest toServiceRequest(Long voteId, Long userId, UpdateNormalVoteRequest request) {
 
         return UpdateVoteServiceRequest.builder()
                 .voteId(voteId)
