@@ -194,4 +194,8 @@ public class VoteService {
 
         throw new VoteSortByNotFountException();
     }
+
+    public Slice<VoteData> getParticipatedVotes(Long userId, int page, int size) {
+        return null;
+    }
 }
