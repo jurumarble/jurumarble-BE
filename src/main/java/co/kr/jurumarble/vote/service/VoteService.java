@@ -154,8 +154,8 @@ public class VoteService {
         return voteFinder.getVoteData(pageable, voteCommonDataByPopularity);
     }
 
-    public List<String> getRecommendVoteList(String keyword) {
-        return voteRepository.findByTitleContains(keyword).stream()
+    public List<String> getRecommendVoteList(String keyword, int recommendCount) {
+        return voteRepository.findByTitleContains(keyword, recommendCount).stream()
                 .map(Vote::getTitle)
                 .collect(Collectors.toList());
     }

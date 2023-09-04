@@ -98,8 +98,8 @@ public class VoteController {
 
     @Operation(summary = "투표 검색어 추천", description = "파라미터에 keyword, category 보내주시면 됩니다.")
     @GetMapping("/recommend")
-    public ResponseEntity recommendVote(@RequestParam String keyword) {
-        List<String> voteRecommendListData = voteService.getRecommendVoteList(keyword);
+    public ResponseEntity recommendVote(@RequestParam String keyword, @RequestParam int recommendCount) {
+        List<String> voteRecommendListData = voteService.getRecommendVoteList(keyword, recommendCount);
         return new ResponseEntity(new GetVoteRecommendListResponse(voteRecommendListData), HttpStatus.OK);
     }
 

@@ -33,7 +33,7 @@ public interface VoteEntityRepository {
 
     Optional<VoteData> findVoteDataByVoteId(Long voteId);
 
-    List<Vote> findByTitleContains(String keyword);
+    List<Vote> findByTitleContains(String keyword, int recommendCount);
 
     Long countByVoteAndChoiceAndGenderAndAgeAndMBTI(Long voteId, ChoiceType choiceType, GenderType gender, Integer classifyAge, MbtiType mbti);
 
