@@ -13,16 +13,16 @@ public class VoteValidator {
 
     private final VoteResultRepository voteResultRepository;
 
-    public void validateParcitipateVote(Vote vote, User user) {
-        validPostedUserWhenParcitipateVote(vote, user);
-        validAlreadyParcitipatedVote(vote, user);
+    public void validateParticipateVote(Vote vote, User user) {
+        validPostedUserWhenParticipateVote(vote, user);
+        validAlreadyParticipatedVote(vote, user);
     }
 
-    public void validPostedUserWhenParcitipateVote(Vote vote, User user) {
+    public void validPostedUserWhenParticipateVote(Vote vote, User user) {
         if (vote.isVoteOfUser(user.getId())) throw new UserNotAccessRightException();
     }
 
-    public void validAlreadyParcitipatedVote(Vote vote, User user) {
+    public void validAlreadyParticipatedVote(Vote vote, User user) {
         if (voteResultRepository.existsByVoteIdAndVotedUserId(vote.getId(), user.getId()))
             throw new AlreadyUserDoVoteException();
     }

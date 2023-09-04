@@ -124,7 +124,7 @@ public class VoteService {
     public void doVote(DoVoteInfo info) {
         Vote vote = voteRepository.findById(info.getVoteId()).orElseThrow(VoteNotFoundException::new);
         User user = userRepository.findById(info.getUserId()).orElseThrow(UserNotFoundException::new);
-        voteValidator.validateParcitipateVote(vote, user);
+        voteValidator.validateParticipateVote(vote, user);
         VoteResult voteResult = new VoteResult(vote.getId(), user.getId(), info.getChoice());
         voteResultRepository.save(voteResult);
     }
