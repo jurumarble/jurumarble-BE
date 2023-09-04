@@ -2,19 +2,14 @@ package co.kr.jurumarble.vote.service;
 
 import co.kr.jurumarble.bookmark.repository.BookmarkRepository;
 import co.kr.jurumarble.drink.domain.DrinkFinder;
-import co.kr.jurumarble.drink.domain.dto.DrinkIdsUsedForVote;
-import co.kr.jurumarble.drink.domain.dto.DrinksUsedForVote;
-import co.kr.jurumarble.drink.domain.entity.Drink;
 import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.user.repository.UserRepository;
 import co.kr.jurumarble.vote.domain.Vote;
 import co.kr.jurumarble.vote.domain.VoteContent;
-import co.kr.jurumarble.vote.domain.VoteDrinkContent;
 import co.kr.jurumarble.vote.domain.VoteGenerator;
 import co.kr.jurumarble.vote.enums.VoteType;
 import co.kr.jurumarble.vote.repository.VoteRepository;
 import co.kr.jurumarble.vote.repository.VoteResultRepository;
-import co.kr.jurumarble.vote.service.request.CreateDrinkVoteServiceRequest;
 import co.kr.jurumarble.vote.service.request.CreateNormalVoteServiceRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +20,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)

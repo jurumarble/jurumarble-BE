@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.TestPropertySource;
 
 import javax.persistence.EntityManager;
@@ -40,7 +39,7 @@ class DrinkEntityRepositoryImplTest {
         LocalDateTime testTime = LocalDateTime.of(2023, 8, 10, 7, 15);
 
         // when
-        List<HotDrinkData> hotDrinks = drinkEntityRepository.getHotDrinks(0,3, testTime);
+        List<HotDrinkData> hotDrinks = drinkEntityRepository.getHotDrinks(0, 3, testTime);
 
         // then
         assertThat(hotDrinks).hasSize(3)
@@ -59,7 +58,7 @@ class DrinkEntityRepositoryImplTest {
         LocalDateTime testTime = LocalDateTime.of(2023, 8, 3, 7, 15);
 
         // when
-        List<HotDrinkData> hotDrinks = drinkEntityRepository.getHotDrinks(0,3, testTime);
+        List<HotDrinkData> hotDrinks = drinkEntityRepository.getHotDrinks(0, 3, testTime);
 
         // then
         assertThat(hotDrinks).hasSize(3)
@@ -78,7 +77,7 @@ class DrinkEntityRepositoryImplTest {
         LocalDateTime testTime = LocalDateTime.of(2023, 9, 20, 7, 15);
 
         // when
-        List<HotDrinkData> hotDrinks = drinkEntityRepository.getHotDrinks(0,3, testTime);
+        List<HotDrinkData> hotDrinks = drinkEntityRepository.getHotDrinks(0, 3, testTime);
 
         // then
         assertThat(hotDrinks).hasSize(0);
@@ -88,7 +87,7 @@ class DrinkEntityRepositoryImplTest {
     @Test
     void findDrinksByPopular() {
         // given // when
-        List<HotDrinkData> actual = drinkEntityRepository.findDrinksByPopular(0,5);
+        List<HotDrinkData> actual = drinkEntityRepository.findDrinksByPopular(0, 5);
 
         // then
         assertThat(actual).hasSize(5)
