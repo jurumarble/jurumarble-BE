@@ -6,6 +6,7 @@ import co.kr.jurumarble.user.enums.AgeType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
 import co.kr.jurumarble.vote.enums.VoteType;
+import co.kr.jurumarble.vote.service.UpdateDrinkVoteServiceRequest;
 import co.kr.jurumarble.vote.service.UpdateNormalVoteServiceRequest;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -78,7 +79,12 @@ public class Vote extends BaseTimeEntity {
         return this.postedUserId.equals(userId);
     }
 
-    public void update(UpdateNormalVoteServiceRequest request) {
+    public void updateNormalVote(UpdateNormalVoteServiceRequest request) {
+        this.title = request.getTitle();
+        this.detail = request.getDetail();
+    }
+
+    public void updateDrinkVote(UpdateDrinkVoteServiceRequest request) {
         this.title = request.getTitle();
         this.detail = request.getDetail();
     }

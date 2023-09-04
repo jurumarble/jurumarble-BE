@@ -4,6 +4,8 @@ package co.kr.jurumarble.vote.domain;
 import co.kr.jurumarble.drink.domain.dto.DrinksUsedForVote;
 import co.kr.jurumarble.drink.domain.entity.Drink;
 import co.kr.jurumarble.exception.vote.VoteDrinksDuplicatedException;
+import co.kr.jurumarble.vote.service.UpdateDrinkVoteServiceRequest;
+import co.kr.jurumarble.vote.service.UpdateNormalVoteServiceRequest;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -89,6 +91,21 @@ public class VoteDrinkContent {
             throw new VoteDrinksDuplicatedException();
         }
     }
+
+    public void updateFromDrinks(DrinksUsedForVote drinksUsedForVote) {
+        Drink drinkA = drinksUsedForVote.getDrinkA();
+        Drink drinkB = drinksUsedForVote.getDrinkB();
+        this.drinkAId = drinkA.getId();
+        this.drinkBId = drinkB.getId();
+        this.drinkAImage = drinkA.getImage();
+        this.drinkBImage = drinkB.getImage();
+        this.drinkAName = drinkA.getName();
+        this.drinkBName = drinkB.getName();
+        this.drinkAType = drinkA.getType();
+        this.drinkBType = drinkB.getType();
+        this.region = drinkA.getRegion();
+    }
+
 
     public void mappingVote(Long voteId) {
         this.voteId = voteId;

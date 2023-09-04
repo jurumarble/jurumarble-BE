@@ -82,8 +82,18 @@ public class VoteService {
         Vote vote = voteRepository.findById(request.getVoteId()).orElseThrow(VoteNotFoundException::new);
         isVoteOfUser(request.getUserId(), vote);
         VoteContent voteContent = voteContentRepository.findByVoteId(vote.getId()).orElseThrow(VoteNotFoundException::new);
-        vote.update(request);
+        vote.updateNormalVote(request);
         voteContent.update(request);
+    }
+
+    @Transactional
+    public void updateDrinkVote(UpdateDrinkVoteServiceRequest request) {
+        Vote vote = voteRepository.findById(request.getVoteId()).orElseThrow(VoteNotFoundException::new);
+        isVoteOfUser(request.getUserId(), vote);
+        VoteDrinkContent voteDrinkContent = voteDrinkContentRepository.findByVoteId(vote.getId()).orElseThrow(VoteNotFoundException::new);
+        DrinksUsedForVote drinksUsedForVote = drinkFinder.findDrinksUsedForVote(request.extractDrinkIds());
+        vote.updateDrinkVote(request);
+        voteDrinkContent.updateFromDrinks(drinksUsedForVote);
     }
 
     public void isVoteOfUser(Long userId, Vote vote) {
@@ -177,9 +187,5 @@ public class VoteService {
         }
 
         throw new VoteSortByNotFountException();
-    }
-
-    public void updateDrinkVote(UpdateNormalVoteServiceRequest serviceRequest) {
-
     }
 }

@@ -35,15 +35,15 @@ public class UpdateNormalVoteRequest {
         this.titleB = titleB;
     }
 
-    public UpdateNormalVoteServiceRequest toServiceRequest(Long voteId, Long userId, UpdateNormalVoteRequest request) {
+    public UpdateNormalVoteServiceRequest toServiceRequest(Long voteId, Long userId) {
 
         return UpdateNormalVoteServiceRequest.builder()
                 .voteId(voteId)
                 .userId(userId)
-                .title(request.getTitle())
-                .detail(request.getDetail())
-                .titleA(request.getTitleA())
-                .titleB(request.getTitleB())
+                .title(title)
+                .detail(detail)
+                .titleA(titleA)
+                .titleB(titleB)
                 .build();
     }
 }

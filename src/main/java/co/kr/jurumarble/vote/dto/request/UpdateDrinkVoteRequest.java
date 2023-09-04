@@ -27,9 +27,16 @@ public class UpdateDrinkVoteRequest {
     @Positive(message = "전통주 아이디는 양수값의 정수여야합니다.")
     private Long drinkBId;
 
-    public UpdateDrinkVoteServiceRequest toServiceRequest() {
+    @Schema(description = "투표 상세글")
+    @NotBlank(message = "투표 상세글은 필수입니다.")
+    private String detail;
+
+    public UpdateDrinkVoteServiceRequest toServiceRequest(Long voteId, Long userId) {
         return UpdateDrinkVoteServiceRequest.builder()
+                .voteId(voteId)
+                .userId(userId)
                 .title(title)
+                .detail(detail)
                 .drinkAId(drinkAId)
                 .drinkBId(drinkBId)
                 .build();

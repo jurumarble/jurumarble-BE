@@ -3,10 +3,7 @@ package co.kr.jurumarble.vote.controller;
 import co.kr.jurumarble.comment.enums.Region;
 import co.kr.jurumarble.vote.dto.GetIsUserVoted;
 import co.kr.jurumarble.vote.dto.VoteData;
-import co.kr.jurumarble.vote.dto.request.CreateDrinkVoteRequest;
-import co.kr.jurumarble.vote.dto.request.CreateNormalVoteRequest;
-import co.kr.jurumarble.vote.dto.request.DoVoteRequest;
-import co.kr.jurumarble.vote.dto.request.UpdateNormalVoteRequest;
+import co.kr.jurumarble.vote.dto.request.*;
 import co.kr.jurumarble.vote.dto.response.GetIsUserVotedResponse;
 import co.kr.jurumarble.vote.dto.response.GetVoteListResponse;
 import co.kr.jurumarble.vote.dto.response.GetVoteRecommendListResponse;
@@ -14,6 +11,7 @@ import co.kr.jurumarble.vote.dto.response.GetVoteResponse;
 import co.kr.jurumarble.vote.enums.SortByType;
 import co.kr.jurumarble.vote.repository.dto.HotDrinkVoteData;
 import co.kr.jurumarble.vote.service.GetVoteData;
+import co.kr.jurumarble.vote.service.UpdateDrinkVoteServiceRequest;
 import co.kr.jurumarble.vote.service.VoteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -61,27 +59,27 @@ public class VoteController {
     public ResponseEntity<GetVoteListResponse> getDrinkVotes(@RequestParam(required = false) String keyword, @RequestParam(required = false) Region region, @RequestParam SortByType sortBy, @RequestParam int page, @RequestParam int size) {
         String regionName = (region != null) ? region.getName() : null;
         Slice<VoteData> voteListData = voteService.findDrinkVotes(keyword, regionName, sortBy, page, size);
-        return new ResponseEntity(new GetVoteListResponse(voteListData), HttpStatus.OK);
+        return new ResponseEntity<>(new GetVoteListResponse(voteListData), HttpStatus.OK);
     }
 
     @Operation(summary = "일반 투표 단건 조회", description = "파라미터에 voteId 보내주시면 됩니다.")
     @GetMapping("/{voteId}/")
     public ResponseEntity<GetVoteResponse> getVote(@PathVariable Long voteId) {
         GetVoteData data = voteService.getVote(voteId);
-        return new ResponseEntity(new GetVoteResponse(data), HttpStatus.OK);
+        return new ResponseEntity<>(new GetVoteResponse(data), HttpStatus.OK);
     }
 
     @Operation(summary = "일반 투표 수정", description = "파라미터에 voteId, 바디에 {title, detail, titleA, titleB} json 형식으로 보내주시면 됩니다.")
     @PutMapping("/{voteId}/normal")
     public ResponseEntity updateNormalVote(@PathVariable("voteId") Long voteId, @RequestBody UpdateNormalVoteRequest request, @RequestAttribute Long userId) {
-        voteService.updateNormalVote(request.toServiceRequest(voteId, userId, request));
+        voteService.updateNormalVote(request.toServiceRequest(voteId, userId));
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @Operation(summary = "전통주 투표 수정", description = "파라미터에 voteId, 바디에 {title, detail, titleA, titleB} json 형식으로 보내주시면 됩니다.")
     @PutMapping("/{voteId}/drink")
-    public ResponseEntity updateDrinkVote(@PathVariable("voteId") Long voteId, @RequestBody UpdateNormalVoteRequest request, @RequestAttribute Long userId) {
-        voteService.updateDrinkVote(request.toServiceRequest(voteId, userId, request));
+    public ResponseEntity updateDrinkVote(@PathVariable("voteId") Long voteId, @RequestBody UpdateDrinkVoteRequest request, @RequestAttribute Long userId) {
+        voteService.updateDrinkVote(request.toServiceRequest(voteId, userId));
         return new ResponseEntity(HttpStatus.OK);
     }
 
