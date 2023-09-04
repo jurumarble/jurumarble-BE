@@ -89,29 +89,6 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
     }
 
 
-    @Override
-    public Optional<VoteData> findVoteDataByVoteId(Long voteId) {
-        VoteData voteData = jpaQueryFactory.select(
-                        Projections.bean(VoteData.class,
-                                vote.id.as("voteId"),
-                                vote.postedUserId,
-                                vote.title,
-                                vote.detail,
-                                vote.filteredGender,
-                                vote.filteredAge,
-                                vote.filteredMbti,
-                                voteContent.imageA,
-                                voteContent.imageB,
-                                voteContent.titleA,
-                                voteContent.titleB
-                        ))
-                .from(vote)
-                .innerJoin(voteContent)
-                .on(vote.id.eq(voteContent.voteId))
-                .where(vote.id.eq(voteId))
-                .fetchOne();
-        return Optional.ofNullable(voteData);
-    }
 
     @Override
     public List<VoteCommonData> findVoteCommonDataByTime(String keyword, Pageable pageable) {
@@ -319,5 +296,29 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .orderBy(vote.id.count().desc(), vote.title.asc())
                 .limit(COUNT_OF_HOT_DRINK_VOTE)
                 .fetchOne();
+    }
+
+    @Override
+    public Optional<VoteCommonData> findVoteCommonDataByVoteId(Long voteId) {
+        VoteCommonData voteCommonData = jpaQueryFactory
+                .select(
+                        Projections.bean(
+                                VoteCommonData.class,
+                                vote.id.as("voteId"),
+                                vote.postedUserId,
+                                vote.title,
+                                vote.detail,
+                                vote.filteredGender,
+                                vote.filteredAge,
+                                vote.filteredMbti,
+                                voteResult.id.count().as("votedCount"),
+                                vote.voteType)
+                )
+                .from(vote)
+                .leftJoin(voteResult).on(vote.id.eq(voteResult.voteId))
+                .where(vote.id.eq(voteId))
+                .groupBy(vote.id)
+                .fetchOne();
+        return Optional.ofNullable(voteCommonData);
     }
 }

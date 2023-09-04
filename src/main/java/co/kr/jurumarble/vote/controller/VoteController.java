@@ -61,11 +61,11 @@ public class VoteController {
         return new ResponseEntity<>(new GetVoteListResponse(voteListData), HttpStatus.OK);
     }
 
-    @Operation(summary = "일반 투표 단건 조회", description = "파라미터에 voteId 보내주시면 됩니다.")
-    @GetMapping("/{voteId}/")
-    public ResponseEntity<GetVoteResponse> getVote(@PathVariable Long voteId) {
-        GetVoteData data = voteService.getVote(voteId);
-        return new ResponseEntity<>(new GetVoteResponse(data), HttpStatus.OK);
+    @Operation(summary = "일반/전통주 투표 단건 조회", description = "파라미터에 voteId 보내주시면 됩니다.")
+    @GetMapping("/{voteId}")
+    public ResponseEntity<VoteData> getVote(@PathVariable Long voteId) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(voteService.getVote(voteId));
     }
 
     @Operation(summary = "일반 투표 수정", description = "파라미터에 voteId, 바디에 {title, detail, titleA, titleB} json 형식으로 보내주시면 됩니다.")
