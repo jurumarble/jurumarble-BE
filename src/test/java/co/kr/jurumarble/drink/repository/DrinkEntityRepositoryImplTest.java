@@ -37,11 +37,10 @@ class DrinkEntityRepositoryImplTest {
     @Test
     void getHotDrinks1() {
         // given
-        PageRequest of = PageRequest.of(0, 3);
         LocalDateTime testTime = LocalDateTime.of(2023, 8, 10, 7, 15);
 
         // when
-        List<HotDrinkData> hotDrinks = drinkEntityRepository.getHotDrinks(of, testTime);
+        List<HotDrinkData> hotDrinks = drinkEntityRepository.getHotDrinks(0,3, testTime);
 
         // then
         assertThat(hotDrinks).hasSize(3)
@@ -57,11 +56,10 @@ class DrinkEntityRepositoryImplTest {
     @Test
     void getHotDrinks2() {
         // given
-        PageRequest of = PageRequest.of(0, 3);
         LocalDateTime testTime = LocalDateTime.of(2023, 8, 3, 7, 15);
 
         // when
-        List<HotDrinkData> hotDrinks = drinkEntityRepository.getHotDrinks(of, testTime);
+        List<HotDrinkData> hotDrinks = drinkEntityRepository.getHotDrinks(0,3, testTime);
 
         // then
         assertThat(hotDrinks).hasSize(3)
@@ -77,11 +75,10 @@ class DrinkEntityRepositoryImplTest {
     @Test
     void getHotDrinks3() {
         // given
-        PageRequest of = PageRequest.of(0, 3);
         LocalDateTime testTime = LocalDateTime.of(2023, 9, 20, 7, 15);
 
         // when
-        List<HotDrinkData> hotDrinks = drinkEntityRepository.getHotDrinks(of, testTime);
+        List<HotDrinkData> hotDrinks = drinkEntityRepository.getHotDrinks(0,3, testTime);
 
         // then
         assertThat(hotDrinks).hasSize(0);
@@ -90,10 +87,8 @@ class DrinkEntityRepositoryImplTest {
     @DisplayName("전통주를 즐겼어요가 많은 순서로 조회한다.")
     @Test
     void findDrinksByPopular() {
-        // given
-        PageRequest of = PageRequest.of(0, 5);
-        // when
-        List<HotDrinkData> actual = drinkEntityRepository.findDrinksByPopular(of);
+        // given // when
+        List<HotDrinkData> actual = drinkEntityRepository.findDrinksByPopular(0,5);
 
         // then
         assertThat(actual).hasSize(5)

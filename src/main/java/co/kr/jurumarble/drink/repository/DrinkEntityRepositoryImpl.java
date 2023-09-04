@@ -1,9 +1,10 @@
 package co.kr.jurumarble.drink.repository;
 
+import co.kr.jurumarble.drink.controller.request.DrinkData;
 import co.kr.jurumarble.drink.repository.dto.HotDrinkData;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -27,9 +28,7 @@ public class DrinkEntityRepositoryImpl implements DrinkEntityRepository {
      * 지금 시간 기준으로 부터 7일간 즐겼어요가 많은 순으로 전통주 조회
      */
     @Override
-    public List<HotDrinkData> getHotDrinks(Pageable pageable, LocalDateTime nowTime) {
-        int pageNo = pageable.getPageNumber();
-        int pageSize = pageable.getPageSize();
+    public List<HotDrinkData> getHotDrinks(int pageNo, int pageSize, LocalDateTime nowTime) {
 
         LocalDateTime descendingHourTime = nowTime.withMinute(0);
         LocalDateTime aWeekAgoTime = descendingHourTime.minus(7, ChronoUnit.DAYS);
@@ -54,11 +53,7 @@ public class DrinkEntityRepositoryImpl implements DrinkEntityRepository {
     }
 
     @Override
-    public List<HotDrinkData> findDrinksByPopular(Pageable pageable) {
-
-        int pageNo = pageable.getPageNumber();
-        int pageSize = pageable.getPageSize();
-
+    public List<HotDrinkData> findDrinksByPopular(int pageNo, int pageSize) {
         return jpaQueryFactory.select(
                         Projections.bean(HotDrinkData.class,
                                 drink.id.as("drinkId"),
@@ -76,4 +71,46 @@ public class DrinkEntityRepositoryImpl implements DrinkEntityRepository {
                 .limit(pageSize)
                 .fetch();
     }
+
+    @Override
+    public List<DrinkData> getDrinks(String keyword, String region, int pageNo, int pageSize) {
+
+        BooleanBuilder searchConditions = new BooleanBuilder();
+        setSearchConditions(keyword, region, searchConditions);
+
+        return jpaQueryFactory.select(
+                        Projections.bean(DrinkData.class,
+                                drink.id,
+                                drink.name,
+                                drink.type,
+                                drink.productName,
+                                drink.alcoholicBeverage,
+                                drink.rawMaterial,
+                                drink.capacity,
+                                drink.manufactureAddress,
+                                drink.region,
+                                drink.price,
+                                drink.image,
+                                drink.latitude,
+                                drink.longitude
+                        ))
+                .from(drink)
+                .where(searchConditions)
+                .orderBy(drink.name.asc())
+                .offset(pageNo * pageSize)
+                .limit(pageSize)
+                .fetch();
+    }
+
+    private void setSearchConditions(String keyword, String region, BooleanBuilder builder) {
+        if (keyword != null && !keyword.isEmpty()) {
+            builder.and(drink.name.like("%" + keyword + "%"));
+        }
+
+        if (region != null && !region.isEmpty()) {
+            builder.and(drink.region.eq(region));
+        }
+    }
+
 }
+
