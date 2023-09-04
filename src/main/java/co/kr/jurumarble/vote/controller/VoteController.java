@@ -48,9 +48,16 @@ public class VoteController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @Operation(summary = "투표 리스트 검색, 조회", description = "파라미터에 keyeword, sortBy, page, size, category 보내주시면 됩니다. 검색이 아니면 keyword = 에 값 없이 ")
+    @Operation(summary = "일반/전통주 투표 리스트 검색, 조회", description = "파라미터에 keyeword, sortBy, page, size, category 보내주시면 됩니다. 검색이 아니면 keyword = 에 값 없이 ")
     @GetMapping("")
-    public ResponseEntity<GetVoteListResponse> getVoteList(@RequestParam(required = false) String keyword, @RequestParam SortByType sortBy, @RequestParam int page, @RequestParam int size) {
+    public ResponseEntity<GetVoteListResponse> getVotes(@RequestParam(required = false) String keyword, @RequestParam SortByType sortBy, @RequestParam int page, @RequestParam int size) {
+        Slice<VoteData> voteListData = voteService.sortFindVotes(keyword, sortBy, page, size);
+        return new ResponseEntity(new GetVoteListResponse(voteListData), HttpStatus.OK);
+    }
+
+    @Operation(summary = "전통주 투표 리스트 검색, 조회", description = "파라미터에 keyeword, sortBy, page, size, category 보내주시면 됩니다. 검색이 아니면 keyword = 에 값 없이 ")
+    @GetMapping("/drinks")
+    public ResponseEntity<GetVoteListResponse> getDrinkVotes(@RequestParam(required = false) String keyword, @RequestParam SortByType sortBy, @RequestParam int page, @RequestParam int size) {
         Slice<VoteData> voteListData = voteService.sortFindVotes(keyword, sortBy, page, size);
         return new ResponseEntity(new GetVoteListResponse(voteListData), HttpStatus.OK);
     }
