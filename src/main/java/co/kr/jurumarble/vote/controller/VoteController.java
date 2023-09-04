@@ -6,7 +6,7 @@ import co.kr.jurumarble.vote.dto.VoteData;
 import co.kr.jurumarble.vote.dto.request.CreateDrinkVoteRequest;
 import co.kr.jurumarble.vote.dto.request.CreateNormalVoteRequest;
 import co.kr.jurumarble.vote.dto.request.DoVoteRequest;
-import co.kr.jurumarble.vote.dto.request.UpdateVoteRequest;
+import co.kr.jurumarble.vote.dto.request.UpdateNormalVoteRequest;
 import co.kr.jurumarble.vote.dto.response.GetIsUserVotedResponse;
 import co.kr.jurumarble.vote.dto.response.GetVoteListResponse;
 import co.kr.jurumarble.vote.dto.response.GetVoteRecommendListResponse;
@@ -72,9 +72,16 @@ public class VoteController {
     }
 
     @Operation(summary = "일반 투표 수정", description = "파라미터에 voteId, 바디에 {title, detail, titleA, titleB} json 형식으로 보내주시면 됩니다.")
-    @PutMapping("/{voteId}/")
-    public ResponseEntity updateVote(@PathVariable("voteId") Long voteId, @RequestBody UpdateVoteRequest request, @RequestAttribute Long userId) {
-        voteService.updateVote(request.toServiceRequest(voteId, userId, request));
+    @PutMapping("/{voteId}/normal")
+    public ResponseEntity updateNormalVote(@PathVariable("voteId") Long voteId, @RequestBody UpdateNormalVoteRequest request, @RequestAttribute Long userId) {
+        voteService.updateNormalVote(request.toServiceRequest(voteId, userId, request));
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @Operation(summary = "전통주 투표 수정", description = "파라미터에 voteId, 바디에 {title, detail, titleA, titleB} json 형식으로 보내주시면 됩니다.")
+    @PutMapping("/{voteId}/drink")
+    public ResponseEntity updateDrinkVote(@PathVariable("voteId") Long voteId, @RequestBody UpdateNormalVoteRequest request, @RequestAttribute Long userId) {
+        voteService.updateDrinkVote(request.toServiceRequest(voteId, userId, request));
         return new ResponseEntity(HttpStatus.OK);
     }
 
