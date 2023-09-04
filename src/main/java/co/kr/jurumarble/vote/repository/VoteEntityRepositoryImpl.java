@@ -89,7 +89,6 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
     }
 
 
-
     @Override
     public List<VoteCommonData> findVoteCommonDataByTime(String keyword, Pageable pageable) {
         int pageNo = pageable.getPageNumber();
