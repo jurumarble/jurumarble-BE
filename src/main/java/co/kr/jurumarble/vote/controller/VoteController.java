@@ -11,7 +11,6 @@ import co.kr.jurumarble.vote.dto.response.GetVoteResponse;
 import co.kr.jurumarble.vote.enums.SortByType;
 import co.kr.jurumarble.vote.repository.dto.HotDrinkVoteData;
 import co.kr.jurumarble.vote.service.GetVoteData;
-import co.kr.jurumarble.vote.service.UpdateDrinkVoteServiceRequest;
 import co.kr.jurumarble.vote.service.VoteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
