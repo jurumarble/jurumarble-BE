@@ -55,7 +55,7 @@ public class VoteService {
     public Long createNormalVote(CreateNormalVoteServiceRequest request, Long userId) {
         userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         VoteContent voteContent = request.toVoteContent();
-        Vote vote = request.toVote(userId);
+        Vote vote = request.toVote(userId, request.getDetail());
         return voteGenerator.createNormalVote(vote, voteContent);
     }
 
@@ -131,7 +131,7 @@ public class VoteService {
     public void doVote(DoVoteInfo info) {
         Vote vote = voteRepository.findById(info.getVoteId()).orElseThrow(VoteNotFoundException::new);
         User user = userRepository.findById(info.getUserId()).orElseThrow(UserNotFoundException::new);
-        voteValidator.validateParcitipateVote(vote, user);
+        voteValidator.validateParticipateVote(vote, user);
         VoteResult voteResult = new VoteResult(vote.getId(), user.getId(), info.getChoice());
         voteResultRepository.save(voteResult);
     }
@@ -161,8 +161,8 @@ public class VoteService {
         return voteFinder.getVoteData(pageable, voteCommonDataByPopularity);
     }
 
-    public List<String> getRecommendVoteList(String keyword) {
-        return voteRepository.findByTitleContains(keyword).stream()
+    public List<String> getRecommendVoteList(String keyword, int recommendCount) {
+        return voteRepository.findByTitleContains(keyword, recommendCount).stream()
                 .map(Vote::getTitle)
                 .collect(Collectors.toList());
     }

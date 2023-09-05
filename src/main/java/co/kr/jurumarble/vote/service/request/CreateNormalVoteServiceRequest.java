@@ -10,6 +10,7 @@ import lombok.Getter;
 @Getter
 public class CreateNormalVoteServiceRequest {
     private String title;
+    private String detail;
     private String titleA;
     private String titleB;
     private String imageA;
@@ -17,9 +18,10 @@ public class CreateNormalVoteServiceRequest {
     private VoteType voteType;
 
     @Builder
-    private CreateNormalVoteServiceRequest(String title, String titleA, String titleB, String imageA, String imageB, VoteType voteType) {
+    private CreateNormalVoteServiceRequest(String title, String detail, String titleA, String titleB, String imageA, String imageB, VoteType voteType) {
         validVoteType(voteType);
         this.title = title;
+        this.detail = detail;
         this.titleA = titleA;
         this.titleB = titleB;
         this.imageA = imageA;
@@ -42,11 +44,12 @@ public class CreateNormalVoteServiceRequest {
                 .build();
     }
 
-    public Vote toVote(Long userId) {
+    public Vote toVote(Long userId, String detail) {
         return Vote.builder()
                 .postedUserId(userId)
                 .voteType(voteType)
                 .title(title)
+                .detail(detail)
                 .build();
     }
 

@@ -209,7 +209,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
 
 
     @Override
-    public List<Vote> findByTitleContains(String keyword) {
+    public List<Vote> findByTitleContains(String keyword, int recommendCount) {
         return jpaQueryFactory
                 .selectFrom(vote)
                 .innerJoin(voteContent)
@@ -219,7 +219,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .where(vote.title.like("%" + keyword + "%"))
                 .groupBy(vote.id)
                 .orderBy(voteResult.id.count().desc())
-                .limit(5)
+                .limit(recommendCount)
                 .fetch();
     }
 

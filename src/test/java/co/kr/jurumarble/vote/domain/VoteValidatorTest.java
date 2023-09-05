@@ -37,7 +37,7 @@ class VoteValidatorTest {
         // when // then
         assertThrows(UserNotAccessRightException.class,
                 () -> {
-                    voteValidator.validPostedUserWhenParcitipateVote(vote, postedUser);
+                    voteValidator.validPostedUserWhenParticipateVote(vote, postedUser);
                 });
     }
 
@@ -53,7 +53,7 @@ class VoteValidatorTest {
 
         when(voteResultRepository.existsByVoteIdAndVotedUserId(vote.getId(), user.getId())).thenReturn(true);
         // when // then
-        assertThrows(AlreadyUserDoVoteException.class, () -> voteValidator.validAlreadyParcitipatedVote(vote, user));
+        assertThrows(AlreadyUserDoVoteException.class, () -> voteValidator.validAlreadyParticipatedVote(vote, user));
     }
 
 }
