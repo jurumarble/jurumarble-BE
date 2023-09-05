@@ -40,4 +40,8 @@ public interface VoteEntityRepository {
     Optional<HotDrinkVoteData> getHotDrinkVote(LocalDateTime nowTime);
 
     HotDrinkVoteData findOneDrinkVoteByPopular();
+
+    List<VoteCommonData> findVoteCommonDataByParticipate(Long userId, int pageNum, int pageSize);
+
+    List<VoteCommonData> findVoteCommonDataByPostedUserId(Long userId, int pageNum, int pageSize);
 }

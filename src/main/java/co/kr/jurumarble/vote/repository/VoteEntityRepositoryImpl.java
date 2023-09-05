@@ -298,6 +298,48 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
     }
 
     @Override
+    public List<VoteCommonData> findVoteCommonDataByParticipate(Long userId, int pageNum, int pageSize) {
+        return jpaQueryFactory.select(
+                        Projections.bean(VoteCommonData.class,
+                                vote.id.as("voteId"),
+                                vote.postedUserId,
+                                vote.title,
+                                vote.detail,
+                                vote.filteredGender,
+                                vote.filteredAge,
+                                vote.filteredMbti,
+                                vote.voteType
+                        ))
+                .from(vote)
+                .where(vote.postedUserId.eq(userId))
+                .orderBy(vote.createdDate.desc())
+                .offset(pageNum * pageSize)
+                .limit(pageSize)
+                .fetch();
+    }
+
+    @Override
+    public List<VoteCommonData> findVoteCommonDataByPostedUserId(Long userId, int pageNum, int pageSize) {
+        return jpaQueryFactory.select(
+                        Projections.bean(VoteCommonData.class,
+                                vote.id.as("voteId"),
+                                vote.postedUserId,
+                                vote.title,
+                                vote.detail,
+                                vote.filteredGender,
+                                vote.filteredAge,
+                                vote.filteredMbti,
+                                vote.voteType
+                        ))
+                .from(vote)
+                .where(vote.postedUserId.eq(userId))
+                .orderBy(vote.createdDate.desc())
+                .offset(pageNum * pageSize)
+                .limit(pageSize)
+                .fetch();
+    }
+
+    @Override
     public Optional<VoteCommonData> findVoteCommonDataByVoteId(Long voteId) {
         VoteCommonData voteCommonData = jpaQueryFactory
                 .select(
