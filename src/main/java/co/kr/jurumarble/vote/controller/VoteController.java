@@ -30,14 +30,14 @@ import java.util.List;
 public class VoteController {
     private final VoteService voteService;
 
-    @Operation(summary = "일반 투표 생성", description = "헤더에 토큰 담고, 바디에 {title, titleA, titleB, imageA, imageB, filteredGender, filteredAge, filteredMbti} json 형식으로 보내주시면 됩니다.")
+    @Operation(summary = "일반 투표 생성", description = "헤더에 토큰 담고, 바디에 {title, titleA, titleB, imageA, imageB} json 형식으로 보내주시면 됩니다.")
     @PostMapping("/normal")
     public ResponseEntity createNormalVote(@Valid @RequestBody CreateNormalVoteRequest request, @RequestAttribute Long userId) {
         voteService.createNormalVote(request.toServiceRequest(), userId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @Operation(summary = "전통주 투표 생성", description = "헤더에 토큰 담고, 바디에 {title, titleA, titleB, imageA, imageB, filteredGender, filteredAge, filteredMbti} json 형식으로 보내주시면 됩니다.")
+    @Operation(summary = "전통주 투표 생성", description = "헤더에 토큰 담고, 바디에 {title, drinkAId, drinkBId} json 형식으로 보내주시면 됩니다.")
     @PostMapping("/drink")
     public ResponseEntity createDrinkVote(@Valid @RequestBody CreateDrinkVoteRequest request, @RequestAttribute Long userId) {
         voteService.createDrinkVote(request.toServiceRequest(), userId);
@@ -117,8 +117,8 @@ public class VoteController {
 
     @Operation(summary = "투표 검색어 추천", description = "파라미터에 keyword, category 보내주시면 됩니다.")
     @GetMapping("/recommend")
-    public ResponseEntity recommendVote(@RequestParam String keyword) {
-        List<String> voteRecommendListData = voteService.getRecommendVoteList(keyword);
+    public ResponseEntity recommendVote(@RequestParam String keyword, @RequestParam int recommendCount) {
+        List<String> voteRecommendListData = voteService.getRecommendVoteList(keyword, recommendCount);
         return new ResponseEntity(new GetVoteRecommendListResponse(voteRecommendListData), HttpStatus.OK);
     }
 

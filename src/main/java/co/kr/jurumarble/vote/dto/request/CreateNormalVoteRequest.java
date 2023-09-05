@@ -18,6 +18,9 @@ public class CreateNormalVoteRequest {
     @NotBlank(message = "투표 제목은 필수입니다.")
     private String title;
 
+    @Schema(description = "투표 상세", example = "A는 ~때문에 고민이고 B는 ~때문에 고민입니다")
+    private String detail;
+
     @Schema(description = "A 항목의 제목")
     @NotBlank(message = "투표 A항목의 제목은 필수입니다.")
     private String titleA;
@@ -27,17 +30,15 @@ public class CreateNormalVoteRequest {
     private String titleB;
 
     @Schema(description = "A 이미지")
-    @NotBlank(message = "투표 A 이미지는 필수입니다.")
     private String imageA;
 
     @Schema(description = "B 이미지")
-    @NotBlank(message = "투표 B 이미지는 필수입니다.")
     private String imageB;
 
-
     @Builder
-    public CreateNormalVoteRequest(String title, String titleA, String titleB, String imageA, String imageB) {
+    public CreateNormalVoteRequest(String title, String detail, String titleA, String titleB, String imageA, String imageB) {
         this.title = title;
+        this.detail = detail;
         this.titleA = titleA;
         this.titleB = titleB;
         this.imageA = imageA;
@@ -47,6 +48,7 @@ public class CreateNormalVoteRequest {
     public CreateNormalVoteServiceRequest toServiceRequest() {
         return CreateNormalVoteServiceRequest.builder()
                 .title(title)
+                .detail(detail)
                 .titleA(titleA)
                 .titleB(titleB)
                 .imageA(imageA)
