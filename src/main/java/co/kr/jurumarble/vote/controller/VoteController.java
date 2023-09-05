@@ -52,7 +52,7 @@ public class VoteController {
     }
 
     @Operation(summary = "마이페이지- 내가 참여한 투표 리스트 조회", description = "파라미터에 keyeword, sortBy, page, size, category 보내주시면 됩니다. 검색이 아니면 keyword = 에 값 없이 ")
-    @GetMapping("")
+    @GetMapping("/participated")
     public ResponseEntity<Slice<VoteData>> getParticipatedVotes(@RequestAttribute Long userId,@RequestParam int page, @RequestParam int size) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(voteService.getParticipatedVotes(userId, page, size));
