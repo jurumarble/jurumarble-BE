@@ -311,7 +311,9 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                                 vote.voteType
                         ))
                 .from(vote)
-                .where(vote.postedUserId.eq(userId))
+                .innerJoin(voteResult)
+                .on(voteResult.voteId.eq(vote.id))
+                .where(voteResult.votedUserId.eq(userId))
                 .orderBy(vote.createdDate.desc())
                 .offset(pageNum * pageSize)
                 .limit(pageSize)
