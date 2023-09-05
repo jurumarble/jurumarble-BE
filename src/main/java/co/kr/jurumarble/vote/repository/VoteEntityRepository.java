@@ -44,4 +44,6 @@ public interface VoteEntityRepository {
     List<VoteCommonData> findVoteCommonDataByParticipate(Long userId, int pageNum, int pageSize);
 
     List<VoteCommonData> findVoteCommonDataByPostedUserId(Long userId, int pageNum, int pageSize);
+
+    List<VoteCommonData> findCommonVoteDataBybookmark(Long userId, int pageNum, int pageSize);
 }

@@ -207,4 +207,10 @@ public class VoteService {
         PageRequest pageRequest = PageRequest.of(page, size);
         return voteFinder.getVoteData(pageRequest, voteCommonDataByParticipate);
     }
+
+    public Slice<VoteData> getBookmarkedVotes(Long userId, int page, int size) {
+        List<VoteCommonData> commonVoteDataBybookmark = voteRepository.findCommonVoteDataBybookmark(userId, page, size);
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return voteFinder.getVoteData(pageRequest, commonVoteDataBybookmark);
+    }
 }
