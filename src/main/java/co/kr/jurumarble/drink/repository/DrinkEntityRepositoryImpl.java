@@ -73,7 +73,7 @@ public class DrinkEntityRepositoryImpl implements DrinkEntityRepository {
     }
 
     @Override
-    public List<DrinkData> getDrinks(String keyword, String region, int pageNo, int pageSize) {
+    public List<DrinkData> getDrinksByName(String keyword, String region, int pageNo, int pageSize) {
 
         BooleanBuilder searchConditions = new BooleanBuilder();
         setSearchConditions(keyword, region, searchConditions);
@@ -100,6 +100,40 @@ public class DrinkEntityRepositoryImpl implements DrinkEntityRepository {
                 .offset(pageNo * pageSize)
                 .limit(pageSize)
                 .fetch();
+    }
+
+    @Override
+    public List<DrinkData> getDrinksByPopularity(String keyword, String region, int pageNo, int pageSize) {
+
+        BooleanBuilder searchConditions = new BooleanBuilder();
+        setSearchConditions(keyword, region, searchConditions);
+
+        return jpaQueryFactory.select(
+                        Projections.bean(DrinkData.class,
+                                drink.id,
+                                drink.name,
+                                drink.type,
+                                drink.productName,
+                                drink.alcoholicBeverage,
+                                drink.rawMaterial,
+                                drink.capacity,
+                                drink.manufactureAddress,
+                                drink.region,
+                                drink.price,
+                                drink.image,
+                                drink.latitude,
+                                drink.longitude
+                        ))
+                .from(drink)
+                .leftJoin(enjoyDrink)
+                .on(drink.id.eq(enjoyDrink.drinkId))
+                .where(searchConditions)
+                .groupBy(drink.id)
+                .orderBy(drink.id.count().desc(), drink.name.asc())
+                .offset(pageNo * pageSize)
+                .limit(pageSize)
+                .fetch();
+
     }
 
     private void setSearchConditions(String keyword, String region, BooleanBuilder builder) {

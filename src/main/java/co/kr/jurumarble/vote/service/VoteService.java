@@ -24,7 +24,6 @@ import co.kr.jurumarble.vote.service.request.CreateDrinkVoteServiceRequest;
 import co.kr.jurumarble.vote.service.request.CreateNormalVoteServiceRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -148,7 +147,7 @@ public class VoteService {
             return findVotesByPopularity(keyword, pageRequest);
         }
 
-        throw new VoteSortByNotFountException();
+        throw new SortByNotFountException();
     }
 
     public Slice<VoteData> findVotesByTime(String keyword, PageRequest pageable) {
@@ -193,7 +192,7 @@ public class VoteService {
             return pageableConverter.convertListToSlice(drinkVotesByPopularity, pageNum, pageSize);
         }
 
-        throw new VoteSortByNotFountException();
+        throw new SortByNotFountException();
     }
 
     public Slice<VoteData> getParticipatedVotes(Long userId, int page, int size) {

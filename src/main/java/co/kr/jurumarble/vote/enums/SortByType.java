@@ -4,7 +4,8 @@ import co.kr.jurumarble.common.enums.EnumModel;
 
 public enum SortByType implements EnumModel {
     ByTime("createdDate"),
-    ByPopularity("인기순");
+    ByPopularity("인기순"),
+    ByName("이름순");
 
     private String value;
 
