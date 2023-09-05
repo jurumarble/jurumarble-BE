@@ -23,6 +23,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
+import static co.kr.jurumarble.bookmark.domain.QBookmark.bookmark;
 import static co.kr.jurumarble.user.domain.QUser.user;
 import static co.kr.jurumarble.vote.domain.QVote.vote;
 import static co.kr.jurumarble.vote.domain.QVoteContent.voteContent;
@@ -295,6 +296,73 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .orderBy(vote.id.count().desc(), vote.title.asc())
                 .limit(COUNT_OF_HOT_DRINK_VOTE)
                 .fetchOne();
+    }
+
+    @Override
+    public List<VoteCommonData> findVoteCommonDataByParticipate(Long userId, int pageNum, int pageSize) {
+        return jpaQueryFactory.select(
+                        Projections.bean(VoteCommonData.class,
+                                vote.id.as("voteId"),
+                                vote.postedUserId,
+                                vote.title,
+                                vote.detail,
+                                vote.filteredGender,
+                                vote.filteredAge,
+                                vote.filteredMbti,
+                                vote.voteType
+                        ))
+                .from(vote)
+                .innerJoin(voteResult)
+                .on(voteResult.voteId.eq(vote.id))
+                .where(voteResult.votedUserId.eq(userId))
+                .orderBy(vote.createdDate.desc())
+                .offset(pageNum * pageSize)
+                .limit(pageSize)
+                .fetch();
+    }
+
+    @Override
+    public List<VoteCommonData> findVoteCommonDataByPostedUserId(Long userId, int pageNum, int pageSize) {
+        return jpaQueryFactory.select(
+                        Projections.bean(VoteCommonData.class,
+                                vote.id.as("voteId"),
+                                vote.postedUserId,
+                                vote.title,
+                                vote.detail,
+                                vote.filteredGender,
+                                vote.filteredAge,
+                                vote.filteredMbti,
+                                vote.voteType
+                        ))
+                .from(vote)
+                .where(vote.postedUserId.eq(userId))
+                .orderBy(vote.createdDate.desc())
+                .offset(pageNum * pageSize)
+                .limit(pageSize)
+                .fetch();
+    }
+
+    @Override
+    public List<VoteCommonData> findCommonVoteDataBybookmark(Long userId, int pageNum, int pageSize) {
+        return jpaQueryFactory.select(
+                        Projections.bean(VoteCommonData.class,
+                                vote.id.as("voteId"),
+                                vote.postedUserId,
+                                vote.title,
+                                vote.detail,
+                                vote.filteredGender,
+                                vote.filteredAge,
+                                vote.filteredMbti,
+                                vote.voteType
+                        ))
+                .from(vote)
+                .innerJoin(bookmark)
+                .on(bookmark.voteId.eq(vote.id))
+                .where(bookmark.userId.eq(userId))
+                .orderBy(vote.createdDate.desc())
+                .offset(pageNum * pageSize)
+                .limit(pageSize)
+                .fetch();
     }
 
     @Override

@@ -24,6 +24,7 @@ import co.kr.jurumarble.vote.service.request.CreateDrinkVoteServiceRequest;
 import co.kr.jurumarble.vote.service.request.CreateNormalVoteServiceRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -193,5 +194,23 @@ public class VoteService {
         }
 
         throw new VoteSortByNotFountException();
+    }
+
+    public Slice<VoteData> getParticipatedVotes(Long userId, int page, int size) {
+        List<VoteCommonData> voteCommonDataByParticipate = voteRepository.findVoteCommonDataByParticipate(userId, page, size);
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return voteFinder.getVoteData(pageRequest, voteCommonDataByParticipate);
+    }
+
+    public Slice<VoteData> getMyVote(Long userId, int page, int size) {
+        List<VoteCommonData> voteCommonDataByParticipate = voteRepository.findVoteCommonDataByPostedUserId(userId, page, size);
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return voteFinder.getVoteData(pageRequest, voteCommonDataByParticipate);
+    }
+
+    public Slice<VoteData> getBookmarkedVotes(Long userId, int page, int size) {
+        List<VoteCommonData> commonVoteDataBybookmark = voteRepository.findCommonVoteDataBybookmark(userId, page, size);
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return voteFinder.getVoteData(pageRequest, commonVoteDataBybookmark);
     }
 }
