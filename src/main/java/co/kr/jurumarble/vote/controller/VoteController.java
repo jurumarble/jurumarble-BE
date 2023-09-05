@@ -46,9 +46,30 @@ public class VoteController {
 
     @Operation(summary = "일반/전통주 투표 리스트 검색, 조회", description = "파라미터에 keyeword, sortBy, page, size, category 보내주시면 됩니다. 검색이 아니면 keyword = 에 값 없이 ")
     @GetMapping("")
-    public ResponseEntity<GetVoteListResponse> getVotes(@RequestParam(required = false) String keyword, @RequestParam SortByType sortBy, @RequestParam int page, @RequestParam int size) {
-        Slice<VoteData> voteListData = voteService.sortFindVotes(keyword, sortBy, page, size);
-        return new ResponseEntity(new GetVoteListResponse(voteListData), HttpStatus.OK);
+    public ResponseEntity<Slice<VoteData>> getVotes(@RequestParam(required = false) String keyword, @RequestParam SortByType sortBy, @RequestParam int page, @RequestParam int size) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(voteService.sortFindVotes(keyword, sortBy, page, size));
+    }
+
+    @Operation(summary = "마이페이지- 내가 참여한 투표 리스트 조회", description = "파라미터에 keyeword, sortBy, page, size, category 보내주시면 됩니다. 검색이 아니면 keyword = 에 값 없이 ")
+    @GetMapping("/participated")
+    public ResponseEntity<Slice<VoteData>> getParticipatedVotes(@RequestAttribute Long userId,@RequestParam int page, @RequestParam int size) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(voteService.getParticipatedVotes(userId, page, size));
+    }
+
+    @Operation(summary = "마이페이지- 내가 작성한 투표 리스트 조회", description = "파라미터에 keyeword, sortBy, page, size, category 보내주시면 됩니다. 검색이 아니면 keyword = 에 값 없이 ")
+    @GetMapping("/my-vote")
+    public ResponseEntity<Slice<VoteData>> getMyVotes(@RequestAttribute Long userId,@RequestParam int page, @RequestParam int size) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(voteService.getMyVote(userId, page, size));
+    }
+
+    @Operation(summary = "마이페이지- 내가 북마크한 투표 리스트 조회", description = "파라미터에 keyeword, sortBy, page, size, category 보내주시면 됩니다. 검색이 아니면 keyword = 에 값 없이 ")
+    @GetMapping("/bookmarked")
+    public ResponseEntity<Slice<VoteData>> getBookmarkedVotes(@RequestAttribute Long userId,@RequestParam int page, @RequestParam int size) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(voteService.getBookmarkedVotes(userId, page, size));
     }
 
     @Operation(summary = "전통주 투표 리스트 검색, 조회", description = "파라미터에 keyeword, sortBy, page, size, category 보내주시면 됩니다. 검색이 아니면 keyword = 에 값 없이 ")
@@ -114,5 +135,4 @@ public class VoteController {
         HotDrinkVoteData hotDrinkVote = voteService.getHotDrinkVote();
         return ResponseEntity.ok().body(hotDrinkVote);
     }
-
 }
