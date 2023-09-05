@@ -58,6 +58,13 @@ public class VoteController {
                 .body(voteService.getParticipatedVotes(userId, page, size));
     }
 
+    @Operation(summary = "마이페이지- 내가 작성한 투표 리스트 조회", description = "파라미터에 keyeword, sortBy, page, size, category 보내주시면 됩니다. 검색이 아니면 keyword = 에 값 없이 ")
+    @GetMapping("/my-vote")
+    public ResponseEntity<Slice<VoteData>> getMyVotes(@RequestAttribute Long userId,@RequestParam int page, @RequestParam int size) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(voteService.getMyVote(userId, page, size));
+    }
+
     @Operation(summary = "전통주 투표 리스트 검색, 조회", description = "파라미터에 keyeword, sortBy, page, size, category 보내주시면 됩니다. 검색이 아니면 keyword = 에 값 없이 ")
     @GetMapping("/drinks")
     public ResponseEntity<GetVoteListResponse> getDrinkVotes(@RequestParam(required = false) String keyword, @RequestParam(required = false) Region region, @RequestParam SortByType sortBy, @RequestParam int page, @RequestParam int size) {
