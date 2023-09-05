@@ -10,6 +10,11 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${rds.username}
     password: ${rds.password}
+  cache:
+    type: redis
+  redis:
+    host: jurumarble-redis-001.upetyi.0001.apn2.cache.amazonaws.com
+    port: 6379
 
   jpa:
     open-in-view: true

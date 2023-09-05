@@ -17,6 +17,7 @@ import co.kr.jurumarble.user.repository.UserRepository;
 import co.kr.jurumarble.vote.domain.Vote;
 import co.kr.jurumarble.vote.repository.VoteRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -103,7 +104,9 @@ public class CommentService {
 
     }
 
+    @Cacheable(value = "searchRestaurant", key = "#keyword ?: '' + '_' + #areaCode ?: '' + '_' + #page")
     public List<SearchRestaurantData> searchRestaurant(Long voteId, Long commentId, Long userId, String keyword, Integer areaCode, int page) {
+        System.out.println("Service 에서 연산을 수행합니다");
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
