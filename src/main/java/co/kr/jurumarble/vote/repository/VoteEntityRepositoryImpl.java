@@ -106,16 +106,17 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                                 vote.filteredGender,
                                 vote.filteredAge,
                                 vote.filteredMbti,
-                                vote.voteType,
-                                voteResult.count().as("voteCount")
+                                voteResult.count().as("voteCount"),
+                                vote.voteType
+
                         ))
                 .from(vote)
                 .leftJoin(voteResult).on(vote.id.eq(voteResult.voteId))
                 .where(keywordExpression)
+                .groupBy(vote.id)
                 .orderBy(vote.createdDate.desc())
                 .offset(pageNo * pageSize)
                 .limit(pageSize)
-                .groupBy(vote.id)
                 .fetch();
 
     }
