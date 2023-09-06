@@ -44,7 +44,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(final CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedMethods(ALLOWED_METHOD_NAMES.split(","))
-                .allowedOrigins("http://localhost:3000","https://jurumarble-git-develop-chooz.vercel.app/")
+                .allowedOrigins("http://localhost:3000","https://jurumarble-git-develop-chooz.vercel.app/","https://jurumarble.site","https://jurumarble.vercel.app/")
                 .maxAge(3600);
     }
 }
