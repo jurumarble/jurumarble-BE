@@ -125,7 +125,6 @@ public class DrinkService {
     public boolean checkEnjoyed(Long drinkId, Long userId) {
         userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         drinkRepository.findById(drinkId).orElseThrow(DrinkNotFoundException::new);
-
         return enjoyDrinkRepository.findByUserIdAndDrinkId(userId, drinkId).isPresent();
     }
 }

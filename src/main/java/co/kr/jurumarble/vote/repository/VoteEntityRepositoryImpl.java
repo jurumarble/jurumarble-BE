@@ -197,7 +197,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
 
     private void setSearchConditions(String keyword, String region, BooleanBuilder builder) {
         if (keyword != null && !keyword.isEmpty()) {
-            builder.and(vote.title.like("%" + keyword + "%"));
+            builder.and(vote.title.like(keyword + "%"));
         }
 
         if (region != null && !region.isEmpty()) {
