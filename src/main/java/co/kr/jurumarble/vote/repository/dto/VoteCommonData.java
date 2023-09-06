@@ -20,6 +20,6 @@ public class VoteCommonData {
     private GenderType filteredGender;
     private AgeType filteredAge;
     private MbtiType filteredMbti;
-    private Long votedCount;
     private VoteType voteType;
+    private Long votedCount;
 }
