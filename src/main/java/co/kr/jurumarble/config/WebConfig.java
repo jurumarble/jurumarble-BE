@@ -7,6 +7,9 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 @Configuration
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
@@ -47,4 +50,5 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins("http://localhost:3000","https://jurumarble-git-develop-chooz.vercel.app/","https://jurumarble.site","https://jurumarble.vercel.app/")
                 .maxAge(3600);
     }
+
 }
