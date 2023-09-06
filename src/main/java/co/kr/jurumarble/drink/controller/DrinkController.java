@@ -4,6 +4,7 @@ import co.kr.jurumarble.comment.enums.Region;
 import co.kr.jurumarble.drink.controller.request.DrinkData;
 import co.kr.jurumarble.drink.controller.request.EnjoyDrinkRequest;
 import co.kr.jurumarble.drink.controller.response.GetDrinkResponse;
+import co.kr.jurumarble.drink.controller.response.GetEnjoyedResponse;
 import co.kr.jurumarble.drink.controller.response.GetHotDrinksResponse;
 import co.kr.jurumarble.drink.controller.response.GetMapInDrinksResponse;
 import co.kr.jurumarble.drink.service.DrinkService;
@@ -71,5 +72,13 @@ public class DrinkController {
     public ResponseEntity<Slice<GetMapInDrinksResponse>> getMapInDrinks(@RequestParam Double startX, @RequestParam Double startY, @RequestParam Double endX, @RequestParam Double endY, @RequestParam int page, @RequestParam int size) {
         Slice<GetMapInDrinksResponse> drinks = drinkService.getMapInDrinks(startX, startY, endX, endY, page, size);
         return new ResponseEntity(drinks, HttpStatus.OK);
+    }
+
+    @Operation(summary = "전통주 즐겼어요 여부 조회", description = "")
+    @GetMapping("/{drinkId}/enjoy")
+    public ResponseEntity<GetEnjoyedResponse> checkEnjoyed(@PathVariable Long drinkId, @RequestAttribute Long userId) {
+        boolean result = drinkService.checkEnjoyed(drinkId, userId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GetEnjoyedResponse(result));
     }
 }

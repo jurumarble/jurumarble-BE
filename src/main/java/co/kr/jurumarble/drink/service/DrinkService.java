@@ -13,7 +13,9 @@ import co.kr.jurumarble.drink.repository.dto.HotDrinkData;
 import co.kr.jurumarble.drink.service.request.EnjoyDrinkServiceRequest;
 import co.kr.jurumarble.drink.service.response.GetDrinkServiceResponse;
 import co.kr.jurumarble.exception.drink.DrinkNotFoundException;
+import co.kr.jurumarble.exception.user.UserNotFoundException;
 import co.kr.jurumarble.exception.vote.SortByNotFountException;
+import co.kr.jurumarble.user.repository.UserRepository;
 import co.kr.jurumarble.utils.PageableConverter;
 import co.kr.jurumarble.vote.enums.SortByType;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +41,7 @@ public class DrinkService {
     private final EnjoyDrinkRepository enjoyDrinkRepository;
     private final EnjoyDrinkValidator enjoyDrinkValidator;
     private final PageableConverter pageableConverter;
+    private final UserRepository userRepository;
 
 
     public GetDrinkServiceResponse getDrinkData(Long drinkId) {
@@ -117,5 +120,12 @@ public class DrinkService {
         return drinkRepository.findDrinksByIdIn(drinkIds).stream()
                 .map(DrinkData::new)
                 .collect(Collectors.toList());
+    }
+
+    public boolean checkEnjoyed(Long drinkId, Long userId) {
+        userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        drinkRepository.findById(drinkId).orElseThrow(DrinkNotFoundException::new);
+
+        return enjoyDrinkRepository.findByUserIdAndDrinkId(userId, drinkId).isPresent();
     }
 }
