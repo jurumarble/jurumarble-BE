@@ -44,14 +44,14 @@ public class CommentValidator {
         }
     }
 
-    public void validateCommentBelongsToVote(Comment parent, Vote vote) {
-        if (parent != null && !commentRepository.existsByIdAndVoteId(parent.getId(), vote.getId())) {
+    public void validateCommentBelongsToVote(Comment comment, Vote vote) {
+        if (comment != null && !commentRepository.existsByIdAndVoteId(comment.getId(), vote.getId())) {
             throw new CommentNotBelongToVoteException();
         }
     }
 
-    public void validateCommentBelongsToDrink(Comment parent, Drink drink) {
-        if (parent != null && !commentRepository.existsByIdAndDrinkId(parent.getId(), drink.getId())) {
+    public void validateCommentBelongsToDrink(Comment comment, Drink drink) {
+        if (comment != null && !commentRepository.existsByIdAndDrinkId(comment.getId(), drink.getId())) {
             throw new CommentNotBelongToDrinkException();
         }
     }

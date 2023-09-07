@@ -9,9 +9,11 @@ import co.kr.jurumarble.comment.service.request.CreateCommentServiceRequest;
 import co.kr.jurumarble.comment.service.request.GetCommentServiceRequest;
 import co.kr.jurumarble.comment.service.request.UpdateCommentServiceRequest;
 import co.kr.jurumarble.comment.service.request.UpdateRestaurantServiceRequest;
+import co.kr.jurumarble.drink.domain.entity.Drink;
 import co.kr.jurumarble.drink.repository.DrinkRepository;
 import co.kr.jurumarble.exception.comment.CommentNotFoundException;
 import co.kr.jurumarble.exception.comment.InvalidSortingMethodException;
+import co.kr.jurumarble.exception.drink.DrinkNotFoundException;
 import co.kr.jurumarble.exception.user.UserNotFoundException;
 import co.kr.jurumarble.exception.vote.VoteNotFoundException;
 import co.kr.jurumarble.user.domain.User;
@@ -88,17 +90,16 @@ public class CommentService {
     }
 
     @Transactional
-    public void emoteComment(Long voteId, Long commentId, Long userId, Emotion emotion) {
+    public void emoteComment(CommentType commentType, Long typeId, Long commentId, Long userId, Emotion emotion) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
+        commentValidator.validateCommentBelongsToType(commentType, typeId, comment);
         commentEmoteManager.doEmote(emotion, user, comment);
     }
 
     @Transactional
     public void addRestaurantToComment(Long voteId, Long commentId, Long userId, UpdateRestaurantServiceRequest request) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
         commentValidator.validateCommentBelongsToUser(comment, user);
         comment.updateRestaurant(request);

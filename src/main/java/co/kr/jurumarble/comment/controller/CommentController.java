@@ -31,7 +31,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @Operation(summary = "댓글 생성", description = "헤더에 토큰을 포함하고, URL 파라미터에 'type'(vote 또는 drink)와 해당 타입'id'를, 요청 바디에 'parentId'(댓글의 부모 아이디. 대댓글일 경우 부모 댓글 아이디, 없으면 빈 문자열)와 'content'(댓글 내용)을 JSON 형식으로 보내주세요.")
+    @Operation(summary = "댓글 생성", description = "헤더에 토큰을 포함하고, URL 파라미터에 'type'(votes 또는 drinks)와 해당 타입'id'를, 요청 바디에 'parentId'(댓글의 부모 아이디. 대댓글일 경우 부모 댓글 아이디, 없으면 빈 문자열)와 'content'(댓글 내용)을 JSON 형식으로 보내주세요.")
     @PostMapping("/{commentType}/{typeId}/comments/create")
     public ResponseEntity createComment(@Valid @RequestBody CreateCommentRequest createCommentRequest, @PathVariable CommentType commentType, @PathVariable Long typeId, @RequestAttribute Long userId) {
         commentService.createComment(commentType, typeId, userId, createCommentRequest.toServiceRequest());
@@ -49,7 +49,7 @@ public class CommentController {
     }
 
 
-    @Operation(summary = "댓글 수정", description = "헤더에 토큰을 포함하고, URL 파라미터에 'voteId'와 'commentId'를, 요청 바디에 'content'(수정할 댓글 내용)을 JSON 형식으로 보내주세요.")
+    @Operation(summary = "댓글 수정", description = "헤더에 토큰을 포함하고, URL 파라미터에 'type'(votes 또는 drinks)와 해당 타입'id'와 commentId 를, 요청 바디에 'content'(수정할 댓글 내용)을 JSON 형식으로 보내주세요.")
     @PutMapping("/{commentType}/{typeId}/comments/{commentId}")
     public ResponseEntity updateComment(@Valid @RequestBody UpdateCommentRequest updateCommentRequest, @PathVariable CommentType commentType, @PathVariable Long typeId, @PathVariable Long commentId, @RequestAttribute Long userId) {
         commentService.updateComment(commentType, typeId, commentId, userId, updateCommentRequest.toServiceRequest());
@@ -57,29 +57,24 @@ public class CommentController {
     }
 
 
-    @Operation(summary = "댓글 삭제", description = "헤더에 토큰을 포함하고, URL 파라미터에 'voteId'와 'commentId'를 전달하여 댓글을 삭제하는 기능.")
+    @Operation(summary = "댓글 삭제", description = "헤더에 토큰을 포함하고, URL 파라미터에 'type'(votes 또는 drinks)와 해당 타입'id'를 전달하여 댓글을 삭제하는 기능.")
     @DeleteMapping("/{commentType}/{typeId}/comments/{commentId}")
     public ResponseEntity deleteComment(@PathVariable CommentType commentType, @PathVariable Long typeId, @PathVariable Long commentId, @RequestAttribute Long userId) {
         commentService.deleteComment(commentType, typeId, commentId, userId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @Operation(summary = "댓글 좋아요", description = "헤더에 토큰을 포함하고, URL 파라미터에 'voteId'와 'commentId'를 전달하여 댓글을 좋아요하는 기능입니다.")
-    @PostMapping("/votes/{voteId}/comments/{commentId}/likers")
-    public ResponseEntity likeComment(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Long userId) {
-
-        commentService.emoteComment(voteId, commentId, userId, Emotion.LIKE);
-
+    @Operation(summary = "댓글 좋아요", description = "헤더에 토큰을 포함하고, URL 파라미터에 'type'(votes 또는 drinks)와 해당 타입'id'와 commentId 를 전달하여 댓글을 좋아요하는 기능입니다.")
+    @PostMapping("/{commentType}/{typeId}/comments/{commentId}/likers")
+    public ResponseEntity likeComment(@PathVariable CommentType commentType, @PathVariable Long typeId, @PathVariable Long commentId, @RequestAttribute Long userId) {
+        commentService.emoteComment(commentType, typeId, commentId, userId, Emotion.LIKE);
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @Operation(summary = "댓글 싫어요", description = "헤더에 토큰을 포함하고, URL 파라미터에 'voteId'와 'commentId'를 전달하여 댓글을 싫어요하는 기능입니다.")
-    @PostMapping("/votes/{voteId}/comments/{commentId}/haters")
-    public ResponseEntity hateComment(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Long userId) {
-
-        commentService.emoteComment(voteId, commentId, userId, Emotion.HATE);
-
-
+    @Operation(summary = "댓글 싫어요", description = "헤더에 토큰을 포함하고, URL 파라미터에 'type'(votes 또는 drinks)와 해당 타입'id'와 commentId 를 전달하여 댓글을 싫어요하는 기능입니다.")
+    @PostMapping("/{commentType}/{typeId}/comments/{commentId}/haters")
+    public ResponseEntity hateComment(@PathVariable CommentType commentType, @PathVariable Long typeId, @PathVariable Long commentId, @RequestAttribute Long userId) {
+        commentService.emoteComment(commentType, typeId, commentId, userId, Emotion.HATE);
         return new ResponseEntity(HttpStatus.OK);
     }
 
