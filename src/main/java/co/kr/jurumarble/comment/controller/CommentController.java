@@ -51,19 +51,17 @@ public class CommentController {
 
     @Operation(summary = "댓글 수정", description = "헤더에 토큰을 포함하고, URL 파라미터에 'voteId'와 'commentId'를, 요청 바디에 'content'(수정할 댓글 내용)을 JSON 형식으로 보내주세요.")
     @PutMapping("/{commentType}/{typeId}/comments/{commentId}")
-    public ResponseEntity updateComment(@Valid @RequestBody UpdateCommentRequest updateCommentRequest, @PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Long userId) {
-
-        commentService.updateComment(voteId, commentId, userId, updateCommentRequest.toServiceRequest());
-
+    public ResponseEntity updateComment(@Valid @RequestBody UpdateCommentRequest updateCommentRequest, @PathVariable CommentType commentType, @PathVariable Long typeId, @PathVariable Long commentId, @RequestAttribute Long userId) {
+        commentService.updateComment(commentType, typeId, commentId, userId, updateCommentRequest.toServiceRequest());
         return new ResponseEntity(HttpStatus.OK);
     }
 
 
     @Operation(summary = "댓글 삭제", description = "헤더에 토큰을 포함하고, URL 파라미터에 'voteId'와 'commentId'를 전달하여 댓글을 삭제하는 기능.")
-    @DeleteMapping("/votes/{voteId}/comments/{commentId}")
-    public ResponseEntity deleteComment(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Long userId) {
+    @DeleteMapping("/{commentType}/{typeId}/comments/{commentId}")
+    public ResponseEntity deleteComment(@PathVariable CommentType commentType, @PathVariable Long typeId, @PathVariable Long commentId, @RequestAttribute Long userId) {
 
-        commentService.deleteComment(voteId, commentId, userId);
+        commentService.deleteComment(typeId, commentId, userId);
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }

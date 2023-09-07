@@ -49,6 +49,12 @@ public class CommentExceptionHandler {
                 .body(ExceptionMessage.of(e.getStatus(), e.getMessage()));
     }
 
+    @ExceptionHandler(CommentNotBelongToDrinkException.class)
+    public ResponseEntity<ExceptionMessage> handle(CommentNotBelongToDrinkException e) {
+        return ResponseEntity.status(e.getStatus().getStatusCode())
+                .body(ExceptionMessage.of(e.getStatus(), e.getMessage()));
+    }
+
     @ExceptionHandler(CommentNotBelongToVoteException.class)
     public ResponseEntity<ExceptionMessage> handle(CommentNotBelongToVoteException e) {
         return ResponseEntity.status(e.getStatus().getStatusCode())

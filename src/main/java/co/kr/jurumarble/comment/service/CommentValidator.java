@@ -23,15 +23,15 @@ public class CommentValidator {
     private final VoteRepository voteRepository;
     private final DrinkRepository drinkRepository;
 
-    public void validateCommentBelongsToType(CommentType commentType, Long typeId, Comment parentComment) {
+    public void validateCommentBelongsToType(CommentType commentType, Long typeId, Comment commment) {
         switch (commentType) {
             case VOTES:
                 Vote vote = voteRepository.findById(typeId).orElseThrow(VoteNotFoundException::new);
-                validateCommentBelongsToVote(parentComment, vote);
+                validateCommentBelongsToVote(commment, vote);
                 break;
             case DRINKS:
                 Drink drink = drinkRepository.findById(typeId).orElseThrow(DrinkNotFoundException::new);
-                validateCommentBelongsToDrink(parentComment, drink);
+                validateCommentBelongsToDrink(commment, drink);
                 break;
             default:
                 throw new InvalidCommentTypeException();
@@ -52,7 +52,7 @@ public class CommentValidator {
 
     public void validateCommentBelongsToDrink(Comment parent, Drink drink) {
         if (parent != null && !commentRepository.existsByIdAndDrinkId(parent.getId(), drink.getId())) {
-            throw new CommentNotBelongToVoteException();
+            throw new CommentNotBelongToDrinkException();
         }
     }
 
