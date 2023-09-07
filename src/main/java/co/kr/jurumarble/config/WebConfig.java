@@ -29,12 +29,12 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/votes/{voteId}/voted")
                 .addPathPatterns("/api/votes/{voteId}/bookmark")
                 .addPathPatterns("/api/drinks/enjoys")
-                .addPathPatterns("/api/votes/{voteId}/comments/create")
-                .addPathPatterns("/api/votes/{voteId}/comments/{commentId}")
-                .addPathPatterns("/api/votes/{voteId}/comments/{commentId}/likers")
-                .addPathPatterns("/api/votes/{voteId}/comments/{commentId}/haters")
-                .addPathPatterns("/api/votes/{voteId}/comments/{commentId}/restaurant")
-                .addPathPatterns("/api/votes/{voteId}/comments/{commentId}/restaurant/{contentId}");
+                .addPathPatterns("/api/{conmmentType}/{typeId}/comments/create")
+                .addPathPatterns("/api/{conmmentType}/{typeId}/comments/{commentId}")
+                .addPathPatterns("/api/{conmmentType}/{typeId}/comments/{commentId}/likers")
+                .addPathPatterns("/api/{conmmentType}/{typeId}/comments/{commentId}/haters")
+                .addPathPatterns("/api/{conmmentType}/{typeId}/comments/{commentId}/restaurant")
+                .addPathPatterns("/api/{conmmentType}/{typeId}/comments/{commentId}/restaurant/{contentId}");
     }
 
     @Override

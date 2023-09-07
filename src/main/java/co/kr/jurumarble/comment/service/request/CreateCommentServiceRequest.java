@@ -27,9 +27,9 @@ public class CreateCommentServiceRequest {
                 .gender(user.getGender())
                 .parent(parentComment);
 
-        if (commentType == CommentType.VOTE) {
+        if (commentType == CommentType.VOTES) {
             commentBuilder.voteId(typeId);
-        } else if (commentType == CommentType.DRINK) {
+        } else if (commentType == CommentType.DRINKS) {
             commentBuilder.drinkId(typeId);
         }
 

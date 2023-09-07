@@ -3,8 +3,8 @@ package co.kr.jurumarble.comment.enums;
 import co.kr.jurumarble.common.enums.EnumModel;
 
 public enum CommentType implements EnumModel {
-    VOTE("투표"),
-    DRINK("우리술");
+    VOTES("투표"),
+    DRINKS("우리술");
 
     private String value;
 

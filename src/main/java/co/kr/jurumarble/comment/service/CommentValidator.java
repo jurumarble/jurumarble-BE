@@ -25,11 +25,11 @@ public class CommentValidator {
 
     public void validateCommentBelongsToType(CommentType commentType, Long typeId, Comment parentComment) {
         switch (commentType) {
-            case VOTE:
+            case VOTES:
                 Vote vote = voteRepository.findById(typeId).orElseThrow(VoteNotFoundException::new);
                 validateCommentBelongsToVote(parentComment, vote);
                 break;
-            case DRINK:
+            case DRINKS:
                 Drink drink = drinkRepository.findById(typeId).orElseThrow(DrinkNotFoundException::new);
                 validateCommentBelongsToDrink(parentComment, drink);
                 break;

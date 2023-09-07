@@ -31,18 +31,9 @@ public class CommentController {
 
     private final CommentService commentService;
 
-//    @Operation(summary = "댓글 생성", description = "헤더에 토큰을 포함하고, URL 파라미터에 'voteId'를, 요청 바디에 'parentId'(댓글의 부모 아이디. 대댓글일 경우 부모 댓글 아이디, 없으면 빈 문자열)와 'content'(댓글 내용)을 JSON 형식으로 보내주세요.")
-//    @PostMapping("/votes/{voteId}/comments/create")
-//    public ResponseEntity createComment(@PathVariable Long voteId, @RequestAttribute Long userId, @RequestBody @Valid CreateCommentRequest createCommentRequest) {
-//
-//        commentService.createComment(voteId, userId, createCommentRequest.toServiceRequest());
-//
-//        return new ResponseEntity(HttpStatus.CREATED);
-//    }
-
     @Operation(summary = "댓글 생성", description = "헤더에 토큰을 포함하고, URL 파라미터에 'type'(vote 또는 drink)와 해당 타입'id'를, 요청 바디에 'parentId'(댓글의 부모 아이디. 대댓글일 경우 부모 댓글 아이디, 없으면 빈 문자열)와 'content'(댓글 내용)을 JSON 형식으로 보내주세요.")
     @PostMapping("/{commentType}/{typeId}/comments/create")
-    public ResponseEntity createComment(@RequestBody @Valid CreateCommentRequest createCommentRequest, @PathVariable CommentType commentType, @PathVariable Long typeId, @RequestAttribute Long userId) {
+    public ResponseEntity createComment(@Valid @RequestBody CreateCommentRequest createCommentRequest, @PathVariable CommentType commentType, @PathVariable Long typeId, @RequestAttribute Long userId) {
         commentService.createComment(commentType, typeId, userId, createCommentRequest.toServiceRequest());
         return new ResponseEntity(HttpStatus.CREATED);
     }
@@ -59,8 +50,8 @@ public class CommentController {
 
 
     @Operation(summary = "댓글 수정", description = "헤더에 토큰을 포함하고, URL 파라미터에 'voteId'와 'commentId'를, 요청 바디에 'content'(수정할 댓글 내용)을 JSON 형식으로 보내주세요.")
-    @PatchMapping("/votes/{voteId}/comments/{commentId}")
-    public ResponseEntity updateComment(@PathVariable Long voteId, @PathVariable Long commentId, @Valid @RequestBody UpdateCommentRequest updateCommentRequest, @RequestAttribute Long userId) {
+    @PutMapping("/{commentType}/{typeId}/comments/{commentId}")
+    public ResponseEntity updateComment(@Valid @RequestBody UpdateCommentRequest updateCommentRequest, @PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Long userId) {
 
         commentService.updateComment(voteId, commentId, userId, updateCommentRequest.toServiceRequest());
 
