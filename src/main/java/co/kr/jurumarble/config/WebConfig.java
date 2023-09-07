@@ -34,18 +34,20 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/votes/{voteId}/voted")
                 .addPathPatterns("/api/votes/{voteId}/bookmark")
                 .addPathPatterns("/api/drinks/enjoys")
-                .addPathPatterns("/api/{conmmentType}/{typeId}/comments/create")
-                .addPathPatterns("/api/{conmmentType}/{typeId}/comments/{commentId}")
-                .addPathPatterns("/api/{conmmentType}/{typeId}/comments/{commentId}/likers")
-                .addPathPatterns("/api/{conmmentType}/{typeId}/comments/{commentId}/haters")
-                .addPathPatterns("/api/{conmmentType}/{typeId}/comments/{commentId}/restaurant")
-                .addPathPatterns("/api/{conmmentType}/{typeId}/comments/{commentId}/restaurant/{contentId}");
+                .addPathPatterns("/api/votes/{voteId}/comments/create")
+                .addPathPatterns("/api/votes/{voteId}/comments/{commentId}")
+                .addPathPatterns("/api/votes/{voteId}/comments/{commentId}/likers")
+                .addPathPatterns("/api/votes/{voteId}/comments/{commentId}/haters")
+                .addPathPatterns("/api/votes/{voteId}/comments/{commentId}/restaurant")
+                .addPathPatterns("/api/votes/{voteId}/comments/{commentId}/restaurant/{contentId}");
     }
 
     @Override
     public void addCorsMappings(final CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedMethods(ALLOWED_METHOD_NAMES.split(","));
+                .allowedMethods(ALLOWED_METHOD_NAMES.split(","))
+                .allowedOrigins("http://localhost:3000","https://jurumarble-git-develop-chooz.vercel.app/","https://jurumarble.site","https://jurumarble.vercel.app/")
+                .maxAge(3600);
     }
 
     @Override

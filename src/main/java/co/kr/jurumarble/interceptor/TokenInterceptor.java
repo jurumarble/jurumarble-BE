@@ -5,6 +5,7 @@ import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -28,6 +29,9 @@ public class TokenInterceptor implements HandlerInterceptor {
     @Override
     // 컨트롤러 호출전에 호출
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        if (request.getMethod().equals(HttpMethod.OPTIONS.name())) {  //preflight 통과하도록 설정
+            return true;
+        }
         String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         parseTokenAndTransferUserId(request, authorizationHeader);
         return true;
@@ -38,4 +42,5 @@ public class TokenInterceptor implements HandlerInterceptor {
         Long userId = getUserIdFromToken(parseJwtTokenMap);
         request.setAttribute("userId", userId);
     }
+
 }
