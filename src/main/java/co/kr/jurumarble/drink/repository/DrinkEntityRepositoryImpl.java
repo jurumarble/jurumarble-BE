@@ -92,10 +92,14 @@ public class DrinkEntityRepositoryImpl implements DrinkEntityRepository {
                                 drink.price,
                                 drink.image,
                                 drink.latitude,
-                                drink.longitude
+                                drink.longitude,
+                                enjoyDrink.count().as("enjoyCount")
                         ))
                 .from(drink)
+                .leftJoin(enjoyDrink)
+                .on(drink.id.eq(enjoyDrink.drinkId))
                 .where(searchConditions)
+                .groupBy(drink.id)
                 .orderBy(drink.name.asc())
                 .offset(pageNo * pageSize)
                 .limit(pageSize)
@@ -122,7 +126,8 @@ public class DrinkEntityRepositoryImpl implements DrinkEntityRepository {
                                 drink.price,
                                 drink.image,
                                 drink.latitude,
-                                drink.longitude
+                                drink.longitude,
+                                enjoyDrink.count().as("enjoyCount")
                         ))
                 .from(drink)
                 .leftJoin(enjoyDrink)
