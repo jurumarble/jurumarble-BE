@@ -9,11 +9,10 @@ import co.kr.jurumarble.comment.service.request.CreateCommentServiceRequest;
 import co.kr.jurumarble.comment.service.request.GetCommentServiceRequest;
 import co.kr.jurumarble.comment.service.request.UpdateCommentServiceRequest;
 import co.kr.jurumarble.comment.service.request.UpdateRestaurantServiceRequest;
-import co.kr.jurumarble.drink.domain.entity.Drink;
 import co.kr.jurumarble.drink.repository.DrinkRepository;
 import co.kr.jurumarble.exception.comment.CommentNotFoundException;
+import co.kr.jurumarble.exception.comment.InvalidCommentTypeException;
 import co.kr.jurumarble.exception.comment.InvalidSortingMethodException;
-import co.kr.jurumarble.exception.drink.DrinkNotFoundException;
 import co.kr.jurumarble.exception.user.UserNotFoundException;
 import co.kr.jurumarble.exception.vote.VoteNotFoundException;
 import co.kr.jurumarble.user.domain.User;
@@ -59,12 +58,12 @@ public class CommentService {
     }
 
 
-    public Slice<GetCommentData> getComments(Long voteId, GetCommentServiceRequest request) {
+    public Slice<GetCommentData> getComments(CommentType commentType, Long typeId, GetCommentServiceRequest request) {
         Pageable pageable = PageRequest.of(request.getPage(), request.getSize());
-        List<Comment> comments = findCommentsBySortType(voteId, request, pageable); //정렬방식에 따라 Pageable 적용하여 부모댓글 가져오기
-        getChildCommentByParentComment(comments);  //부모댓글에 속한 대댓글들 다가져오기
+        List<Comment> comments = findCommentsBySortType(commentType, typeId, request, pageable); //정렬방식에 따라 부모댓글 가져오기
+        getChildCommentByParentComment(comments);
         List<GetCommentData> getCommentData = convertToCommentDataList(comments); // 댓글 목록을 매개 변수로 받아, GetCommentData 목록을 반환
-        Slice<GetCommentData> slice = convertToSlice(voteId, request, pageable, getCommentData); // Response 리스트를 Slice 객체로 만들어주기
+        Slice<GetCommentData> slice = convertToSlice(typeId, request, pageable, getCommentData); // Response 리스트를 Slice 객체로 만들어주기
 
         return slice;
 
@@ -130,19 +129,36 @@ public class CommentService {
     }
 
 
-    private List<Comment> findCommentsBySortType(Long voteId, GetCommentServiceRequest request, Pageable pageable) {
-        List<Comment> comments;
+    private List<Comment> findCommentsBySortType(CommentType commentType, Long typeId, GetCommentServiceRequest request, Pageable pageable) {
         switch (request.getSortBy()) {
             case ByTime:
-                comments = commentRepository.findNewestComments(voteId, pageable);
-                break;
+                return findNewestComments(commentType, typeId, pageable);
             case ByPopularity:
-                comments = commentRepository.findHotComments(voteId, pageable);
-                break;
+                return findHotComments(commentType, typeId, pageable);
             default:
                 throw new InvalidSortingMethodException();
         }
-        return comments;
+    }
+
+    private List<Comment> findNewestComments(CommentType commentType, Long typeId, Pageable pageable) {
+        if (commentType == CommentType.VOTES) {
+            return commentRepository.findNewestVoteComments(typeId, pageable);
+        } else if (commentType == CommentType.DRINKS) {
+            return commentRepository.findNewestDrinkComments(typeId, pageable);
+        } else {
+            throw new InvalidCommentTypeException();
+        }
+
+    }
+
+    private List<Comment> findHotComments(CommentType commentType, Long typeId, Pageable pageable) {
+        if (commentType == CommentType.VOTES) {
+            return commentRepository.findHotVoteComments(typeId, pageable);
+        } else if (commentType == CommentType.DRINKS) {
+            return commentRepository.findHotDrinkComments(typeId, pageable);
+        } else {
+            throw new InvalidCommentTypeException();
+        }
     }
 
     private void getChildCommentByParentComment(List<Comment> comments) {

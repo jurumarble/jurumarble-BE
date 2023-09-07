@@ -16,6 +16,8 @@ import java.util.List;
 public class GetCommentData {
     private Long id;
     private Long userId;
+    private Long voteId;
+    private Long drinkId;
     private String nickName;
     private Long parentId;
     private String content;
@@ -33,6 +35,8 @@ public class GetCommentData {
     public GetCommentData(Comment comment) {
         this.id = comment.getId();
         this.userId = comment.getUser().getId();
+        this.voteId = comment.getVoteId();
+        this.drinkId = comment.getDrinkId();
         this.content = comment.getContent();
         this.gender = comment.getGender();
         this.imageUrl = comment.getUser().getImageUrl();
