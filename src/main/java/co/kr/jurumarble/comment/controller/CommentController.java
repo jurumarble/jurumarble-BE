@@ -60,9 +60,7 @@ public class CommentController {
     @Operation(summary = "댓글 삭제", description = "헤더에 토큰을 포함하고, URL 파라미터에 'voteId'와 'commentId'를 전달하여 댓글을 삭제하는 기능.")
     @DeleteMapping("/{commentType}/{typeId}/comments/{commentId}")
     public ResponseEntity deleteComment(@PathVariable CommentType commentType, @PathVariable Long typeId, @PathVariable Long commentId, @RequestAttribute Long userId) {
-
-        commentService.deleteComment(typeId, commentId, userId);
-
+        commentService.deleteComment(commentType, typeId, commentId, userId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 

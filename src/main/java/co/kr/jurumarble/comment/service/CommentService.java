@@ -79,12 +79,11 @@ public class CommentService {
 
 
     @Transactional
-    public void deleteComment(Long voteId, Long commentId, Long userId) {
+    public void deleteComment(CommentType commentType, Long typeId, Long commentId, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
         commentValidator.validateCommentBelongsToUser(comment, user);
-        commentValidator.validateCommentBelongsToVote(comment, vote);
+        commentValidator.validateCommentBelongsToType(commentType, typeId, comment);
         commentRepository.delete(comment);
     }
 
