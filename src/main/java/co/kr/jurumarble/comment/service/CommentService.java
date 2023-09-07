@@ -4,6 +4,7 @@ import co.kr.jurumarble.client.tourApi.RestaurantInfoDto;
 import co.kr.jurumarble.comment.domain.Comment;
 import co.kr.jurumarble.comment.enums.CommentType;
 import co.kr.jurumarble.comment.enums.Emotion;
+import co.kr.jurumarble.comment.enums.Region;
 import co.kr.jurumarble.comment.repository.CommentRepository;
 import co.kr.jurumarble.comment.service.request.CreateCommentServiceRequest;
 import co.kr.jurumarble.comment.service.request.GetCommentServiceRequest;
@@ -52,7 +53,6 @@ public class CommentService {
         commentValidator.checkNestedCommentAllowed(parentComment);
         commentValidator.validateCommentBelongsToType(commentType, typeId, parentComment);
         Comment comment = request.toComment(commentType, parentComment, user, typeId);
-
         commentRepository.save(comment);
 
     }
@@ -97,31 +97,32 @@ public class CommentService {
     }
 
     @Transactional
-    public void addRestaurantToComment(Long voteId, Long commentId, Long userId, UpdateRestaurantServiceRequest request) {
+    public void addRestaurantToComment(CommentType commentType, Long typeId, Long commentId, Long userId, UpdateRestaurantServiceRequest request) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
         commentValidator.validateCommentBelongsToUser(comment, user);
+        commentValidator.validateCommentBelongsToType(commentType, typeId, comment);
         comment.updateRestaurant(request);
 
     }
 
-    @Cacheable(value = "searchRestaurant", key = "#keyword ?: '' + '_' + #areaCode ?: '' + '_' + #page")
-    public List<SearchRestaurantData> searchRestaurant(Long voteId, Long commentId, Long userId, String keyword, Integer areaCode, int page) {
-        System.out.println("Service 에서 연산을 수행합니다");
+    @Cacheable(value = "searchRestaurant", key = "(#keyword ?: '') + '_' + (#region?.getCode() ?: '') + '_' + #page")
+    public List<SearchRestaurantData> searchRestaurant(CommentType commentType, Long typeId, Long commentId, Long userId, String keyword, Region region, int page) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
-        //vote의 지역이 있으면 받아오고 없으면 선택받은 지역
-        List<RestaurantInfoDto> restaurantInfo = tourApiDataManager.getRestaurantInfoList(keyword, areaCode, page);
-
+        commentValidator.validateCommentBelongsToUser(comment, user);
+        commentValidator.validateCommentBelongsToType(commentType, typeId, comment);
+        List<RestaurantInfoDto> restaurantInfo = tourApiDataManager.getRestaurantInfoList(keyword, region, page);
         return tourApiDataManager.convertToSearchRestaurantDataList(restaurantInfo);
 
     }
 
-    public List<String> getRestaurantImage(Long voteId, Long commentId, Long userId, String contentId) {
+    @Cacheable(value = "getRestaurantImage", key = "#contentId")
+    public List<String> getRestaurantImage(CommentType commentType, Long typeId, Long commentId, Long userId, String contentId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
+        commentValidator.validateCommentBelongsToUser(comment, user);
+        commentValidator.validateCommentBelongsToType(commentType, typeId, comment);
         List<String> detailImages = tourApiDataManager.fetchDetailImages(contentId);
 
         return detailImages;

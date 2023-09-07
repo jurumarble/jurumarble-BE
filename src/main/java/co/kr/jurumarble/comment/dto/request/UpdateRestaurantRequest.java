@@ -6,9 +6,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UpdateRestaurantRequest {
+    @NotNull
     private String restaurantName;
     private String restaurantImage;
 
