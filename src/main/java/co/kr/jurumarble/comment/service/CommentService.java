@@ -10,16 +10,16 @@ import co.kr.jurumarble.comment.service.request.CreateCommentServiceRequest;
 import co.kr.jurumarble.comment.service.request.GetCommentServiceRequest;
 import co.kr.jurumarble.comment.service.request.UpdateCommentServiceRequest;
 import co.kr.jurumarble.comment.service.request.UpdateRestaurantServiceRequest;
-import co.kr.jurumarble.drink.repository.DrinkRepository;
 import co.kr.jurumarble.exception.comment.CommentNotFoundException;
 import co.kr.jurumarble.exception.comment.InvalidCommentTypeException;
 import co.kr.jurumarble.exception.comment.InvalidSortingMethodException;
 import co.kr.jurumarble.exception.user.UserNotFoundException;
-import co.kr.jurumarble.exception.vote.VoteNotFoundException;
+import co.kr.jurumarble.exception.vote.VoteResultNotFoundException;
 import co.kr.jurumarble.user.domain.User;
+import co.kr.jurumarble.user.enums.ChoiceType;
 import co.kr.jurumarble.user.repository.UserRepository;
-import co.kr.jurumarble.vote.domain.Vote;
-import co.kr.jurumarble.vote.repository.VoteRepository;
+import co.kr.jurumarble.vote.domain.VoteResult;
+import co.kr.jurumarble.vote.repository.VoteResultRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
@@ -39,8 +39,7 @@ import java.util.Map;
 @Transactional(readOnly = true)
 public class CommentService {
     private final UserRepository userRepository;
-    private final VoteRepository voteRepository;
-    private final DrinkRepository drinkRepository;
+    private final VoteResultRepository voteResultRepository;
     private final CommentRepository commentRepository;
     private final CommentEmoteManager commentEmoteManager;
     private final TourApiDataManager tourApiDataManager;
@@ -62,9 +61,8 @@ public class CommentService {
         Pageable pageable = PageRequest.of(request.getPage(), request.getSize());
         List<Comment> comments = findCommentsBySortType(commentType, typeId, request, pageable); //정렬방식에 따라 부모댓글 가져오기
         getChildCommentByParentComment(comments);
-        List<GetCommentData> getCommentData = convertToCommentDataList(comments); // 댓글 목록을 매개 변수로 받아, GetCommentData 목록을 반환
+        List<GetCommentData> getCommentData = convertToCommentDataList(comments, commentType, typeId); // 댓글 목록을 매개 변수로 받아, GetCommentData 목록을 반환
         Slice<GetCommentData> slice = convertToSlice(typeId, request, pageable, getCommentData); // Response 리스트를 Slice 객체로 만들어주기
-
         return slice;
 
     }
@@ -172,12 +170,14 @@ public class CommentService {
     }
 
 
-    private List<GetCommentData> convertToCommentDataList(List<Comment> parentComments) {
+    private List<GetCommentData> convertToCommentDataList(List<Comment> parentComments, CommentType commentType, Long typeId) {
         List<GetCommentData> getCommentData = new ArrayList<>();
         Map<Long, GetCommentData> map = new HashMap<>();
 
         for (Comment comment : parentComments) {
-            GetCommentData response = new GetCommentData(comment);
+            ChoiceType choice = getChoiceType(comment, commentType, typeId);
+
+            GetCommentData response = new GetCommentData(comment, choice);
             map.put(response.getId(), response);
 
             if (response.getParentId() != null) {
@@ -186,7 +186,17 @@ public class CommentService {
                 getCommentData.add(response);
             }
         }
+
         return getCommentData;
+    }
+
+    private ChoiceType getChoiceType(Comment comment, CommentType commentType, Long typeId) {
+        if (commentType == CommentType.VOTES) {
+            VoteResult voteResult = voteResultRepository.findByVotedUserIdAndVoteId(comment.getUser().getId(), typeId)
+                    .orElseThrow(VoteResultNotFoundException::new);
+            return voteResult.getChoice();
+        }
+        return null;
     }
 
     private Slice<GetCommentData> convertToSlice(Long voteId, GetCommentServiceRequest request, Pageable pageable, List<GetCommentData> getCommentData) {
