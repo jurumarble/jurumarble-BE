@@ -2,7 +2,7 @@ package co.kr.jurumarble.vote.controller;
 
 import co.kr.jurumarble.token.domain.JwtTokenProvider;
 import co.kr.jurumarble.vote.dto.request.CreateNormalVoteRequest;
-import co.kr.jurumarble.vote.service.NormalVoteService;
+import co.kr.jurumarble.vote.service.VoteService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,10 +20,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = NormalVoteController.class)
+@WebMvcTest(controllers = VoteController.class)
 @Import(JwtTokenProvider.class)
 @TestPropertySource(locations = "classpath:application-test.yml")
-class NormalVoteControllerTest {
+class VoteControllerTest {
     private static final int TOKEN_VALID_TIME = 30;
     private static final int TOKEN_EXPIRED_TIME = 0;
 
@@ -34,7 +34,7 @@ class NormalVoteControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private NormalVoteService normalVoteService;
+    private VoteService voteService;
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
@@ -46,6 +46,7 @@ class NormalVoteControllerTest {
         // given
         CreateNormalVoteRequest request = CreateNormalVoteRequest.builder()
                 .title("투표 제목")
+                .detail("투표 상세")
                 .titleA("A 항목 제목")
                 .titleB("B 항목 제목")
                 .imageA("A 항목 이미지")
@@ -73,6 +74,7 @@ class NormalVoteControllerTest {
         // given
         CreateNormalVoteRequest request = CreateNormalVoteRequest.builder()
                 .title("투표 제목")
+                .detail("투표 상세")
                 .titleA("A 항목 제목")
                 .titleB("B 항목 제목")
                 .imageA("A 항목 이미지")
@@ -97,6 +99,7 @@ class NormalVoteControllerTest {
         // given
         CreateNormalVoteRequest request = CreateNormalVoteRequest.builder()
                 .title("투표 제목")
+                .detail("투표 상세")
                 .titleA("A 항목 제목")
                 .titleB("B 항목 제목")
                 .imageA("A 항목 이미지")

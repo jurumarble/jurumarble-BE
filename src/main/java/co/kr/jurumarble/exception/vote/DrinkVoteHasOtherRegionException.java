@@ -3,14 +3,14 @@ package co.kr.jurumarble.exception.vote;
 import co.kr.jurumarble.exception.StatusEnum;
 import co.kr.jurumarble.exception.common.CustomException;
 
-public class VoteNotFoundException extends CustomException {
+public class DrinkVoteHasOtherRegionException extends CustomException {
 
-    private static final String message = "해당 투표 id와 연결된 투표 컨텐츠가 없습니다. 아이디 값을 다시 한번 확인하세요.";
+    private static final String message = "전통주 투표에 다른 지역의 술이 들어갔습니다.";
     private final StatusEnum status;
 
-    public VoteNotFoundException() {
+    public DrinkVoteHasOtherRegionException() {
         super(message);
-        this.status = StatusEnum.VOTE_NOT_FOUND;
+        this.status = StatusEnum.ALREADY_VOTE_RESULT_EXIST;
     }
 
     @Override

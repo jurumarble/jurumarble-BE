@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
 import org.springframework.test.context.TestPropertySource;
 
 import javax.persistence.EntityManager;
@@ -38,11 +36,10 @@ class DrinkEntityRepositoryImplTest {
     @Test
     void getHotDrinks1() {
         // given
-        PageRequest of = PageRequest.of(0, 3);
         LocalDateTime testTime = LocalDateTime.of(2023, 8, 10, 7, 15);
 
         // when
-        List<HotDrinkData> hotDrinks = drinkEntityRepository.getHotDrinks(of, testTime);
+        List<HotDrinkData> hotDrinks = drinkEntityRepository.getHotDrinks(0, 3, testTime);
 
         // then
         assertThat(hotDrinks).hasSize(3)
@@ -58,11 +55,10 @@ class DrinkEntityRepositoryImplTest {
     @Test
     void getHotDrinks2() {
         // given
-        PageRequest of = PageRequest.of(0, 3);
         LocalDateTime testTime = LocalDateTime.of(2023, 8, 3, 7, 15);
 
         // when
-        List<HotDrinkData> hotDrinks = drinkEntityRepository.getHotDrinks(of, testTime);
+        List<HotDrinkData> hotDrinks = drinkEntityRepository.getHotDrinks(0, 3, testTime);
 
         // then
         assertThat(hotDrinks).hasSize(3)
@@ -78,11 +74,10 @@ class DrinkEntityRepositoryImplTest {
     @Test
     void getHotDrinks3() {
         // given
-        PageRequest of = PageRequest.of(0, 3);
         LocalDateTime testTime = LocalDateTime.of(2023, 9, 20, 7, 15);
 
         // when
-        List<HotDrinkData> hotDrinks = drinkEntityRepository.getHotDrinks(of, testTime);
+        List<HotDrinkData> hotDrinks = drinkEntityRepository.getHotDrinks(0, 3, testTime);
 
         // then
         assertThat(hotDrinks).hasSize(0);
@@ -90,11 +85,9 @@ class DrinkEntityRepositoryImplTest {
 
     @DisplayName("전통주를 즐겼어요가 많은 순서로 조회한다.")
     @Test
-    void findDrinksByPopular(){
-        // given
-        PageRequest of = PageRequest.of(0, 5);
-        // when
-        List<HotDrinkData> actual = drinkEntityRepository.findDrinksByPopular(of);
+    void findDrinksByPopular() {
+        // given // when
+        List<HotDrinkData> actual = drinkEntityRepository.findDrinksByPopular(0, 5);
 
         // then
         assertThat(actual).hasSize(5)

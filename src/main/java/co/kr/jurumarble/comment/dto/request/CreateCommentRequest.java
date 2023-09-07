@@ -2,7 +2,10 @@ package co.kr.jurumarble.comment.dto.request;
 
 import co.kr.jurumarble.comment.service.request.CreateCommentServiceRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 

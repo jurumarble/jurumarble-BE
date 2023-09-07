@@ -20,8 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Tag(name = "image", description = "S3 업로드 api")
 public class S3Controller {
 
-    private final S3Uploader s3Uploader;
     private static final Logger logger = LoggerFactory.getLogger(S3Controller.class);
+    private final S3Uploader s3Uploader;
 
     @Operation(
             summary = "이미지 파일 업로드",

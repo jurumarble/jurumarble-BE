@@ -1,6 +1,6 @@
 package co.kr.jurumarble.vote.domain;
 
-import co.kr.jurumarble.vote.service.UpdateVoteServiceRequest;
+import co.kr.jurumarble.vote.service.UpdateNormalVoteServiceRequest;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,7 +40,7 @@ public class VoteContent {
         this.voteId = voteId;
     }
 
-    public void update(UpdateVoteServiceRequest request) {
+    public void update(UpdateNormalVoteServiceRequest request) {
         this.titleA = request.getTitleA();
         this.titleB = request.getTitleB();
     }

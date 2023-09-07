@@ -1,5 +1,6 @@
 package co.kr.jurumarble.drink.service;
 
+import co.kr.jurumarble.drink.controller.request.DrinkData;
 import co.kr.jurumarble.drink.controller.response.GetHotDrinksResponse;
 import co.kr.jurumarble.drink.controller.response.GetMapInDrinksResponse;
 import co.kr.jurumarble.drink.domain.EnjoyDrinkValidator;
@@ -12,6 +13,7 @@ import co.kr.jurumarble.drink.repository.dto.HotDrinkData;
 import co.kr.jurumarble.drink.service.request.EnjoyDrinkServiceRequest;
 import co.kr.jurumarble.drink.service.response.GetDrinkServiceResponse;
 import co.kr.jurumarble.exception.drink.DrinkNotFoundException;
+import co.kr.jurumarble.utils.PageableConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -34,6 +36,7 @@ public class DrinkService {
     private final DrinkRepository drinkRepository;
     private final EnjoyDrinkRepository enjoyDrinkRepository;
     private final EnjoyDrinkValidator enjoyDrinkValidator;
+    private final PageableConverter pageableConverter;
 
 
     public GetDrinkServiceResponse getDrinkData(Long drinkId) {
@@ -48,16 +51,15 @@ public class DrinkService {
     }
 
     public List<GetHotDrinksResponse> getHotDrinks() {
-        PageRequest pageRequest = PageRequest.of(FIXED_INDEX_OF_GETTING_HOT_DRINKS, NUMBER_OF_HOT_DRINK);
-        List<HotDrinkData> hotDrinkData = drinkRepository.getHotDrinks(pageRequest, LocalDateTime.now());
+        List<HotDrinkData> hotDrinkData = drinkRepository.getHotDrinks(FIXED_INDEX_OF_GETTING_HOT_DRINKS, NUMBER_OF_HOT_DRINK, LocalDateTime.now());
         makeHotDrinkDataHasTenData(hotDrinkData);
         return getGetHotDrinksResponses(hotDrinkData);
     }
+
     private void makeHotDrinkDataHasTenData(List<HotDrinkData> hotDrinkData) {
         if (hotDrinkData.size() < NUMBER_OF_HOT_DRINK) {
             int shortageOfDrink = NUMBER_OF_HOT_DRINK - hotDrinkData.size();
-            PageRequest of = PageRequest.of(FIXED_INDEX_OF_GETTING_HOT_DRINKS, shortageOfDrink);
-            List<HotDrinkData> additionalDrinks = drinkRepository.findDrinksByPopular(of);
+            List<HotDrinkData> additionalDrinks = drinkRepository.findDrinksByPopular(FIXED_INDEX_OF_GETTING_HOT_DRINKS, shortageOfDrink);
             hotDrinkData.addAll(additionalDrinks);
         }
     }
@@ -78,6 +80,30 @@ public class DrinkService {
     private List<GetMapInDrinksResponse> getGetMapInDrinksResponses(Slice<MapInDrinkData> drinkData) {
         return drinkData.stream()
                 .map(MapInDrinkData::toMapInDrinksResponse)
+                .collect(Collectors.toList());
+    }
+
+    public Slice<DrinkData> getDrinks(String keyword, String region, int pageNum, int pageSize) {
+        List<DrinkData> drinks = drinkRepository.getDrinks(keyword, region, pageNum, pageSize);
+        return pageableConverter.convertListToSlice(drinks, pageNum, pageSize);
+    }
+
+    public Slice<DrinkData> getEnjoyDrinks(Long userId, int pageNum, int pageSize) {
+        List<EnjoyDrink> enjoyDrinks = enjoyDrinkRepository.findByUserId(userId);
+        List<Long> drinkIds = extractDrinkIds(enjoyDrinks);
+        List<DrinkData> drinksByEnjoyed = findDrinksByDrinkIds(drinkIds);
+        return pageableConverter.convertListToSlice(drinksByEnjoyed, pageNum, pageSize);
+    }
+
+    private List<Long> extractDrinkIds(List<EnjoyDrink> enjoyDrinks) {
+        return enjoyDrinks.stream()
+                .map(EnjoyDrink::getDrinkId)
+                .collect(Collectors.toList());
+    }
+
+    private List<DrinkData> findDrinksByDrinkIds(List<Long> drinkIds) {
+        return drinkRepository.findDrinksByIdIn(drinkIds).stream()
+                .map(DrinkData::new)
                 .collect(Collectors.toList());
     }
 }

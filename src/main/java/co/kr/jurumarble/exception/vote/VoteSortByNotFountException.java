@@ -5,9 +5,8 @@ import co.kr.jurumarble.exception.common.CustomException;
 
 public class VoteSortByNotFountException extends CustomException {
 
-    private final StatusEnum status;
-
     private static final String message = "해당 정렬 기준은 없습니다 정렬 기준을 다시 확인해 주세요";
+    private final StatusEnum status;
 
     public VoteSortByNotFountException() {
         super(message);

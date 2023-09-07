@@ -1,6 +1,7 @@
 package co.kr.jurumarble.comment.service.request;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
 
 @Getter
 public class UpdateRestaurantServiceRequest {
