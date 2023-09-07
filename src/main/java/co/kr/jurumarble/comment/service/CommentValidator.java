@@ -1,14 +1,17 @@
 package co.kr.jurumarble.comment.service;
 
 import co.kr.jurumarble.comment.domain.Comment;
+import co.kr.jurumarble.comment.enums.CommentType;
 import co.kr.jurumarble.comment.repository.CommentRepository;
 import co.kr.jurumarble.comment.service.request.CreateCommentServiceRequest;
-import co.kr.jurumarble.exception.comment.CommentNotBelongToUserException;
-import co.kr.jurumarble.exception.comment.CommentNotFoundException;
-import co.kr.jurumarble.exception.comment.NestedCommentNotAllowedException;
-import co.kr.jurumarble.exception.comment.CommentNotBelongToVoteException;
+import co.kr.jurumarble.drink.domain.entity.Drink;
+import co.kr.jurumarble.drink.repository.DrinkRepository;
+import co.kr.jurumarble.exception.comment.*;
+import co.kr.jurumarble.exception.drink.DrinkNotFoundException;
+import co.kr.jurumarble.exception.vote.VoteNotFoundException;
 import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.vote.domain.Vote;
+import co.kr.jurumarble.vote.repository.VoteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +20,23 @@ import org.springframework.stereotype.Component;
 public class CommentValidator {
 
     private final CommentRepository commentRepository;
+    private final VoteRepository voteRepository;
+    private final DrinkRepository drinkRepository;
+
+    public void validateCommentBelongsToType(CommentType commentType, Long typeId, Comment parentComment) {
+        switch (commentType) {
+            case VOTE:
+                Vote vote = voteRepository.findById(typeId).orElseThrow(VoteNotFoundException::new);
+                validateCommentBelongsToVote(parentComment, vote);
+                break;
+            case DRINK:
+                Drink drink = drinkRepository.findById(typeId).orElseThrow(DrinkNotFoundException::new);
+                validateCommentBelongsToDrink(parentComment, drink);
+                break;
+            default:
+                throw new InvalidCommentTypeException();
+        }
+    }
 
     public void validateCommentBelongsToUser(Comment comment, User user) {
         if (!commentRepository.existsByIdAndUser(comment.getId(), user)) {
@@ -26,6 +46,12 @@ public class CommentValidator {
 
     public void validateCommentBelongsToVote(Comment parent, Vote vote) {
         if (parent != null && !commentRepository.existsByIdAndVoteId(parent.getId(), vote.getId())) {
+            throw new CommentNotBelongToVoteException();
+        }
+    }
+
+    public void validateCommentBelongsToDrink(Comment parent, Drink drink) {
+        if (parent != null && !commentRepository.existsByIdAndDrinkId(parent.getId(), drink.getId())) {
             throw new CommentNotBelongToVoteException();
         }
     }
@@ -44,7 +70,6 @@ public class CommentValidator {
             throw new NestedCommentNotAllowedException();
         }
     }
-
 
 
 }

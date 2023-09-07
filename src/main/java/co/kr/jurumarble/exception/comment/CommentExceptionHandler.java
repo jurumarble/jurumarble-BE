@@ -54,4 +54,10 @@ public class CommentExceptionHandler {
         return ResponseEntity.status(e.getStatus().getStatusCode())
                 .body(ExceptionMessage.of(e.getStatus(), e.getMessage()));
     }
+
+    @ExceptionHandler(InvalidCommentTypeException.class)
+    public ResponseEntity<ExceptionMessage> handle(InvalidCommentTypeException e) {
+        return ResponseEntity.status(e.getStatus().getStatusCode())
+                .body(ExceptionMessage.of(e.getStatus(), e.getMessage()));
+    }
 }

@@ -35,6 +35,9 @@ public class Comment extends BaseTimeEntity {
     @Column(name = "vote_id")
     private Long voteId;
 
+    @Column(name = "drink_id")
+    private Long drinkId;
+
     private String content;
 
     @Enumerated(EnumType.STRING)
@@ -69,9 +72,10 @@ public class Comment extends BaseTimeEntity {
     private Restaurant restaurant = new Restaurant();
 
     @Builder
-    public Comment(User user, Long voteId, String content, AgeType age, MbtiType mbti, GenderType gender, Comment parent) {
+    public Comment(User user, Long voteId, Long drinkId, String content, AgeType age, MbtiType mbti, GenderType gender, Comment parent) {
         this.user = user;
         this.voteId = voteId;
+        this.drinkId = drinkId;
         this.content = content;
         this.age = age;
         this.mbti = mbti;

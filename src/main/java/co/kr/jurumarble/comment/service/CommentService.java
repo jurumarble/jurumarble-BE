@@ -2,14 +2,19 @@ package co.kr.jurumarble.comment.service;
 
 import co.kr.jurumarble.client.tourApi.RestaurantInfoDto;
 import co.kr.jurumarble.comment.domain.Comment;
+import co.kr.jurumarble.comment.enums.CommentType;
 import co.kr.jurumarble.comment.enums.Emotion;
 import co.kr.jurumarble.comment.repository.CommentRepository;
 import co.kr.jurumarble.comment.service.request.CreateCommentServiceRequest;
 import co.kr.jurumarble.comment.service.request.GetCommentServiceRequest;
 import co.kr.jurumarble.comment.service.request.UpdateCommentServiceRequest;
 import co.kr.jurumarble.comment.service.request.UpdateRestaurantServiceRequest;
+import co.kr.jurumarble.drink.domain.entity.Drink;
+import co.kr.jurumarble.drink.repository.DrinkRepository;
 import co.kr.jurumarble.exception.comment.CommentNotFoundException;
+import co.kr.jurumarble.exception.comment.InvalidCommentTypeException;
 import co.kr.jurumarble.exception.comment.InvalidSortingMethodException;
+import co.kr.jurumarble.exception.drink.DrinkNotFoundException;
 import co.kr.jurumarble.exception.user.UserNotFoundException;
 import co.kr.jurumarble.exception.vote.VoteNotFoundException;
 import co.kr.jurumarble.user.domain.User;
@@ -36,23 +41,24 @@ import java.util.Map;
 public class CommentService {
     private final UserRepository userRepository;
     private final VoteRepository voteRepository;
+    private final DrinkRepository drinkRepository;
     private final CommentRepository commentRepository;
     private final CommentEmoteManager commentEmoteManager;
     private final TourApiDataManager tourApiDataManager;
     private final CommentValidator commentValidator;
 
     @Transactional
-    public void createComment(Long voteId, Long userId, CreateCommentServiceRequest request) {
+    public void createComment(CommentType commentType, Long typeId, Long userId, CreateCommentServiceRequest request) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment parentComment = commentValidator.checkParentComment(request);
         commentValidator.checkNestedCommentAllowed(parentComment);
-        commentValidator.validateCommentBelongsToVote(parentComment, vote);
-        Comment comment = request.toComment(parentComment, user, voteId);
+        commentValidator.validateCommentBelongsToType(commentType, typeId, parentComment);
+        Comment comment = request.toComment(commentType, parentComment, user, typeId);
 
         commentRepository.save(comment);
 
     }
+
 
     public Slice<GetCommentData> getComments(Long voteId, GetCommentServiceRequest request) {
         Pageable pageable = PageRequest.of(request.getPage(), request.getSize());
@@ -71,7 +77,7 @@ public class CommentService {
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
         commentValidator.validateCommentBelongsToUser(comment, user);
-        commentValidator.validateCommentBelongsToVote(comment,vote);
+        commentValidator.validateCommentBelongsToVote(comment, vote);
         comment.updateContent(request.getContent());
     }
 
@@ -82,7 +88,7 @@ public class CommentService {
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
         commentValidator.validateCommentBelongsToUser(comment, user);
-        commentValidator.validateCommentBelongsToVote(comment,vote);
+        commentValidator.validateCommentBelongsToVote(comment, vote);
         commentRepository.delete(comment);
     }
 
@@ -126,6 +132,7 @@ public class CommentService {
         return detailImages;
 
     }
+
 
     private List<Comment> findCommentsBySortType(Long voteId, GetCommentServiceRequest request, Pageable pageable) {
         List<Comment> comments;

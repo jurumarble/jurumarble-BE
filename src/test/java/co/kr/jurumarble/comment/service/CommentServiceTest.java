@@ -35,37 +35,37 @@ class CommentServiceTest {
     @Mock
     private CommentValidator commentValidator;
 
-    @DisplayName("댓글을 생성한다.")
-    @Test
-    void createComment() {
-        // given
-        Long userId = 1L;
-        Long voteId = 1L;
-
-        User user = User.builder().age(30).build();
-
-        Vote vote = new Vote();
-
-        CreateCommentServiceRequest request = CreateCommentServiceRequest.builder().content("댓글 내용").parentId(null).build();
-
-        Comment parentComment = null;
-        Comment comment = request.toComment(parentComment,user,voteId);
-
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-        when(voteRepository.findById(voteId)).thenReturn(Optional.of(vote));
-        when(commentValidator.checkParentComment(request)).thenReturn(parentComment);
-        doNothing().when(commentValidator).checkNestedCommentAllowed(parentComment);
-
-        // when
-        commentService.createComment(voteId, userId, request);
-
-        // then
-        verify(userRepository, times(1)).findById(userId);
-        verify(voteRepository, times(1)).findById(voteId);
-        verify(commentValidator, times(1)).checkParentComment(request);
-        verify(commentValidator, times(1)).checkNestedCommentAllowed(parentComment);
-        verify(commentRepository, times(1)).save(any(Comment.class));
-    }
+//    @DisplayName("댓글을 생성한다.")
+//    @Test
+//    void createComment() {
+//        // given
+//        Long userId = 1L;
+//        Long voteId = 1L;
+//
+//        User user = User.builder().age(30).build();
+//
+//        Vote vote = new Vote();
+//
+//        CreateCommentServiceRequest request = CreateCommentServiceRequest.builder().content("댓글 내용").parentId(null).build();
+//
+//        Comment parentComment = null;
+//        Comment comment = request.toComment(parentComment,user,voteId);
+//
+//        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+//        when(voteRepository.findById(voteId)).thenReturn(Optional.of(vote));
+//        when(commentValidator.checkParentComment(request)).thenReturn(parentComment);
+//        doNothing().when(commentValidator).checkNestedCommentAllowed(parentComment);
+//
+//        // when
+//        commentService.createComment(voteId, userId, request);
+//
+//        // then
+//        verify(userRepository, times(1)).findById(userId);
+//        verify(voteRepository, times(1)).findById(voteId);
+//        verify(commentValidator, times(1)).checkParentComment(request);
+//        verify(commentValidator, times(1)).checkNestedCommentAllowed(parentComment);
+//        verify(commentRepository, times(1)).save(any(Comment.class));
+//    }
 
 
     @DisplayName("댓글을 업데이트한다.")

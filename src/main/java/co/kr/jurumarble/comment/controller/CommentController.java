@@ -1,5 +1,6 @@
 package co.kr.jurumarble.comment.controller;
 
+import co.kr.jurumarble.comment.enums.CommentType;
 import co.kr.jurumarble.comment.service.GetCommentData;
 import co.kr.jurumarble.comment.service.SearchRestaurantData;
 import co.kr.jurumarble.comment.dto.request.GetCommentRequest;
@@ -30,12 +31,19 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @Operation(summary = "댓글 생성", description = "헤더에 토큰을 포함하고, URL 파라미터에 'voteId'를, 요청 바디에 'parentId'(댓글의 부모 아이디. 대댓글일 경우 부모 댓글 아이디, 없으면 빈 문자열)와 'content'(댓글 내용)을 JSON 형식으로 보내주세요.")
-    @PostMapping("/votes/{voteId}/comments/create")
-    public ResponseEntity createComment(@PathVariable Long voteId, @RequestAttribute Long userId, @RequestBody @Valid CreateCommentRequest createCommentRequest) {
+//    @Operation(summary = "댓글 생성", description = "헤더에 토큰을 포함하고, URL 파라미터에 'voteId'를, 요청 바디에 'parentId'(댓글의 부모 아이디. 대댓글일 경우 부모 댓글 아이디, 없으면 빈 문자열)와 'content'(댓글 내용)을 JSON 형식으로 보내주세요.")
+//    @PostMapping("/votes/{voteId}/comments/create")
+//    public ResponseEntity createComment(@PathVariable Long voteId, @RequestAttribute Long userId, @RequestBody @Valid CreateCommentRequest createCommentRequest) {
+//
+//        commentService.createComment(voteId, userId, createCommentRequest.toServiceRequest());
+//
+//        return new ResponseEntity(HttpStatus.CREATED);
+//    }
 
-        commentService.createComment(voteId, userId, createCommentRequest.toServiceRequest());
-
+    @Operation(summary = "댓글 생성", description = "헤더에 토큰을 포함하고, URL 파라미터에 'type'(vote 또는 drink)와 해당 타입'id'를, 요청 바디에 'parentId'(댓글의 부모 아이디. 대댓글일 경우 부모 댓글 아이디, 없으면 빈 문자열)와 'content'(댓글 내용)을 JSON 형식으로 보내주세요.")
+    @PostMapping("/{commentType}/{typeId}/comments/create")
+    public ResponseEntity createComment(@RequestBody @Valid CreateCommentRequest createCommentRequest, @PathVariable CommentType commentType, @PathVariable Long typeId, @RequestAttribute Long userId) {
+        commentService.createComment(commentType, typeId, userId, createCommentRequest.toServiceRequest());
         return new ResponseEntity(HttpStatus.CREATED);
     }
 
