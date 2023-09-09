@@ -16,9 +16,7 @@ import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,14 +49,13 @@ public class CommentService {
     }
 
 
-    public Slice<GetCommentData> getComments(CommentType commentType, Long typeId, GetCommentServiceRequest request) {
+    public Page<GetCommentData> getComments(CommentType commentType, Long typeId, GetCommentServiceRequest request) {
         Pageable pageable = PageRequest.of(request.getPage(), request.getSize());
         List<Comment> comments = commentFinder.findCommentsBySortType(commentType, typeId, request, pageable);
         commentFinder.findChildCommentByParentComment(comments);
         List<GetCommentData> getCommentData = commentConverter.convertToCommentDataList(comments, commentType, typeId);
-        Slice<GetCommentData> slice = commentConverter.convertToSlice(typeId, request, pageable, getCommentData);
-        return slice;
-
+        int totalComments = commentFinder.findTotalCommentsCount(commentType, typeId);
+        return new PageImpl<>(getCommentData, pageable, totalComments);
     }
 
     public List<GetCommentData> getSampleComments(CommentType commentType, Long typeId) {

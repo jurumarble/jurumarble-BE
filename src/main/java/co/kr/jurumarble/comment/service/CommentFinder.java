@@ -68,6 +68,17 @@ public class CommentFinder {
         comments.addAll(childComments);
     }
 
+    public int findTotalCommentsCount(CommentType commentType, Long typeId) {
+        switch (commentType) {
+            case VOTES:
+                return commentRepository.countByVoteId(typeId);
+            case DRINKS:
+                return commentRepository.countByDrinkId(typeId);
+            default:
+                throw new InvalidCommentTypeException();
+        }
+    }
+
 
     private List<Comment> findNewestComments(CommentType commentType, Long typeId, Pageable pageable) {
         if (commentType == CommentType.VOTES) {

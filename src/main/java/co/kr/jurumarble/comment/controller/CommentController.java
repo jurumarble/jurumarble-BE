@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,8 +45,8 @@ public class CommentController {
 
     @Operation(summary = "댓글 조회", description = "헤더에 토큰을 포함하고, URL 파라미터에 'voteId'를, 'sortBy'(정렬 기준 - ByTime, ByPopularity), 'page'(페이지 번호)와 'size'(페이지 내의 데이터 수)를 JSON 형식으로 보내 주십시오.")
     @GetMapping("/{commentType}/{typeId}/comments")
-    public ResponseEntity<Slice<GetCommentData>> getComment(@ModelAttribute @Valid GetCommentRequest getCommentRequest, @PathVariable CommentType commentType, @PathVariable Long typeId) {
-        Slice<GetCommentData> getCommentResponses = commentService.getComments(commentType, typeId, getCommentRequest.toServiceRequest());
+    public ResponseEntity<Page<GetCommentData>> getComment(@ModelAttribute @Valid GetCommentRequest getCommentRequest, @PathVariable CommentType commentType, @PathVariable Long typeId) {
+        Page<GetCommentData> getCommentResponses = commentService.getComments(commentType, typeId, getCommentRequest.toServiceRequest());
         return new ResponseEntity(getCommentResponses, HttpStatus.OK);
     }
 

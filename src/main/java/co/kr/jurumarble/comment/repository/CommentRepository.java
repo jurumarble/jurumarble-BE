@@ -33,5 +33,10 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     boolean existsByIdAndUser(Long commentId, User user);
 
     boolean existsByIdAndVoteId(Long id, Long voteId);
+
     boolean existsByIdAndDrinkId(Long id, Long drinkId);
+
+    int countByVoteId(Long typeId);
+
+    int countByDrinkId(Long typeId);
 }
