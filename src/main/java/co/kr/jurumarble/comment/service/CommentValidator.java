@@ -9,9 +9,12 @@ import co.kr.jurumarble.drink.repository.DrinkRepository;
 import co.kr.jurumarble.exception.comment.*;
 import co.kr.jurumarble.exception.drink.DrinkNotFoundException;
 import co.kr.jurumarble.exception.vote.VoteNotFoundException;
+import co.kr.jurumarble.exception.vote.VoteResultNotFoundException;
 import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.vote.domain.Vote;
+import co.kr.jurumarble.vote.domain.VoteResult;
 import co.kr.jurumarble.vote.repository.VoteRepository;
+import co.kr.jurumarble.vote.repository.VoteResultRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +24,7 @@ public class CommentValidator {
 
     private final CommentRepository commentRepository;
     private final VoteRepository voteRepository;
+    private final VoteResultRepository voteResultRepository;
     private final DrinkRepository drinkRepository;
 
     public void validateCommentBelongsToType(CommentType commentType, Long typeId, Comment commment) {
@@ -38,21 +42,15 @@ public class CommentValidator {
         }
     }
 
+    public void validateUserVotedBeforeCommenting(CommentType commentType, Long typeId, Long userId) {
+        if (commentType == CommentType.VOTES) {
+            voteResultRepository.findByVotedUserIdAndVoteId(userId, typeId).orElseThrow(VoteResultNotFoundException::new);
+        }
+    }
+
     public void validateCommentBelongsToUser(Comment comment, User user) {
         if (!commentRepository.existsByIdAndUser(comment.getId(), user)) {
             throw new CommentNotBelongToUserException();
-        }
-    }
-
-    public void validateCommentBelongsToVote(Comment comment, Vote vote) {
-        if (comment != null && !commentRepository.existsByIdAndVoteId(comment.getId(), vote.getId())) {
-            throw new CommentNotBelongToVoteException();
-        }
-    }
-
-    public void validateCommentBelongsToDrink(Comment comment, Drink drink) {
-        if (comment != null && !commentRepository.existsByIdAndDrinkId(comment.getId(), drink.getId())) {
-            throw new CommentNotBelongToDrinkException();
         }
     }
 
@@ -71,5 +69,16 @@ public class CommentValidator {
         }
     }
 
+    private void validateCommentBelongsToVote(Comment comment, Vote vote) {
+        if (comment != null && !commentRepository.existsByIdAndVoteId(comment.getId(), vote.getId())) {
+            throw new CommentNotBelongToVoteException();
+        }
+    }
+
+    private void validateCommentBelongsToDrink(Comment comment, Drink drink) {
+        if (comment != null && !commentRepository.existsByIdAndDrinkId(comment.getId(), drink.getId())) {
+            throw new CommentNotBelongToDrinkException();
+        }
+    }
 
 }

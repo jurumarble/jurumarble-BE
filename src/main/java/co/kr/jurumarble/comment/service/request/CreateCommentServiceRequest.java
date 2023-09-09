@@ -18,7 +18,7 @@ public class CreateCommentServiceRequest {
     }
 
 
-    public Comment toComment(CommentType commentType, Comment parentComment, User user, Long typeId) {
+    public Comment toComment(CommentType commentType, Comment parentComment, User user, Long typeId, Long drinkId) {
         Comment.CommentBuilder commentBuilder = Comment.builder()
                 .user(user)
                 .content(content)
@@ -29,6 +29,10 @@ public class CreateCommentServiceRequest {
 
         if (commentType == CommentType.VOTES) {
             commentBuilder.voteId(typeId);
+        }
+
+        if (commentType == CommentType.VOTES && drinkId != null) {
+            commentBuilder.drinkId(drinkId);
         } else if (commentType == CommentType.DRINKS) {
             commentBuilder.drinkId(typeId);
         }
