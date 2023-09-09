@@ -29,10 +29,7 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -66,6 +63,39 @@ public class CommentService {
         return slice;
 
     }
+
+    public List<GetCommentData> getSampleComments(CommentType commentType, Long typeId) {
+        List<Comment> comments = findSampleComments(commentType, typeId);
+        List<GetCommentData> getCommentData = convertToCommentDataList(comments, commentType, typeId);
+        return getCommentData;
+    }
+
+    private List<Comment> findSampleComments(CommentType commentType, Long typeId) {
+        List<Comment> topCommentList = findHotComments(commentType, typeId, PageRequest.of(0, 1));
+
+        // Hot comment가 없는 경우 바로 빈 리스트 반환
+        if (topCommentList.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        Comment topComment = topCommentList.get(0);
+        List<Comment> newestComments = findNewestComments(commentType, typeId, PageRequest.of(0, 3));
+
+        List<Comment> sampleComments = new ArrayList<>();
+        sampleComments.add(topComment);
+
+        for (Comment comment : newestComments) {
+            if (!comment.equals(topComment)) {
+                sampleComments.add(comment);
+            }
+            if (sampleComments.size() == 3) { // 최대 3개까지만 추가
+                break;
+            }
+        }
+
+        return sampleComments;
+    }
+
 
     @Transactional
     public void updateComment(CommentType commentType, Long typeId, Long commentId, Long userId, UpdateCommentServiceRequest request) {

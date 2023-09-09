@@ -14,7 +14,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +21,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
+
+import static co.kr.jurumarble.utils.ResponseUtils.wrapWithContent;
 
 @RequestMapping("/api")
 @RestController
@@ -40,11 +42,18 @@ public class CommentController {
     }
 
 
-    @Operation(summary = "댓글 조회", description = "헤더에 토큰을 포함하고, URL 파라미터에 'voteId'를, 요청 쿼리에 'age'(연령 필터 - 선택), 'mbti'(MBTI 필터 - 선택), 'gender'(성별 필터 - 선택), 'sortBy'(정렬 기준 - ByTime, ByPopularity), 'page'(페이지 번호)와 'size'(페이지 내의 데이터 수)를 JSON 형식으로 보내 주십시오.")
+    @Operation(summary = "댓글 조회", description = "헤더에 토큰을 포함하고, URL 파라미터에 'voteId'를, 'sortBy'(정렬 기준 - ByTime, ByPopularity), 'page'(페이지 번호)와 'size'(페이지 내의 데이터 수)를 JSON 형식으로 보내 주십시오.")
     @GetMapping("/{commentType}/{typeId}/comments")
-    public ResponseEntity<Slice<GetCommentData>> getComment(@ModelAttribute GetCommentRequest getCommentRequest, @PathVariable CommentType commentType, @PathVariable Long typeId) {
+    public ResponseEntity<Slice<GetCommentData>> getComment(@ModelAttribute @Valid GetCommentRequest getCommentRequest, @PathVariable CommentType commentType, @PathVariable Long typeId) {
         Slice<GetCommentData> getCommentResponses = commentService.getComments(commentType, typeId, getCommentRequest.toServiceRequest());
         return new ResponseEntity(getCommentResponses, HttpStatus.OK);
+    }
+
+    @Operation(summary = "맛보기 댓글 조회", description = "헤더에 토큰을 포함하고, URL 파라미터에 'voteId'를, 'sortBy'(정렬 기준 - ByTime, ByPopularity), 'page'(페이지 번호)와 'size'(페이지 내의 데이터 수)를 JSON 형식으로 보내 주십시오.")
+    @GetMapping("/{commentType}/{typeId}/comments/sample")
+    public ResponseEntity<Map<String, List<GetCommentData>>> getSampleComment(@PathVariable CommentType commentType, @PathVariable Long typeId) {
+        List<GetCommentData> getCommentResponses = commentService.getSampleComments(commentType, typeId);
+        return wrapWithContent(getCommentResponses);
     }
 
 
