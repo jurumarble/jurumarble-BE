@@ -35,8 +35,7 @@ public class CommentVoteService {
 
     public ChoiceType getChoiceType(Comment comment, CommentType commentType, Long typeId) {
         if (commentType == CommentType.VOTES) {
-            VoteResult voteResult = voteResultRepository.findByVotedUserIdAndVoteId(comment.getUser().getId(), typeId)
-                    .orElseThrow(VoteResultNotFoundException::new);
+            VoteResult voteResult = voteResultRepository.findByVotedUserIdAndVoteId(comment.getUser().getId(), typeId).orElseThrow(VoteResultNotFoundException::new);
             return voteResult.getChoice();
         }
         return null;
