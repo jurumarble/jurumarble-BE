@@ -11,8 +11,6 @@ import co.kr.jurumarble.comment.service.request.GetCommentServiceRequest;
 import co.kr.jurumarble.comment.service.request.UpdateCommentServiceRequest;
 import co.kr.jurumarble.comment.service.request.UpdateRestaurantServiceRequest;
 import co.kr.jurumarble.exception.comment.CommentNotFoundException;
-import co.kr.jurumarble.exception.comment.InvalidCommentTypeException;
-import co.kr.jurumarble.exception.comment.InvalidSortingMethodException;
 import co.kr.jurumarble.exception.user.UserNotFoundException;
 import co.kr.jurumarble.exception.vote.VoteResultNotFoundException;
 import co.kr.jurumarble.user.domain.User;
@@ -29,7 +27,10 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +42,7 @@ public class CommentService {
     private final CommentEmoteManager commentEmoteManager;
     private final TourApiDataManager tourApiDataManager;
     private final CommentValidator commentValidator;
+    private final CommentFinder commentFinder;
 
     @Transactional
     public void createComment(CommentType commentType, Long typeId, Long userId, CreateCommentServiceRequest request) {
@@ -56,8 +58,8 @@ public class CommentService {
 
     public Slice<GetCommentData> getComments(CommentType commentType, Long typeId, GetCommentServiceRequest request) {
         Pageable pageable = PageRequest.of(request.getPage(), request.getSize());
-        List<Comment> comments = findCommentsBySortType(commentType, typeId, request, pageable); //정렬방식에 따라 부모댓글 가져오기
-        getChildCommentByParentComment(comments);
+        List<Comment> comments = commentFinder.findCommentsBySortType(commentType, typeId, request, pageable); //정렬방식에 따라 부모댓글 가져오기
+        commentFinder.findChildCommentByParentComment(comments);
         List<GetCommentData> getCommentData = convertToCommentDataList(comments, commentType, typeId); // 댓글 목록을 매개 변수로 받아, GetCommentData 목록을 반환
         Slice<GetCommentData> slice = convertToSlice(typeId, request, pageable, getCommentData); // Response 리스트를 Slice 객체로 만들어주기
         return slice;
@@ -65,37 +67,10 @@ public class CommentService {
     }
 
     public List<GetCommentData> getSampleComments(CommentType commentType, Long typeId) {
-        List<Comment> comments = findSampleComments(commentType, typeId);
+        List<Comment> comments = commentFinder.findSampleComments(commentType, typeId);
         List<GetCommentData> getCommentData = convertToCommentDataList(comments, commentType, typeId);
         return getCommentData;
     }
-
-    private List<Comment> findSampleComments(CommentType commentType, Long typeId) {
-        List<Comment> topCommentList = findHotComments(commentType, typeId, PageRequest.of(0, 1));
-
-        // Hot comment가 없는 경우 바로 빈 리스트 반환
-        if (topCommentList.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        Comment topComment = topCommentList.get(0);
-        List<Comment> newestComments = findNewestComments(commentType, typeId, PageRequest.of(0, 3));
-
-        List<Comment> sampleComments = new ArrayList<>();
-        sampleComments.add(topComment);
-
-        for (Comment comment : newestComments) {
-            if (!comment.equals(topComment)) {
-                sampleComments.add(comment);
-            }
-            if (sampleComments.size() == 3) { // 최대 3개까지만 추가
-                break;
-            }
-        }
-
-        return sampleComments;
-    }
-
 
     @Transactional
     public void updateComment(CommentType commentType, Long typeId, Long commentId, Long userId, UpdateCommentServiceRequest request) {
@@ -157,47 +132,6 @@ public class CommentService {
 
     }
 
-
-    private List<Comment> findCommentsBySortType(CommentType commentType, Long typeId, GetCommentServiceRequest request, Pageable pageable) {
-        switch (request.getSortBy()) {
-            case ByTime:
-                return findNewestComments(commentType, typeId, pageable);
-            case ByPopularity:
-                return findHotComments(commentType, typeId, pageable);
-            default:
-                throw new InvalidSortingMethodException();
-        }
-    }
-
-    private List<Comment> findNewestComments(CommentType commentType, Long typeId, Pageable pageable) {
-        if (commentType == CommentType.VOTES) {
-            return commentRepository.findNewestVoteComments(typeId, pageable);
-        } else if (commentType == CommentType.DRINKS) {
-            return commentRepository.findNewestDrinkComments(typeId, pageable);
-        } else {
-            throw new InvalidCommentTypeException();
-        }
-
-    }
-
-    private List<Comment> findHotComments(CommentType commentType, Long typeId, Pageable pageable) {
-        if (commentType == CommentType.VOTES) {
-            return commentRepository.findHotVoteComments(typeId, pageable);
-        } else if (commentType == CommentType.DRINKS) {
-            return commentRepository.findHotDrinkComments(typeId, pageable);
-        } else {
-            throw new InvalidCommentTypeException();
-        }
-    }
-
-    private void getChildCommentByParentComment(List<Comment> comments) {
-        List<Comment> childComments = new ArrayList<>(); //대댓글
-        //대댓글 가져오기
-        for (Comment parent : comments) {
-            childComments.addAll(commentRepository.findByParent(parent));
-        }
-        comments.addAll(childComments);
-    }
 
 
     private List<GetCommentData> convertToCommentDataList(List<Comment> parentComments, CommentType commentType, Long typeId) {
