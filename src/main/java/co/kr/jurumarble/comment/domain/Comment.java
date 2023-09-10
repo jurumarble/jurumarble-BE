@@ -40,15 +40,6 @@ public class Comment extends BaseTimeEntity {
 
     private String content;
 
-    @Enumerated(EnumType.STRING)
-    private AgeType age;
-
-    @Enumerated(EnumType.STRING)
-    private MbtiType mbti;
-
-    @Enumerated(EnumType.STRING)
-    private GenderType gender;
-
     @Column(name = "like_count")
     private Integer likeCount = INITIAL_COUNT;
     @Column(name = "hate_count")
@@ -72,15 +63,17 @@ public class Comment extends BaseTimeEntity {
     private Restaurant restaurant = new Restaurant();
 
     @Builder
-    public Comment(User user, Long voteId, Long drinkId, String content, AgeType age, MbtiType mbti, GenderType gender, Comment parent) {
+    public Comment(User user, Long voteId, Long drinkId, String content, Integer likeCount, Integer hateCount, Comment parent, List<Comment> children, List<CommentEmotion> commentEmotionList, Restaurant restaurant) {
         this.user = user;
         this.voteId = voteId;
         this.drinkId = drinkId;
         this.content = content;
-        this.age = age;
-        this.mbti = mbti;
-        this.gender = gender;
+        this.likeCount = likeCount;
+        this.hateCount = hateCount;
         this.parent = parent;
+        this.children = children;
+        this.commentEmotionList = commentEmotionList;
+        this.restaurant = restaurant;
     }
 
     public void updateParent(Comment parent) {

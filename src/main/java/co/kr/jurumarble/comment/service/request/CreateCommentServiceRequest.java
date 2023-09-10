@@ -22,9 +22,6 @@ public class CreateCommentServiceRequest {
         Comment.CommentBuilder commentBuilder = Comment.builder()
                 .user(user)
                 .content(content)
-                .age(user.classifyAge())
-                .mbti(user.getMbti())
-                .gender(user.getGender())
                 .parent(parentComment);
 
         if (commentType == CommentType.VOTES) {
