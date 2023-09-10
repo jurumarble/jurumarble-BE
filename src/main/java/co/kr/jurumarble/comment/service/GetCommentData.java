@@ -41,10 +41,10 @@ public class GetCommentData {
         this.voteId = comment.getVoteId();
         this.drinkId = comment.getDrinkId();
         this.content = comment.getContent();
-        this.gender = comment.getGender();
+        this.gender = comment.getUser().getGender();
         this.imageUrl = comment.getUser().getImageUrl();
-        this.age = comment.getAge();
-        this.mbti = comment.getMbti();
+        this.age = comment.getUser().classifyAge();
+        this.mbti = comment.getUser().getMbti();
         this.nickName = comment.getUser().getNickname();
         this.createdDate = comment.getCreatedDate();
         this.children = new ArrayList<>();
@@ -67,10 +67,10 @@ public class GetCommentData {
         this.voteId = comment.getVoteId();
         this.drinkId = comment.getDrinkId();
         this.content = comment.getContent();
-        this.gender = comment.getGender();
+        this.gender = comment.getUser().getGender();
         this.imageUrl = comment.getUser().getImageUrl();
-        this.age = comment.getAge();
-        this.mbti = comment.getMbti();
+        this.age = comment.getUser().classifyAge();
+        this.mbti = comment.getUser().getMbti();
         this.nickName = comment.getUser().getNickname();
         this.createdDate = comment.getCreatedDate();
         this.children = new ArrayList<>();
