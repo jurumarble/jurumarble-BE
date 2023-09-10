@@ -1,8 +1,10 @@
 package co.kr.jurumarble.config;
 
+import co.kr.jurumarble.comment.controller.converter.StringToEnumConverter;
 import co.kr.jurumarble.interceptor.TokenInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -32,18 +34,25 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/votes/{voteId}/voted")
                 .addPathPatterns("/api/votes/{voteId}/bookmark")
                 .addPathPatterns("/api/drinks/enjoys")
-                .addPathPatterns("/api/votes/{voteId}/comments")
-                .addPathPatterns("/api/votes/{voteId}/comments/{commentId}")
-                .addPathPatterns("/api/votes/{voteId}/comments/{commentId}/likers")
-                .addPathPatterns("/api/votes/{voteId}/comments/{commentId}/haters")
-                .addPathPatterns("/api/votes/{voteId}/comments/{commentId}/restaurant")
-                .addPathPatterns("/api/votes/{voteId}/comments/{commentId}/restaurant/{contentId}")
-                .addPathPatterns("/api/drinks/{drinkId}/enjoy");
+                .addPathPatterns("/api/drinks/{drinkId}/enjoy")
+                .addPathPatterns("/api/{commentType}/{typeId}/comments/create")
+                .addPathPatterns("/api/{commentType}/{typeId}/comments/{commentId}")
+                .addPathPatterns("/api/{commentType}/{typeId}/comments/{commentId}/likers")
+                .addPathPatterns("/api/{commentType}/{typeId}/comments/{commentId}/haters")
+                .addPathPatterns("/api/{commentType}/{typeId}/comments/{commentId}/restaurant")
+                .addPathPatterns("/api/{commentType}/{typeId}/comments/{commentId}/restaurant/{contentId}");
     }
 
     @Override
     public void addCorsMappings(final CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedMethods(ALLOWED_METHOD_NAMES.split(","));
+                .allowedMethods(ALLOWED_METHOD_NAMES.split(","))
+                .allowedOrigins("http://localhost:3000","https://jurumarble-git-develop-chooz.vercel.app/","https://jurumarble.site","https://jurumarble.vercel.app/")
+                .maxAge(3600);
+    }
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addConverter(new StringToEnumConverter());
     }
 }

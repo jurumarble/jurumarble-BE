@@ -17,17 +17,18 @@ public enum Region {
     GYEONGNAM(36, "경남"),
     JEONBUK(37, "전북"),
     JEONNAM(38, "전남"),
-    JEJU(39, "제주");
+    JEJU(39, "제주"),
+    ALL(null, "전국");
 
-    private final int code;
+    private final Integer code;
     private final String name;
 
-    Region(int code, String name) {
+    Region(Integer code, String name) {
         this.code = code;
         this.name = name;
     }
 
-    public int getCode() {
+    public Integer getCode() {
         return code;
     }
 

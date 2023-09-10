@@ -15,10 +15,16 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
 
     @Query(value = "SELECT c FROM Comment c WHERE c.voteId = :voteId AND c.parent IS NULL ORDER BY (c.likeCount + c.hateCount) DESC , c.createdDate DESC")
-    List<Comment> findHotComments(@Param("voteId") Long voteId, Pageable pageable);                    //인기순 댓글 불러오기
+    List<Comment> findHotVoteComments(@Param("voteId") Long voteId, Pageable pageable);                    //투표에서 인기순 댓글 불러오기
 
     @Query(value = "SELECT c FROM Comment c WHERE c.voteId = :voteId AND c.parent IS NULL Order By c.createdDate DESC")
-    List<Comment> findNewestComments(@Param("voteId") Long voteId, Pageable pageable);                 //최신순 댓글 불러오기
+    List<Comment> findNewestVoteComments(@Param("voteId") Long voteId, Pageable pageable);                 //투표에서 최신순 댓글 불러오기
+
+    @Query(value = "SELECT c FROM Comment c WHERE c.drinkId = :drinkId AND c.parent IS NULL ORDER BY (c.likeCount + c.hateCount) DESC , c.createdDate DESC")
+    List<Comment> findHotDrinkComments(@Param("drinkId") Long drinkId, Pageable pageable);                    //술인포에서 인기순 댓글 불러오기
+
+    @Query(value = "SELECT c FROM Comment c WHERE c.drinkId = :drinkId AND c.parent IS NULL Order By c.createdDate DESC")
+    List<Comment> findNewestDrinkComments(@Param("drinkId") Long drinkId, Pageable pageable);                 //술인포에서 최신순 댓글 불러오기
 
     int countByVoteIdAndParentIsNull(Long voteId);
 
@@ -27,4 +33,10 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     boolean existsByIdAndUser(Long commentId, User user);
 
     boolean existsByIdAndVoteId(Long id, Long voteId);
+
+    boolean existsByIdAndDrinkId(Long id, Long drinkId);
+
+    int countByVoteId(Long typeId);
+
+    int countByDrinkId(Long typeId);
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -42,7 +43,7 @@ public class TourApiService {
     private String cat2;
 
 
-    public String getTreatMenu(String contentId) {
+    public String getFirstMenu(String contentId) {
         String decodedServiceKey = decodeServiceKey(serviceKey);
         TourDetailIntroResponse introResponse = tourApiClient.getDetailIntro(
                 decodedServiceKey,
@@ -52,7 +53,7 @@ public class TourApiService {
                 mobileApp,
                 responseType);
 
-        return introResponse.getTreatMenu();
+        return introResponse.getFirstMenu();
     }
 
     public List<String> getDetailImages(String contentId) {
@@ -72,13 +73,13 @@ public class TourApiService {
     }
 
 
-    public List<RestaurantInfoDto> getRestaurantInfo(int areaCode, int pageNo) {
+    public List<RestaurantInfoDto> getRestaurantInfo(Integer areaCode, int pageNo) {
         String decodedServiceKey = decodeServiceKey(serviceKey);
 
         TourAreaBasedListResponse restaurantList = tourApiClient.getRestaurantList(
                 decodedServiceKey,
                 contentTypeId,
-                areaCode,
+                Optional.ofNullable(areaCode).orElse(null),
                 mobileOS,
                 mobileApp,
                 numOfRows,
@@ -102,13 +103,13 @@ public class TourApiService {
     }
 
 
-    public List<RestaurantInfoDto> getRestaurantInfoByKeyWord(String keyWord, int areaCode, int pageNo) {
+    public List<RestaurantInfoDto> getRestaurantInfoByKeyWord(String keyWord, Integer areaCode, int pageNo) {
         String decodedServiceKey = decodeServiceKey(serviceKey);
 
         TourSearchKeyWordResponse restaurantList = tourApiClient.getRestaurantListByKeyWord(
                 decodedServiceKey,
                 contentTypeId,
-                areaCode,
+                Optional.ofNullable(areaCode).orElse(null),
                 mobileOS,
                 mobileApp,
                 listYN,

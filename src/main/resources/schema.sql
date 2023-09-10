@@ -123,7 +123,8 @@ CREATE TABLE comment
 (
     id               BIGINT       NOT NULL AUTO_INCREMENT,
     user_id          BIGINT       NOT NULL,
-    vote_id          BIGINT       NOT NULL,
+    vote_id          BIGINT       DEFAULT NULL,
+    drink_id         BIGINT       DEFAULT NULL,
     content          VARCHAR(255) NOT NULL,
     age              VARCHAR(255) DEFAULT NULL,
     mbti             VARCHAR(4)   DEFAULT NULL,

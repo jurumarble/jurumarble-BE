@@ -1,6 +1,7 @@
 package co.kr.jurumarble.comment.service.request;
 
 import co.kr.jurumarble.comment.domain.Comment;
+import co.kr.jurumarble.comment.enums.CommentType;
 import co.kr.jurumarble.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,15 +18,25 @@ public class CreateCommentServiceRequest {
     }
 
 
-    public Comment toComment(Comment parentComment, User user, Long voteId) {
-        return Comment.builder()
+    public Comment toComment(CommentType commentType, Comment parentComment, User user, Long typeId, Long drinkId) {
+        Comment.CommentBuilder commentBuilder = Comment.builder()
                 .user(user)
-                .voteId(voteId)
                 .content(content)
                 .age(user.classifyAge())
                 .mbti(user.getMbti())
                 .gender(user.getGender())
-                .parent(parentComment)
-                .build();
+                .parent(parentComment);
+
+        if (commentType == CommentType.VOTES) {
+            commentBuilder.voteId(typeId);
+        }
+
+        if (commentType == CommentType.VOTES && drinkId != null) {
+            commentBuilder.drinkId(drinkId);
+        } else if (commentType == CommentType.DRINKS) {
+            commentBuilder.drinkId(typeId);
+        }
+
+        return commentBuilder.build();
     }
 }
