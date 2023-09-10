@@ -108,6 +108,7 @@ public class User extends BaseTimeEntity {
         this.mbti = addUserInfo.getMbti();
         this.age = addUserInfo.getAge();
         this.gender = addUserInfo.getGender();
+        this.alcoholLimit = addUserInfo.getAlcoholLimit();
     }
 
 //    public void mappingBookmark(Bookmark bookmark) {

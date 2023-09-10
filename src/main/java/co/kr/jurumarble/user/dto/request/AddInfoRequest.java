@@ -1,7 +1,7 @@
 package co.kr.jurumarble.user.dto.request;
 
-
 import co.kr.jurumarble.user.dto.AddUserInfo;
+import co.kr.jurumarble.user.enums.AlcoholLimitType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
 import lombok.AllArgsConstructor;
@@ -24,8 +24,11 @@ public class AddInfoRequest {
     @NotBlank(message = "gender는 blank일 수 없습니다.")
     private GenderType gender;
 
+    @NotBlank(message = "alcohol_limit(주량)은 blank일 수 없습니다.")
+    private AlcoholLimitType alcoholLimit;
+
     public AddUserInfo toAddUserInfo() {
-        return new AddUserInfo(mbti, age, gender);
+        return new AddUserInfo(mbti, age, gender, alcoholLimit);
     }
 
 }
