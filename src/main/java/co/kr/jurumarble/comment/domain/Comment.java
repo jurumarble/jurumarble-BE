@@ -116,4 +116,8 @@ public class Comment extends BaseTimeEntity {
         }
         restaurant.updateRestaurant(request.getRestaurantName(), request.getRestaurantImage());
     }
+
+    public void removeRestaurant() {
+        this.restaurant = null;
+    }
 }

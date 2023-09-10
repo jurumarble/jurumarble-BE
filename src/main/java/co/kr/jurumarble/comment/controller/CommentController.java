@@ -1,21 +1,20 @@
 package co.kr.jurumarble.comment.controller;
 
-import co.kr.jurumarble.comment.enums.CommentType;
-import co.kr.jurumarble.comment.enums.Region;
-import co.kr.jurumarble.comment.service.GetCommentData;
-import co.kr.jurumarble.comment.service.SearchRestaurantData;
-import co.kr.jurumarble.comment.dto.request.GetCommentRequest;
 import co.kr.jurumarble.comment.dto.request.CreateCommentRequest;
+import co.kr.jurumarble.comment.dto.request.GetCommentRequest;
 import co.kr.jurumarble.comment.dto.request.UpdateCommentRequest;
 import co.kr.jurumarble.comment.dto.request.UpdateRestaurantRequest;
+import co.kr.jurumarble.comment.enums.CommentType;
 import co.kr.jurumarble.comment.enums.Emotion;
+import co.kr.jurumarble.comment.enums.Region;
 import co.kr.jurumarble.comment.service.CommentService;
+import co.kr.jurumarble.comment.service.GetCommentData;
+import co.kr.jurumarble.comment.service.SearchRestaurantData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +40,6 @@ public class CommentController {
         commentService.createComment(commentType, typeId, userId, createCommentRequest.toServiceRequest());
         return new ResponseEntity(HttpStatus.CREATED);
     }
-
 
     @Operation(summary = "댓글 조회", description = "헤더에 토큰을 포함하고, URL 파라미터에 'voteId'를, 'sortBy'(정렬 기준 - ByTime, ByPopularity), 'page'(페이지 번호)와 'size'(페이지 내의 데이터 수)를 JSON 형식으로 보내 주십시오.")
     @GetMapping("/{commentType}/{typeId}/comments")
@@ -106,6 +104,13 @@ public class CommentController {
     public ResponseEntity<List<String>> getRestaurantImage(@PathVariable CommentType commentType, @PathVariable Long typeId, @PathVariable Long commentId, @RequestAttribute Long userId, @PathVariable String contentId) {
         List<String> restaurantImage = commentService.getRestaurantImage(commentType, typeId, commentId, userId, contentId);
         return new ResponseEntity(restaurantImage, HttpStatus.OK);
+    }
+
+    @Operation(summary = "음식점 삭제", description = "헤더에 토큰을 포함하고, URL 파라미터에 'type'(votes 또는 drinks)와 해당 타입'id 전달하여 음식점을 삭제하는 기능입니다.")
+    @DeleteMapping("/{commentType}/{typeId}/comments/{commentId}/restaurant")
+    public ResponseEntity<List<String>> deleteRestaurant(@PathVariable CommentType commentType, @PathVariable Long typeId, @PathVariable Long commentId, @RequestAttribute Long userId) {
+        commentService.deleteRestaurant(commentType, typeId, commentId, userId);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
 

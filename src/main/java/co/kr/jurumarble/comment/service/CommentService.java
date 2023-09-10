@@ -45,7 +45,6 @@ public class CommentService {
         Long drinkId = commentVoteService.getDrinkIdIfApplicable(commentType, typeId, userId).orElse(null);
         Comment comment = request.toComment(commentType, parentComment, user, typeId, drinkId);
         commentRepository.save(comment);
-
     }
 
 
@@ -119,9 +118,16 @@ public class CommentService {
         commentValidator.validateCommentBelongsToUser(comment, user);
         commentValidator.validateCommentBelongsToType(commentType, typeId, comment);
         List<String> detailImages = tourApiDataManager.fetchDetailImages(contentId);
-
         return detailImages;
+    }
 
+    @Transactional
+    public void deleteRestaurant(CommentType commentType, Long typeId, Long commentId, Long userId){
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
+        commentValidator.validateCommentBelongsToUser(comment, user);
+        commentValidator.validateCommentBelongsToType(commentType, typeId, comment);
+        comment.removeRestaurant();
     }
 
 }
