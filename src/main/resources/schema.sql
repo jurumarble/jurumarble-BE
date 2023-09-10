@@ -45,6 +45,7 @@ CREATE TABLE users
     age                INTEGER      DEFAULT NULL,
     gender             VARCHAR(6)   DEFAULT NULL,
     mbti               VARCHAR(4)   DEFAULT NULL,
+    alcohol_limit      VARCHAR(6)   DEFAULT NULL,
     provider_type      VARCHAR(10)  DEFAULT NULL,
     provider_id        VARCHAR(255) DEFAULT NULL,
     created_date       TIMESTAMP    DEFAULT NULL,

@@ -1,15 +1,16 @@
-package co.kr.jurumarble.vote.enums;
+package co.kr.jurumarble.user.enums;
 
 import co.kr.jurumarble.common.enums.EnumModel;
 
-public enum SortByType implements EnumModel {
-    ByTime("createdDate"),
-    ByPopularity("인기순"),
-    ByName("이름순");
+public enum AlcoholLimitType implements EnumModel {
+
+    HIGH("상"),
+    MEDIUM("중"),
+    LOW("하");
 
     private String value;
 
-    SortByType(String value) {
+    AlcoholLimitType(String value) {
         this.value = value;
     }
 

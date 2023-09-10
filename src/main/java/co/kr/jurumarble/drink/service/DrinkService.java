@@ -13,7 +13,11 @@ import co.kr.jurumarble.drink.repository.dto.HotDrinkData;
 import co.kr.jurumarble.drink.service.request.EnjoyDrinkServiceRequest;
 import co.kr.jurumarble.drink.service.response.GetDrinkServiceResponse;
 import co.kr.jurumarble.exception.drink.DrinkNotFoundException;
+import co.kr.jurumarble.exception.user.UserNotFoundException;
+import co.kr.jurumarble.exception.vote.SortByNotFountException;
+import co.kr.jurumarble.user.repository.UserRepository;
 import co.kr.jurumarble.utils.PageableConverter;
+import co.kr.jurumarble.vote.enums.SortByType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -37,6 +41,7 @@ public class DrinkService {
     private final EnjoyDrinkRepository enjoyDrinkRepository;
     private final EnjoyDrinkValidator enjoyDrinkValidator;
     private final PageableConverter pageableConverter;
+    private final UserRepository userRepository;
 
 
     public GetDrinkServiceResponse getDrinkData(Long drinkId) {
@@ -83,9 +88,19 @@ public class DrinkService {
                 .collect(Collectors.toList());
     }
 
-    public Slice<DrinkData> getDrinks(String keyword, String region, int pageNum, int pageSize) {
-        List<DrinkData> drinks = drinkRepository.getDrinks(keyword, region, pageNum, pageSize);
-        return pageableConverter.convertListToSlice(drinks, pageNum, pageSize);
+    public Slice<DrinkData> getDrinks(String keyword, String region, SortByType sortBy, int pageNum, int pageSize) {
+
+        if(SortByType.ByPopularity == sortBy) {
+            List<DrinkData> drinks = drinkRepository.getDrinksByPopularity(keyword, region, pageNum, pageSize);
+            return pageableConverter.convertListToSlice(drinks, pageNum, pageSize);
+        }
+
+        if(SortByType.ByName == sortBy) {
+            List<DrinkData> drinks = drinkRepository.getDrinksByName(keyword, region, pageNum, pageSize);
+            return pageableConverter.convertListToSlice(drinks, pageNum, pageSize);
+        }
+
+        throw new SortByNotFountException();
     }
 
     public Slice<DrinkData> getEnjoyDrinks(Long userId, int pageNum, int pageSize) {
@@ -105,5 +120,11 @@ public class DrinkService {
         return drinkRepository.findDrinksByIdIn(drinkIds).stream()
                 .map(DrinkData::new)
                 .collect(Collectors.toList());
+    }
+
+    public boolean checkEnjoyed(Long drinkId, Long userId) {
+        userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        drinkRepository.findById(drinkId).orElseThrow(DrinkNotFoundException::new);
+        return enjoyDrinkRepository.findByUserIdAndDrinkId(userId, drinkId).isPresent();
     }
 }

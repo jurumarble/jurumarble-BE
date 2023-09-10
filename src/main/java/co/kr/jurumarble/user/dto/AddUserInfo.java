@@ -1,5 +1,6 @@
 package co.kr.jurumarble.user.dto;
 
+import co.kr.jurumarble.user.enums.AlcoholLimitType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
 import lombok.AllArgsConstructor;
@@ -16,5 +17,7 @@ public class AddUserInfo {
     private Integer age;
 
     private GenderType gender;
+
+    private AlcoholLimitType alcoholLimit;
 
 }
