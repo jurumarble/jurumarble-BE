@@ -9,6 +9,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor
+@Table(name = "bookmark")
 public class Bookmark extends BaseTimeEntity {
 
     @Id
