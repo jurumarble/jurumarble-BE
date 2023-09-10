@@ -41,6 +41,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/{commentType}/{typeId}/comments/{commentId}/haters")
                 .addPathPatterns("/api/{commentType}/{typeId}/comments/{commentId}/restaurant")
                 .addPathPatterns("/api/{commentType}/{typeId}/comments/{commentId}/restaurant/{contentId}");
+
     }
 
     @Override
