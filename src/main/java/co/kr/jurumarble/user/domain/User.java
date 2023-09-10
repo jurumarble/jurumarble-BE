@@ -3,10 +3,7 @@ package co.kr.jurumarble.user.domain;
 import co.kr.jurumarble.common.domain.BaseTimeEntity;
 import co.kr.jurumarble.exception.user.AlreadyDeletedUserException;
 import co.kr.jurumarble.user.dto.AddUserInfo;
-import co.kr.jurumarble.user.enums.AgeType;
-import co.kr.jurumarble.user.enums.GenderType;
-import co.kr.jurumarble.user.enums.MbtiType;
-import co.kr.jurumarble.user.enums.ProviderType;
+import co.kr.jurumarble.user.enums.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -44,6 +41,10 @@ public class User extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     private MbtiType mbti;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "alcohol_limit")
+    private AlcoholLimitType alcoholLimit;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "provider_type")
@@ -107,6 +108,7 @@ public class User extends BaseTimeEntity {
         this.mbti = addUserInfo.getMbti();
         this.age = addUserInfo.getAge();
         this.gender = addUserInfo.getGender();
+        this.alcoholLimit = addUserInfo.getAlcoholLimit();
     }
 
 //    public void mappingBookmark(Bookmark bookmark) {

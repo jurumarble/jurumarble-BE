@@ -26,8 +26,8 @@ public class BookmarkService {
     @Transactional
     public void bookmarkVote(Long userId, Long voteId) {
 
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+        userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
         Optional<Bookmark> byVoteAndUser = bookmarkRepository.findByUserIdAndVoteId(userId, voteId);
 
@@ -46,8 +46,8 @@ public class BookmarkService {
     }
 
     public boolean checkBookmarked(Long userId, Long voteId) {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+        userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
         return bookmarkRepository.findByUserIdAndVoteId(userId, voteId).isPresent();
     }
