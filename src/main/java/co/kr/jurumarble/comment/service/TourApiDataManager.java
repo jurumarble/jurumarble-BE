@@ -2,6 +2,7 @@ package co.kr.jurumarble.comment.service;
 
 import co.kr.jurumarble.client.tourApi.RestaurantInfoDto;
 import co.kr.jurumarble.client.tourApi.TourApiService;
+import co.kr.jurumarble.comment.enums.Region;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -15,10 +16,10 @@ public class TourApiDataManager {
     private final TourApiService tourApiService;
 
 
-    public List<RestaurantInfoDto> getRestaurantInfoList(String keyword, Integer areaCode, int page) {
+    public List<RestaurantInfoDto> getRestaurantInfoList(String keyword, Region region, int page) {
         return (keyword != null)
-                ? tourApiService.getRestaurantInfoByKeyWord(keyword, areaCode, page)
-                : tourApiService.getRestaurantInfo(areaCode, page);
+                ? tourApiService.getRestaurantInfoByKeyWord(keyword, region.getCode(), page)
+                : tourApiService.getRestaurantInfo(region.getCode(), page);
     }
 
     public List<SearchRestaurantData> convertToSearchRestaurantDataList(List<RestaurantInfoDto> restaurantInfo) {
@@ -27,7 +28,7 @@ public class TourApiDataManager {
                         restaurant.getContentId(),
                         restaurant.getTitle(),
                         restaurant.getFirstImage(),
-                        tourApiService.getTreatMenu(restaurant.getContentId())
+                        tourApiService.getFirstMenu(restaurant.getContentId())
                 ))
                 .collect(Collectors.toList());
     }

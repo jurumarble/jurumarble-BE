@@ -10,8 +10,8 @@ public class TourDetailIntroResponse {
     @JsonProperty("response")
     private TourDetailIntroResponse.Response response;
 
-    public String getTreatMenu() {
-        return response.getBody().getItems().getItem().get(0).getTreatmenu();
+    public String getFirstMenu() {
+        return response.getBody().getItems().getItem().get(0).getFirstmenu();
     }
 
     @Data
@@ -34,7 +34,7 @@ public class TourDetailIntroResponse {
 
     @Data
     static class Item {
-        @JsonProperty("treatmenu")
-        private String treatmenu;
+        @JsonProperty("firstmenu")
+        private String firstmenu;
     }
 }

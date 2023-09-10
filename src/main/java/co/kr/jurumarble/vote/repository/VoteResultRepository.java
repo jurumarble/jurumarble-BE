@@ -14,4 +14,6 @@ public interface VoteResultRepository extends JpaRepository<VoteResult, Long> {
 
     @Query("SELECT vr FROM VoteResult vr WHERE vr.voteId = :voteId and vr.votedUserId = :userId")
     Optional<VoteResult> getVoteResultByVoteIdAndUserId(@Param("voteId") Long voteId, @Param("userId") Long userId);
+
+    Optional<VoteResult> findByVotedUserIdAndVoteId(Long userId, Long voteId);
 }

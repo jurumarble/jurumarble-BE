@@ -1,14 +1,13 @@
 package co.kr.jurumarble.config;
 
+import co.kr.jurumarble.comment.controller.converter.StringToEnumConverter;
 import co.kr.jurumarble.interceptor.TokenInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @Configuration
 @RequiredArgsConstructor
@@ -35,13 +34,14 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/votes/{voteId}/voted")
                 .addPathPatterns("/api/votes/{voteId}/bookmark")
                 .addPathPatterns("/api/drinks/enjoys")
-                .addPathPatterns("/api/votes/{voteId}/comments/create")
-                .addPathPatterns("/api/votes/{voteId}/comments/{commentId}")
-                .addPathPatterns("/api/votes/{voteId}/comments/{commentId}/likers")
-                .addPathPatterns("/api/votes/{voteId}/comments/{commentId}/haters")
-                .addPathPatterns("/api/votes/{voteId}/comments/{commentId}/restaurant")
-                .addPathPatterns("/api/votes/{voteId}/comments/{commentId}/restaurant/{contentId}")
-                .addPathPatterns("/api/drinks/{drinkId}/enjoy");
+                .addPathPatterns("/api/drinks/{drinkId}/enjoy")
+                .addPathPatterns("/api/{commentType}/{typeId}/comments/create")
+                .addPathPatterns("/api/{commentType}/{typeId}/comments/{commentId}")
+                .addPathPatterns("/api/{commentType}/{typeId}/comments/{commentId}/likers")
+                .addPathPatterns("/api/{commentType}/{typeId}/comments/{commentId}/haters")
+                .addPathPatterns("/api/{commentType}/{typeId}/comments/{commentId}/restaurant")
+                .addPathPatterns("/api/{commentType}/{typeId}/comments/{commentId}/restaurant/{contentId}");
+
     }
 
     @Override
@@ -52,4 +52,8 @@ public class WebConfig implements WebMvcConfigurer {
                 .maxAge(3600);
     }
 
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addConverter(new StringToEnumConverter());
+    }
 }

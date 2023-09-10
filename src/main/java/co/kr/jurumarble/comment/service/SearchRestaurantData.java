@@ -2,9 +2,12 @@ package co.kr.jurumarble.comment.service;
 
 import lombok.Getter;
 
-@Getter
-public class SearchRestaurantData {
+import java.io.Serializable;
 
+@Getter
+public class SearchRestaurantData implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     private String contentId;
 
     private String restaurantName;

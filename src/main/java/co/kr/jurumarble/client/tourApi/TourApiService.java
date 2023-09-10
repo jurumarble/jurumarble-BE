@@ -43,7 +43,7 @@ public class TourApiService {
     private String cat2;
 
 
-    public String getTreatMenu(String contentId) {
+    public String getFirstMenu(String contentId) {
         String decodedServiceKey = decodeServiceKey(serviceKey);
         TourDetailIntroResponse introResponse = tourApiClient.getDetailIntro(
                 decodedServiceKey,
@@ -53,7 +53,7 @@ public class TourApiService {
                 mobileApp,
                 responseType);
 
-        return introResponse.getTreatMenu();
+        return introResponse.getFirstMenu();
     }
 
     public List<String> getDetailImages(String contentId) {
@@ -109,7 +109,7 @@ public class TourApiService {
         TourSearchKeyWordResponse restaurantList = tourApiClient.getRestaurantListByKeyWord(
                 decodedServiceKey,
                 contentTypeId,
-                areaCode,
+                Optional.ofNullable(areaCode).orElse(null),
                 mobileOS,
                 mobileApp,
                 listYN,
