@@ -106,10 +106,14 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                                 vote.filteredGender,
                                 vote.filteredAge,
                                 vote.filteredMbti,
+                                voteResult.count().as("voteCount"),
                                 vote.voteType
+
                         ))
                 .from(vote)
+                .leftJoin(voteResult).on(vote.id.eq(voteResult.voteId))
                 .where(keywordExpression)
+                .groupBy(vote.id)
                 .orderBy(vote.createdDate.desc())
                 .offset(pageNo * pageSize)
                 .limit(pageSize)
@@ -193,7 +197,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
 
     private void setSearchConditions(String keyword, String region, BooleanBuilder builder) {
         if (keyword != null && !keyword.isEmpty()) {
-            builder.and(vote.title.like("%" + keyword + "%"));
+            builder.and(vote.title.like(keyword + "%"));
         }
 
         if (region != null && !region.isEmpty()) {
@@ -203,7 +207,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
 
     private BooleanExpression getKeywordExpression(String keyword) {
         return keyword != null
-                ? vote.title.like("%" + keyword + "%")
+                ? vote.title.like(keyword + "%")
                 : null;
     }
 
@@ -216,7 +220,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .on(vote.id.eq(voteContent.voteId))
                 .innerJoin(voteResult)
                 .on(vote.id.eq(voteResult.voteId))
-                .where(vote.title.like("%" + keyword + "%"))
+                .where(vote.title.like(keyword + "%"))
                 .groupBy(vote.id)
                 .orderBy(voteResult.id.count().desc())
                 .limit(recommendCount)

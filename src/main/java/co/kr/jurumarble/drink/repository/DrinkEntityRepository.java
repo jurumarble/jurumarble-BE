@@ -14,5 +14,7 @@ public interface DrinkEntityRepository {
 
     List<HotDrinkData> findDrinksByPopular(int pageNo, int pageSize);
 
-    List<DrinkData> getDrinks(String keyword, String region, int pageNo, int pageSize);
+    List<DrinkData> getDrinksByName(String keyword, String region, int pageNo, int pageSize);
+
+    List<DrinkData> getDrinksByPopularity(String keyword, String region, int pageNum, int pageSize);
 }

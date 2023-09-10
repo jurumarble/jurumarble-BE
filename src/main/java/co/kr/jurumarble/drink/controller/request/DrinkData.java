@@ -25,6 +25,7 @@ public class DrinkData {
     private String image;
     private Double latitude;
     private Double longitude;
+    private Long enjoyCount;
 
     public DrinkData(Drink drink) {
         this.id = drink.getId();
