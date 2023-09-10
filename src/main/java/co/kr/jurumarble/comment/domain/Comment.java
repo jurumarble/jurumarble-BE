@@ -57,8 +57,8 @@ public class Comment extends BaseTimeEntity {
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "restaurantName", column = @Column(name = "restaurant_image")),
-            @AttributeOverride(name = "restaurantImage", column = @Column(name = "restaurant_name")),
+            @AttributeOverride(name = "restaurantName", column = @Column(name = "restaurant_name")),
+            @AttributeOverride(name = "restaurantImage", column = @Column(name = "restaurant_image")),
     })
     private Restaurant restaurant = new Restaurant();
 
