@@ -51,7 +51,7 @@ public class RedisConfig {
 
     @Bean
     public CacheManager cacheManager(RedisConnectionFactory connectionFactory) {
-        Duration expiration = Duration.ofMinutes(10);  // 만료 시간을 1분으로 설정
+        Duration expiration = Duration.ofDays(3); // 캐싱 만료시간을 3일로 변경
 
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
                 .entryTtl(expiration)

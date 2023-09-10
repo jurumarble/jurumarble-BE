@@ -13,8 +13,8 @@ spring:
   cache:
     type: redis
   redis:
-    host: jurumarble-redis-001.upetyi.0001.apn2.cache.amazonaws.com
-    port: 6379
+    host: ${redis.host}
+    port: ${redis.port}
 
   jpa:
     open-in-view: true
