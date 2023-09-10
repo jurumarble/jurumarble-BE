@@ -23,24 +23,16 @@ public class BookmarkService {
 
     @Transactional
     public void bookmarkVote(Long userId, Long voteId) {
-
         userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
-
-        Optional<Bookmark> byVoteAndUser = bookmarkRepository.findByUserIdAndVoteId(userId, voteId);
-
-        byVoteAndUser.ifPresentOrElse(
-                bookmark -> {
-                    //북마크를 눌렀는데 또 눌렀을 경우 북마크 취소
-                    bookmarkRepository.delete(bookmark);
-                },
+        bookmarkRepository.findByUserIdAndVoteId(userId, voteId).ifPresentOrElse(
+                bookmarkRepository::delete,
                 // 북마크가 없을 경우 북마크 추가
                 () -> {
                     Bookmark bookmark = new Bookmark(userId, voteId);
                     bookmarkRepository.save(bookmark);
                 }
         );
-
     }
 
     public boolean checkBookmarked(Long userId, Long voteId) {
