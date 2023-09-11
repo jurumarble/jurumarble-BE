@@ -19,7 +19,7 @@ public class BookmarkController {
 
     private final BookmarkService bookmarkService;
 
-    @Operation(summary = "투표 북마크", description = "헤더에 토큰 담고, 파라미터에 voteId 보내주시면 됩니다.")
+    @Operation(summary = "투표 북마크", description = "헤더에 토큰 담고, 파라미터에 voteId 보내주시면 됩니다. 북마크 여부 알아내서 생성, 삭제")
     @PostMapping("/{voteId}/bookmark")
     public ResponseEntity bookmarkVote(@PathVariable Long voteId, @RequestAttribute Long userId) {
 

@@ -36,7 +36,7 @@ public class DrinkController {
                 .body(drinkData.toControllerResponse());
     }
 
-    @Operation(summary = "전통주 즐겼어요 추가", description = "요청시 유저 토큰과 바디값을 잘 확인해서 보내주세요.")
+    @Operation(summary = "전통주 즐겼어요", description = "요청시 유저 토큰과 바디값을 잘 확인해서 보내주세요. 북마크 여부 알아내서 생성, 삭제")
     @PostMapping("/enjoys")
     public ResponseEntity<HttpStatus> enjoyDrink(@RequestAttribute Long userId, @RequestBody EnjoyDrinkRequest request) {
         drinkService.enjoyDrink(userId, request.toServiceRequest());
