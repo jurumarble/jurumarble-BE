@@ -52,10 +52,7 @@ public class DrinkService {
         userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         drinkRepository.findById(request.getDrinkId()).orElseThrow(DrinkNotFoundException::new);
         enjoyDrinkRepository.findByUserIdAndDrinkId(userId, request.getDrinkId()).ifPresentOrElse(
-                enjoyDrink -> {
-                    // enjoyDrink가 존재하는 경우 삭제 로직을 추가합니다.
-                    enjoyDrinkRepository.delete(enjoyDrink);
-                },
+                enjoyDrinkRepository::delete,
                 () -> {
                     EnjoyDrink enjoyDrink = new EnjoyDrink(userId, request.getDrinkId());
                     enjoyDrinkRepository.save(enjoyDrink);

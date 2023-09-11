@@ -25,7 +25,6 @@ public class BookmarkService {
         voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         bookmarkRepository.findByUserIdAndVoteId(userId, voteId).ifPresentOrElse(
                 bookmarkRepository::delete,
-                // 북마크가 없을 경우 북마크 추가
                 () -> {
                     Bookmark bookmark = new Bookmark(userId, voteId);
                     bookmarkRepository.save(bookmark);
