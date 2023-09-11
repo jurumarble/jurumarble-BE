@@ -3,7 +3,6 @@ package co.kr.jurumarble.drink.service;
 import co.kr.jurumarble.drink.controller.request.DrinkData;
 import co.kr.jurumarble.drink.controller.response.GetHotDrinksResponse;
 import co.kr.jurumarble.drink.controller.response.GetMapInDrinksResponse;
-import co.kr.jurumarble.drink.domain.EnjoyDrinkValidator;
 import co.kr.jurumarble.drink.domain.dto.MapInDrinkData;
 import co.kr.jurumarble.drink.domain.entity.Drink;
 import co.kr.jurumarble.drink.domain.entity.EnjoyDrink;
@@ -39,7 +38,6 @@ public class DrinkService {
 
     private final DrinkRepository drinkRepository;
     private final EnjoyDrinkRepository enjoyDrinkRepository;
-    private final EnjoyDrinkValidator enjoyDrinkValidator;
     private final PageableConverter pageableConverter;
     private final UserRepository userRepository;
 
@@ -49,10 +47,17 @@ public class DrinkService {
         return new GetDrinkServiceResponse(drink);
     }
 
+    @Transactional
     public void enjoyDrink(Long userId, EnjoyDrinkServiceRequest request) {
-        enjoyDrinkValidator.checkIsAlreadyEnjoyed(userId, request.getDrinkId());
-        EnjoyDrink enjoyDrink = new EnjoyDrink(userId, request.getDrinkId());
-        enjoyDrinkRepository.save(enjoyDrink);
+        userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        drinkRepository.findById(request.getDrinkId()).orElseThrow(DrinkNotFoundException::new);
+        enjoyDrinkRepository.findByUserIdAndDrinkId(userId, request.getDrinkId()).ifPresentOrElse(
+                enjoyDrinkRepository::delete,
+                () -> {
+                    EnjoyDrink enjoyDrink = new EnjoyDrink(userId, request.getDrinkId());
+                    enjoyDrinkRepository.save(enjoyDrink);
+                }
+        );
     }
 
     public List<GetHotDrinksResponse> getHotDrinks() {

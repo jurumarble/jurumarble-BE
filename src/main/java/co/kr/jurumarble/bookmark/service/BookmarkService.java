@@ -10,8 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
@@ -23,24 +21,15 @@ public class BookmarkService {
 
     @Transactional
     public void bookmarkVote(Long userId, Long voteId) {
-
         userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
-
-        Optional<Bookmark> byVoteAndUser = bookmarkRepository.findByUserIdAndVoteId(userId, voteId);
-
-        byVoteAndUser.ifPresentOrElse(
-                bookmark -> {
-                    //북마크를 눌렀는데 또 눌렀을 경우 북마크 취소
-                    bookmarkRepository.delete(bookmark);
-                },
-                // 북마크가 없을 경우 북마크 추가
+        bookmarkRepository.findByUserIdAndVoteId(userId, voteId).ifPresentOrElse(
+                bookmarkRepository::delete,
                 () -> {
                     Bookmark bookmark = new Bookmark(userId, voteId);
                     bookmarkRepository.save(bookmark);
                 }
         );
-
     }
 
     public boolean checkBookmarked(Long userId, Long voteId) {
