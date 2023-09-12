@@ -73,7 +73,7 @@ public class TourApiService {
     }
 
 
-    public List<RestaurantInfoDto> getRestaurantInfo(Integer areaCode, int pageNo) {
+    public RestaurantListDto getRestaurantInfo(Integer areaCode, int pageNo) {
         String decodedServiceKey = decodeServiceKey(serviceKey);
 
         TourAreaBasedListResponse restaurantList = tourApiClient.getRestaurantList(
@@ -93,17 +93,20 @@ public class TourApiService {
         List<String> contentIds = restaurantList.getContentIds();
         List<String> firstImages = restaurantList.getFirstImages();
         List<String> titles = restaurantList.getTitles();
+        Integer totalCount = restaurantList.getTotalCount();
+        Integer page = restaurantList.getPageNo();
+
 
         List<RestaurantInfoDto> restaurantInfoList =
                 IntStream.range(0, contentIds.size())
                         .mapToObj(i -> new RestaurantInfoDto(contentIds.get(i), firstImages.get(i), titles.get(i)))
                         .collect(Collectors.toList());
 
-        return restaurantInfoList;
+        return new RestaurantListDto(restaurantInfoList, totalCount, page, numOfRows);
     }
 
 
-    public List<RestaurantInfoDto> getRestaurantInfoByKeyWord(String keyWord, Integer areaCode, int pageNo) {
+    public RestaurantListDto getRestaurantInfoByKeyWord(String keyWord, Integer areaCode, int pageNo) {
         String decodedServiceKey = decodeServiceKey(serviceKey);
 
         TourSearchKeyWordResponse restaurantList = tourApiClient.getRestaurantListByKeyWord(
@@ -121,13 +124,15 @@ public class TourApiService {
         List<String> contentIds = restaurantList.getContentIds();
         List<String> firstImages = restaurantList.getFirstImages();
         List<String> titles = restaurantList.getTitles();
+        Integer totalCount = restaurantList.getTotalCount();
+        Integer page = restaurantList.getPageNo();
 
         List<RestaurantInfoDto> restaurantInfoList =
                 IntStream.range(0, contentIds.size())
                         .mapToObj(i -> new RestaurantInfoDto(contentIds.get(i), firstImages.get(i), titles.get(i)))
                         .collect(Collectors.toList());
 
-        return restaurantInfoList;
+        return new RestaurantListDto(restaurantInfoList, totalCount, page, numOfRows);
     }
 
 
