@@ -44,7 +44,7 @@ public class VoteController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @Operation(summary = "일반/전통주 투표 리스트 검색, 조회", description = "파라미터에 keyeword, sortBy, page, size, category 보내주시면 됩니다. 검색이 아니면 keyword = 에 값 없이 ")
+    @Operation(summary = "일반/전통주 투표 리스트 검색, 조회", description = "파라미터에 keyeword, sortBy, page, size, category 보내주시면 됩니다. 검색이 아니면 keyword = 에 값 없이 기획상 최신순, 인기순 만")
     @GetMapping("")
     public ResponseEntity<Slice<VoteData>> getVotes(@RequestParam(required = false) String keyword, @RequestParam SortByType sortBy, @RequestParam int page, @RequestParam int size) {
         return ResponseEntity.status(HttpStatus.OK)
