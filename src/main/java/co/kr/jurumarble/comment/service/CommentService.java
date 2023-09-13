@@ -1,6 +1,7 @@
 package co.kr.jurumarble.comment.service;
 
 import co.kr.jurumarble.client.tourApi.RestaurantInfoDto;
+import co.kr.jurumarble.client.tourApi.RestaurantListDto;
 import co.kr.jurumarble.comment.domain.Comment;
 import co.kr.jurumarble.comment.enums.CommentType;
 import co.kr.jurumarble.comment.enums.Emotion;
@@ -101,12 +102,13 @@ public class CommentService {
     }
 
     @Cacheable(value = "searchRestaurant", key = "(#keyword ?: '') + '_' + (#region?.getCode() ?: '') + '_' + #page")
-    public List<SearchRestaurantData> searchRestaurant(CommentType commentType, Long typeId, Long commentId, Long userId, String keyword, Region region, int page) {
+    public Page<SearchRestaurantData> searchRestaurant(CommentType commentType, Long typeId, Long commentId, Long userId, String keyword, Region region, int page) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
         commentValidator.validateCommentBelongsToUser(comment, user);
         commentValidator.validateCommentBelongsToType(commentType, typeId, comment);
-        List<RestaurantInfoDto> restaurantInfo = tourApiDataManager.getRestaurantInfoList(keyword, region, page);
+        RestaurantListDto restaurantInfo = tourApiDataManager.getRestaurantInfoList(keyword, region, page);
+        System.out.println("restaurantInfo = " + restaurantInfo);
         return tourApiDataManager.convertToSearchRestaurantDataList(restaurantInfo);
 
     }
