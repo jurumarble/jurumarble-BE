@@ -39,6 +39,20 @@ public class TourSearchKeyWordResponse {
         throw new NoDataFoundException();
     }
 
+    public Integer getTotalCount() {
+        if (response != null && response.getBody() != null) {
+            return response.getBody().getTotalCount();
+        }
+        throw new NoDataFoundException();
+    }
+
+    public Integer getPageNo() {
+        if (response != null && response.getBody() != null) {
+            return response.getBody().getPageNo();
+        }
+        throw new NoDataFoundException();
+    }
+
     @Data
     static class Response {
         @JsonProperty("body")
@@ -49,6 +63,12 @@ public class TourSearchKeyWordResponse {
     static class Body {
         @JsonProperty("items")
         private TourSearchKeyWordResponse.Items items;
+
+        @JsonProperty("pageNo")
+        private Integer pageNo;
+
+        @JsonProperty("totalCount")
+        private Integer totalCount;
     }
 
     @Data

@@ -39,16 +39,39 @@ public class TourAreaBasedListResponse {
         throw new NoDataFoundException();
     }
 
+    public Integer getTotalCount() {
+        if (response != null && response.getBody() != null) {
+            return response.getBody().getTotalCount();
+        }
+        throw new NoDataFoundException();
+    }
+
+    public Integer getPageNo() {
+        if (response != null && response.getBody() != null) {
+            return response.getBody().getPageNo();
+        }
+        throw new NoDataFoundException();
+    }
+
+
     @Data
     static class Response {
         @JsonProperty("body")
         private TourAreaBasedListResponse.Body body;
+
     }
 
     @Data
     static class Body {
         @JsonProperty("items")
         private TourAreaBasedListResponse.Items items;
+
+        @JsonProperty("pageNo")
+        private Integer pageNo;
+
+        @JsonProperty("totalCount")
+        private Integer totalCount;
+
     }
 
     @Data
