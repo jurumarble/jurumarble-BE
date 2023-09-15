@@ -6,6 +6,8 @@ import co.kr.jurumarble.user.enums.MbtiType;
 import co.kr.jurumarble.vote.enums.VoteType;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter // QueryDsl 때문에 필요함
 @NoArgsConstructor
@@ -22,4 +24,5 @@ public class VoteCommonData {
     private MbtiType filteredMbti;
     private Long votedCount;
     private VoteType voteType;
+    private LocalDateTime createdAt;
 }

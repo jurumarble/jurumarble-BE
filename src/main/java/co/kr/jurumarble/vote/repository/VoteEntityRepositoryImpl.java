@@ -60,7 +60,9 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                                 vote.filteredAge,
                                 vote.filteredMbti,
                                 voteResult.id.count().as("votedCount"),
-                                vote.voteType)
+                                vote.voteType,
+                                vote.createdDate.as("createdAt")
+                        )
                 )
                 .from(vote)
                 .leftJoin(voteResult).on(vote.id.eq(voteResult.voteId))
@@ -107,9 +109,10 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                                 vote.filteredAge,
                                 vote.filteredMbti,
                                 voteResult.count().as("voteCount"),
-                                vote.voteType
-
-                        ))
+                                vote.voteType,
+                                vote.createdDate.as("createdAt")
+                        )
+                )
                 .from(vote)
                 .leftJoin(voteResult).on(vote.id.eq(voteResult.voteId))
                 .where(keywordExpression)
