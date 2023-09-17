@@ -103,11 +103,11 @@ CREATE TABLE drink
 
 CREATE TABLE bookmark
 (
-    id              BIGINT     NOT NULL AUTO_INCREMENT,
-    user_id         BIGINT     NOT NULL,
-    vote_id         BIGINT     NOT NULL,
-    created_date    TIMESTAMP  DEFAULT NULL,
-    modified_date   TIMESTAMP  DEFAULT NULL,
+    id      BIGINT NOT NULL AUTO_INCREMENT,
+    user_id BIGINT NOT NULL,
+    vote_id BIGINT NOT NULL,
+    created_date  TIMESTAMP DEFAULT NULL,
+    modified_date TIMESTAMP DEFAULT NULL,
     PRIMARY KEY (id)
 );
 
@@ -128,6 +128,9 @@ CREATE TABLE comment
     vote_id          BIGINT       DEFAULT NULL,
     drink_id         BIGINT       DEFAULT NULL,
     content          VARCHAR(255) NOT NULL,
+    age              VARCHAR(255) DEFAULT NULL,
+    mbti             VARCHAR(4)   DEFAULT NULL,
+    gender           VARCHAR(6)   DEFAULT NULL,
     like_count       INTEGER      DEFAULT NULL,
     hate_count       INTEGER      DEFAULT NULL,
     parent_id        BIGINT       DEFAULT NULL,
