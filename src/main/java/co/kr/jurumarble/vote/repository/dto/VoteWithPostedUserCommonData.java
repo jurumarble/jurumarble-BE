@@ -24,7 +24,7 @@ public class VoteWithPostedUserCommonData {
     private MbtiType filteredMbti;
     private Long votedCount;
     private VoteType voteType;
-    private LocalDateTime createdAt;가
+    private LocalDateTime createdAt;
     private String postedUserName;
     private GenderType postedUserGender;
     private Integer postedUserAge;
