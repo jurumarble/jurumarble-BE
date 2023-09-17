@@ -14,15 +14,17 @@ public class CreateDrinkVoteServiceRequest {
     private final Long voteId;
     private final Long drinkAId;
     private final Long drinkBId;
+    private final String detail;
 
     @Builder
-    public CreateDrinkVoteServiceRequest(String title, VoteType voteType, Long voteId, Long drinkAId, Long drinkBId) {
+    public CreateDrinkVoteServiceRequest(String title, VoteType voteType, Long voteId, Long drinkAId, Long drinkBId, String detail) {
         validVoteType(voteType);
         this.title = title;
         this.voteType = voteType;
         this.voteId = voteId;
         this.drinkAId = drinkAId;
         this.drinkBId = drinkBId;
+        this.detail = detail;
     }
 
     private void validVoteType(VoteType voteType) {
@@ -40,6 +42,7 @@ public class CreateDrinkVoteServiceRequest {
                 .postedUserId(userId)
                 .voteType(voteType)
                 .title(title)
+                .detail(detail)
                 .build();
     }
 
