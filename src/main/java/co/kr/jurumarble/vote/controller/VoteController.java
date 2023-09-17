@@ -9,6 +9,7 @@ import co.kr.jurumarble.vote.dto.response.GetVoteListResponse;
 import co.kr.jurumarble.vote.dto.response.GetVoteRecommendListResponse;
 import co.kr.jurumarble.vote.enums.SortByType;
 import co.kr.jurumarble.vote.repository.dto.HotDrinkVoteData;
+import co.kr.jurumarble.vote.repository.dto.VoteWithPostedUserCommonData;
 import co.kr.jurumarble.vote.service.VoteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -82,7 +83,7 @@ public class VoteController {
 
     @Operation(summary = "일반/전통주 투표 단건 조회", description = "파라미터에 voteId 보내주시면 됩니다.")
     @GetMapping("/{voteId}")
-    public ResponseEntity<VoteData> getVote(@PathVariable Long voteId) {
+    public ResponseEntity<VoteWithPostedUserData> getVote(@PathVariable Long voteId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(voteService.getVote(voteId));
     }

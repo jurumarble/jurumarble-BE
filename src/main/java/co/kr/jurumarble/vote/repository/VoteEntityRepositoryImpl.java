@@ -10,6 +10,7 @@ import co.kr.jurumarble.vote.dto.VoteData;
 import co.kr.jurumarble.vote.enums.VoteType;
 import co.kr.jurumarble.vote.repository.dto.HotDrinkVoteData;
 import co.kr.jurumarble.vote.repository.dto.VoteCommonData;
+import co.kr.jurumarble.vote.repository.dto.VoteWithPostedUserCommonData;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -373,11 +374,11 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
     }
 
     @Override
-    public Optional<VoteCommonData> findVoteCommonDataByVoteId(Long voteId) {
-        VoteCommonData voteCommonData = jpaQueryFactory
+    public Optional<VoteWithPostedUserCommonData> findVoteCommonDataByVoteId(Long voteId) {
+        VoteWithPostedUserCommonData voteCommonData = jpaQueryFactory
                 .select(
                         Projections.bean(
-                                VoteCommonData.class,
+                                VoteWithPostedUserCommonData.class,
                                 vote.id.as("voteId"),
                                 vote.postedUserId,
                                 vote.title,
@@ -386,10 +387,19 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                                 vote.filteredAge,
                                 vote.filteredMbti,
                                 voteResult.id.count().as("votedCount"),
-                                vote.voteType)
+                                vote.voteType,
+                                vote.createdDate.as("createdAt"),
+                                user.gender.as("postedUserGender"),
+                                user.age.as("postedUserAge"),
+                                user.mbti.as("postedUserMbti"),
+                                user.alcoholLimit.as("postedUserAlcoholLimit"),
+                                user.nickname.as("postedUserNickname"),
+                                user.imageUrl.as("postedUserImageUrl")
+                        )
                 )
                 .from(vote)
                 .leftJoin(voteResult).on(vote.id.eq(voteResult.voteId))
+                .leftJoin(user).on(vote.postedUserId.eq(user.id))
                 .where(vote.id.eq(voteId))
                 .groupBy(vote.id)
                 .fetchOne();
