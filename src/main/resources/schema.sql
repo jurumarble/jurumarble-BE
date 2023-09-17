@@ -28,8 +28,8 @@ CREATE TABLE vote_content
 (
     id      BIGINT NOT NULL AUTO_INCREMENT,
     vote_id BIGINT NOT NULL,
-    imageA  VARCHAR(255) DEFAULT NULL,
-    imageB  VARCHAR(255) DEFAULT NULL,
+    imageA  VARCHAR(500) DEFAULT NULL,
+    imageB  VARCHAR(500) DEFAULT NULL,
     titleA  VARCHAR(55)  DEFAULT NULL,
     titleB  VARCHAR(55)  DEFAULT NULL,
     PRIMARY KEY (id)
@@ -41,7 +41,7 @@ CREATE TABLE users
     nickname           VARCHAR(20)  DEFAULT NULL,
     email              VARCHAR(55)  DEFAULT NULL,
     password           VARCHAR(15)  DEFAULT NULL,
-    image_url          VARCHAR(255) DEFAULT NULL,
+    image_url          VARCHAR(500) DEFAULT NULL,
     age                INTEGER      DEFAULT NULL,
     gender             VARCHAR(6)   DEFAULT NULL,
     mbti               VARCHAR(4)   DEFAULT NULL,
@@ -76,8 +76,8 @@ CREATE TABLE vote_drink_content
     drink_a_type  VARCHAR(10)  DEFAULT NULL,
     drink_b_name  VARCHAR(30)  DEFAULT NULL,
     drink_b_type  VARCHAR(10)  DEFAULT NULL,
-    drink_a_image VARCHAR(255) DEFAULT NULL,
-    drink_b_image VARCHAR(255) DEFAULT NULL,
+    drink_a_image VARCHAR(500) DEFAULT NULL,
+    drink_b_image VARCHAR(500) DEFAULT NULL,
     region        VARCHAR(10)  DEFAULT NULL,
     PRIMARY KEY (id)
 );
@@ -95,7 +95,7 @@ CREATE TABLE drink
     manufacture_address VARCHAR(255)    DEFAULT NULL,
     region              VARCHAR(10)     DEFAULT NULL,
     price               VARCHAR(50)     DEFAULT NULL,
-    image               VARCHAR(255)    DEFAULT NULL,
+    image               VARCHAR(500)    DEFAULT NULL,
     latitude            DECIMAL(18, 15) DEFAULT NULL,
     longitude           DECIMAL(18, 15) DEFAULT NULL,
     PRIMARY KEY (id)
@@ -131,7 +131,7 @@ CREATE TABLE comment
     like_count       INTEGER      DEFAULT NULL,
     hate_count       INTEGER      DEFAULT NULL,
     parent_id        BIGINT       DEFAULT NULL,
-    restaurant_image VARCHAR(255) DEFAULT NULL,
+    restaurant_image VARCHAR(500) DEFAULT NULL,
     restaurant_name  VARCHAR(255) DEFAULT NULL,
     created_date     TIMESTAMP,
     modified_date    TIMESTAMP,

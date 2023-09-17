@@ -460,7 +460,7 @@ VALUES ('허니비 와인', '기타주류', '아이비영농조합법인', '8%',
         '127.40731816580301');
 INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, region,
                    price, image, latitude, longitude)
-VALUES ('풍정사계 동', '증류식소주', '농업회사법인(유)화양', '42%, 25%', '국내산찹살, 향온곡', '375ml', '충북 청주시 청원구 내수읍 풍정1길 8-4', '충북', '25000',
+VALUES ('풍정사계 동', '증류식소주', '농업회사법인(유)화양', '25%', '국내산찹살, 향온곡', '375ml', '충북 청주시 청원구 내수읍 풍정1길 8-4', '충북', '25000',
         'https://shopping-phinf.pstatic.net/main_8506016/85060161938.jpg', '36.701814585674001', '127.54556270058499');
 INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, region,
                    price, image, latitude, longitude)
@@ -2129,7 +2129,7 @@ VALUES ('신선주 약주', '약주', '농업회사법인(주)신선', '16%',
         'https://shopping-phinf.pstatic.net/main_4070884/40708847116.jpg', '36.6531657154637', '127.54201794414099');
 INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, capacity, manufacture_address, region,
                    price, image, latitude, longitude)
-VALUES ('신선주 증류주', '증류주', '농업회사법인(주)신선', '52% / 42% / 35%',
+VALUES ('신선주 증류주', '증류주', '농업회사법인(주)신선', '35%',
         '찹쌀(국내산), 전통누룩(국내산)(밀함유), 약재(국화, 쇠무릅, 당귀, 하수오, 구기자, 맥문동, 인삼, 육계(계피), 숙지황, 생지황)', '375ml',
         '충청북도 청주시 상당구 것대로 5 1층', '충북', '60,000',
         'https://shopping-phinf.pstatic.net/main_8224024/82240243659.2.jpg', '36.6531657154637', '127.54201794414099');
@@ -2138,6 +2138,9 @@ INSERT INTO drink (name, type, product_name, alcoholic_beverage, raw_material, c
 VALUES ('백이주', '과실주', '농업회사법인 (주)세찬 제조사', '35%', '쌀(국산), 홍마늘액(국산), 감초(국산), 개량누룩(국산), 효모, 정제효소제, 정제수, 밀함유', '800ml',
         '경상북도 영천시 임고면 포은로 842-50', '경북', '30,000',
         'https://shopping-phinf.pstatic.net/main_8304112/83041122592.jpg', '36.0451664108259', '128.995207775642');
+
+UPDATE drink
+SET alcoholic_beverage = REPLACE(alcoholic_beverage, '%', '');
 
 
 
