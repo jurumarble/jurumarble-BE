@@ -1,12 +1,13 @@
-package co.kr.jurumarble.vote.dto;
+package co.kr.jurumarble.vote.dto.request;
 
 import co.kr.jurumarble.user.enums.AgeType;
+import co.kr.jurumarble.user.enums.AlcoholLimitType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
 import co.kr.jurumarble.vote.domain.VoteContent;
 import co.kr.jurumarble.vote.domain.VoteDrinkContent;
 import co.kr.jurumarble.vote.enums.VoteType;
-import co.kr.jurumarble.vote.repository.dto.VoteCommonData;
+import co.kr.jurumarble.vote.repository.dto.VoteWithPostedUserCommonData;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class VoteData {
+public class VoteWithPostedUserData {
 
     private Long voteId;
     private Long postedUserId;
@@ -33,9 +34,15 @@ public class VoteData {
     private String titleB;
     private String region;
     private LocalDateTime createdAt;
+    private GenderType postedUserGender;
+    private Integer postedUserAge;
+    private MbtiType postedUserMbti;
+    private AlcoholLimitType postedUserAlcoholLimit;
+    private String postedUserNickname;
+    private String postedUserImageUrl;
 
-    public static VoteData generateNormalVoteData(VoteCommonData voteCommonData, VoteContent voteContent) {
-        return VoteData.builder()
+    public static VoteWithPostedUserData generateNormalVoteData(VoteWithPostedUserCommonData voteCommonData, VoteContent voteContent) {
+        return VoteWithPostedUserData.builder()
                 .voteId(voteCommonData.getVoteId())
                 .postedUserId(voteCommonData.getPostedUserId())
                 .title(voteCommonData.getTitle())
@@ -50,12 +57,17 @@ public class VoteData {
                 .voteType(voteCommonData.getVoteType())
                 .votedCount(voteCommonData.getVotedCount())
                 .createdAt(voteCommonData.getCreatedAt())
+                .postedUserGender(voteCommonData.getPostedUserGender())
+                .postedUserAge(voteCommonData.getPostedUserAge())
+                .postedUserMbti(voteCommonData.getPostedUserMbti())
+                .postedUserAlcoholLimit(voteCommonData.getPostedUserAlcoholLimit())
+                .postedUserNickname(voteCommonData.getPostedUserNickname())
+                .postedUserImageUrl(voteCommonData.getPostedUserImageUrl())
                 .build();
     }
 
-
-    public static VoteData generateDrinkVoteData(VoteCommonData voteCommonData, VoteDrinkContent voteDrinkContent) {
-        return VoteData.builder()
+    public static VoteWithPostedUserData generateDrinkVoteData(VoteWithPostedUserCommonData voteCommonData, VoteDrinkContent voteDrinkContent) {
+        return VoteWithPostedUserData.builder()
                 .voteId(voteCommonData.getVoteId())
                 .postedUserId(voteCommonData.getPostedUserId())
                 .title(voteCommonData.getTitle())
@@ -71,6 +83,12 @@ public class VoteData {
                 .voteType(voteCommonData.getVoteType())
                 .region(voteDrinkContent.getRegion())
                 .createdAt(voteCommonData.getCreatedAt())
+                .postedUserGender(voteCommonData.getPostedUserGender())
+                .postedUserAge(voteCommonData.getPostedUserAge())
+                .postedUserMbti(voteCommonData.getPostedUserMbti())
+                .postedUserAlcoholLimit(voteCommonData.getPostedUserAlcoholLimit())
+                .postedUserNickname(voteCommonData.getPostedUserNickname())
+                .postedUserImageUrl(voteCommonData.getPostedUserImageUrl())
                 .build();
     }
 }

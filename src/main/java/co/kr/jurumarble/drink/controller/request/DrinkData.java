@@ -15,7 +15,7 @@ public class DrinkData {
     private Long id;
     private String name;
     private String type;
-    private String productName;
+    private String manufacturer;
     private String alcoholicBeverage;
     private String rawMaterial;
     private String capacity;
@@ -31,7 +31,7 @@ public class DrinkData {
         this.id = drink.getId();
         this.name = drink.getName();
         this.type = drink.getType();
-        this.productName = drink.getProductName();
+        this.manufacturer = drink.getManufacturer();
         this.alcoholicBeverage = drink.getAlcoholicBeverage();
         this.rawMaterial = drink.getRawMaterial();
         this.capacity = drink.getCapacity();

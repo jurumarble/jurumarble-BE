@@ -32,7 +32,7 @@ public class UserController {
     }
 
     @Operation(summary = "유저 정보 추가")
-    @PatchMapping("/additional-info")
+    @PutMapping("/additional-info")
     public ResponseEntity<HttpStatus> addUserInfo(@RequestAttribute Long userId, @RequestBody AddInfoRequest addInfoRequest) {
         userService.addUserInfo(userId, addInfoRequest.toAddUserInfo());
         return ResponseEntity.ok().build();

@@ -12,6 +12,7 @@ import co.kr.jurumarble.vote.domain.*;
 import co.kr.jurumarble.vote.dto.DoVoteInfo;
 import co.kr.jurumarble.vote.dto.GetIsUserVoted;
 import co.kr.jurumarble.vote.dto.VoteData;
+import co.kr.jurumarble.vote.dto.request.VoteWithPostedUserData;
 import co.kr.jurumarble.vote.enums.SortByType;
 import co.kr.jurumarble.vote.enums.VoteType;
 import co.kr.jurumarble.vote.repository.VoteContentRepository;
@@ -20,6 +21,7 @@ import co.kr.jurumarble.vote.repository.VoteRepository;
 import co.kr.jurumarble.vote.repository.VoteResultRepository;
 import co.kr.jurumarble.vote.repository.dto.HotDrinkVoteData;
 import co.kr.jurumarble.vote.repository.dto.VoteCommonData;
+import co.kr.jurumarble.vote.repository.dto.VoteWithPostedUserCommonData;
 import co.kr.jurumarble.vote.service.request.CreateDrinkVoteServiceRequest;
 import co.kr.jurumarble.vote.service.request.CreateNormalVoteServiceRequest;
 import lombok.RequiredArgsConstructor;
@@ -67,17 +69,16 @@ public class VoteService {
         return voteGenerator.createDrinkVote(vote, voteDrinkContent);
     }
 
-    public VoteData getVote(Long voteId) {
-        VoteCommonData voteCommonData = voteRepository.findVoteCommonDataByVoteId(voteId).orElseThrow(VoteNotFoundException::new);
-
+    public VoteWithPostedUserData getVote(Long voteId) {
+        VoteWithPostedUserCommonData voteCommonData = voteRepository.findVoteCommonDataByVoteId(voteId).orElseThrow(VoteNotFoundException::new);
         if (VoteType.NORMAL == voteCommonData.getVoteType()) {
             VoteContent voteContent = voteContentRepository.findByVoteId(voteId).orElseThrow(VoteContentNotFoundException::new);
-            return VoteData.generateNormalVoteData(voteCommonData, voteContent);
+            return VoteWithPostedUserData.generateNormalVoteData(voteCommonData, voteContent);
         }
 
         if (VoteType.DRINK == voteCommonData.getVoteType()) {
             VoteDrinkContent voteDrinkContent = voteDrinkContentRepository.findByVoteId(voteId).orElseThrow(VoteDrinkContentNotFoundException::new);
-            return VoteData.generateDrinkVoteData(voteCommonData, voteDrinkContent);
+            return VoteWithPostedUserData.generateDrinkVoteData(voteCommonData, voteDrinkContent);
         }
 
         throw new VoteTypeNotMatchException();
