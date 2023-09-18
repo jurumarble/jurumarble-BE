@@ -88,7 +88,7 @@ CREATE TABLE drink
     id                  BIGINT NOT NULL AUTO_INCREMENT,
     name                VARCHAR(30)     DEFAULT NULL,
     type                VARCHAR(10)     DEFAULT NULL,
-    product_name        VARCHAR(50)     DEFAULT NULL,
+    manufacturer        VARCHAR(50)     DEFAULT NULL,
     alcoholic_beverage  VARCHAR(100)    DEFAULT NULL,
     raw_material        VARCHAR(255)    DEFAULT NULL,
     capacity            VARCHAR(50)     DEFAULT NULL,
