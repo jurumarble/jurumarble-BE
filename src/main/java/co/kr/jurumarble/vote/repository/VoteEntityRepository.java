@@ -1,5 +1,6 @@
 package co.kr.jurumarble.vote.repository;
 
+import co.kr.jurumarble.user.enums.AlcoholLimitType;
 import co.kr.jurumarble.user.enums.ChoiceType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
@@ -36,7 +37,7 @@ public interface VoteEntityRepository {
 
     List<Vote> findByTitleContains(String keyword, int recommendCount);
 
-    Long countByVoteAndChoiceAndGenderAndAgeAndMBTI(Long voteId, ChoiceType choiceType, GenderType gender, Integer classifyAge, MbtiType mbti);
+    Long countByVoteAndChoiceAndGenderAndAgeAndMBTI(Long voteId, ChoiceType choiceType, GenderType gender, Integer classifyAge, MbtiType mbti, AlcoholLimitType alcoholLimit);
 
     Optional<HotDrinkVoteData> getHotDrinkVote(LocalDateTime nowTime);
 

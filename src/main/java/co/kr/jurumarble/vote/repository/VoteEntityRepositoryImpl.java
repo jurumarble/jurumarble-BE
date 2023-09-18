@@ -1,5 +1,6 @@
 package co.kr.jurumarble.vote.repository;
 
+import co.kr.jurumarble.user.enums.AlcoholLimitType;
 import co.kr.jurumarble.user.enums.ChoiceType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
@@ -232,7 +233,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
     }
 
     @Override
-    public Long countByVoteAndChoiceAndGenderAndAgeAndMBTI(Long voteId, ChoiceType choiceType, GenderType gender, Integer age, MbtiType mbti) {
+    public Long countByVoteAndChoiceAndGenderAndAgeAndMBTI(Long voteId, ChoiceType choiceType, GenderType gender, Integer age, MbtiType mbti, AlcoholLimitType alcoholLimit) {
 
         BooleanBuilder whereClause = new BooleanBuilder();
         whereClause.and(voteResult.choice.eq(choiceType)); // 항상 포함되는 조건
@@ -247,13 +248,16 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
         if (mbti != null) {
             whereClause.and(user.mbti.eq(mbti));
         }
+        if (alcoholLimit != null) {
+            whereClause.and(user.alcoholLimit.eq(alcoholLimit));
+        }
 
         return jpaQueryFactory
                 .selectFrom(vote)
                 .innerJoin(voteResult)
                 .on(vote.id.eq(voteResult.voteId))
                 .innerJoin(user)
-                .on(vote.postedUserId.eq(user.id))
+                .on(voteResult.votedUserId.eq(user.id))
                 .where(whereClause)
                 .fetchCount();
     }
