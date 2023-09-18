@@ -243,7 +243,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
             whereClause.and(user.gender.eq(gender));
         }
         if (age != null) {
-            whereClause.and(user.age.eq(age));
+            whereClause.and(user.age.between(age, age + 9));
         }
         if (mbti != null) {
             whereClause.and(user.mbti.eq(mbti));
