@@ -22,8 +22,7 @@ public class Drink {
 
     private String type;
 
-    @Column(name = "product_name")
-    private String productName;
+    private String manufacturer;
 
     @Column(name = "alcoholic_beverage")
     private String alcoholicBeverage;
@@ -47,11 +46,11 @@ public class Drink {
     private Double longitude;
 
     @Builder
-    public Drink(Long id, String name, String type, String productName, String alcoholicBeverage, String rawMaterial, String capacity, String manufactureAddress, String region, String price, String image, Double latitude, Double longitude) {
+    public Drink(Long id, String name, String type, String manufacturer, String alcoholicBeverage, String rawMaterial, String capacity, String manufactureAddress, String region, String price, String image, Double latitude, Double longitude) {
         this.id = id;
         this.name = name;
         this.type = type;
-        this.productName = productName;
+        this.manufacturer = manufacturer;
         this.alcoholicBeverage = alcoholicBeverage;
         this.rawMaterial = rawMaterial;
         this.capacity = capacity;
