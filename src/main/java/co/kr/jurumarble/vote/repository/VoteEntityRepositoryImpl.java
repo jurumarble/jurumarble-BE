@@ -1,5 +1,6 @@
 package co.kr.jurumarble.vote.repository;
 
+import co.kr.jurumarble.user.enums.AlcoholLimitType;
 import co.kr.jurumarble.user.enums.ChoiceType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
@@ -10,6 +11,7 @@ import co.kr.jurumarble.vote.dto.VoteData;
 import co.kr.jurumarble.vote.enums.VoteType;
 import co.kr.jurumarble.vote.repository.dto.HotDrinkVoteData;
 import co.kr.jurumarble.vote.repository.dto.VoteCommonData;
+import co.kr.jurumarble.vote.repository.dto.VoteWithPostedUserCommonData;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -60,7 +62,9 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                                 vote.filteredAge,
                                 vote.filteredMbti,
                                 voteResult.id.count().as("votedCount"),
-                                vote.voteType)
+                                vote.voteType,
+                                vote.createdDate.as("createdAt")
+                        )
                 )
                 .from(vote)
                 .leftJoin(voteResult).on(vote.id.eq(voteResult.voteId))
@@ -107,9 +111,10 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                                 vote.filteredAge,
                                 vote.filteredMbti,
                                 voteResult.count().as("voteCount"),
-                                vote.voteType
-
-                        ))
+                                vote.voteType,
+                                vote.createdDate.as("createdAt")
+                        )
+                )
                 .from(vote)
                 .leftJoin(voteResult).on(vote.id.eq(voteResult.voteId))
                 .where(keywordExpression)
@@ -228,7 +233,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
     }
 
     @Override
-    public Long countByVoteAndChoiceAndGenderAndAgeAndMBTI(Long voteId, ChoiceType choiceType, GenderType gender, Integer age, MbtiType mbti) {
+    public Long countByVoteAndChoiceAndGenderAndAgeAndMBTI(Long voteId, ChoiceType choiceType, GenderType gender, Integer age, MbtiType mbti, AlcoholLimitType alcoholLimit) {
 
         BooleanBuilder whereClause = new BooleanBuilder();
         whereClause.and(voteResult.choice.eq(choiceType)); // 항상 포함되는 조건
@@ -238,10 +243,13 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
             whereClause.and(user.gender.eq(gender));
         }
         if (age != null) {
-            whereClause.and(user.age.eq(age));
+            whereClause.and(user.age.between(age, age + 9));
         }
         if (mbti != null) {
             whereClause.and(user.mbti.eq(mbti));
+        }
+        if (alcoholLimit != null) {
+            whereClause.and(user.alcoholLimit.eq(alcoholLimit));
         }
 
         return jpaQueryFactory
@@ -249,7 +257,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .innerJoin(voteResult)
                 .on(vote.id.eq(voteResult.voteId))
                 .innerJoin(user)
-                .on(vote.postedUserId.eq(user.id))
+                .on(voteResult.votedUserId.eq(user.id))
                 .where(whereClause)
                 .fetchCount();
     }
@@ -370,11 +378,11 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
     }
 
     @Override
-    public Optional<VoteCommonData> findVoteCommonDataByVoteId(Long voteId) {
-        VoteCommonData voteCommonData = jpaQueryFactory
+    public Optional<VoteWithPostedUserCommonData> findVoteCommonDataByVoteId(Long voteId) {
+        VoteWithPostedUserCommonData voteCommonData = jpaQueryFactory
                 .select(
                         Projections.bean(
-                                VoteCommonData.class,
+                                VoteWithPostedUserCommonData.class,
                                 vote.id.as("voteId"),
                                 vote.postedUserId,
                                 vote.title,
@@ -383,10 +391,19 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                                 vote.filteredAge,
                                 vote.filteredMbti,
                                 voteResult.id.count().as("votedCount"),
-                                vote.voteType)
+                                vote.voteType,
+                                vote.createdDate.as("createdAt"),
+                                user.gender.as("postedUserGender"),
+                                user.age.as("postedUserAge"),
+                                user.mbti.as("postedUserMbti"),
+                                user.alcoholLimit.as("postedUserAlcoholLimit"),
+                                user.nickname.as("postedUserNickname"),
+                                user.imageUrl.as("postedUserImageUrl")
+                        )
                 )
                 .from(vote)
                 .leftJoin(voteResult).on(vote.id.eq(voteResult.voteId))
+                .leftJoin(user).on(vote.postedUserId.eq(user.id))
                 .where(vote.id.eq(voteId))
                 .groupBy(vote.id)
                 .fetchOne();

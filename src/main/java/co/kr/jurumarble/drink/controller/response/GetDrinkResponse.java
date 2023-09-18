@@ -18,8 +18,8 @@ public class GetDrinkResponse {
     @Schema(description = "전통주 타입", example = "막걸리")
     private String type;
 
-    @Schema(description = "상품 이름", example = "진도 꿀 막걸리")
-    private String productName;
+    @Schema(description = "제조사 명", example = "(주)막걸리 장인")
+    private String manufacturer;
 
     @Schema(description = "전통주 도수", example = "4%~6%")
     private String alcoholicBeverage;
@@ -37,11 +37,11 @@ public class GetDrinkResponse {
     private String image;
 
     @Builder
-    private GetDrinkResponse(Long drinkId, String name, String type, String productName, String alcoholicBeverage, String rawMaterial, String capacity, String manufactureAddress, String image) {
+    private GetDrinkResponse(Long drinkId, String name, String type, String manufacturer, String alcoholicBeverage, String rawMaterial, String capacity, String manufactureAddress, String image) {
         this.drinkId = drinkId;
         this.name = name;
         this.type = type;
-        this.productName = productName;
+        this.manufacturer = manufacturer;
         this.alcoholicBeverage = alcoholicBeverage;
         this.rawMaterial = rawMaterial;
         this.capacity = capacity;

@@ -2,10 +2,7 @@ package co.kr.jurumarble.statistics.service;
 
 import co.kr.jurumarble.exception.vote.VoteNotFoundException;
 import co.kr.jurumarble.statistics.dto.VoteSelectResultData;
-import co.kr.jurumarble.user.enums.AgeType;
-import co.kr.jurumarble.user.enums.ChoiceType;
-import co.kr.jurumarble.user.enums.GenderType;
-import co.kr.jurumarble.user.enums.MbtiType;
+import co.kr.jurumarble.user.enums.*;
 import co.kr.jurumarble.vote.domain.Vote;
 import co.kr.jurumarble.vote.repository.VoteRepository;
 import co.kr.jurumarble.vote.repository.VoteResultRepository;
@@ -33,17 +30,17 @@ public class StatisticsService {
         return totalVoteCount;
     }
 
-    public VoteSelectResultData getSelectedStatistics(Long voteId, GenderType gender, AgeType age, MbtiType mbti) {
+    public VoteSelectResultData getSelectedStatistics(Long voteId, GenderType gender, AgeType age, MbtiType mbti, AlcoholLimitType alcoholLimit) {
 
         Integer classifyAge = null;
 
         if (age != null)
             classifyAge = Integer.valueOf(age.getValue().substring(0, 2));
 
-        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+        voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
-        Long totalCountA = voteRepository.countByVoteAndChoiceAndGenderAndAgeAndMBTI(voteId, ChoiceType.A, gender, classifyAge, mbti);
-        Long totalCountB = voteRepository.countByVoteAndChoiceAndGenderAndAgeAndMBTI(voteId, ChoiceType.B, gender, classifyAge, mbti);
+        Long totalCountA = voteRepository.countByVoteAndChoiceAndGenderAndAgeAndMBTI(voteId, ChoiceType.A, gender, classifyAge, mbti, alcoholLimit);
+        Long totalCountB = voteRepository.countByVoteAndChoiceAndGenderAndAgeAndMBTI(voteId, ChoiceType.B, gender, classifyAge, mbti, alcoholLimit);
 
         float totalVoteCount = totalCountA + totalCountB;
 
