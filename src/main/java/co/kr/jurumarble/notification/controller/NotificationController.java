@@ -1,9 +1,7 @@
 package co.kr.jurumarble.notification.controller;
 
 import co.kr.jurumarble.notification.service.NotificationService;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -14,13 +12,9 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public class NotificationController {
     private final NotificationService notificationService;
 
-    @GetMapping(value = "/subscribe/{id}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter subscribe(@PathVariable Long id) {
-        return notificationService.subscribe(id);
+    @GetMapping(value = "/subscribe", produces = "text/event-stream")
+    public SseEmitter subscribe(@RequestAttribute Long userId, @RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "") String lastEventId) {
+        return notificationService.subscribe(userId, lastEventId);
     }
 
-    @PostMapping("/send-data/{id}")
-    public void sendData(@PathVariable Long id) {
-        notificationService.notify(id, "data");
-    }
 }
