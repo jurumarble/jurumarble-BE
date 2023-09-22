@@ -30,7 +30,7 @@ public class NotificationService {
 
         // (1-5) 503 에러를 방지하기 위한 더미 이벤트 전송
         String eventId = makeTimeIncludeId(userId);
-        sendNotification(emitter, eventId, emitterId, "EventStream Created. [userEmail=" + userId + "]");
+        sendNotification(emitter, eventId, emitterId, "EventStream Created. [userId=" + userId + "]");
 
         // (1-6) 클라이언트가 미수신한 Event 목록이 존재할 경우 전송하여 Event 유실을 예방
         if (hasLostData(lastEventId)) {
@@ -42,9 +42,9 @@ public class NotificationService {
 
     public void send(User receiver, Notification.NotificationType notificationType, String content, String url) {
         Notification notification = notifyRepository.save(createNotification(receiver, notificationType, content, url)); // (2-1)
-        String receiverEmail = receiver.getEmail(); // (2-2)
-        String eventId = receiverEmail + "_" + System.currentTimeMillis(); // (2-3)
-        Map<String, SseEmitter> emitters = emitterRepository.findAllEmitterStartWithByMemberId(receiverEmail); // (2-4)
+        String receiverId = String.valueOf(receiver.getId()); // (2-2)
+        String eventId = receiverId + "_" + System.currentTimeMillis(); // (2-3)
+        Map<String, SseEmitter> emitters = emitterRepository.findAllEmitterStartWithByUserId(receiverId); // (2-4)
         emitters.forEach( // (2-5)
                 (key, emitter) -> {
                     emitterRepository.saveEventCache(key, notification);
