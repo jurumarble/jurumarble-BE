@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface EnjoyDrinkRepository extends JpaRepository<EnjoyDrink, Long> {
+public interface EnjoyDrinkRepository extends JpaRepository<EnjoyDrink, Long>, EnjoyDrinkEntityRepository{
 
     Optional<EnjoyDrink> findByUserIdAndDrinkId(Long userId, Long drinkId);
 
