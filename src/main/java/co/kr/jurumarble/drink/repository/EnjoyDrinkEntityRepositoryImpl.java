@@ -50,7 +50,7 @@ public class EnjoyDrinkEntityRepositoryImpl implements EnjoyDrinkEntityRepositor
                 .groupBy(drink.id)
                 .orderBy(enjoyDrink.createdDate.desc())
                 .offset(pageNum * pageSize)
-                .limit(pageSize)
+                .limit(pageSize + 1)
                 .fetch();
 
     }
