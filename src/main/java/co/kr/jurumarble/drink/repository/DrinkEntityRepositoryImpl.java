@@ -102,7 +102,7 @@ public class DrinkEntityRepositoryImpl implements DrinkEntityRepository {
                 .groupBy(drink.id)
                 .orderBy(drink.name.asc())
                 .offset(pageNo * pageSize)
-                .limit(pageSize)
+                .limit(pageSize + 1)
                 .fetch();
     }
 
@@ -136,7 +136,7 @@ public class DrinkEntityRepositoryImpl implements DrinkEntityRepository {
                 .groupBy(drink.id)
                 .orderBy(drink.id.count().desc(), drink.name.asc())
                 .offset(pageNo * pageSize)
-                .limit(pageSize)
+                .limit(pageSize + 1)
                 .fetch();
 
     }
