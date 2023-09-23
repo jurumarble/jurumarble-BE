@@ -72,7 +72,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .groupBy(vote.id)
                 .orderBy(voteResult.id.count().desc())
                 .offset(pageNo * pageSize)
-                .limit(pageSize)
+                .limit(pageSize + 1)
                 .fetch();
     }
 
@@ -121,7 +121,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .groupBy(vote.id)
                 .orderBy(vote.createdDate.desc())
                 .offset(pageNo * pageSize)
-                .limit(pageSize)
+                .limit(pageSize + 1)
                 .fetch();
 
     }
@@ -158,7 +158,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .groupBy(vote.id)
                 .orderBy(vote.createdDate.desc())
                 .offset(pageNum * pageSize)
-                .limit(pageSize)
+                .limit(pageSize + 1)
                 .fetch();
     }
 
@@ -196,7 +196,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .groupBy(vote.id)
                 .orderBy(vote.id.count().desc())
                 .offset(pageNum * pageSize)
-                .limit(pageSize)
+                .limit(pageSize + 1)
                 .fetch();
     }
 
@@ -329,7 +329,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .where(voteResult.votedUserId.eq(userId))
                 .orderBy(vote.createdDate.desc())
                 .offset(pageNum * pageSize)
-                .limit(pageSize)
+                .limit(pageSize + 1)
                 .fetch();
     }
 
@@ -350,7 +350,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .where(vote.postedUserId.eq(userId))
                 .orderBy(vote.createdDate.desc())
                 .offset(pageNum * pageSize)
-                .limit(pageSize)
+                .limit(pageSize + 1)
                 .fetch();
     }
 
@@ -373,7 +373,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .where(bookmark.userId.eq(userId))
                 .orderBy(vote.createdDate.desc())
                 .offset(pageNum * pageSize)
-                .limit(pageSize)
+                .limit(pageSize + 1)
                 .fetch();
     }
 
