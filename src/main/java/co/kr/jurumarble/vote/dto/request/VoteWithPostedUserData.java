@@ -35,13 +35,14 @@ public class VoteWithPostedUserData {
     private String region;
     private LocalDateTime createdAt;
     private GenderType postedUserGender;
-    private Integer postedUserAge;
+    private AgeType postedUserAge;
     private MbtiType postedUserMbti;
     private AlcoholLimitType postedUserAlcoholLimit;
     private String postedUserNickname;
     private String postedUserImageUrl;
 
     public static VoteWithPostedUserData generateNormalVoteData(VoteWithPostedUserCommonData voteCommonData, VoteContent voteContent) {
+        AgeType classifiedAge = classifyAge(voteCommonData.getPostedUserAge());
         return VoteWithPostedUserData.builder()
                 .voteId(voteCommonData.getVoteId())
                 .postedUserId(voteCommonData.getPostedUserId())
@@ -58,7 +59,7 @@ public class VoteWithPostedUserData {
                 .votedCount(voteCommonData.getVotedCount())
                 .createdAt(voteCommonData.getCreatedAt())
                 .postedUserGender(voteCommonData.getPostedUserGender())
-                .postedUserAge(voteCommonData.getPostedUserAge())
+                .postedUserAge(classifiedAge)
                 .postedUserMbti(voteCommonData.getPostedUserMbti())
                 .postedUserAlcoholLimit(voteCommonData.getPostedUserAlcoholLimit())
                 .postedUserNickname(voteCommonData.getPostedUserNickname())
@@ -67,6 +68,7 @@ public class VoteWithPostedUserData {
     }
 
     public static VoteWithPostedUserData generateDrinkVoteData(VoteWithPostedUserCommonData voteCommonData, VoteDrinkContent voteDrinkContent) {
+        AgeType classifiedAge = classifyAge(voteCommonData.getPostedUserAge());
         return VoteWithPostedUserData.builder()
                 .voteId(voteCommonData.getVoteId())
                 .postedUserId(voteCommonData.getPostedUserId())
@@ -84,11 +86,39 @@ public class VoteWithPostedUserData {
                 .region(voteDrinkContent.getRegion())
                 .createdAt(voteCommonData.getCreatedAt())
                 .postedUserGender(voteCommonData.getPostedUserGender())
-                .postedUserAge(voteCommonData.getPostedUserAge())
+                .postedUserAge(classifiedAge)
                 .postedUserMbti(voteCommonData.getPostedUserMbti())
                 .postedUserAlcoholLimit(voteCommonData.getPostedUserAlcoholLimit())
                 .postedUserNickname(voteCommonData.getPostedUserNickname())
                 .postedUserImageUrl(voteCommonData.getPostedUserImageUrl())
                 .build();
+    }
+
+    public static AgeType classifyAge(Integer age) {
+        if (age == null) {
+            return AgeType.NULL; // 혹은 원하는 다른 동작 수행
+        }
+        AgeType ageGroup;
+        switch (age / 10) {
+            case 1:
+                ageGroup = AgeType.teenager;
+                break;
+            case 2:
+                ageGroup = AgeType.twenties;
+                break;
+            case 3:
+                ageGroup = AgeType.thirties;
+                break;
+            case 4:
+                ageGroup = AgeType.fourties;
+                break;
+            case 5:
+                ageGroup = AgeType.fifties;
+                break;
+            default:
+                ageGroup = AgeType.NULL;
+                break;
+        }
+        return ageGroup;
     }
 }
