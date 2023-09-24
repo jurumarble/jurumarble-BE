@@ -48,8 +48,7 @@ public class Notification extends BaseTimeEntity {
     }
 
     public enum NotificationType{
-        YATA, REVIEW, CHAT
+        VOTE, COMMENT, ADMIN_NOTIFY
     }
-
 
 }
