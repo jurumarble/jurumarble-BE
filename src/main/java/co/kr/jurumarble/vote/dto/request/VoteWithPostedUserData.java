@@ -96,7 +96,7 @@ public class VoteWithPostedUserData {
 
     public static AgeType classifyAge(Integer age) {
         if (age == null) {
-            return AgeType.NULL; // 혹은 원하는 다른 동작 수행
+            return null; // 혹은 원하는 다른 동작 수행
         }
         AgeType ageGroup;
         switch (age / 10) {
@@ -116,7 +116,7 @@ public class VoteWithPostedUserData {
                 ageGroup = AgeType.fifties;
                 break;
             default:
-                ageGroup = AgeType.NULL;
+                ageGroup = null;
                 break;
         }
         return ageGroup;

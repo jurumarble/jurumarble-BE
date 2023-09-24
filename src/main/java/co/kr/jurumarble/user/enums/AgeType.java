@@ -7,8 +7,7 @@ public enum AgeType implements EnumModel {
     twenties("20대"),
     thirties("30대"),
     fourties("40대"),
-    fifties("50대"),
-    NULL("null");
+    fifties("50대");
 
     private String value;
 
