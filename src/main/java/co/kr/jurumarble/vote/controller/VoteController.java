@@ -5,10 +5,12 @@ import co.kr.jurumarble.vote.dto.GetIsUserVoted;
 import co.kr.jurumarble.vote.dto.VoteData;
 import co.kr.jurumarble.vote.dto.request.*;
 import co.kr.jurumarble.vote.dto.response.GetIsUserVotedResponse;
+import co.kr.jurumarble.vote.dto.response.GetMyVotesResponse;
 import co.kr.jurumarble.vote.dto.response.GetVoteListResponse;
 import co.kr.jurumarble.vote.dto.response.GetVoteRecommendListResponse;
 import co.kr.jurumarble.vote.enums.SortByType;
 import co.kr.jurumarble.vote.repository.dto.HotDrinkVoteData;
+import co.kr.jurumarble.vote.repository.dto.MyVotesCntData;
 import co.kr.jurumarble.vote.repository.dto.VoteWithPostedUserCommonData;
 import co.kr.jurumarble.vote.service.VoteService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -138,9 +140,9 @@ public class VoteController {
     }
 
     @Operation(summary = "마이페이지 각 투표 갯수 조회", description = "작성한 투표, 참여한 투표, 북마크 투표 갯수 조회 기능")
-    @GetMapping("/drinks/hot")
-    public ResponseEntity<HotDrinkVoteData> getMyVotes() {
-        HotDrinkVoteData hotDrinkVote = voteService.getHotDrinkVote();
-        return ResponseEntity.ok().body(hotDrinkVote);
+    @GetMapping("/myActivities")
+    public ResponseEntity<GetMyVotesResponse> getMyVotes(@RequestAttribute Long userId) {
+        MyVotesCntData myVotes = voteService.getMyVotes(userId);
+        return ResponseEntity.ok().body(GetMyVotesResponse.fromVotesCntData(myVotes));
     }
 }
