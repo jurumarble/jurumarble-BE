@@ -3,6 +3,7 @@ package co.kr.jurumarble.user.domain;
 import co.kr.jurumarble.common.domain.BaseTimeEntity;
 import co.kr.jurumarble.exception.user.AlreadyDeletedUserException;
 import co.kr.jurumarble.user.dto.AddUserInfo;
+import co.kr.jurumarble.user.dto.UpdateUserInfo;
 import co.kr.jurumarble.user.enums.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -109,6 +110,7 @@ public class User extends BaseTimeEntity {
         this.age = addUserInfo.getAge();
         this.gender = addUserInfo.getGender();
         this.alcoholLimit = addUserInfo.getAlcoholLimit();
+        this.modifiedMbtiDate = LocalDateTime.now();
     }
 
 //    public void mappingBookmark(Bookmark bookmark) {
@@ -136,5 +138,16 @@ public class User extends BaseTimeEntity {
 
     public void deleteUser() {
         this.deletedDate = LocalDateTime.now();
+    }
+
+    public void updateUser(UpdateUserInfo info) {
+        this.nickname = info.getNickname();
+        this.imageUrl = info.getImageUrl();
+        this.alcoholLimit = info.getAlcoholLimit();
+    }
+
+    public void updateMbti(MbtiType mbti) {
+        this.mbti = mbti;
+        this.modifiedMbtiDate = LocalDateTime.now();
     }
 }
