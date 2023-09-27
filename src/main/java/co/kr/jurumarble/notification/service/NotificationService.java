@@ -1,15 +1,18 @@
 package co.kr.jurumarble.notification.service;
 
+import co.kr.jurumarble.exception.user.UserNotFoundException;
 import co.kr.jurumarble.notification.Notification;
 import co.kr.jurumarble.notification.NotificationDto;
 import co.kr.jurumarble.notification.repository.EmitterRepository;
 import co.kr.jurumarble.notification.repository.NotificationRepository;
 import co.kr.jurumarble.user.domain.User;
+import co.kr.jurumarble.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -19,6 +22,7 @@ public class NotificationService {
     // SSE 연결 지속 시간 설정
     private final EmitterRepository emitterRepository;
     private final NotificationRepository notifyRepository;
+    private final UserRepository userRepository;
 
     // [1] subscribe()
     public SseEmitter subscribe(Long userId, String lastEventId) { // (1-1)
@@ -90,5 +94,23 @@ public class NotificationService {
                 .url(url)
                 .isRead(false)
                 .build();
+    }
+
+    public void sendNotificationToUser(Long userId, CreateNotificationServiceRequest request) {
+        User receiver = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Notification.NotificationType type = Notification.NotificationType.ADMIN_NOTIFY;
+        String message = request.getMessage();
+        String relatedUrl = request.getRelatedUrl();
+        send(receiver, type, message, relatedUrl);
+    }
+
+    public void sendNotificationToAllUsers(CreateNotificationServiceRequest request) {
+        List<User> allUsers = userRepository.findAll();
+        Notification.NotificationType type = Notification.NotificationType.ADMIN_NOTIFY;
+        String message = request.getMessage();
+        String relatedUrl = request.getRelatedUrl();
+        for (User user : allUsers) {
+            send(user, type, message, relatedUrl);
+        }
     }
 }

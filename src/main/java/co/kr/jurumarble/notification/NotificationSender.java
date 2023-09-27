@@ -28,4 +28,7 @@ public class NotificationSender {
         notificationService.send(receiver, Notification.NotificationType.COMMENT, content, url);
         logger.info("Notification sent to user: {}, type: {}, content: {}, url: {}", receiver.getId(), Notification.NotificationType.COMMENT, content, url);
     }
+
+
+
 }
