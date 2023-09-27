@@ -9,6 +9,7 @@ import co.kr.jurumarble.vote.domain.VoteContent;
 import co.kr.jurumarble.vote.domain.VoteDrinkContent;
 import co.kr.jurumarble.vote.dto.VoteData;
 import co.kr.jurumarble.vote.repository.dto.HotDrinkVoteData;
+import co.kr.jurumarble.vote.repository.dto.MyVotesCntData;
 import co.kr.jurumarble.vote.repository.dto.VoteCommonData;
 import co.kr.jurumarble.vote.repository.dto.VoteWithPostedUserCommonData;
 import org.springframework.data.domain.Pageable;
@@ -47,5 +48,9 @@ public interface VoteEntityRepository {
 
     List<VoteCommonData> findVoteCommonDataByPostedUserId(Long userId, int pageNum, int pageSize);
 
-    List<VoteCommonData> findCommonVoteDataBybookmark(Long userId, int pageNum, int pageSize);
+    List<VoteCommonData> findCommonVoteDataByBookmark(Long userId, int pageNum, int pageSize);
+
+    Long findMyParticipatedVoteCnt(Long userId);
+    Long findMyWrittenVoteCnt(Long userId);
+    Long findMyBookmarkedVoteCnt(Long userId);
 }

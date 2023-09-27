@@ -10,6 +10,7 @@ import co.kr.jurumarble.vote.domain.VoteDrinkContent;
 import co.kr.jurumarble.vote.dto.VoteData;
 import co.kr.jurumarble.vote.enums.VoteType;
 import co.kr.jurumarble.vote.repository.dto.HotDrinkVoteData;
+import co.kr.jurumarble.vote.repository.dto.MyVotesCntData;
 import co.kr.jurumarble.vote.repository.dto.VoteCommonData;
 import co.kr.jurumarble.vote.repository.dto.VoteWithPostedUserCommonData;
 import com.querydsl.core.BooleanBuilder;
@@ -355,7 +356,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
     }
 
     @Override
-    public List<VoteCommonData> findCommonVoteDataBybookmark(Long userId, int pageNum, int pageSize) {
+    public List<VoteCommonData> findCommonVoteDataByBookmark(Long userId, int pageNum, int pageSize) {
         return jpaQueryFactory.select(
                         Projections.bean(VoteCommonData.class,
                                 vote.id.as("voteId"),
@@ -375,6 +376,32 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .offset(pageNum * pageSize)
                 .limit(pageSize + 1)
                 .fetch();
+    }
+
+    @Override
+    public Long findMyParticipatedVoteCnt(Long userId) {
+        return jpaQueryFactory.select(vote.count())
+                .from(vote)
+                .innerJoin(voteResult).on(vote.id.eq(voteResult.voteId))
+                .where(voteResult.votedUserId.eq(userId))
+                .fetchOne();
+    }
+
+    @Override
+    public Long findMyWrittenVoteCnt(Long userId) {
+        return jpaQueryFactory.select(vote.count())
+                .from(vote)
+                .where(vote.postedUserId.eq(userId))
+                .fetchOne();
+    }
+
+    @Override
+    public Long findMyBookmarkedVoteCnt(Long userId) {
+        return jpaQueryFactory.select(vote.count())
+                .from(vote)
+                .innerJoin(bookmark)
+                .on(bookmark.voteId.eq(vote.id))
+                .fetchOne();
     }
 
     @Override
