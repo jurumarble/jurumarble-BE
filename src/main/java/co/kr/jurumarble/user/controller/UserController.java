@@ -4,6 +4,7 @@ import co.kr.jurumarble.user.dto.LoginToken;
 import co.kr.jurumarble.user.dto.request.AddInfoRequest;
 import co.kr.jurumarble.user.dto.request.KakaoLoginRequest;
 import co.kr.jurumarble.user.dto.request.NaverLoginRequest;
+import co.kr.jurumarble.user.dto.request.UpdateUserRequest;
 import co.kr.jurumarble.user.dto.response.GetUserResponse;
 import co.kr.jurumarble.user.dto.response.TokenResponse;
 import co.kr.jurumarble.user.service.UserService;
@@ -56,6 +57,13 @@ public class UserController {
     @DeleteMapping()
     public ResponseEntity<HttpStatus> deleteUser(@RequestAttribute Long userId) {
         userService.deleteUser(userId);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "유저 정보 수정")
+    @PutMapping("")
+    public ResponseEntity<HttpStatus> updateUser(@RequestBody UpdateUserRequest request, @RequestAttribute Long userId) {
+        userService.updateUser(userId, request.toUpdateUserInfo());
         return ResponseEntity.ok().build();
     }
 }
