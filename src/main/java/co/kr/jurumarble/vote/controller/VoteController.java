@@ -136,4 +136,11 @@ public class VoteController {
         HotDrinkVoteData hotDrinkVote = voteService.getHotDrinkVote();
         return ResponseEntity.ok().body(hotDrinkVote);
     }
+
+    @Operation(summary = "마이페이지 각 투표 갯수 조회", description = "작성한 투표, 참여한 투표, 북마크 투표 갯수 조회 기능")
+    @GetMapping("/drinks/hot")
+    public ResponseEntity<HotDrinkVoteData> getMyVotes() {
+        HotDrinkVoteData hotDrinkVote = voteService.getHotDrinkVote();
+        return ResponseEntity.ok().body(hotDrinkVote);
+    }
 }
