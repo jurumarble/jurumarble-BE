@@ -212,4 +212,12 @@ public class VoteService {
         PageRequest pageRequest = PageRequest.of(page, size);
         return voteFinder.getVoteData(pageRequest, commonVoteDataBybookmark);
     }
+
+    public User getVoteCreator(Long typeId) {
+        Long creatorId = voteRepository.findById(typeId)
+                .map(Vote::getPostedUserId)
+                .orElseThrow(() -> new VoteNotFoundException());
+        return userRepository.findById(creatorId)
+                .orElseThrow(() -> new UserNotFoundException());
+    }
 }

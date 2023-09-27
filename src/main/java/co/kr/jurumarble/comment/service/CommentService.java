@@ -13,6 +13,7 @@ import co.kr.jurumarble.comment.service.request.UpdateCommentServiceRequest;
 import co.kr.jurumarble.comment.service.request.UpdateRestaurantServiceRequest;
 import co.kr.jurumarble.exception.comment.CommentNotFoundException;
 import co.kr.jurumarble.exception.user.UserNotFoundException;
+import co.kr.jurumarble.notification.NotificationSender;
 import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,7 @@ public class CommentService {
     private final CommentFinder commentFinder;
     private final CommentVoteService commentVoteService;
     private final CommentConverter commentConverter;
+    private final NotificationSender notificationSender;
 
     @Transactional
     public void createComment(CommentType commentType, Long typeId, Long userId, CreateCommentServiceRequest request) {
@@ -46,6 +48,7 @@ public class CommentService {
         Long drinkId = commentVoteService.getDrinkIdIfApplicable(commentType, typeId, userId).orElse(null);
         Comment comment = request.toComment(commentType, parentComment, user, typeId, drinkId);
         commentRepository.save(comment);
+        notificationSender.sendCommentNotification(typeId);
     }
 
 

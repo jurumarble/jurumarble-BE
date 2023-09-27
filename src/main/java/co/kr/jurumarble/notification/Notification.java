@@ -19,18 +19,17 @@ public class Notification extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "notification_id")
     private Long id;
 
     private String content;
 
     private String url;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "is_read")
     private Boolean isRead;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, name = "notification_type")
     private NotificationType notificationType;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
@@ -47,7 +46,7 @@ public class Notification extends BaseTimeEntity {
         this.isRead = isRead;
     }
 
-    public enum NotificationType{
+    public enum NotificationType {
         VOTE, COMMENT, ADMIN_NOTIFY
     }
 
