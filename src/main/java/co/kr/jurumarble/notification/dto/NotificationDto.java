@@ -1,5 +1,6 @@
-package co.kr.jurumarble.notification;
+package co.kr.jurumarble.notification.dto;
 
+import co.kr.jurumarble.notification.domain.Notification;
 import lombok.*;
 
 public class NotificationDto {

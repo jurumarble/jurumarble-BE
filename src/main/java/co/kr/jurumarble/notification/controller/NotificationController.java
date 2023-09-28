@@ -1,7 +1,7 @@
 package co.kr.jurumarble.notification.controller;
 
 import co.kr.jurumarble.notification.dto.CreateNotificationRequest;
-import co.kr.jurumarble.notification.NotificationSender;
+import co.kr.jurumarble.notification.service.NotificationSender;
 import co.kr.jurumarble.notification.service.NotificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

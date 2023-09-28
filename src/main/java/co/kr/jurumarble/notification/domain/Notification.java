@@ -1,4 +1,4 @@
-package co.kr.jurumarble.notification;
+package co.kr.jurumarble.notification.domain;
 
 import co.kr.jurumarble.common.domain.BaseTimeEntity;
 import co.kr.jurumarble.user.domain.User;

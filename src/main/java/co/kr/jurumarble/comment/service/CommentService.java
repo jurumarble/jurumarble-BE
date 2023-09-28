@@ -1,6 +1,5 @@
 package co.kr.jurumarble.comment.service;
 
-import co.kr.jurumarble.client.tourApi.RestaurantInfoDto;
 import co.kr.jurumarble.client.tourApi.RestaurantListDto;
 import co.kr.jurumarble.comment.domain.Comment;
 import co.kr.jurumarble.comment.enums.CommentType;
@@ -13,11 +12,12 @@ import co.kr.jurumarble.comment.service.request.UpdateCommentServiceRequest;
 import co.kr.jurumarble.comment.service.request.UpdateRestaurantServiceRequest;
 import co.kr.jurumarble.exception.comment.CommentNotFoundException;
 import co.kr.jurumarble.exception.user.UserNotFoundException;
-import co.kr.jurumarble.notification.NotificationSender;
+import co.kr.jurumarble.notification.event.CommentCreatedEvent;
 import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +36,7 @@ public class CommentService {
     private final CommentFinder commentFinder;
     private final CommentVoteService commentVoteService;
     private final CommentConverter commentConverter;
-    private final NotificationSender notificationSender;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public void createComment(CommentType commentType, Long typeId, Long userId, CreateCommentServiceRequest request) {
@@ -48,7 +48,7 @@ public class CommentService {
         Long drinkId = commentVoteService.getDrinkIdIfApplicable(commentType, typeId, userId).orElse(null);
         Comment comment = request.toComment(commentType, parentComment, user, typeId, drinkId);
         commentRepository.save(comment);
-        notificationSender.sendCommentNotification(typeId);
+        eventPublisher.publishEvent(new CommentCreatedEvent(this, comment.getVoteId()));
     }
 
 

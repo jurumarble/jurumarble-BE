@@ -1,8 +1,8 @@
 package co.kr.jurumarble.notification.service;
 
 import co.kr.jurumarble.exception.user.UserNotFoundException;
-import co.kr.jurumarble.notification.Notification;
-import co.kr.jurumarble.notification.NotificationDto;
+import co.kr.jurumarble.notification.domain.Notification;
+import co.kr.jurumarble.notification.dto.NotificationDto;
 import co.kr.jurumarble.notification.repository.EmitterRepository;
 import co.kr.jurumarble.notification.repository.NotificationRepository;
 import co.kr.jurumarble.user.domain.User;
@@ -112,5 +112,7 @@ public class NotificationService {
         for (User user : allUsers) {
             send(user, type, message, relatedUrl);
         }
+        //비동기화 해야한다.
     }
+
 }

@@ -5,6 +5,7 @@ import co.kr.jurumarble.drink.domain.dto.DrinksUsedForVote;
 import co.kr.jurumarble.exception.user.UserNotAccessRightException;
 import co.kr.jurumarble.exception.user.UserNotFoundException;
 import co.kr.jurumarble.exception.vote.*;
+import co.kr.jurumarble.notification.event.DoVoteEvent;
 import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.user.repository.UserRepository;
 import co.kr.jurumarble.utils.PageableConverter;
@@ -23,6 +24,7 @@ import co.kr.jurumarble.vote.repository.dto.VoteCommonData;
 import co.kr.jurumarble.vote.service.request.CreateDrinkVoteServiceRequest;
 import co.kr.jurumarble.vote.service.request.CreateNormalVoteServiceRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -48,6 +50,7 @@ public class VoteService {
     private final VoteFinder voteFinder;
     private final PageableConverter pageableConverter;
     private final VoteDrinkContentRepository voteDrinkContentRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
 
     @Transactional
@@ -133,6 +136,7 @@ public class VoteService {
         voteValidator.validateParticipateVote(vote, user);
         VoteResult voteResult = new VoteResult(vote.getId(), user.getId(), info.getChoice());
         voteResultRepository.save(voteResult);
+        eventPublisher.publishEvent(new DoVoteEvent(this, vote.getId()));
     }
 
     public Slice<VoteData> sortFindVotes(String keyword, SortByType sortBy, Integer page, Integer size) {
@@ -213,11 +217,4 @@ public class VoteService {
         return voteFinder.getVoteData(pageRequest, commonVoteDataBybookmark);
     }
 
-    public User getVoteCreator(Long typeId) {
-        Long creatorId = voteRepository.findById(typeId)
-                .map(Vote::getPostedUserId)
-                .orElseThrow(() -> new VoteNotFoundException());
-        return userRepository.findById(creatorId)
-                .orElseThrow(() -> new UserNotFoundException());
-    }
 }
