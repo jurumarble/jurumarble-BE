@@ -8,15 +8,22 @@ import co.kr.jurumarble.notification.repository.NotificationRepository;
 import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class NotificationService {
     private static final Long DEFAULT_TIMEOUT = 60L * 1000 * 60;
     // SSE 연결 지속 시간 설정
@@ -109,10 +116,15 @@ public class NotificationService {
         Notification.NotificationType type = Notification.NotificationType.ADMIN_NOTIFY;
         String message = request.getMessage();
         String relatedUrl = request.getRelatedUrl();
-        for (User user : allUsers) {
-            send(user, type, message, relatedUrl);
-        }
-        //비동기화 해야한다.
+
+        allUsers.stream()
+                .forEach(user -> CompletableFuture.runAsync(() -> sendAsync(user, type, message, relatedUrl)));
+    }
+
+    private void sendAsync(User receiver, Notification.NotificationType notificationType, String content, String relatedUrl) {
+        send(receiver,notificationType,content,relatedUrl);
+        log.info("Thread: {}, Notification sent to user: {}, type: {}, content: {}, url: {}",
+                Thread.currentThread().getName(), receiver.getId(), Notification.NotificationType.COMMENT,content, relatedUrl);
     }
 
 }

@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -31,16 +32,16 @@ public class NotificationController {
 
     @Operation(summary = "단일 사용자 알림 전송", description = "특정 사용자에게 알림 메시지를 전송합니다.")
     @PostMapping("/send-to-user/{userId}")
-    public ResponseEntity<?> sendToUser(@PathVariable Long userId, @RequestBody @Valid CreateNotificationRequest createNotificationRequest) {
+    public ResponseEntity sendToUser(@PathVariable Long userId, @RequestBody @Valid CreateNotificationRequest createNotificationRequest) {
         notificationService.sendNotificationToUser(userId, createNotificationRequest.toServiceRequest());
-        return ResponseEntity.ok().build();
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @Operation(summary = "전체 사용자 알림 전송", description = "모든 사용자에게 알림 메시지를 전송합니다.")
     @PostMapping("/send-to-all-users")
     public ResponseEntity<?> sendToAllUsers(@RequestBody @Valid CreateNotificationRequest createNotificationRequest){
         notificationService.sendNotificationToAllUsers(createNotificationRequest.toServiceRequest());
-        return ResponseEntity.ok().build();
+        return new ResponseEntity(HttpStatus.OK);
     }
-
+    
 }

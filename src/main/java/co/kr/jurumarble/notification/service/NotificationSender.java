@@ -1,34 +1,34 @@
 package co.kr.jurumarble.notification.service;
 
-import co.kr.jurumarble.notification.domain.Notification;
-import co.kr.jurumarble.notification.event.CommentCreatedEvent;
 import co.kr.jurumarble.exception.user.UserNotFoundException;
 import co.kr.jurumarble.exception.vote.VoteNotFoundException;
+import co.kr.jurumarble.notification.domain.Notification;
+import co.kr.jurumarble.notification.event.CommentCreatedEvent;
+import co.kr.jurumarble.notification.event.DoVoteEvent;
 import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.user.repository.UserRepository;
 import co.kr.jurumarble.vote.domain.Vote;
 import co.kr.jurumarble.vote.domain.VoteResult;
 import co.kr.jurumarble.vote.repository.VoteRepository;
 import co.kr.jurumarble.vote.repository.VoteResultRepository;
-import co.kr.jurumarble.notification.event.DoVoteEvent;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class NotificationSender {
 
     private final VoteRepository voteRepository;
     private final UserRepository userRepository;
     private final VoteResultRepository voteResultRepository;
     private final NotificationService notificationService;
-    private static final Logger logger = LoggerFactory.getLogger(NotificationSender.class);
 
 
     @TransactionalEventListener
@@ -49,7 +49,11 @@ public class NotificationSender {
         String content = "투표에 댓글이 달렸습니다.";
         String url = "/api/votes/" + voteId;
         notificationService.send(receiver, Notification.NotificationType.COMMENT, content, url);
-        logger.info("Notification sent to user: {}, type: {}, content: {}, url: {}", receiver.getId(), Notification.NotificationType.COMMENT, content, url);
+        log.info("Thread: {}, Notification sent to user: {}, type: {}, content: {}, url: {}",
+                Thread.currentThread().getName(),
+                receiver.getId(),
+                Notification.NotificationType.COMMENT,
+                content, url);
     }
 
     public void sendNotificationsForVoters(Long voteId) {
@@ -64,9 +68,12 @@ public class NotificationSender {
 
     private void sendNotificationsToVoters(String content, String url, List<VoteResult> voteResultList) {
         for (VoteResult result : voteResultList) {
-            User receiver = userRepository.findById(result.getVotedUserId()).orElseThrow(UserNotFoundException::new);
-            notificationService.send(receiver, Notification.NotificationType.VOTE, content, url);
-            logger.info("Notification sent to user: {}, type: {}, content: {}, url: {}", receiver.getId(), Notification.NotificationType.VOTE, content, url);
+            CompletableFuture.runAsync(() -> {
+                User receiver = userRepository.findById(result.getVotedUserId()).orElseThrow(UserNotFoundException::new);
+                notificationService.send(receiver, Notification.NotificationType.VOTE, content, url);
+                log.info("Thread: {}, Notification sent to user: {}, type: {}, content: {}, url: {}",
+                        Thread.currentThread().getName(), receiver.getId(), Notification.NotificationType.COMMENT, content, url);
+            });
         }
     }
 
