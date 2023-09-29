@@ -50,4 +50,7 @@ public class Notification extends BaseTimeEntity {
         VOTE, COMMENT, ADMIN_NOTIFY
     }
 
+    public void setIsReadTrue() {
+        isRead = true;
+    }
 }

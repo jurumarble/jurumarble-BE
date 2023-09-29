@@ -3,25 +3,41 @@ package co.kr.jurumarble.notification.dto;
 import co.kr.jurumarble.notification.domain.Notification;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class NotificationDto {
-    @AllArgsConstructor
+    Long id;
+
+    String url;
+
+    String content;
+
+    Notification.NotificationType type;
+
+    Boolean isRead;
+
+    LocalDateTime createdAt;
+
     @Builder
-    @NoArgsConstructor
-    @Getter
-    @Setter
-    public static class Response {
-        String id;
-        String name;
-        String content;
-        String type;
-        String createdAt;
-        public static Response createResponse(Notification notification) {
-            return Response.builder()
-                    .content(notification.getContent())
-                    .id(notification.getId().toString())
-                    .name(notification.getReceiver().getNickname())
-                    .createdAt(notification.getCreatedDate().toString())
-                    .build();
-        }
+    public NotificationDto(Long id, String url, String content, Notification.NotificationType type, Boolean isRead, LocalDateTime createdAt) {
+        this.id = id;
+        this.url = url;
+        this.content = content;
+        this.type = type;
+        this.isRead = isRead;
+        this.createdAt = createdAt;
+    }
+
+
+    public static NotificationDto from(Notification notification) {
+        return NotificationDto.builder()
+                .id(notification.getId())
+                .url(notification.getUrl())
+                .content(notification.getContent())
+                .type(notification.getNotificationType())
+                .isRead(notification.getIsRead())
+                .createdAt(notification.getCreatedDate()).build();
     }
 }

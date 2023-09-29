@@ -9,16 +9,14 @@ import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,7 +26,7 @@ public class NotificationService {
     private static final Long DEFAULT_TIMEOUT = 60L * 1000 * 60;
     // SSE 연결 지속 시간 설정
     private final EmitterRepository emitterRepository;
-    private final NotificationRepository notifyRepository;
+    private final NotificationRepository notificationRepository;
     private final UserRepository userRepository;
 
     // [1] subscribe()
@@ -51,15 +49,16 @@ public class NotificationService {
         return emitter; // (1-7)
     }
 
+    @Transactional
     public void send(User receiver, Notification.NotificationType notificationType, String content, String url) {
-        Notification notification = notifyRepository.save(createNotification(receiver, notificationType, content, url)); // (2-1)
+        Notification notification = notificationRepository.save(createNotification(receiver, notificationType, content, url)); // (2-1)
         String receiverId = String.valueOf(receiver.getId()); // (2-2)
         String eventId = receiverId + "_" + System.currentTimeMillis(); // (2-3)
         Map<String, SseEmitter> emitters = emitterRepository.findAllEmitterStartWithByUserId(receiverId); // (2-4)
         emitters.forEach( // (2-5)
                 (key, emitter) -> {
                     emitterRepository.saveEventCache(key, notification);
-                    sendNotification(emitter, eventId, key, NotificationDto.Response.createResponse(notification));
+                    sendNotification(emitter, eventId, key, NotificationDto.from(notification));
                 }
         );
     }
@@ -125,6 +124,22 @@ public class NotificationService {
         send(receiver,notificationType,content,relatedUrl);
         log.info("Thread: {}, Notification sent to user: {}, type: {}, content: {}, url: {}",
                 Thread.currentThread().getName(), receiver.getId(), Notification.NotificationType.COMMENT,content, relatedUrl);
+    }
+
+    public List<NotificationDto> getNotificationDtos(Long userId) {
+        return getNotificationsByUserId(userId).stream()
+                .map(NotificationDto::from)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void setNotificationsAsRead(Long userId) {
+        getNotificationsByUserId(userId).forEach(Notification::setIsReadTrue);
+    }
+
+    private List<Notification> getNotificationsByUserId(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        return notificationRepository.findAllByReceiver(user);
     }
 
 }
