@@ -49,8 +49,14 @@ public class NotificationController {
     @GetMapping("")
     public ResponseEntity<List<NotificationDto>> getNotifications(@RequestAttribute Long userId) {
         List<NotificationDto> notifications = notificationService.getNotificationDtos(userId);
-        notificationService.setNotificationsAsRead(userId);
         return new ResponseEntity(notifications, HttpStatus.OK);
+    }
+
+    @Operation(summary = "알림 읽음 처리", description = "사용자가 클릭한 알림을 읽음 처리 합니다.")
+    @PostMapping("/{notificationId}/read")
+    public ResponseEntity setNotificationAsRead(@PathVariable Long notificationId) {
+        notificationService.setNotificationsAsRead(notificationId);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
 }
