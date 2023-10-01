@@ -8,6 +8,7 @@ import co.kr.jurumarble.exception.vote.*;
 import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.user.repository.UserRepository;
 import co.kr.jurumarble.utils.PageableConverter;
+import co.kr.jurumarble.utils.SpringContext;
 import co.kr.jurumarble.vote.domain.*;
 import co.kr.jurumarble.vote.dto.DoVoteInfo;
 import co.kr.jurumarble.vote.dto.GetIsUserVoted;
@@ -28,6 +29,7 @@ import co.kr.jurumarble.vote.service.request.CreateNormalVoteServiceRequest;
 import co.kr.jurumarble.vote.service.request.UpdateDrinkVoteServiceRequest;
 import co.kr.jurumarble.vote.service.request.UpdateNormalVoteServiceRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -90,7 +92,7 @@ public class VoteService {
     public VoteWithPostedUserData getVoteWithPostedUserData(Long voteId) {
         VoteWithPostedUserCommonData voteCommonData = voteRepository.findVoteCommonDataByVoteId(voteId).orElseThrow(VoteNotFoundException::new);
         VoteType voteType = voteCommonData.getVoteType();
-        return voteType.execute(voteId, voteCommonData);
+        return voteType.execute(voteId, voteCommonData, SpringContext.getContext());
     }
 
     @Transactional
