@@ -72,7 +72,7 @@ public class VoteService {
         return voteGenerator.createDrinkVote(vote, voteDrinkContent);
     }
 
-    public VoteWithPostedUserData getVote(Long voteId) {
+    public VoteWithPostedUserData getVoteWithPostedUserData(Long voteId) {
         VoteWithPostedUserCommonData voteCommonData = voteRepository.findVoteCommonDataByVoteId(voteId).orElseThrow(VoteNotFoundException::new);
         if (VoteType.NORMAL == voteCommonData.getVoteType()) {
             VoteContent voteContent = voteContentRepository.findByVoteId(voteId).orElseThrow(VoteContentNotFoundException::new);

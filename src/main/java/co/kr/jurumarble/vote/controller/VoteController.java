@@ -87,7 +87,7 @@ public class VoteController {
     @GetMapping("/{voteId}")
     public ResponseEntity<VoteWithPostedUserData> getVote(@PathVariable Long voteId) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(voteService.getVote(voteId));
+                .body(voteService.getVoteWithPostedUserData(voteId));
     }
 
     @Operation(summary = "일반 투표 수정", description = "파라미터에 voteId, 바디에 {title, detail, titleA, titleB} json 형식으로 보내주시면 됩니다.")
