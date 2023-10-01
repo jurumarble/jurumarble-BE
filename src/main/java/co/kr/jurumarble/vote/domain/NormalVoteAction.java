@@ -5,8 +5,10 @@ import co.kr.jurumarble.vote.dto.request.VoteWithPostedUserData;
 import co.kr.jurumarble.vote.repository.VoteContentRepository;
 import co.kr.jurumarble.vote.repository.dto.VoteWithPostedUserCommonData;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
+@Component
 public class NormalVoteAction implements VoteAction{
     private final VoteContentRepository voteContentRepository;
     @Override
