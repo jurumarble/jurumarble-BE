@@ -1,13 +1,18 @@
 package co.kr.jurumarble.vote.enums;
 
 import co.kr.jurumarble.common.enums.EnumModel;
+import co.kr.jurumarble.utils.SpringContext;
 import co.kr.jurumarble.vote.domain.DrinkVoteAction;
 import co.kr.jurumarble.vote.domain.NormalVoteAction;
 import co.kr.jurumarble.vote.domain.VoteAction;
+import co.kr.jurumarble.vote.dto.request.VoteWithPostedUserData;
+import co.kr.jurumarble.vote.repository.VoteContentRepository;
+import co.kr.jurumarble.vote.repository.VoteDrinkContentRepository;
+import co.kr.jurumarble.vote.repository.dto.VoteWithPostedUserCommonData;
 
 public enum VoteType implements EnumModel {
-    NORMAL("일반투표", new NormalVoteAction()),
-    DRINK("전통주투표", new DrinkVoteAction());
+    NORMAL("일반투표", new NormalVoteAction(SpringContext.getBean(VoteContentRepository.class))),
+    DRINK("전통주투표", new DrinkVoteAction(SpringContext.getBean(VoteDrinkContentRepository.class)));
 
     private final String value;
     private final VoteAction action;
@@ -27,7 +32,7 @@ public enum VoteType implements EnumModel {
         return value;
     }
 
-    public void execute() {
-        action.execute();
+    public VoteWithPostedUserData execute(Long voteId, VoteWithPostedUserCommonData voteCommonData) {
+        return action.getVoteWithPostedUserData(voteId, voteCommonData);
     }
 }

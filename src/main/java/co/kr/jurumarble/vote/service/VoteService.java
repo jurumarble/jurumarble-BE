@@ -72,19 +72,25 @@ public class VoteService {
         return voteGenerator.createDrinkVote(vote, voteDrinkContent);
     }
 
+//    public VoteWithPostedUserData getVoteWithPostedUserData(Long voteId) {
+//        VoteWithPostedUserCommonData voteCommonData = voteRepository.findVoteCommonDataByVoteId(voteId).orElseThrow(VoteNotFoundException::new);
+//        if (VoteType.NORMAL == voteCommonData.getVoteType()) {
+//            VoteContent voteContent = voteContentRepository.findByVoteId(voteId).orElseThrow(VoteContentNotFoundException::new);
+//            return VoteWithPostedUserData.generateNormalVoteData(voteCommonData, voteContent);
+//        }
+//
+//        if (VoteType.DRINK == voteCommonData.getVoteType()) {
+//            VoteDrinkContent voteDrinkContent = voteDrinkContentRepository.findByVoteId(voteId).orElseThrow(VoteDrinkContentNotFoundException::new);
+//            return VoteWithPostedUserData.generateDrinkVoteData(voteCommonData, voteDrinkContent);
+//        }
+//
+//        throw new VoteTypeNotMatchException();
+//    }
+
     public VoteWithPostedUserData getVoteWithPostedUserData(Long voteId) {
         VoteWithPostedUserCommonData voteCommonData = voteRepository.findVoteCommonDataByVoteId(voteId).orElseThrow(VoteNotFoundException::new);
-        if (VoteType.NORMAL == voteCommonData.getVoteType()) {
-            VoteContent voteContent = voteContentRepository.findByVoteId(voteId).orElseThrow(VoteContentNotFoundException::new);
-            return VoteWithPostedUserData.generateNormalVoteData(voteCommonData, voteContent);
-        }
-
-        if (VoteType.DRINK == voteCommonData.getVoteType()) {
-            VoteDrinkContent voteDrinkContent = voteDrinkContentRepository.findByVoteId(voteId).orElseThrow(VoteDrinkContentNotFoundException::new);
-            return VoteWithPostedUserData.generateDrinkVoteData(voteCommonData, voteDrinkContent);
-        }
-
-        throw new VoteTypeNotMatchException();
+        VoteType voteType = voteCommonData.getVoteType();
+        return voteType.execute(voteId, voteCommonData);
     }
 
     @Transactional
