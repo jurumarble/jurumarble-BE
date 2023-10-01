@@ -1,6 +1,6 @@
 package co.kr.jurumarble.vote.dto.request;
 
-import co.kr.jurumarble.vote.service.UpdateNormalVoteServiceRequest;
+import co.kr.jurumarble.vote.service.request.UpdateNormalVoteServiceRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
