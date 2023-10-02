@@ -13,7 +13,7 @@ public class GetUserResponse {
     private final String nickname;
     private final String email;
     private final String imageUrl;
-    private final AgeType ageType;
+    private final Integer yearOfBirth;
     private final GenderType gender;
     private final MbtiType mbti;
     private final AlcoholLimitType alcoholLimit;
@@ -22,7 +22,7 @@ public class GetUserResponse {
         this.nickname = user.getNickname();
         this.email = user.getEmail();
         this.imageUrl = user.getImageUrl();
-        this.ageType = user.classifyAge();
+        this.yearOfBirth = user.getYearOfBirth();
         this.gender = user.getGender();
         this.mbti = user.getMbti();
         this.alcoholLimit = user.getAlcoholLimit();
