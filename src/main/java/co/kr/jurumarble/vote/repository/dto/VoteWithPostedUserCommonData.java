@@ -27,7 +27,7 @@ public class VoteWithPostedUserCommonData {
     private LocalDateTime createdAt;
     private String postedUserName;
     private GenderType postedUserGender;
-    private Integer postedUserAge;
+    private Integer postedUserYearOfBirth;
     private MbtiType postedUserMbti;
     private AlcoholLimitType postedUserAlcoholLimit;
     private String postedUserNickname;
