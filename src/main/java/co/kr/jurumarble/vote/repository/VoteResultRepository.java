@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface VoteResultRepository extends JpaRepository<VoteResult, Long> {
@@ -16,4 +17,6 @@ public interface VoteResultRepository extends JpaRepository<VoteResult, Long> {
     Optional<VoteResult> getVoteResultByVoteIdAndUserId(@Param("voteId") Long voteId, @Param("userId") Long userId);
 
     Optional<VoteResult> findByVotedUserIdAndVoteId(Long userId, Long voteId);
+
+    List<VoteResult> findByVoteId(Long typeId);
 }
