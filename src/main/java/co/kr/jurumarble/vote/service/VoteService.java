@@ -8,12 +8,12 @@ import co.kr.jurumarble.exception.vote.*;
 import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.user.repository.UserRepository;
 import co.kr.jurumarble.utils.PageableConverter;
+import co.kr.jurumarble.utils.SpringContext;
 import co.kr.jurumarble.vote.domain.*;
 import co.kr.jurumarble.vote.dto.DoVoteInfo;
 import co.kr.jurumarble.vote.dto.GetIsUserVoted;
 import co.kr.jurumarble.vote.dto.VoteData;
 import co.kr.jurumarble.vote.dto.request.VoteWithPostedUserData;
-import co.kr.jurumarble.vote.dto.response.GetMyVotesResponse;
 import co.kr.jurumarble.vote.enums.SortByType;
 import co.kr.jurumarble.vote.enums.VoteType;
 import co.kr.jurumarble.vote.repository.VoteContentRepository;
@@ -26,7 +26,10 @@ import co.kr.jurumarble.vote.repository.dto.VoteCommonData;
 import co.kr.jurumarble.vote.repository.dto.VoteWithPostedUserCommonData;
 import co.kr.jurumarble.vote.service.request.CreateDrinkVoteServiceRequest;
 import co.kr.jurumarble.vote.service.request.CreateNormalVoteServiceRequest;
+import co.kr.jurumarble.vote.service.request.UpdateDrinkVoteServiceRequest;
+import co.kr.jurumarble.vote.service.request.UpdateNormalVoteServiceRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -71,19 +74,10 @@ public class VoteService {
         return voteGenerator.createDrinkVote(vote, voteDrinkContent);
     }
 
-    public VoteWithPostedUserData getVote(Long voteId) {
+    public VoteWithPostedUserData getVoteWithPostedUserData(Long voteId) {
         VoteWithPostedUserCommonData voteCommonData = voteRepository.findVoteCommonDataByVoteId(voteId).orElseThrow(VoteNotFoundException::new);
-        if (VoteType.NORMAL == voteCommonData.getVoteType()) {
-            VoteContent voteContent = voteContentRepository.findByVoteId(voteId).orElseThrow(VoteContentNotFoundException::new);
-            return VoteWithPostedUserData.generateNormalVoteData(voteCommonData, voteContent);
-        }
-
-        if (VoteType.DRINK == voteCommonData.getVoteType()) {
-            VoteDrinkContent voteDrinkContent = voteDrinkContentRepository.findByVoteId(voteId).orElseThrow(VoteDrinkContentNotFoundException::new);
-            return VoteWithPostedUserData.generateDrinkVoteData(voteCommonData, voteDrinkContent);
-        }
-
-        throw new VoteTypeNotMatchException();
+        VoteType voteType = voteCommonData.getVoteType();
+        return voteType.execute(voteId, voteCommonData, SpringContext.getContext());
     }
 
     @Transactional

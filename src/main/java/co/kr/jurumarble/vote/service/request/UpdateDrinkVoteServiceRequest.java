@@ -1,4 +1,4 @@
-package co.kr.jurumarble.vote.service;
+package co.kr.jurumarble.vote.service.request;
 
 import co.kr.jurumarble.drink.domain.dto.DrinkIdsUsedForVote;
 import lombok.Builder;
