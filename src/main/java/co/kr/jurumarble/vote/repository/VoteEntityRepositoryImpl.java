@@ -426,7 +426,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                                 vote.voteType,
                                 vote.createdDate.as("createdAt"),
                                 user.gender.as("postedUserGender"),
-                                user.age.as("postedUserAge"),
+                                user.yearOfBirth.as("postedUserYearOfBirth"),
                                 user.mbti.as("postedUserMbti"),
                                 user.alcoholLimit.as("postedUserAlcoholLimit"),
                                 user.nickname.as("postedUserNickname"),
