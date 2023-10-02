@@ -1,6 +1,6 @@
 package co.kr.jurumarble.vote.domain;
 
-import co.kr.jurumarble.vote.service.UpdateNormalVoteServiceRequest;
+import co.kr.jurumarble.vote.service.request.UpdateNormalVoteServiceRequest;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
