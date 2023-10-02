@@ -9,9 +9,11 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -20,6 +22,7 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "users")
 @Where(clause = "deleted_date IS NULL")
+@Slf4j
 public class User extends BaseTimeEntity {
 
     @Id
@@ -79,9 +82,12 @@ public class User extends BaseTimeEntity {
     }
 
     public AgeType classifyAge() {
-        if (age == null) {
-            return null; // 혹은 원하는 다른 동작 수행
+        if (yearOfBirth == null) {
+            return null; // 혹은 원하는 다른 동작 
         }
+        LocalDate localDate = LocalDate.now();
+        int age = localDate.getYear() - yearOfBirth + 1;
+        log.info("******************" + age);
         AgeType ageGroup;
         switch (age / 10) {
             case 1:
