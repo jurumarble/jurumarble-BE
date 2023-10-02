@@ -31,6 +31,7 @@ import co.kr.jurumarble.vote.service.request.UpdateDrinkVoteServiceRequest;
 import co.kr.jurumarble.vote.service.request.UpdateNormalVoteServiceRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -76,20 +77,10 @@ public class VoteService {
         return voteGenerator.createDrinkVote(vote, voteDrinkContent);
     }
 
-    public VoteData getVote(Long voteId) {
-        VoteCommonData voteCommonData = voteRepository.findVoteCommonDataByVoteId(voteId).orElseThrow(VoteNotFoundException::new);
-
-        if (VoteType.NORMAL == voteCommonData.getVoteType()) {
-            VoteContent voteContent = voteContentRepository.findByVoteId(voteId).orElseThrow(VoteContentNotFoundException::new);
-            return VoteData.generateNormalVoteData(voteCommonData, voteContent);
-        }
-
-        if (VoteType.DRINK == voteCommonData.getVoteType()) {
-            VoteDrinkContent voteDrinkContent = voteDrinkContentRepository.findByVoteId(voteId).orElseThrow(VoteDrinkContentNotFoundException::new);
-            return VoteData.generateDrinkVoteData(voteCommonData, voteDrinkContent);
-        }
-
-        throw new VoteTypeNotMatchException();
+    public VoteWithPostedUserData getVoteWithPostedUserData(Long voteId) {
+        VoteWithPostedUserCommonData voteCommonData = voteRepository.findVoteCommonDataByVoteId(voteId).orElseThrow(VoteNotFoundException::new);
+        VoteType voteType = voteCommonData.getVoteType();
+        return voteType.execute(voteId, voteCommonData, SpringContext.getContext());
     }
 
     @Transactional
@@ -229,5 +220,4 @@ public class VoteService {
         Long myBookmarkedVoteCnt = voteRepository.findMyBookmarkedVoteCnt(userId);
         return new MyVotesCntData(myWrittenVoteCnt, myParticipatedVoteCnt, myBookmarkedVoteCnt);
     }
-
 }
