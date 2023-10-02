@@ -3,14 +3,17 @@ package co.kr.jurumarble.user.domain;
 import co.kr.jurumarble.common.domain.BaseTimeEntity;
 import co.kr.jurumarble.exception.user.AlreadyDeletedUserException;
 import co.kr.jurumarble.user.dto.AddUserInfo;
+import co.kr.jurumarble.user.dto.UpdateUserInfo;
 import co.kr.jurumarble.user.enums.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -34,7 +37,8 @@ public class User extends BaseTimeEntity {
     @Column(name = "image_url")
     private String imageUrl;
 
-    private Integer age;
+    @Column(name = "year_of_birth")
+    private Integer yearOfBirth;
 
     @Enumerated(EnumType.STRING)
     private GenderType gender;
@@ -61,7 +65,7 @@ public class User extends BaseTimeEntity {
 
 
     @Builder
-    private User(Long id, String nickname, String email, String imageUrl, String password, ProviderType providerType, String providerId, Integer age, GenderType gender, MbtiType mbti, LocalDateTime modifiedMbtiDate) {
+    private User(Long id, String nickname, String email, String imageUrl, String password, ProviderType providerType, String providerId, Integer yearOfBirth, GenderType gender, MbtiType mbti, LocalDateTime modifiedMbtiDate) {
         validIsUserDeleted();
         this.id = id;
         this.nickname = nickname;
@@ -70,16 +74,18 @@ public class User extends BaseTimeEntity {
         this.password = password;
         this.providerType = providerType;
         this.providerId = providerId;
-        this.age = age;
+        this.yearOfBirth = yearOfBirth;
         this.gender = gender;
         this.mbti = mbti;
         this.modifiedMbtiDate = modifiedMbtiDate;
     }
 
     public AgeType classifyAge() {
-        if (age == null) {
-            return AgeType.NULL; // 혹은 원하는 다른 동작 수행
+        if (yearOfBirth == null) {
+            return null;
         }
+        LocalDate localDate = LocalDate.now();
+        int age = localDate.getYear() - yearOfBirth + 1;
         AgeType ageGroup;
         switch (age / 10) {
             case 1:
@@ -98,7 +104,7 @@ public class User extends BaseTimeEntity {
                 ageGroup = AgeType.fifties;
                 break;
             default:
-                ageGroup = AgeType.NULL;
+                ageGroup = null;
                 break;
         }
         return ageGroup;
@@ -106,9 +112,10 @@ public class User extends BaseTimeEntity {
 
     public void addInfo(AddUserInfo addUserInfo) {
         this.mbti = addUserInfo.getMbti();
-        this.age = addUserInfo.getAge();
+        this.yearOfBirth = addUserInfo.getBirthOfAge();
         this.gender = addUserInfo.getGender();
         this.alcoholLimit = addUserInfo.getAlcoholLimit();
+        this.modifiedMbtiDate = LocalDateTime.now();
     }
 
 //    public void mappingBookmark(Bookmark bookmark) {
@@ -136,5 +143,16 @@ public class User extends BaseTimeEntity {
 
     public void deleteUser() {
         this.deletedDate = LocalDateTime.now();
+    }
+
+    public void updateUser(UpdateUserInfo info) {
+        this.nickname = info.getNickname();
+        this.imageUrl = info.getImageUrl();
+        this.alcoholLimit = info.getAlcoholLimit();
+    }
+
+    public void updateMbti(MbtiType mbti) {
+        this.mbti = mbti;
+        this.modifiedMbtiDate = LocalDateTime.now();
     }
 }

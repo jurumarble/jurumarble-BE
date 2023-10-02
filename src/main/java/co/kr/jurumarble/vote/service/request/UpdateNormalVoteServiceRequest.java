@@ -1,4 +1,4 @@
-package co.kr.jurumarble.vote.service;
+package co.kr.jurumarble.vote.service.request;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -3,10 +3,7 @@ package co.kr.jurumarble.comment.service;
 
 import co.kr.jurumarble.comment.domain.Comment;
 import co.kr.jurumarble.comment.domain.Restaurant;
-import co.kr.jurumarble.user.enums.AgeType;
-import co.kr.jurumarble.user.enums.ChoiceType;
-import co.kr.jurumarble.user.enums.GenderType;
-import co.kr.jurumarble.user.enums.MbtiType;
+import co.kr.jurumarble.user.enums.*;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -21,6 +18,7 @@ public class GetCommentData {
     private Long voteId;
     private Long drinkId;
     private String nickName;
+    private AlcoholLimitType alcoholLimitType;
     private Long parentId;
     private String content;
     private String imageUrl;
@@ -46,6 +44,7 @@ public class GetCommentData {
         this.age = comment.getUser().classifyAge();
         this.mbti = comment.getUser().getMbti();
         this.nickName = comment.getUser().getNickname();
+        this.alcoholLimitType = comment.getUser().getAlcoholLimit();
         this.createdDate = comment.getCreatedDate();
         this.children = new ArrayList<>();
         this.likeCount = comment.getLikeCount();
@@ -72,6 +71,7 @@ public class GetCommentData {
         this.age = comment.getUser().classifyAge();
         this.mbti = comment.getUser().getMbti();
         this.nickName = comment.getUser().getNickname();
+        this.alcoholLimitType = comment.getUser().getAlcoholLimit();
         this.createdDate = comment.getCreatedDate();
         this.children = new ArrayList<>();
         this.likeCount = comment.getLikeCount();

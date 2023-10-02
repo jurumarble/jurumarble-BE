@@ -83,7 +83,7 @@ public class DrinkEntityRepositoryImpl implements DrinkEntityRepository {
                                 drink.id,
                                 drink.name,
                                 drink.type,
-                                drink.productName,
+                                drink.manufacturer,
                                 drink.alcoholicBeverage,
                                 drink.rawMaterial,
                                 drink.capacity,
@@ -102,7 +102,7 @@ public class DrinkEntityRepositoryImpl implements DrinkEntityRepository {
                 .groupBy(drink.id)
                 .orderBy(drink.name.asc())
                 .offset(pageNo * pageSize)
-                .limit(pageSize)
+                .limit(pageSize + 1)
                 .fetch();
     }
 
@@ -117,7 +117,7 @@ public class DrinkEntityRepositoryImpl implements DrinkEntityRepository {
                                 drink.id,
                                 drink.name,
                                 drink.type,
-                                drink.productName,
+                                drink.manufacturer,
                                 drink.alcoholicBeverage,
                                 drink.rawMaterial,
                                 drink.capacity,
@@ -136,7 +136,7 @@ public class DrinkEntityRepositoryImpl implements DrinkEntityRepository {
                 .groupBy(drink.id)
                 .orderBy(drink.id.count().desc(), drink.name.asc())
                 .offset(pageNo * pageSize)
-                .limit(pageSize)
+                .limit(pageSize + 1)
                 .fetch();
 
     }

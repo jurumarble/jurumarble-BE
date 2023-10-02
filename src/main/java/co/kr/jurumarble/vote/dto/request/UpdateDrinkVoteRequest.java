@@ -1,6 +1,6 @@
 package co.kr.jurumarble.vote.dto.request;
 
-import co.kr.jurumarble.vote.service.UpdateDrinkVoteServiceRequest;
+import co.kr.jurumarble.vote.service.request.UpdateDrinkVoteServiceRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Getter;

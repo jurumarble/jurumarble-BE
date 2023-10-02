@@ -9,6 +9,8 @@ import co.kr.jurumarble.vote.enums.VoteType;
 import co.kr.jurumarble.vote.repository.dto.VoteCommonData;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -30,6 +32,7 @@ public class VoteData {
     private String titleA;
     private String titleB;
     private String region;
+    private LocalDateTime createdAt;
 
     public static VoteData generateNormalVoteData(VoteCommonData voteCommonData, VoteContent voteContent) {
         return VoteData.builder()
@@ -46,6 +49,7 @@ public class VoteData {
                 .titleB(voteContent.getTitleB())
                 .voteType(voteCommonData.getVoteType())
                 .votedCount(voteCommonData.getVotedCount())
+                .createdAt(voteCommonData.getCreatedAt())
                 .build();
     }
 
@@ -66,6 +70,7 @@ public class VoteData {
                 .votedCount(voteCommonData.getVotedCount())
                 .voteType(voteCommonData.getVoteType())
                 .region(voteDrinkContent.getRegion())
+                .createdAt(voteCommonData.getCreatedAt())
                 .build();
     }
 }

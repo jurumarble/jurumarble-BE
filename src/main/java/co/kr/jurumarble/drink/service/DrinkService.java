@@ -108,23 +108,9 @@ public class DrinkService {
         throw new SortByNotFountException();
     }
 
-    public Slice<DrinkData> getEnjoyDrinks(Long userId, int pageNum, int pageSize) {
-        List<EnjoyDrink> enjoyDrinks = enjoyDrinkRepository.findByUserId(userId);
-        List<Long> drinkIds = extractDrinkIds(enjoyDrinks);
-        List<DrinkData> drinksByEnjoyed = findDrinksByDrinkIds(drinkIds);
+    public Slice<DrinkData> getEnjoyDrinks(Long userId, String regionName, int pageNum, int pageSize) {
+        List<DrinkData> drinksByEnjoyed = enjoyDrinkRepository.findDrinksByUserId(userId, regionName, pageNum, pageSize);
         return pageableConverter.convertListToSlice(drinksByEnjoyed, pageNum, pageSize);
-    }
-
-    private List<Long> extractDrinkIds(List<EnjoyDrink> enjoyDrinks) {
-        return enjoyDrinks.stream()
-                .map(EnjoyDrink::getDrinkId)
-                .collect(Collectors.toList());
-    }
-
-    private List<DrinkData> findDrinksByDrinkIds(List<Long> drinkIds) {
-        return drinkRepository.findDrinksByIdIn(drinkIds).stream()
-                .map(DrinkData::new)
-                .collect(Collectors.toList());
     }
 
     public boolean checkEnjoyed(Long drinkId, Long userId) {

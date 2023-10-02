@@ -1,6 +1,7 @@
 package co.kr.jurumarble.utils;
 
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Component;
 
@@ -11,20 +12,12 @@ import java.util.List;
 public class PageableConverter {
 
     public <T> SliceImpl<T> convertListToSlice(List<T> list, int pageNum, int pageSize) {
-        int start = pageNum * pageSize;
-        int end = Math.min((pageNum + 1) * pageSize, list.size());
-
-        List<T> subList = new ArrayList<>();
-
-        if (start < list.size()) {
-            subList = list.subList(start, end);
+        Pageable pageable = PageRequest.of(pageNum, pageSize);
+        if (list.size() > pageSize) {
+            list.remove(list.size() - 1);
+            return new SliceImpl<>(list, pageable, true);
         }
-
-        boolean hasNext = end < list.size();
-
-        PageRequest pageRequest = PageRequest.of(pageNum, pageSize);
-
-        return new SliceImpl<>(subList, pageRequest, hasNext);
+        return new SliceImpl<>(list, pageable, false);
     }
 
 }

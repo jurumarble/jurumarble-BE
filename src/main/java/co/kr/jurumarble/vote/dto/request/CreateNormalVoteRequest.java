@@ -29,10 +29,10 @@ public class CreateNormalVoteRequest {
     @NotBlank(message = "투표 B항목의 제목은 필수입니다.")
     private String titleB;
 
-    @Schema(description = "A 이미지")
+    @Schema(description = "A 이미지", example = "https://shopping-phinf.pstatic.net/main_8259853/82598534476.2.jpg")
     private String imageA;
 
-    @Schema(description = "B 이미지")
+    @Schema(description = "B 이미지", example = "https://shopping-phinf.pstatic.net/main_8204301/82043013300.5.jpg")
     private String imageB;
 
     @Builder

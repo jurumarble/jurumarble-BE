@@ -5,6 +5,7 @@ import co.kr.jurumarble.statistics.dto.response.SelectStatisticsResponse;
 import co.kr.jurumarble.statistics.dto.response.TotalStatisticsResponse;
 import co.kr.jurumarble.statistics.service.StatisticsService;
 import co.kr.jurumarble.user.enums.AgeType;
+import co.kr.jurumarble.user.enums.AlcoholLimitType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,9 +36,9 @@ public class StatisticsController {
 
     @Operation(summary = "A, B 투표 참여인원, 퍼센테이지 통계", description = "파라미터에 voteId, gender, age, mbti 보내주시면 됩니다.")
     @GetMapping("/votes/{voteId}/select-statistics")
-    public ResponseEntity<SelectStatisticsResponse> getSelectStatistics(@PathVariable("voteId") Long voteId, @RequestParam(required = false) GenderType gender, @RequestParam(required = false) AgeType age, @RequestParam(required = false) MbtiType mbti) {
+    public ResponseEntity<SelectStatisticsResponse> getSelectStatistics(@PathVariable("voteId") Long voteId, @RequestParam(required = false) GenderType gender, @RequestParam(required = false) AgeType age, @RequestParam(required = false) MbtiType mbti, @RequestParam(required = false)AlcoholLimitType alcoholLimit) {
 
-        VoteSelectResultData voteSelectResultData = statisticsService.getSelectedStatistics(voteId, gender, age, mbti);
+        VoteSelectResultData voteSelectResultData = statisticsService.getSelectedStatistics(voteId, gender, age, mbti, alcoholLimit);
 
         return new ResponseEntity(new SelectStatisticsResponse(voteId, voteSelectResultData), HttpStatus.OK);
     }

@@ -1,5 +1,6 @@
 package co.kr.jurumarble.vote.repository;
 
+import co.kr.jurumarble.user.enums.AlcoholLimitType;
 import co.kr.jurumarble.user.enums.ChoiceType;
 import co.kr.jurumarble.user.enums.GenderType;
 import co.kr.jurumarble.user.enums.MbtiType;
@@ -8,7 +9,9 @@ import co.kr.jurumarble.vote.domain.VoteContent;
 import co.kr.jurumarble.vote.domain.VoteDrinkContent;
 import co.kr.jurumarble.vote.dto.VoteData;
 import co.kr.jurumarble.vote.repository.dto.HotDrinkVoteData;
+import co.kr.jurumarble.vote.repository.dto.MyVotesCntData;
 import co.kr.jurumarble.vote.repository.dto.VoteCommonData;
+import co.kr.jurumarble.vote.repository.dto.VoteWithPostedUserCommonData;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
@@ -31,11 +34,11 @@ public interface VoteEntityRepository {
 
     List<VoteData> findDrinkVotesByPopularity(String keyword, String region, int pageNum, int pageSize);
 
-    Optional<VoteCommonData> findVoteCommonDataByVoteId(Long voteId);
+    Optional<VoteWithPostedUserCommonData> findVoteCommonDataByVoteId(Long voteId);
 
     List<Vote> findByTitleContains(String keyword, int recommendCount);
 
-    Long countByVoteAndChoiceAndGenderAndAgeAndMBTI(Long voteId, ChoiceType choiceType, GenderType gender, Integer classifyAge, MbtiType mbti);
+    Long countByVoteAndChoiceAndGenderAndAgeAndMBTI(Long voteId, ChoiceType choiceType, GenderType gender, Integer classifyAge, MbtiType mbti, AlcoholLimitType alcoholLimit);
 
     Optional<HotDrinkVoteData> getHotDrinkVote(LocalDateTime nowTime);
 
@@ -45,5 +48,9 @@ public interface VoteEntityRepository {
 
     List<VoteCommonData> findVoteCommonDataByPostedUserId(Long userId, int pageNum, int pageSize);
 
-    List<VoteCommonData> findCommonVoteDataBybookmark(Long userId, int pageNum, int pageSize);
+    List<VoteCommonData> findCommonVoteDataByBookmark(Long userId, int pageNum, int pageSize);
+
+    Long findMyParticipatedVoteCnt(Long userId);
+    Long findMyWrittenVoteCnt(Long userId);
+    Long findMyBookmarkedVoteCnt(Long userId);
 }

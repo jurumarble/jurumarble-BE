@@ -9,7 +9,7 @@ public class GetDrinkServiceResponse {
     private final Long drinkId;
     private final String name;
     private final String type;
-    private final String productName;
+    private final String manufacturer;
     private final String alcoholicBeverage;
     private final String rawMaterial;
     private final String capacity;
@@ -20,7 +20,7 @@ public class GetDrinkServiceResponse {
         this.drinkId = drink.getId();
         this.name = drink.getName();
         this.type = drink.getType();
-        this.productName = drink.getProductName();
+        this.manufacturer = drink.getManufacturer();
         this.alcoholicBeverage = drink.getAlcoholicBeverage();
         this.rawMaterial = drink.getRawMaterial();
         this.capacity = drink.getCapacity();
@@ -33,7 +33,7 @@ public class GetDrinkServiceResponse {
                 .drinkId(drinkId)
                 .name(name)
                 .type(type)
-                .productName(productName)
+                .manufacturer(manufacturer)
                 .alcoholicBeverage(alcoholicBeverage)
                 .rawMaterial(rawMaterial)
                 .capacity(capacity)

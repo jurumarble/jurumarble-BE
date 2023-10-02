@@ -18,8 +18,8 @@ public class AddInfoRequest {
     @NotBlank(message = "mbti는 blank일 수 없습니다.")
     private MbtiType mbti;
 
-    @NotBlank(message = "age는 blank일 수 없습니다.")
-    private Integer age;
+    @NotBlank(message = "birthOfAge는 blank일 수 없습니다.")
+    private Integer birthOfAge;
 
     @NotBlank(message = "gender는 blank일 수 없습니다.")
     private GenderType gender;
@@ -28,7 +28,7 @@ public class AddInfoRequest {
     private AlcoholLimitType alcoholLimit;
 
     public AddUserInfo toAddUserInfo() {
-        return new AddUserInfo(mbti, age, gender, alcoholLimit);
+        return new AddUserInfo(mbti, birthOfAge, gender, alcoholLimit);
     }
 
 }

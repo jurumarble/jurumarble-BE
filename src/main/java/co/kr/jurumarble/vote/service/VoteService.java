@@ -9,10 +9,12 @@ import co.kr.jurumarble.notification.event.DoVoteEvent;
 import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.user.repository.UserRepository;
 import co.kr.jurumarble.utils.PageableConverter;
+import co.kr.jurumarble.utils.SpringContext;
 import co.kr.jurumarble.vote.domain.*;
 import co.kr.jurumarble.vote.dto.DoVoteInfo;
 import co.kr.jurumarble.vote.dto.GetIsUserVoted;
 import co.kr.jurumarble.vote.dto.VoteData;
+import co.kr.jurumarble.vote.dto.request.VoteWithPostedUserData;
 import co.kr.jurumarble.vote.enums.SortByType;
 import co.kr.jurumarble.vote.enums.VoteType;
 import co.kr.jurumarble.vote.repository.VoteContentRepository;
@@ -20,11 +22,15 @@ import co.kr.jurumarble.vote.repository.VoteDrinkContentRepository;
 import co.kr.jurumarble.vote.repository.VoteRepository;
 import co.kr.jurumarble.vote.repository.VoteResultRepository;
 import co.kr.jurumarble.vote.repository.dto.HotDrinkVoteData;
+import co.kr.jurumarble.vote.repository.dto.MyVotesCntData;
 import co.kr.jurumarble.vote.repository.dto.VoteCommonData;
+import co.kr.jurumarble.vote.repository.dto.VoteWithPostedUserCommonData;
 import co.kr.jurumarble.vote.service.request.CreateDrinkVoteServiceRequest;
 import co.kr.jurumarble.vote.service.request.CreateNormalVoteServiceRequest;
+import co.kr.jurumarble.vote.service.request.UpdateDrinkVoteServiceRequest;
+import co.kr.jurumarble.vote.service.request.UpdateNormalVoteServiceRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -212,9 +218,16 @@ public class VoteService {
     }
 
     public Slice<VoteData> getBookmarkedVotes(Long userId, int page, int size) {
-        List<VoteCommonData> commonVoteDataBybookmark = voteRepository.findCommonVoteDataBybookmark(userId, page, size);
+        List<VoteCommonData> commonVoteDataByBookmark = voteRepository.findCommonVoteDataByBookmark(userId, page, size);
         PageRequest pageRequest = PageRequest.of(page, size);
-        return voteFinder.getVoteData(pageRequest, commonVoteDataBybookmark);
+        return voteFinder.getVoteData(pageRequest, commonVoteDataByBookmark);
+    }
+
+    public MyVotesCntData getMyVotes(Long userId) {
+        Long myWrittenVoteCnt = voteRepository.findMyWrittenVoteCnt(userId);
+        Long myParticipatedVoteCnt = voteRepository.findMyParticipatedVoteCnt(userId);
+        Long myBookmarkedVoteCnt = voteRepository.findMyBookmarkedVoteCnt(userId);
+        return new MyVotesCntData(myWrittenVoteCnt, myParticipatedVoteCnt, myBookmarkedVoteCnt);
     }
 
 }
