@@ -22,7 +22,6 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "users")
 @Where(clause = "deleted_date IS NULL")
-@Slf4j
 public class User extends BaseTimeEntity {
 
     @Id
@@ -83,11 +82,10 @@ public class User extends BaseTimeEntity {
 
     public AgeType classifyAge() {
         if (yearOfBirth == null) {
-            return null; // 혹은 원하는 다른 동작 
+            return null;
         }
         LocalDate localDate = LocalDate.now();
         int age = localDate.getYear() - yearOfBirth + 1;
-        log.info("******************" + age);
         AgeType ageGroup;
         switch (age / 10) {
             case 1:
