@@ -165,6 +165,7 @@ CREATE TABLE notification
     notification_type ENUM('VOTE', 'COMMENT', 'ADMIN_NOTIFY') NOT NULL,
     created_date      TIMESTAMP    DEFAULT NULL,
     modified_date     TIMESTAMP    DEFAULT NULL,
+    PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
