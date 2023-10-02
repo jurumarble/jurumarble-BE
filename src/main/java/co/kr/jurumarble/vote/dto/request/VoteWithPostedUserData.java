@@ -10,6 +10,7 @@ import co.kr.jurumarble.vote.enums.VoteType;
 import co.kr.jurumarble.vote.repository.dto.VoteWithPostedUserCommonData;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -42,7 +43,7 @@ public class VoteWithPostedUserData {
     private String postedUserImageUrl;
 
     public static VoteWithPostedUserData generateNormalVoteData(VoteWithPostedUserCommonData voteCommonData, VoteContent voteContent) {
-        AgeType classifiedAge = classifyAge(voteCommonData.getPostedUserAge());
+        AgeType classifiedAge = classifyAge(voteCommonData.getPostedUserYearOfBirth());
         return VoteWithPostedUserData.builder()
                 .voteId(voteCommonData.getVoteId())
                 .postedUserId(voteCommonData.getPostedUserId())
@@ -68,7 +69,7 @@ public class VoteWithPostedUserData {
     }
 
     public static VoteWithPostedUserData generateDrinkVoteData(VoteWithPostedUserCommonData voteCommonData, VoteDrinkContent voteDrinkContent) {
-        AgeType classifiedAge = classifyAge(voteCommonData.getPostedUserAge());
+        AgeType classifiedAge = classifyAge(voteCommonData.getPostedUserYearOfBirth());
         return VoteWithPostedUserData.builder()
                 .voteId(voteCommonData.getVoteId())
                 .postedUserId(voteCommonData.getPostedUserId())
@@ -94,10 +95,12 @@ public class VoteWithPostedUserData {
                 .build();
     }
 
-    public static AgeType classifyAge(Integer age) {
-        if (age == null) {
+    public static AgeType classifyAge(Integer yearOfBirth) {
+        if (yearOfBirth == null) {
             return null; // 혹은 원하는 다른 동작 수행
         }
+        LocalDate localDate = LocalDate.now();
+        int age = localDate.getYear() - yearOfBirth + 1;
         AgeType ageGroup;
         switch (age / 10) {
             case 1:

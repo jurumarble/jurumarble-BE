@@ -10,17 +10,18 @@ import co.kr.jurumarble.vote.domain.VoteDrinkContent;
 import co.kr.jurumarble.vote.dto.VoteData;
 import co.kr.jurumarble.vote.enums.VoteType;
 import co.kr.jurumarble.vote.repository.dto.HotDrinkVoteData;
-import co.kr.jurumarble.vote.repository.dto.MyVotesCntData;
 import co.kr.jurumarble.vote.repository.dto.VoteCommonData;
 import co.kr.jurumarble.vote.repository.dto.VoteWithPostedUserCommonData;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -35,6 +36,7 @@ import static co.kr.jurumarble.vote.domain.QVoteResult.voteResult;
 
 
 @Repository
+@Slf4j
 public class VoteEntityRepositoryImpl implements VoteEntityRepository {
 
     private static final int COUNT_OF_HOT_DRINK_VOTE = 1;
@@ -237,14 +239,17 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
     public Long countByVoteAndChoiceAndGenderAndAgeAndMBTI(Long voteId, ChoiceType choiceType, GenderType gender, Integer age, MbtiType mbti, AlcoholLimitType alcoholLimit) {
 
         BooleanBuilder whereClause = new BooleanBuilder();
-        whereClause.and(voteResult.choice.eq(choiceType)); // 항상 포함되는 조건
-        whereClause.and(vote.id.eq(voteId)); // 항상 포함되는 조건
+        whereClause.and(voteResult.choice.eq(choiceType));
+        whereClause.and(vote.id.eq(voteId));
 
         if (gender != null) {
             whereClause.and(user.gender.eq(gender));
         }
         if (age != null) {
-            whereClause.and(user.age.between(age, age + 9));
+            LocalDate localDate = LocalDate.now();
+            Integer startYear = localDate.getYear() - (age + 8);
+            log.info("********************" + startYear);
+            whereClause.and(user.yearOfBirth.between(startYear, startYear + 9));
         }
         if (mbti != null) {
             whereClause.and(user.mbti.eq(mbti));
@@ -421,7 +426,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                                 vote.voteType,
                                 vote.createdDate.as("createdAt"),
                                 user.gender.as("postedUserGender"),
-                                user.age.as("postedUserAge"),
+                                user.yearOfBirth.as("postedUserYearOfBirth"),
                                 user.mbti.as("postedUserMbti"),
                                 user.alcoholLimit.as("postedUserAlcoholLimit"),
                                 user.nickname.as("postedUserNickname"),

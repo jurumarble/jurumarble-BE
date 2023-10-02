@@ -14,7 +14,7 @@ public class AddUserInfo {
 
     private MbtiType mbti;
 
-    private Integer age;
+    private Integer birthOfAge;
 
     private GenderType gender;
 

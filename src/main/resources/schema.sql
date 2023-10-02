@@ -42,7 +42,7 @@ CREATE TABLE users
     email              VARCHAR(55)  DEFAULT NULL,
     password           VARCHAR(15)  DEFAULT NULL,
     image_url          VARCHAR(500) DEFAULT NULL,
-    age                INTEGER      DEFAULT NULL,
+    year_of_Birth        INTEGER      DEFAULT NULL,
     gender             VARCHAR(6)   DEFAULT NULL,
     mbti               VARCHAR(4)   DEFAULT NULL,
     alcohol_limit      VARCHAR(6)   DEFAULT NULL,
