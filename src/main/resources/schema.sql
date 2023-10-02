@@ -8,6 +8,7 @@ DROP TABLE if EXISTS bookmark;
 DROP TABLE if EXISTS enjoy_drink;
 DROP TABLE if EXISTS comment_emotion;
 DROP TABLE if EXISTS comment;
+DROP TABLE if EXISTS notification;
 
 CREATE TABLE vote
 (
@@ -103,9 +104,9 @@ CREATE TABLE drink
 
 CREATE TABLE bookmark
 (
-    id      BIGINT NOT NULL AUTO_INCREMENT,
-    user_id BIGINT NOT NULL,
-    vote_id BIGINT NOT NULL,
+    id            BIGINT NOT NULL AUTO_INCREMENT,
+    user_id       BIGINT NOT NULL,
+    vote_id       BIGINT NOT NULL,
     created_date  TIMESTAMP DEFAULT NULL,
     modified_date TIMESTAMP DEFAULT NULL,
     PRIMARY KEY (id)
@@ -153,4 +154,19 @@ CREATE TABLE comment_emotion
     FOREIGN KEY (user_id) REFERENCES users (id),
     FOREIGN KEY (comment_id) REFERENCES comment (id)
 );
+
+CREATE TABLE notification
+(
+    id                BIGINT  NOT NULL AUTO_INCREMENT,
+    user_id           BIGINT  NOT NULL,
+    content           VARCHAR(255) DEFAULT NULL,
+    url               VARCHAR(500) DEFAULT NULL,
+    is_read           BOOLEAN NOT NULL,
+    notification_type ENUM('VOTE', 'COMMENT', 'ADMIN_NOTIFY') NOT NULL,
+    created_date      TIMESTAMP    DEFAULT NULL,
+    modified_date     TIMESTAMP    DEFAULT NULL,
+    FOREIGN KEY (user_id) REFERENCES users (id)
+);
+
+
 
