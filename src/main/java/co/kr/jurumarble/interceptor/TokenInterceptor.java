@@ -20,12 +20,6 @@ public class TokenInterceptor implements HandlerInterceptor {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    private static Long getUserIdFromToken(HashMap<String, Object> parseJwtTokenMap) {
-        Claims claims = (Claims) parseJwtTokenMap.get("claims");
-        Integer integerUserId = (Integer) claims.get("userId");
-        return Long.valueOf(integerUserId);
-    }
-
     @Override
     // 컨트롤러 호출전에 호출
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -38,9 +32,15 @@ public class TokenInterceptor implements HandlerInterceptor {
     }
 
     private void parseTokenAndTransferUserId(HttpServletRequest request, String authorizationHeader) {
-        HashMap<String, Object> parseJwtTokenMap = jwtTokenProvider.parseJwtToken(authorizationHeader);
+        HashMap<String, Object> parseJwtTokenMap = jwtTokenProvider.parseJwtToken(request ,authorizationHeader);
         Long userId = getUserIdFromToken(parseJwtTokenMap);
         request.setAttribute("userId", userId);
+    }
+
+    private Long getUserIdFromToken(HashMap<String, Object> parseJwtTokenMap) {
+        Claims claims = (Claims) parseJwtTokenMap.get("claims");
+        Integer integerUserId = (Integer) claims.get("userId");
+        return Long.valueOf(integerUserId);
     }
 
 }
