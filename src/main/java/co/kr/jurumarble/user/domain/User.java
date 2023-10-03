@@ -9,7 +9,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -117,10 +116,6 @@ public class User extends BaseTimeEntity {
         this.alcoholLimit = addUserInfo.getAlcoholLimit();
         this.modifiedMbtiDate = LocalDateTime.now();
     }
-
-//    public void mappingBookmark(Bookmark bookmark) {
-//        this.bookmarkList.add(bookmark);
-//    }
 
     private void validIsUserDeleted() {
         if (!(deletedDate == null)) {
