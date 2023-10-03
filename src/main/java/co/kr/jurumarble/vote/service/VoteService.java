@@ -5,6 +5,7 @@ import co.kr.jurumarble.drink.domain.dto.DrinksUsedForVote;
 import co.kr.jurumarble.exception.user.UserNotAccessRightException;
 import co.kr.jurumarble.exception.user.UserNotFoundException;
 import co.kr.jurumarble.exception.vote.*;
+import co.kr.jurumarble.notification.event.DoVoteEvent;
 import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.user.repository.UserRepository;
 import co.kr.jurumarble.utils.PageableConverter;
@@ -30,6 +31,7 @@ import co.kr.jurumarble.vote.service.request.UpdateDrinkVoteServiceRequest;
 import co.kr.jurumarble.vote.service.request.UpdateNormalVoteServiceRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -55,6 +57,7 @@ public class VoteService {
     private final VoteFinder voteFinder;
     private final PageableConverter pageableConverter;
     private final VoteDrinkContentRepository voteDrinkContentRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
 
     @Transactional
@@ -130,6 +133,7 @@ public class VoteService {
         voteValidator.validateParticipateVote(vote, user);
         VoteResult voteResult = new VoteResult(vote.getId(), user.getId(), info.getChoice());
         voteResultRepository.save(voteResult);
+        eventPublisher.publishEvent(new DoVoteEvent(this, vote.getId()));
     }
 
     public Slice<VoteData> sortFindVotes(String keyword, SortByType sortBy, Integer page, Integer size) {
