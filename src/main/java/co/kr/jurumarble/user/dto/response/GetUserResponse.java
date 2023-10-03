@@ -10,6 +10,7 @@ import lombok.Getter;
 @Getter
 public class GetUserResponse {
 
+    private final Long userId;
     private final String nickname;
     private final String email;
     private final String imageUrl;
@@ -19,6 +20,7 @@ public class GetUserResponse {
     private final AlcoholLimitType alcoholLimit;
 
     public GetUserResponse(User user) {
+        this.userId = user.getId();
         this.nickname = user.getNickname();
         this.email = user.getEmail();
         this.imageUrl = user.getImageUrl();
