@@ -16,7 +16,6 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
@@ -36,7 +35,6 @@ import static co.kr.jurumarble.vote.domain.QVoteResult.voteResult;
 
 
 @Repository
-@Slf4j
 public class VoteEntityRepositoryImpl implements VoteEntityRepository {
 
     private static final int COUNT_OF_HOT_DRINK_VOTE = 1;
@@ -248,7 +246,6 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
         if (age != null) {
             LocalDate localDate = LocalDate.now();
             Integer startYear = localDate.getYear() - (age + 8);
-            log.info("********************" + startYear);
             whereClause.and(user.yearOfBirth.between(startYear, startYear + 9));
         }
         if (mbti != null) {
