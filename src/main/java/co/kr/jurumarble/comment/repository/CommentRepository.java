@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
@@ -39,4 +40,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     int countByVoteId(Long typeId);
 
     int countByDrinkId(Long typeId);
+
+    List<Comment> findByVoteId(Long id);
 }
