@@ -30,7 +30,6 @@ import co.kr.jurumarble.vote.service.request.CreateNormalVoteServiceRequest;
 import co.kr.jurumarble.vote.service.request.UpdateDrinkVoteServiceRequest;
 import co.kr.jurumarble.vote.service.request.UpdateNormalVoteServiceRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -58,6 +57,7 @@ public class VoteService {
     private final PageableConverter pageableConverter;
     private final VoteDrinkContentRepository voteDrinkContentRepository;
     private final ApplicationEventPublisher eventPublisher;
+    private final VoteDeleter voteDeleter;
 
 
     @Transactional
@@ -110,20 +110,8 @@ public class VoteService {
     public void deleteVote(Long voteId, Long userId) {
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         isVoteOfUser(userId, vote);
-        deleteVoteContent(vote);
+        voteDeleter.deleteVoteRelatedData(vote);
         voteRepository.delete(vote);
-    }
-
-    private void deleteVoteContent(Vote vote) {
-        if (VoteType.DRINK == vote.getVoteType()) {
-            VoteDrinkContent voteDrinkContent = voteDrinkContentRepository.findByVoteId(vote.getId()).orElseThrow(VoteDrinkContentNotFoundException::new);
-            voteDrinkContentRepository.delete(voteDrinkContent);
-        }
-
-        if (VoteType.NORMAL == vote.getVoteType()) {
-            VoteContent voteContent = voteContentRepository.findByVoteId(vote.getId()).orElseThrow(VoteContentNotFoundException::new);
-            voteContentRepository.delete(voteContent);
-        }
     }
 
     @Transactional
