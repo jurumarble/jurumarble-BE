@@ -9,6 +9,7 @@ DROP TABLE if EXISTS enjoy_drink;
 DROP TABLE if EXISTS comment_emotion;
 DROP TABLE if EXISTS comment;
 DROP TABLE if EXISTS notification;
+DROP TABLE if EXISTS report;
 
 CREATE TABLE vote
 (
@@ -167,6 +168,18 @@ CREATE TABLE notification
     modified_date     TIMESTAMP    DEFAULT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES users (id)
+);
+
+CREATE TABLE report
+(
+    id                  BIGINT NOT NULL AUTO_INCREMENT,
+    report_user_id      BIGINT NOT NULL,
+    reported_user_id    BIGINT NOT NULL,
+    reported_object_id  BIGINT NOT NULL,
+    report_type         VARCHAR(55) DEFAULT NULL,
+    created_date        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modified_date       TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
 );
 
 
