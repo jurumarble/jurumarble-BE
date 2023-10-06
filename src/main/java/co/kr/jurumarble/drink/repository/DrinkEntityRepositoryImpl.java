@@ -37,7 +37,7 @@ public class DrinkEntityRepositoryImpl implements DrinkEntityRepository {
                         Projections.bean(HotDrinkData.class,
                                 drink.id.as("drinkId"),
                                 drink.name,
-                                drink.manufactureAddress,
+                                drink.region.as("manufactureAddress"),
                                 drink.image,
                                 drink.id.count().as("enjoyedCount")
                         ))
@@ -58,7 +58,7 @@ public class DrinkEntityRepositoryImpl implements DrinkEntityRepository {
                         Projections.bean(HotDrinkData.class,
                                 drink.id.as("drinkId"),
                                 drink.name,
-                                drink.manufactureAddress,
+                                drink.region.as("manufactureAddress"),
                                 drink.image,
                                 drink.id.count().as("enjoyedCount")
                         ))
