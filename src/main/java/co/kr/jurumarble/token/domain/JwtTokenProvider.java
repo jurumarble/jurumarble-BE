@@ -7,9 +7,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * jwt 토큰 만들어주는애
@@ -28,6 +31,8 @@ public class JwtTokenProvider {
 
     @Value("${jwt.tokenPrefix}")
     private String tokenPrefix;
+
+    private final List<String> notFilteredRoutes = List.of("/api/votes", "/api/drinks");
 
     /**
      * JwtToken 생성 메서드
@@ -49,8 +54,9 @@ public class JwtTokenProvider {
     }
 
 
-    public HashMap<String, Object> parseJwtToken(String authorizationHeader) {
-        validationAuthorizationHeader(authorizationHeader);
+    public HashMap<String, Object> parseJwtToken(HttpServletRequest request, String authorizationHeader) {
+        String requestURI = request.getRequestURI();
+        validationAuthorizationHeader(requestURI, authorizationHeader);
         String token = extractToken(authorizationHeader);
 
         loggingTokenInfo(token);
@@ -76,12 +82,18 @@ public class JwtTokenProvider {
      *
      * @param header
      */
-    private void validationAuthorizationHeader(String header) {
+    private void validationAuthorizationHeader(String requestURI, String header) {
         log.info("*******header : {}", header);
+
+        if (notFilteredRoutes.contains(requestURI)) {
+            return;
+        }
+
         if (header == null || !header.startsWith("Bearer ")) {
             throw new TokenNotFoundException();
         }
     }
+
 
     /**
      * 토큰 추출 메서드 : 헤더에서 토큰값만 추출해줌
