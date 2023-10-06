@@ -66,12 +66,21 @@ public class DrinkService {
         return getGetHotDrinksResponses(hotDrinkData);
     }
 
-    private void makeHotDrinkDataHasTenData(List<HotDrinkData> hotDrinkData) {
-        if (hotDrinkData.size() < NUMBER_OF_HOT_DRINK) {
-            int shortageOfDrink = NUMBER_OF_HOT_DRINK - hotDrinkData.size();
-            List<HotDrinkData> additionalDrinks = drinkRepository.findDrinksByPopular(FIXED_INDEX_OF_GETTING_HOT_DRINKS, shortageOfDrink);
-            hotDrinkData.addAll(additionalDrinks);
+    private void makeHotDrinkDataHasTenData(List<HotDrinkData> hotDrinkDatas) {
+        if (hotDrinkDatas.size() < NUMBER_OF_HOT_DRINK) {
+            List<HotDrinkData> additionalDrinks = drinkRepository.findDrinksByPopular(FIXED_INDEX_OF_GETTING_HOT_DRINKS, NUMBER_OF_HOT_DRINK);
+            additionalDrinks
+                    .forEach(additionalHotDrink -> {
+                                if (conditionToAddNewDrink(hotDrinkDatas, additionalHotDrink)) {
+                                    hotDrinkDatas.add(additionalHotDrink);
+                                }
+                            }
+                    );
         }
+    }
+
+    private boolean conditionToAddNewDrink(List<HotDrinkData> hotDrinkDatas, HotDrinkData additionalHotDrink) {
+        return !hotDrinkDatas.contains(additionalHotDrink) && hotDrinkDatas.size() < NUMBER_OF_HOT_DRINK;
     }
 
     private List<GetHotDrinksResponse> getGetHotDrinksResponses(List<HotDrinkData> hotDrinks) {
@@ -95,12 +104,12 @@ public class DrinkService {
 
     public Slice<DrinkData> getDrinks(String keyword, String region, SortByType sortBy, int pageNum, int pageSize) {
 
-        if(SortByType.ByPopularity == sortBy) {
+        if (SortByType.ByPopularity == sortBy) {
             List<DrinkData> drinks = drinkRepository.getDrinksByPopularity(keyword, region, pageNum, pageSize);
             return pageableConverter.convertListToSlice(drinks, pageNum, pageSize);
         }
 
-        if(SortByType.ByName == sortBy) {
+        if (SortByType.ByName == sortBy) {
             List<DrinkData> drinks = drinkRepository.getDrinksByName(keyword, region, pageNum, pageSize);
             return pageableConverter.convertListToSlice(drinks, pageNum, pageSize);
         }
