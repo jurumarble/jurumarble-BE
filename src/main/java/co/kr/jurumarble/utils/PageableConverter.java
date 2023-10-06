@@ -12,12 +12,24 @@ import java.util.List;
 public class PageableConverter {
 
     public <T> SliceImpl<T> convertListToSlice(List<T> list, int pageNum, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNum, pageSize);
-        if (list.size() > pageSize) {
-            list.remove(list.size() - 1);
-            return new SliceImpl<>(list, pageable, true);
+        if (list.isEmpty()) {
+            return new SliceImpl<>(list);
         }
-        return new SliceImpl<>(list, pageable, false);
+
+        if (list.size() < pageSize) {
+            pageSize = list.size();
+        }
+
+        Pageable pageable = PageRequest.of(pageNum, pageSize);
+
+        int start = (int)pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), list.size());
+
+        List<T> subList = new ArrayList<>(list.subList(start, end));
+
+        boolean hasNext = end < list.size();
+
+        return new SliceImpl<>(subList, pageable, hasNext);
     }
 
 }
