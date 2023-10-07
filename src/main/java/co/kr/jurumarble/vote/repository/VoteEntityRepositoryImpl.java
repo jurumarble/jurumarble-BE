@@ -403,6 +403,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .from(vote)
                 .innerJoin(bookmark)
                 .on(bookmark.voteId.eq(vote.id))
+                .where(bookmark.userId.eq(userId))
                 .fetchOne();
     }
 
