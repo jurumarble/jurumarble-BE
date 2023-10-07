@@ -56,4 +56,8 @@ public class UserService {
     public void updateUser(Long userId, UpdateUserInfo updateUserInfo) {
         userManager.updateUser(userId, updateUserInfo);
     }
+
+    public void validBirth(Long year) {
+        userManager.validBirth(year);
+    }
 }

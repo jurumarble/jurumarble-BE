@@ -66,4 +66,11 @@ public class UserController {
         userService.updateUser(userId, request.toUpdateUserInfo());
         return ResponseEntity.ok().build();
     }
+
+    @Operation(summary = "유저 출생년도 검증")
+    @GetMapping("/valid/birth/{year}")
+    public ResponseEntity<HttpStatus> validBirth(@PathVariable Long year) {
+        userService.validBirth(year);
+        return ResponseEntity.ok().build();
+    }
 }

@@ -1,5 +1,7 @@
 package co.kr.jurumarble.user.domain;
 
+import co.kr.jurumarble.exception.user.BirthYearLimitExceededException;
+import co.kr.jurumarble.exception.user.UserBirthYearMinorException;
 import co.kr.jurumarble.exception.user.UserIllegalStateException;
 import co.kr.jurumarble.exception.user.UserNotFoundException;
 import co.kr.jurumarble.user.dto.AddUserInfo;
@@ -9,6 +11,7 @@ import co.kr.jurumarble.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -41,6 +44,17 @@ public class UserManager {
             } else {
                 user.updateMbti(mbti);
             }
+        }
+    }
+
+    public void validBirth(Long year) {
+        if(year <= 1900) {
+            throw new BirthYearLimitExceededException();
+        }
+        LocalDate now = LocalDate.now();
+        int age = (int) (now.getYear() - year + 1);
+        if(age < 20) {
+            throw new UserBirthYearMinorException();
         }
     }
 }
