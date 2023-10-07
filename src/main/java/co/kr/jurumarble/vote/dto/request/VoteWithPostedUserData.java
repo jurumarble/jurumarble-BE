@@ -33,6 +33,8 @@ public class VoteWithPostedUserData {
     private String imageB;
     private String titleA;
     private String titleB;
+    private Long drinkAId;
+    private Long drinkBId;
     private String region;
     private LocalDateTime createdAt;
     private GenderType postedUserGender;
@@ -56,6 +58,8 @@ public class VoteWithPostedUserData {
                 .imageB(voteContent.getImageB())
                 .titleA(voteContent.getTitleA())
                 .titleB(voteContent.getTitleB())
+                .drinkAId(null)
+                .drinkBId(null)
                 .voteType(voteCommonData.getVoteType())
                 .votedCount(voteCommonData.getVotedCount())
                 .createdAt(voteCommonData.getCreatedAt())
@@ -82,6 +86,8 @@ public class VoteWithPostedUserData {
                 .imageB(voteDrinkContent.getDrinkBImage())
                 .titleA(voteDrinkContent.getDrinkAName())
                 .titleB(voteDrinkContent.getDrinkBName())
+                .drinkAId(voteDrinkContent.getDrinkAId())
+                .drinkBId(voteDrinkContent.getDrinkBId())
                 .votedCount(voteCommonData.getVotedCount())
                 .voteType(voteCommonData.getVoteType())
                 .region(voteDrinkContent.getRegion())

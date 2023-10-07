@@ -14,7 +14,6 @@ public class VoteValidator {
     private final VoteResultRepository voteResultRepository;
 
     public void validateParticipateVote(Vote vote, User user) {
-        validPostedUserWhenParticipateVote(vote, user);
         validAlreadyParticipatedVote(vote, user);
     }
 
