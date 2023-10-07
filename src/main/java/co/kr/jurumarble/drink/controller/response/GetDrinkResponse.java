@@ -36,8 +36,13 @@ public class GetDrinkResponse {
     @Schema(description = "전통주 사진", example = "https://shopping-phinf.pstatic.net/main_2013736/20137360521.20190709103019.jpg")
     private String image;
 
+    @Schema(description = "가격", example = "10,000")
+    private String price;
+    @Schema(description = "즐긴 사람 명수", example = "10")
+    private Long enjoyCount;
+
     @Builder
-    private GetDrinkResponse(Long drinkId, String name, String type, String manufacturer, String alcoholicBeverage, String rawMaterial, String capacity, String manufactureAddress, String image) {
+    private GetDrinkResponse(Long drinkId, String name, String type, String manufacturer, String alcoholicBeverage, String rawMaterial, String capacity, String manufactureAddress, String image, String price, Long enjoyCount) {
         this.drinkId = drinkId;
         this.name = name;
         this.type = type;
@@ -47,5 +52,7 @@ public class GetDrinkResponse {
         this.capacity = capacity;
         this.manufactureAddress = manufactureAddress;
         this.image = image;
+        this.price = price;
+        this.enjoyCount = enjoyCount;
     }
 }
