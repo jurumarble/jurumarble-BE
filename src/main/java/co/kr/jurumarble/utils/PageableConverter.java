@@ -10,6 +10,7 @@ import java.util.List;
 
 @Component
 public class PageableConverter {
+    private static final int INDEX_OF_START_SUBLIST = 0;
 
     public <T> SliceImpl<T> convertListToSlice(List<T> list, int pageNum, int pageSize) {
         if (list.isEmpty()) {
@@ -22,7 +23,7 @@ public class PageableConverter {
 
         Pageable pageable = PageRequest.of(pageNum, pageSize);
 
-        int start = (int)pageable.getOffset();
+        int start = INDEX_OF_START_SUBLIST;
         int end = Math.min((start + pageable.getPageSize()), list.size());
 
         List<T> subList = new ArrayList<>(list.subList(start, end));
