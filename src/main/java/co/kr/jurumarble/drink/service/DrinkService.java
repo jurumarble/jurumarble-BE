@@ -44,7 +44,8 @@ public class DrinkService {
 
     public GetDrinkServiceResponse getDrinkData(Long drinkId) {
         Drink drink = drinkRepository.findById(drinkId).orElseThrow(DrinkNotFoundException::new);
-        return new GetDrinkServiceResponse(drink);
+        long enjoyCount = enjoyDrinkRepository.countByDrinkId(drink.getId());
+        return new GetDrinkServiceResponse(drink,enjoyCount);
     }
 
     @Transactional

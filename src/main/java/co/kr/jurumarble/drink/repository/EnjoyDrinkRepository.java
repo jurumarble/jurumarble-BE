@@ -11,4 +11,7 @@ public interface EnjoyDrinkRepository extends JpaRepository<EnjoyDrink, Long>, E
     Optional<EnjoyDrink> findByUserIdAndDrinkId(Long userId, Long drinkId);
 
     List<EnjoyDrink> findByUserId(Long userId);
+
+    long countByDrinkId(Long drinkId);
+
 }
