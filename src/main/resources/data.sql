@@ -2144,27 +2144,38 @@ SET alcoholic_beverage = REPLACE(alcoholic_beverage, '%', '');
 
 
 
-INSERT INTO users (nickname, email, password, image_url, year_of_Birth, gender, mbti, alcohol_limit, provider_type, provider_id, created_date,
+INSERT INTO users (nickname, email, password, image_url, year_of_Birth, gender, mbti, alcohol_limit, provider_type,
+                   provider_id, created_date,
                    modified_date, modified_mbti_date, deleted_date)
-VALUES ('user1', 'user1@test.com', 'password1', 'https://picsum.photos/200/300', 2001, 'MALE', 'ENFP', 'HIGH', 'KAKAO', 'user1',
+VALUES ('user1', 'user1@test.com', 'password1', 'https://picsum.photos/200/300', 2001, 'MALE', 'ENFP', 'HIGH', 'KAKAO',
+        'user1',
         '2023-08-01 00:00:00', '2023-08-01 00:00:00', '2023-08-01 00:00:00', NULL),
-       ('user2', 'user2@test.com', 'password2', 'https://picsum.photos/200/300', 1999, 'FEMALE', 'INFJ', 'MEDIUM', 'NAVER', 'user2',
+       ('user2', 'user2@test.com', 'password2', 'https://picsum.photos/200/300', 1999, 'FEMALE', 'INFJ', 'MEDIUM',
+        'NAVER', 'user2',
         '2023-08-02 00:00:00', '2023-08-02 00:00:00', '2023-08-02 00:00:00', NULL),
-       ('user3', 'user3@test.com', 'password3', 'https://picsum.photos/200/300', 1992, 'MALE', 'ISTJ', 'HIGH', 'KAKAO', 'user3',
+       ('user3', 'user3@test.com', 'password3', 'https://picsum.photos/200/300', 1992, 'MALE', 'ISTJ', 'HIGH', 'KAKAO',
+        'user3',
         '2023-08-03 00:00:00', '2023-08-03 00:00:00', '2023-08-03 00:00:00', NULL),
-       ('user4', 'user4@test.com', 'password4', 'https://picsum.photos/200/300', 1998, 'FEMALE', 'ISFP', 'LOW', 'NAVER', 'user4',
+       ('user4', 'user4@test.com', 'password4', 'https://picsum.photos/200/300', 1998, 'FEMALE', 'ISFP', 'LOW', 'NAVER',
+        'user4',
         '2023-08-04 00:00:00', '2023-08-04 00:00:00', '2023-08-04 00:00:00', NULL),
-       ('user5', 'user5@test.com', 'password5', 'https://picsum.photos/200/300', 1995, 'MALE', 'ENFJ', 'LOW', 'KAKAO', 'user5',
+       ('user5', 'user5@test.com', 'password5', 'https://picsum.photos/200/300', 1995, 'MALE', 'ENFJ', 'LOW', 'KAKAO',
+        'user5',
         '2023-08-05 00:00:00', '2023-08-05 00:00:00', '2023-08-05 00:00:00', NULL),
-       ('user6', 'user6@test.com', 'password6', 'https://picsum.photos/200/300', 1994, 'FEMALE', 'INTP', 'HIGH', 'NAVER', 'user6',
+       ('user6', 'user6@test.com', 'password6', 'https://picsum.photos/200/300', 1994, 'FEMALE', 'INTP', 'HIGH',
+        'NAVER', 'user6',
         '2023-08-06 00:00:00', '2023-08-06 00:00:00', '2023-08-06 00:00:00', NULL),
-       ('user7', 'user7@test.com', 'password7', 'https://picsum.photos/200/300', 1996, 'MALE', 'ENTJ', 'MEDIUM', 'KAKAO', 'user7',
+       ('user7', 'user7@test.com', 'password7', 'https://picsum.photos/200/300', 1996, 'MALE', 'ENTJ', 'MEDIUM',
+        'KAKAO', 'user7',
         '2023-08-07 00:00:00', '2023-08-07 00:00:00', '2023-08-07 00:00:00', NULL),
-       ('user8', 'user8@test.com', 'password8', 'https://picsum.photos/200/300', 1991, 'FEMALE', 'INFJ', 'HIGH', 'NAVER', 'user8',
+       ('user8', 'user8@test.com', 'password8', 'https://picsum.photos/200/300', 1991, 'FEMALE', 'INFJ', 'HIGH',
+        'NAVER', 'user8',
         '2023-08-08 00:00:00', '2023-08-08 00:00:00', '2023-08-08 00:00:00', NULL),
-       ('user9', 'user9@test.com', 'password9', 'https://picsum.photos/200/300', 1993, 'MALE', 'ISTP', 'HIGH', 'KAKAO', 'user9',
+       ('user9', 'user9@test.com', 'password9', 'https://picsum.photos/200/300', 1993, 'MALE', 'ISTP', 'HIGH', 'KAKAO',
+        'user9',
         '2023-08-09 00:00:00', '2023-08-09 00:00:00', '2023-08-09 00:00:00', NULL),
-       ('user10', 'user10@test.com', 'password10', 'https://picsum.photos/200/300', 1997, 'FEMALE', 'ENFP', 'LOW', 'NAVER','user10',
+       ('user10', 'user10@test.com', 'password10', 'https://picsum.photos/200/300', 1997, 'FEMALE', 'ENFP', 'LOW',
+        'NAVER', 'user10',
         '2023-08-10 00:00:00', '2023-08-10 00:00:00', '2023-08-10 00:00:00', NULL);
 
 
@@ -2274,6 +2285,7 @@ values (11, 1, 2, 'https://shopping-phinf.pstatic.net/main_8204301/82043013300.5
 
 
 
+
 INSERT INTO enjoy_drink (user_id, drink_id, created_date)
 VALUES (1, 3, '2023-08-16 08:45:23'),
        (2, 8, '2023-08-08 23:36:50'),
@@ -2319,4 +2331,3 @@ VALUES (1, 3, '2023-08-16 08:45:23'),
        (13, 6, '2023-07-28 22:50:02'),
        (14, 5, '2023-07-27 14:15:17'),
        (15, 2, '2023-07-26 07:37:45');
-
