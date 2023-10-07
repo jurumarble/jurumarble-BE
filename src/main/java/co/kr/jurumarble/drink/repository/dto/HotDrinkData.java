@@ -21,4 +21,17 @@ public class HotDrinkData {
     public GetHotDrinksResponse toHotDrinksResponse() {
         return new GetHotDrinksResponse(drinkId, name, manufactureAddress, image);
     }
+//
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        HotDrinkData that = (HotDrinkData) o;
+//        return Objects.equals(drinkId, that.drinkId);
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(drinkId);
+//    }
 }
