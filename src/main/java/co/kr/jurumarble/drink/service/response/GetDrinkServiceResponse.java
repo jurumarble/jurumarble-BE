@@ -15,8 +15,10 @@ public class GetDrinkServiceResponse {
     private final String capacity;
     private final String manufactureAddress;
     private final String image;
+    private String price;
+    private Long enjoyCount;
 
-    public GetDrinkServiceResponse(Drink drink) {
+    public GetDrinkServiceResponse(Drink drink, long enjoyCount) {
         this.drinkId = drink.getId();
         this.name = drink.getName();
         this.type = drink.getType();
@@ -26,6 +28,9 @@ public class GetDrinkServiceResponse {
         this.capacity = drink.getCapacity();
         this.manufactureAddress = drink.getManufactureAddress();
         this.image = drink.getImage();
+        this.price = drink.getPrice();
+        this.enjoyCount = enjoyCount;
+
     }
 
     public GetDrinkResponse toControllerResponse() {
@@ -39,6 +44,8 @@ public class GetDrinkServiceResponse {
                 .capacity(capacity)
                 .manufactureAddress(manufactureAddress)
                 .image(image)
+                .price(price)
+                .enjoyCount(enjoyCount)
                 .build();
     }
 }
