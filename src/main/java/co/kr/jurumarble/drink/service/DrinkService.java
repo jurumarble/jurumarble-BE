@@ -1,5 +1,6 @@
 package co.kr.jurumarble.drink.service;
 
+import co.kr.jurumarble.drink.controller.request.AddImage;
 import co.kr.jurumarble.drink.controller.request.DrinkData;
 import co.kr.jurumarble.drink.controller.response.GetHotDrinksResponse;
 import co.kr.jurumarble.drink.controller.response.GetMapInDrinksResponse;
@@ -127,5 +128,11 @@ public class DrinkService {
         userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         drinkRepository.findById(drinkId).orElseThrow(DrinkNotFoundException::new);
         return enjoyDrinkRepository.findByUserIdAndDrinkId(userId, drinkId).isPresent();
+    }
+
+    @Transactional
+    public void addDrinkImage(AddImage image) {
+        Drink drink = drinkRepository.findById(image.getDrinkId()).orElseThrow(RuntimeException::new);
+        drink.updateImage(image.getImageUrl());
     }
 }
