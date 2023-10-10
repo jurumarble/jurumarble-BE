@@ -62,6 +62,10 @@ public class Drink {
         this.longitude = longitude;
     }
 
+    public void updateImage(String imageUrl) {
+        this.image = imageUrl;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
