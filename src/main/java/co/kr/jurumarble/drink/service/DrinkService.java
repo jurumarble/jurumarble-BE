@@ -1,5 +1,6 @@
 package co.kr.jurumarble.drink.service;
 
+import co.kr.jurumarble.drink.controller.request.AddDrink;
 import co.kr.jurumarble.drink.controller.request.AddImage;
 import co.kr.jurumarble.drink.controller.request.DrinkData;
 import co.kr.jurumarble.drink.controller.response.GetHotDrinksResponse;
@@ -134,5 +135,10 @@ public class DrinkService {
     public void addDrinkImage(AddImage image) {
         Drink drink = drinkRepository.findById(image.getDrinkId()).orElseThrow(RuntimeException::new);
         drink.updateImage(image.getImageUrl());
+    }
+
+    public Long addDrink(AddDrink drinkInfo) {
+        Drink drink = drinkInfo.toEntity();
+        return drinkRepository.save(drink).getId();
     }
 }
