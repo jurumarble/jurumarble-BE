@@ -137,6 +137,7 @@ public class DrinkService {
         drink.updateImage(image.getImageUrl());
     }
 
+    @Transactional
     public Long addDrink(AddDrink drinkInfo) {
         Drink drink = drinkInfo.toEntity();
         return drinkRepository.save(drink).getId();
