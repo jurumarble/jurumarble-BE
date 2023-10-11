@@ -45,7 +45,9 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/notifications")
                 .addPathPatterns("/api/notifications/subscribe")
                 .addPathPatterns("/api/reports/votes")
-                .addPathPatterns("/api/reports/comments");
+                .addPathPatterns("/api/reports/comments")
+                .addPathPatterns("/api/notifications/users")
+                .addPathPatterns("/api/notifications/users/{userId}");
 
     }
 

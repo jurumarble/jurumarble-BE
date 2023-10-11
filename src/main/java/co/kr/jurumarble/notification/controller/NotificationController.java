@@ -1,9 +1,7 @@
 package co.kr.jurumarble.notification.controller;
 
-import co.kr.jurumarble.notification.domain.Notification;
 import co.kr.jurumarble.notification.dto.CreateNotificationRequest;
 import co.kr.jurumarble.notification.dto.NotificationDto;
-import co.kr.jurumarble.notification.service.NotificationSender;
 import co.kr.jurumarble.notification.service.NotificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,16 +30,16 @@ public class NotificationController {
     }
 
     @Operation(summary = "단일 사용자 알림 전송", description = "특정 사용자에게 알림 메시지를 전송합니다.")
-    @PostMapping("/users/{userId}")
-    public ResponseEntity sendToUser(@PathVariable Long userId, @RequestBody @Valid CreateNotificationRequest createNotificationRequest) {
-        notificationService.sendNotificationToUser(userId, createNotificationRequest.toServiceRequest());
+    @PostMapping("/users/{receiverId}")
+    public ResponseEntity sendToUser(@PathVariable Long receiverId, @RequestBody @Valid CreateNotificationRequest createNotificationRequest, @RequestAttribute Long userId) {
+        notificationService.sendNotificationToUser(receiverId, userId, createNotificationRequest.toServiceRequest());
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @Operation(summary = "전체 사용자 알림 전송", description = "모든 사용자에게 알림 메시지를 전송합니다.")
     @PostMapping("/users")
-    public ResponseEntity<?> sendToAllUsers(@RequestBody @Valid CreateNotificationRequest createNotificationRequest) {
-        notificationService.sendNotificationToAllUsers(createNotificationRequest.toServiceRequest());
+    public ResponseEntity<?> sendToAllUsers(@RequestBody @Valid CreateNotificationRequest createNotificationRequest, @RequestAttribute Long userId) {
+        notificationService.sendNotificationToAllUsers(userId, createNotificationRequest.toServiceRequest());
         return new ResponseEntity(HttpStatus.OK);
     }
 
