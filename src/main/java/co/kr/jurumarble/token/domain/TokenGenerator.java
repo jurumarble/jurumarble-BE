@@ -26,7 +26,7 @@ public class TokenGenerator {
         );
     }
 
-    private String generateRefreshToken(Long userId) {
+    public String generateRefreshToken(Long userId) {
         return jwtTokenProvider.makeJwtToken(userId, MONTH_TO_MINITES);
     }
 
