@@ -7,6 +7,7 @@ import co.kr.jurumarble.user.dto.request.NaverLoginRequest;
 import co.kr.jurumarble.user.dto.request.UpdateUserRequest;
 import co.kr.jurumarble.user.dto.response.GetUserResponse;
 import co.kr.jurumarble.user.dto.response.TokenResponse;
+import co.kr.jurumarble.user.dto.response.TokenTestResponse;
 import co.kr.jurumarble.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -72,5 +73,12 @@ public class UserController {
     public ResponseEntity<HttpStatus> validBirth(@PathVariable Long year) {
         userService.validBirth(year);
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "심사용 계정 로그인")
+    @GetMapping("/test")
+    public ResponseEntity<TokenTestResponse> tokenTest() {
+        String token = userService.testToken();
+        return ResponseEntity.ok().body(new TokenTestResponse(token));
     }
 }

@@ -60,4 +60,9 @@ public class UserService {
     public void validBirth(Long year) {
         userManager.validBirth(year);
     }
+
+    public String testToken() {
+        String token = tokenGenerator.generateRefreshToken(19L);
+        return token;
+    }
 }
