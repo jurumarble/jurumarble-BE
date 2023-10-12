@@ -29,14 +29,14 @@ public class NotificationController {
         return notificationService.subscribe(userId, lastEventId);
     }
 
-    @Operation(summary = "단일 사용자 알림 전송", description = "특정 사용자에게 알림 메시지를 전송합니다.")
+    @Operation(summary = "단일 사용자 알림 전송", description = "관리자가 특정 사용자에게 알림 메시지를 전송합니다.")
     @PostMapping("/users/{receiverId}")
     public ResponseEntity sendToUser(@PathVariable Long receiverId, @RequestBody @Valid CreateNotificationRequest createNotificationRequest, @RequestAttribute Long userId) {
         notificationService.sendNotificationToUser(receiverId, userId, createNotificationRequest.toServiceRequest());
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @Operation(summary = "전체 사용자 알림 전송", description = "모든 사용자에게 알림 메시지를 전송합니다.")
+    @Operation(summary = "전체 사용자 알림 전송", description = "관리자가 모든 사용자에게 알림 메시지를 전송합니다.")
     @PostMapping("/users")
     public ResponseEntity<?> sendToAllUsers(@RequestBody @Valid CreateNotificationRequest createNotificationRequest, @RequestAttribute Long userId) {
         notificationService.sendNotificationToAllUsers(userId, createNotificationRequest.toServiceRequest());
