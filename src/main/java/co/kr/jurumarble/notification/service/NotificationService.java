@@ -1,5 +1,6 @@
 package co.kr.jurumarble.notification.service;
 
+import co.kr.jurumarble.exception.notification.AdminAuthorityException;
 import co.kr.jurumarble.exception.notification.NotificationNotFoundException;
 import co.kr.jurumarble.exception.user.UserNotFoundException;
 import co.kr.jurumarble.notification.domain.Notification;
@@ -97,15 +98,17 @@ public class NotificationService {
                 .build();
     }
 
-    public void sendNotificationToUser(Long userId, CreateNotificationServiceRequest request) {
-        User receiver = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+    public void sendNotificationToUser(Long receiverId, Long adminId, CreateNotificationServiceRequest request) {
+        validateAdminId(adminId);
+        User receiver = userRepository.findById(receiverId).orElseThrow(UserNotFoundException::new);
         Notification.NotificationType type = Notification.NotificationType.ADMIN_NOTIFY;
         String message = request.getMessage();
         String relatedUrl = request.getRelatedUrl();
         send(receiver, type, message, relatedUrl);
     }
 
-    public void sendNotificationToAllUsers(CreateNotificationServiceRequest request) {
+    public void sendNotificationToAllUsers(Long adminId, CreateNotificationServiceRequest request) {
+        validateAdminId(adminId);
         List<User> allUsers = userRepository.findAll();
         Notification.NotificationType type = Notification.NotificationType.ADMIN_NOTIFY;
         String message = request.getMessage();
@@ -137,5 +140,12 @@ public class NotificationService {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         return notificationRepository.findNotificationsByUser(user);
     }
+
+    private void validateAdminId(Long adminId) {
+        if (adminId != 100L) {
+            throw new AdminAuthorityException();
+        }
+    }
+
 
 }
