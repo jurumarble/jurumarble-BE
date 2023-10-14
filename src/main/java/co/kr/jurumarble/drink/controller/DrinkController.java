@@ -1,10 +1,7 @@
 package co.kr.jurumarble.drink.controller;
 
 import co.kr.jurumarble.comment.enums.Region;
-import co.kr.jurumarble.drink.controller.request.AddDrink;
-import co.kr.jurumarble.drink.controller.request.AddImage;
-import co.kr.jurumarble.drink.controller.request.DrinkData;
-import co.kr.jurumarble.drink.controller.request.EnjoyDrinkRequest;
+import co.kr.jurumarble.drink.controller.request.*;
 import co.kr.jurumarble.drink.controller.response.GetDrinkResponse;
 import co.kr.jurumarble.drink.controller.response.GetEnjoyedResponse;
 import co.kr.jurumarble.drink.controller.response.GetHotDrinksResponse;
@@ -92,11 +89,19 @@ public class DrinkController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "전통주 추가")
+    @Operation(summary = "전통주 추가 테스트")
     @PostMapping("/add-test")
     public ResponseEntity<Long> addDrink(@RequestBody AddDrink drink) {
         Long id = drinkService.addDrink(drink);
         return new ResponseEntity(id, HttpStatus.OK);
     }
+
+    @Operation(summary = "전통주 수정 테스트")
+    @PutMapping("/update-test")
+    public ResponseEntity<Long> updateDrink(@RequestBody UpdateDrink drink) {
+        Long id = drinkService.updateDrink(drink);
+        return new ResponseEntity(id, HttpStatus.OK);
+    }
+
 
 }
