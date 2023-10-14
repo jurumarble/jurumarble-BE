@@ -1,5 +1,6 @@
 package co.kr.jurumarble.drink.domain.entity;
 
+import co.kr.jurumarble.drink.controller.request.UpdateDrink;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -81,5 +82,20 @@ public class Drink {
 
     public boolean hasSameRegion(Drink drink) {
         return region.equals(drink.getRegion());
+    }
+
+    public void updateDrink(UpdateDrink info) {
+        this.name = info.getName();
+        this.type = info.getType();
+        this.manufacturer = info.getManufacturer();
+        this.alcoholicBeverage = info.getAlcoholicBeverage();
+        this.rawMaterial = info.getRawMaterial();
+        this.capacity = info.getCapacity();
+        this.manufactureAddress = info.getManufactureAddress();
+        this.region = info.getRegion();
+        this.price = info.getPrice();
+        this.image = info.getImage();
+        this.latitude = info.getLatitude();
+        this.longitude = info.getLongitude();
     }
 }

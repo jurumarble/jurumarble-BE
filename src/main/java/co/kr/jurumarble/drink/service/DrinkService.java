@@ -3,6 +3,7 @@ package co.kr.jurumarble.drink.service;
 import co.kr.jurumarble.drink.controller.request.AddDrink;
 import co.kr.jurumarble.drink.controller.request.AddImage;
 import co.kr.jurumarble.drink.controller.request.DrinkData;
+import co.kr.jurumarble.drink.controller.request.UpdateDrink;
 import co.kr.jurumarble.drink.controller.response.GetHotDrinksResponse;
 import co.kr.jurumarble.drink.controller.response.GetMapInDrinksResponse;
 import co.kr.jurumarble.drink.domain.dto.MapInDrinkData;
@@ -141,5 +142,12 @@ public class DrinkService {
     public Long addDrink(AddDrink drinkInfo) {
         Drink drink = drinkInfo.toEntity();
         return drinkRepository.save(drink).getId();
+    }
+
+    @Transactional
+    public Long updateDrink(UpdateDrink drinkInfo) {
+        Drink drink = drinkRepository.findById(drinkInfo.getDrinkId()).orElseThrow(RuntimeException::new);
+        drink.updateDrink(drinkInfo);
+        return drink.getId();
     }
 }
