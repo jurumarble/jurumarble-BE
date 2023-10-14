@@ -20,7 +20,7 @@ public class TourApiDataManager {
 
 
     public RestaurantListDto getRestaurantInfoList(String keyword, Region region, int page) {
-        return (keyword != null)
+        return (keyword != null && !keyword.isEmpty())
                 ? tourApiService.getRestaurantInfoByKeyWord(keyword, region.getCode(), page)
                 : tourApiService.getRestaurantInfo(region.getCode(), page);
     }
