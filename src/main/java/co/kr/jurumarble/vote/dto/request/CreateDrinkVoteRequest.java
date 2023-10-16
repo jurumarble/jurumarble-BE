@@ -27,7 +27,6 @@ public class CreateDrinkVoteRequest {
     private Long drinkBId;
 
     @Schema(description = "전통주 투표 상세 내용")
-    @NotBlank(message = "전통주 투표 내용은 필수 입니다.")
     private String detail;
 
     public CreateDrinkVoteServiceRequest toServiceRequest() {
