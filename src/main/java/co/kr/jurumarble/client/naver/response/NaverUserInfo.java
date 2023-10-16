@@ -7,13 +7,13 @@ public class NaverUserInfo {
 
     private NaverUserProperties response;
 
-    public String getNickName() {
-        return response.getNickname();
-    }
-
-    public String getProfileImage() {
-        return response.getProfile_image();
-    }
+//    public String getNickName() {
+//        return response.getNickname();
+//    }
+//
+//    public String getProfileImage() {
+//        return response.getProfile_image();
+//    }
 
     public String getId() {
         return response.getId();
@@ -25,7 +25,7 @@ public class NaverUserInfo {
 @Data
 class NaverUserProperties {
     private String id;
-    private String nickname;
-    private String profile_image;
+//    private String nickname;
+//    private String profile_image;
 
 }

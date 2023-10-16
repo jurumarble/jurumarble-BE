@@ -48,8 +48,8 @@ public class NaverAuthorizer implements ThirdPartyAuthorizer {
 
         Map<String, String> result = new HashMap<>();
         result.put("id", naverUserInfo.getId().toString());
-        result.put("nickname", naverUserInfo.getNickName());
-        result.put("profile_image", naverUserInfo.getProfileImage());
+//        result.put("nickname", naverUserInfo.getNickName());
+//        result.put("profile_image", naverUserInfo.getProfileImage());
 
         return result;
     }
