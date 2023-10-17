@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -16,6 +17,7 @@ public class CreateDrinkVoteRequest {
 
     @Schema(description = "투표 제목", example = "A, B 중 어떤게 나을까요?")
     @NotBlank(message = "투표 제목은 필수입니다.")
+    @Size(max = 75)
     private String title;
 
     @Schema(description = "전통주 후보 A의 id (전통주 아이디는 다른값으로 넣어주셔야합니다.)")
@@ -27,6 +29,7 @@ public class CreateDrinkVoteRequest {
     private Long drinkBId;
 
     @Schema(description = "전통주 투표 상세 내용")
+    @Size(max = 600)
     private String detail;
 
     public CreateDrinkVoteServiceRequest toServiceRequest() {

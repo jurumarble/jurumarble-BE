@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -16,8 +17,9 @@ public class CreateCommentRequest {
     @Schema(description = "부모 댓글 ID")
     private Long parentId;
 
-    @Schema(description = "댓글 내용", example = "좋습니다!", maxLength = 500)
+    @Schema(description = "댓글 내용", example = "좋습니다!")
     @NotBlank
+    @Size(max = 600)
     private String content;
 
     @Builder

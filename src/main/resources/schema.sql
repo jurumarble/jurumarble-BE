@@ -15,8 +15,8 @@ CREATE TABLE vote
 (
     id              BIGINT NOT NULL AUTO_INCREMENT,
     posted_user_id  BIGINT NOT NULL,
-    title           VARCHAR(55)  DEFAULT NULL,
-    detail          VARCHAR(255) DEFAULT NULL,
+    title           VARCHAR(100)  DEFAULT NULL,
+    detail          VARCHAR(700) DEFAULT NULL,
     filtered_age    VARCHAR(10)  DEFAULT NULL,
     filtered_gender VARCHAR(6)   DEFAULT NULL,
     filtered_mbti   VARCHAR(4)   DEFAULT NULL,
@@ -32,8 +32,8 @@ CREATE TABLE vote_content
     vote_id BIGINT NOT NULL,
     imageA  VARCHAR(500) DEFAULT NULL,
     imageB  VARCHAR(500) DEFAULT NULL,
-    titleA  VARCHAR(55)  DEFAULT NULL,
-    titleB  VARCHAR(55)  DEFAULT NULL,
+    titleA  VARCHAR(100)  DEFAULT NULL,
+    titleB  VARCHAR(100)  DEFAULT NULL,
     PRIMARY KEY (id)
 );
 
@@ -129,7 +129,7 @@ CREATE TABLE comment
     user_id          BIGINT       NOT NULL,
     vote_id          BIGINT       DEFAULT NULL,
     drink_id         BIGINT       DEFAULT NULL,
-    content          VARCHAR(255) NOT NULL,
+    content          VARCHAR(700) NOT NULL,
     age              VARCHAR(255) DEFAULT NULL,
     mbti             VARCHAR(4)   DEFAULT NULL,
     gender           VARCHAR(6)   DEFAULT NULL,
