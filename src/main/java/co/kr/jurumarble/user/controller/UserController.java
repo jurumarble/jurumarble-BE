@@ -81,4 +81,11 @@ public class UserController {
         String token = userService.testToken();
         return ResponseEntity.ok().body(new TokenTestResponse(token));
     }
+
+    @Operation(summary = "예비 심사용 계정 로그인")
+    @GetMapping("/test-temporary")
+    public ResponseEntity<TokenTestResponse> tokenTemporaryTest() {
+        String token = userService.tokenTemporaryTest();
+        return ResponseEntity.ok().body(new TokenTestResponse(token));
+    }
 }

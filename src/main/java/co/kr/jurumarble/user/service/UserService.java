@@ -62,7 +62,10 @@ public class UserService {
     }
 
     public String testToken() {
-        String token = tokenGenerator.generateRefreshToken(6L);
-        return token;
+        return tokenGenerator.generateRefreshToken(6L);
+    }
+
+    public String tokenTemporaryTest() {
+        return tokenGenerator.generateRefreshToken(100L);
     }
 }
