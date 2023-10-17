@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -16,17 +17,21 @@ public class CreateNormalVoteRequest {
 
     @Schema(description = "투표 제목", example = "A, B 중 어떤게 나을까요?")
     @NotBlank(message = "투표 제목은 필수입니다.")
+    @Size(max = 75)
     private String title;
 
     @Schema(description = "투표 상세", example = "A는 ~때문에 고민이고 B는 ~때문에 고민입니다")
+    @Size(max = 600)
     private String detail;
 
     @Schema(description = "A 항목의 제목")
     @NotBlank(message = "투표 A항목의 제목은 필수입니다.")
+    @Size(max = 55)
     private String titleA;
 
     @Schema(description = "B 항목의 제목")
     @NotBlank(message = "투표 B항목의 제목은 필수입니다.")
+    @Size(max = 55)
     private String titleB;
 
     @Schema(description = "A 이미지", example = "https://shopping-phinf.pstatic.net/main_8259853/82598534476.2.jpg")
