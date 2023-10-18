@@ -54,6 +54,15 @@ public class VoteController {
                 .body(voteService.sortFindVotes(keyword, sortBy, page, size));
     }
 
+    @Operation(summary = "일반/전통주 투표 리스트 검색, 조회", description = "파라미터에 keyeword, sortBy, page, size, category 보내주시면 됩니다. 검색이 아니면 keyword = 에 값 없이 기획상 최신순, 인기순 만")
+    @GetMapping("/v2")
+    public ResponseEntity<Slice<VoteData>> getVotesV2(@RequestAttribute(required = false) Long userId, @RequestParam(required = false) String keyword, @RequestParam SortByType sortBy, @RequestParam int page, @RequestParam int size) {
+        log.info("******************" + String.valueOf(userId));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(voteService.sortFindVotesV2(keyword, sortBy, page, size, userId));
+    }
+
+
     @Operation(summary = "마이페이지- 내가 참여한 투표 리스트 조회", description = "파라미터에 keyeword, sortBy, page, size, category 보내주시면 됩니다. 검색이 아니면 keyword = 에 값 없이 ")
     @GetMapping("/participated")
     public ResponseEntity<Slice<VoteData>> getParticipatedVotes(@RequestAttribute Long userId,@RequestParam int page, @RequestParam int size) {

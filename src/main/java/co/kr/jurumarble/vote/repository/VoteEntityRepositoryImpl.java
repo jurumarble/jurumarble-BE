@@ -13,12 +13,18 @@ import co.kr.jurumarble.vote.repository.dto.HotDrinkVoteData;
 import co.kr.jurumarble.vote.repository.dto.VoteCommonData;
 import co.kr.jurumarble.vote.repository.dto.VoteWithPostedUserCommonData;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Expression;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.NumberExpression;
+import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -32,7 +38,6 @@ import static co.kr.jurumarble.vote.domain.QVote.vote;
 import static co.kr.jurumarble.vote.domain.QVoteContent.voteContent;
 import static co.kr.jurumarble.vote.domain.QVoteDrinkContent.voteDrinkContent;
 import static co.kr.jurumarble.vote.domain.QVoteResult.voteResult;
-
 
 @Repository
 public class VoteEntityRepositoryImpl implements VoteEntityRepository {
@@ -125,6 +130,45 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .limit(pageSize + 1)
                 .fetch();
 
+    }
+
+    @Override
+    public List<VoteCommonData> findVoteCommonDataByTimeAndUserId(Long userId, String keyword, PageRequest pageable) {
+        int pageNo = pageable.getPageNumber();
+        int pageSize = pageable.getPageSize();
+
+        BooleanExpression keywordExpression = getKeywordExpression(keyword);
+
+        NumberExpression<Integer> voteOrder = new CaseBuilder()
+                .when(voteResult.votedUserId.eq(userId)).then(1)
+                .otherwise(0);
+
+        List<VoteCommonData> result = jpaQueryFactory
+                .select(Projections.bean(VoteCommonData.class,
+                        vote.id.as("voteId"),
+                        vote.postedUserId,
+                        vote.title,
+                        vote.detail,
+                        vote.filteredGender,
+                        vote.filteredAge,
+                        vote.filteredMbti,
+                        voteResult.count().as("voteCount"),
+                        vote.voteType,
+                        vote.createdDate.as("createdAt")
+                ))
+                .from(vote)
+                .leftJoin(voteResult).on(vote.id.eq(voteResult.voteId))
+                .where(keywordExpression)
+                .groupBy(vote.id)
+                .orderBy(
+                        voteOrder.asc(),
+                        vote.createdDate.desc()
+                )
+                .offset(pageNo * pageSize)
+                .limit(pageSize + 1)
+                .fetch();
+
+        return result;
     }
 
     @Override
