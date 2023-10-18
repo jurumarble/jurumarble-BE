@@ -19,7 +19,7 @@ public class CreateCommentRequest {
 
     @Schema(description = "댓글 내용", example = "좋습니다!")
     @NotBlank
-    @Size(max = 600)
+    @Size(max = 600, message = "댓글은 최대 600자까지 입력 가능합니다.")
     private String content;
 
     @Builder
