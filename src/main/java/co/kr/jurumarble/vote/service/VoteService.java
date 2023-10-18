@@ -208,4 +208,30 @@ public class VoteService {
         Long myBookmarkedVoteCnt = voteRepository.findMyBookmarkedVoteCnt(userId);
         return new MyVotesCntData(myWrittenVoteCnt, myParticipatedVoteCnt, myBookmarkedVoteCnt);
     }
+
+    public Slice<VoteData> sortFindVotesV2(String keyword, SortByType sortBy, Integer page, Integer size, Long userId) {
+
+        if (SortByType.ByTime == sortBy) {
+            PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
+            return findVotesByTimeV2(userId, keyword, pageRequest);
+        }
+
+        if (SortByType.ByPopularity == sortBy) {
+            PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
+            return findVotesByPopularity(keyword, pageRequest);
+        }
+
+        throw new SortByNotFountException();
+    }
+
+    public Slice<VoteData> findVotesByTimeV2(Long userId, String keyword, PageRequest pageable) {
+        List<VoteCommonData> voteCommonDataByTime;
+        if(userId == null) {
+            voteCommonDataByTime = voteRepository.findVoteCommonDataByTime(keyword, pageable);
+        } else {
+            voteCommonDataByTime = voteRepository.findVoteCommonDataByTimeAndUserId(userId, keyword, pageable);
+        }
+        return voteFinder.getVoteData(pageable, voteCommonDataByTime);
+    }
+
 }

@@ -32,7 +32,7 @@ public class JwtTokenProvider {
     @Value("${jwt.tokenPrefix}")
     private String tokenPrefix;
 
-    private final List<String> notFilteredRoutes = List.of("/api/votes", "/api/drinks");
+    private final List<String> notFilteredRoutes = List.of("/api/votes/v2", "/api/drinks");
 
     /**
      * JwtToken 생성 메서드
