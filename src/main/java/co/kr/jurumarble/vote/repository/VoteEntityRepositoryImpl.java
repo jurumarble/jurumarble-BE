@@ -235,7 +235,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                                 .and(searchConditions)
                 )
                 .groupBy(vote.id)
-                .orderBy(vote.id.count().desc())
+                .orderBy(vote.id.count().desc(), vote.title.asc())
                 .offset(pageNum * pageSize)
                 .limit(pageSize + 1)
                 .fetch();
