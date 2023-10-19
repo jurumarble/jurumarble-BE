@@ -13,14 +13,10 @@ import co.kr.jurumarble.vote.repository.dto.HotDrinkVoteData;
 import co.kr.jurumarble.vote.repository.dto.VoteCommonData;
 import co.kr.jurumarble.vote.repository.dto.VoteWithPostedUserCommonData;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Expression;
-import com.querydsl.core.types.Order;
-import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.NumberExpression;
-import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -161,12 +157,15 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .where(keywordExpression)
                 .groupBy(vote.id)
                 .orderBy(
-                        voteOrder.asc(),
+                        new CaseBuilder()
+                                .when(voteResult.votedUserId.eq(userId)).then(1)
+                                .otherwise(0).asc(),
                         vote.createdDate.desc()
                 )
                 .offset(pageNo * pageSize)
                 .limit(pageSize + 1)
                 .fetch();
+
 
         return result;
     }
