@@ -157,15 +157,12 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .where(keywordExpression)
                 .groupBy(vote.id)
                 .orderBy(
-                        new CaseBuilder()
-                                .when(voteResult.votedUserId.eq(userId)).then(1)
-                                .otherwise(0).asc(),
+                        voteOrder.asc(),
                         vote.createdDate.desc()
                 )
                 .offset(pageNo * pageSize)
                 .limit(pageSize + 1)
                 .fetch();
-
 
         return result;
     }
