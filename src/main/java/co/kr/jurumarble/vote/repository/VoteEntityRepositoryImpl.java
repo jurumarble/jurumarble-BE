@@ -347,9 +347,13 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                                 vote.filteredGender,
                                 vote.filteredAge,
                                 vote.filteredMbti,
-                                vote.voteType
+                                voteResult.id.count().as("votedCount"),
+                                vote.voteType,
+                                vote.createdDate.as("createdAt")
                         ))
                 .from(vote)
+                .leftJoin(voteResult).on(vote.id.eq(voteResult.voteId))
+                .groupBy(vote.id)
                 .where(vote.postedUserId.eq(userId))
                 .orderBy(vote.createdDate.desc())
                 .offset(pageNum * pageSize)
