@@ -148,7 +148,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                         vote.filteredGender,
                         vote.filteredAge,
                         vote.filteredMbti,
-                        voteResult.count().as("voteCount"),
+                        voteResult.id.count().as("votedCount"),
                         vote.voteType,
                         vote.createdDate.as("createdAt")
                 ))
