@@ -372,7 +372,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .innerJoin(voteResult).on(voteResult.voteId.eq(vote.id))
                 .groupBy(vote.id)
                 .where(voteResult.votedUserId.eq(userId))
-                .orderBy(vote.createdDate.desc())
+                .orderBy(voteResult.createdDate.desc())
                 .offset(pageNum * pageSize)
                 .limit(pageSize + 1)
                 .fetch();
