@@ -6,6 +6,7 @@ import co.kr.jurumarble.drink.controller.request.DrinkData;
 import co.kr.jurumarble.drink.controller.request.UpdateDrink;
 import co.kr.jurumarble.drink.controller.response.GetHotDrinksResponse;
 import co.kr.jurumarble.drink.controller.response.GetMapInDrinksResponse;
+import co.kr.jurumarble.drink.controller.response.UsersEnjoyDrinks;
 import co.kr.jurumarble.drink.domain.dto.MapInDrinkData;
 import co.kr.jurumarble.drink.domain.entity.Drink;
 import co.kr.jurumarble.drink.domain.entity.EnjoyDrink;
@@ -121,9 +122,11 @@ public class DrinkService {
         throw new SortByNotFountException();
     }
 
-    public Slice<DrinkData> getEnjoyDrinks(Long userId, String regionName, int pageNum, int pageSize) {
+    public UsersEnjoyDrinks getEnjoyDrinks(Long userId, String regionName, int pageNum, int pageSize) {
         List<DrinkData> drinksByEnjoyed = enjoyDrinkRepository.findDrinksByUserId(userId, regionName, pageNum, pageSize);
-        return pageableConverter.convertListToSlice(drinksByEnjoyed, pageNum, pageSize);
+        Slice<DrinkData> data = pageableConverter.convertListToSlice(drinksByEnjoyed, pageNum, pageSize);
+        Long enjoyedDrinksTotalCount = enjoyDrinkRepository.countByUserId(userId);
+        return new UsersEnjoyDrinks(enjoyedDrinksTotalCount, data);
     }
 
     public boolean checkEnjoyed(Long drinkId, Long userId) {

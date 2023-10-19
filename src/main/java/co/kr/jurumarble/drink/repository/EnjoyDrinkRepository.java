@@ -14,4 +14,5 @@ public interface EnjoyDrinkRepository extends JpaRepository<EnjoyDrink, Long>, E
 
     long countByDrinkId(Long drinkId);
 
+    Long countByUserId(Long userId);
 }

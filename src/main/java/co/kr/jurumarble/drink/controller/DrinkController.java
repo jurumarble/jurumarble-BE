@@ -2,10 +2,7 @@ package co.kr.jurumarble.drink.controller;
 
 import co.kr.jurumarble.comment.enums.Region;
 import co.kr.jurumarble.drink.controller.request.*;
-import co.kr.jurumarble.drink.controller.response.GetDrinkResponse;
-import co.kr.jurumarble.drink.controller.response.GetEnjoyedResponse;
-import co.kr.jurumarble.drink.controller.response.GetHotDrinksResponse;
-import co.kr.jurumarble.drink.controller.response.GetMapInDrinksResponse;
+import co.kr.jurumarble.drink.controller.response.*;
 import co.kr.jurumarble.drink.service.DrinkService;
 import co.kr.jurumarble.drink.service.response.GetDrinkServiceResponse;
 import co.kr.jurumarble.vote.enums.SortByType;
@@ -60,9 +57,9 @@ public class DrinkController {
 
     @Operation(summary = "즐긴 술 리스트 조회", description = "파라미터에 keyeword, sortBy, page, size, category 보내주시면 됩니다. 검색이 아니면 keyword = 에 값 없이 보내주시고, 필터로 지역을 추가해서 조회 가능하고 지역없이 조회하면 전체 전통주 이름순으로 나옵니다.")
     @GetMapping("/enjoys")
-    public ResponseEntity<Slice<DrinkData>> getEnjoyDrinks(@RequestAttribute Long userId, @RequestParam(required = false) Region region, @RequestParam int page, @RequestParam int size) {
+    public ResponseEntity<UsersEnjoyDrinks> getEnjoyDrinks(@RequestAttribute Long userId, @RequestParam(required = false) Region region, @RequestParam int page, @RequestParam int size) {
         String regionName = (region != null) ? region.getName() : null;
-        Slice<DrinkData> drinkList = drinkService.getEnjoyDrinks(userId, regionName, page, size);
+        UsersEnjoyDrinks drinkList = drinkService.getEnjoyDrinks(userId, regionName, page, size);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(drinkList);
     }
