@@ -29,7 +29,7 @@ public class CreateDrinkVoteRequest {
     private Long drinkBId;
 
     @Schema(description = "전통주 투표 상세 내용")
-    @Size(max = 600)
+    @Size(max = 600, message = "내용은 최대 600자까지 입력 가능합니다.")
     private String detail;
 
     public CreateDrinkVoteServiceRequest toServiceRequest() {

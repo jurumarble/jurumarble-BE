@@ -31,7 +31,7 @@ public class UpdateDrinkVoteRequest {
 
     @Schema(description = "투표 상세글")
     @NotBlank(message = "투표 상세글은 필수입니다.")
-    @Size(max = 600, message = "내용은 최대 600자까지 입력할 가능합니다.")
+    @Size(max = 600, message = "내용은 최대 600자까지 입력 가능합니다.")
     private String detail;
 
     public UpdateDrinkVoteServiceRequest toServiceRequest(Long voteId, Long userId) {
