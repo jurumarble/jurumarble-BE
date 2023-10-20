@@ -101,14 +101,14 @@ public class VoteController {
 
     @Operation(summary = "일반 투표 수정", description = "파라미터에 voteId, 바디에 {title, detail, titleA, titleB} json 형식으로 보내주시면 됩니다.")
     @PutMapping("/{voteId}/normal")
-    public ResponseEntity<HttpStatus> updateNormalVote(@PathVariable("voteId") Long voteId, @RequestBody UpdateNormalVoteRequest request, @RequestAttribute Long userId) {
+    public ResponseEntity<HttpStatus> updateNormalVote(@PathVariable("voteId") Long voteId, @Valid @RequestBody UpdateNormalVoteRequest request, @RequestAttribute Long userId) {
         voteService.updateNormalVote(request.toServiceRequest(voteId, userId));
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @Operation(summary = "전통주 투표 수정", description = "파라미터에 voteId, 바디에 {title, detail, titleA, titleB} json 형식으로 보내주시면 됩니다.")
     @PutMapping("/{voteId}/drink")
-    public ResponseEntity<HttpStatus> updateDrinkVote(@PathVariable("voteId") Long voteId, @RequestBody UpdateDrinkVoteRequest request, @RequestAttribute Long userId) {
+    public ResponseEntity<HttpStatus> updateDrinkVote(@PathVariable("voteId") Long voteId, @Valid @RequestBody UpdateDrinkVoteRequest request, @RequestAttribute Long userId) {
         voteService.updateDrinkVote(request.toServiceRequest(voteId, userId));
         return new ResponseEntity(HttpStatus.OK);
     }
