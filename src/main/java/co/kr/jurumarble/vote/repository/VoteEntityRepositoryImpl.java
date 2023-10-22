@@ -309,7 +309,7 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
     public Optional<HotDrinkVoteData> getHotDrinkVote(LocalDateTime nowTime) {
 
         LocalDateTime descendingHourTime = nowTime.withMinute(0);
-        LocalDateTime aWeekAgoTime = descendingHourTime.minus(7, ChronoUnit.DAYS);
+        LocalDateTime aWeekAgoTime = descendingHourTime.minus(2, ChronoUnit.DAYS);
 
         HotDrinkVoteData hotDrinkVoteData = jpaQueryFactory.select(
                         Projections.bean(HotDrinkVoteData.class,
