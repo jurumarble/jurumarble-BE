@@ -32,9 +32,8 @@ public class Notification extends BaseTimeEntity {
     @Column(nullable = false, name = "notification_type")
     private NotificationType notificationType;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_Id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private User receiver;
 
     @Builder
