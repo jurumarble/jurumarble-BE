@@ -46,7 +46,7 @@ public class NotificationSender {
     public void sendNotificationForNewComments(Long voteId) {
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         User receiver = userRepository.findById(vote.getPostedUserId()).orElseThrow(UserNotFoundException::new);
-        String content = "투표에 댓글이 달렸습니다.";
+        String content = "[" + vote.getTitle() + "] " + "투표에 댓글이 달렸습니다.";
         String url = String.valueOf(voteId);
         notificationService.send(receiver, Notification.NotificationType.COMMENT, content, url);
         log.info("Thread: {}, Notification sent to user: {}, type: {}, content: {}, url: {}",
@@ -57,9 +57,10 @@ public class NotificationSender {
     }
 
     public void sendNotificationsForVoters(Long voteId) {
+        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Long count = voteResultRepository.countByVoteId(voteId);
         if (count % 10 == 0 && count != 0) {
-            String content = "투표에 " + count + "명 이상이 참여했어요!";
+            String content = "[" + vote.getTitle() + "] " + "투표에 " + count + "명 이상이 참여했어요!";
             String url = String.valueOf(voteId);
             List<VoteResult> voteResultList = voteResultRepository.findByVoteId(voteId);
             sendNotificationsToVoters(content, url, voteResultList);
