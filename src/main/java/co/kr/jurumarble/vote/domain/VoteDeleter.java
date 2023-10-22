@@ -6,6 +6,8 @@ import co.kr.jurumarble.comment.domain.Comment;
 import co.kr.jurumarble.comment.repository.CommentRepository;
 import co.kr.jurumarble.exception.vote.VoteContentNotFoundException;
 import co.kr.jurumarble.exception.vote.VoteDrinkContentNotFoundException;
+import co.kr.jurumarble.notification.domain.Notification;
+import co.kr.jurumarble.notification.repository.NotificationRepository;
 import co.kr.jurumarble.vote.enums.VoteType;
 import co.kr.jurumarble.vote.repository.VoteContentRepository;
 import co.kr.jurumarble.vote.repository.VoteDrinkContentRepository;
@@ -24,11 +26,13 @@ public class VoteDeleter {
     private final CommentRepository commentRepository;
     private final VoteResultRepository voteResultRepository;
     private final BookmarkRepository bookmarkRepository;
+    private final NotificationRepository notificationRepository;
     public void deleteVoteRelatedData(Vote vote) {
         deleteVoteContent(vote);
         deleteVoteComment(vote);
         deleteVoteResult(vote);
         deleteVoteBookmark(vote);
+        deleteVoteNotification(vote);
     }
 
     private void deleteVoteContent(Vote vote) {
@@ -58,4 +62,8 @@ public class VoteDeleter {
         bookmarkRepository.deleteAll(bookmarks);
     }
 
+    private void deleteVoteNotification(Vote vote) {
+        List<Notification> notifications = notificationRepository.findNotificationsByUrl(vote.getId().toString());
+        notificationRepository.deleteAll(notifications);
+    }
 }
