@@ -5,6 +5,7 @@ import co.kr.jurumarble.exception.notification.NotificationNotFoundException;
 import co.kr.jurumarble.exception.user.UserNotFoundException;
 import co.kr.jurumarble.notification.domain.Notification;
 import co.kr.jurumarble.notification.dto.NotificationDto;
+import co.kr.jurumarble.notification.dto.NotificationDtoV1;
 import co.kr.jurumarble.notification.repository.EmitterRepository;
 import co.kr.jurumarble.notification.repository.NotificationRepository;
 import co.kr.jurumarble.user.domain.User;
@@ -46,15 +47,15 @@ public class NotificationService {
     }
 
     @Transactional
-    public void send(User receiver, Notification.NotificationType notificationType, String content, String url) {
-        Notification notification = notificationRepository.save(createNotification(receiver, notificationType, content, url));
+    public void send(User receiver, Notification.NotificationType notificationType, String title, String content, String url) {
+        Notification notification = notificationRepository.save(createNotification(receiver, notificationType, title, content, url));
         String receiverId = String.valueOf(receiver.getId());
         String eventId = receiverId + "_" + System.currentTimeMillis();
         Map<String, SseEmitter> emitters = emitterRepository.findAllEmitterStartWithByUserId(receiverId);
         emitters.forEach(
                 (key, emitter) -> {
                     emitterRepository.saveEventCache(key, notification);
-                    sendNotification(emitter, eventId, key, NotificationDto.from(notification));
+                    sendNotification(emitter, eventId, key, NotificationDtoV1.from(notification));
                 }
         );
     }
@@ -88,10 +89,11 @@ public class NotificationService {
                 .forEach(entry -> sendNotification(emitter, entry.getKey(), emitterId, entry.getValue()));
     }
 
-    private Notification createNotification(User receiver, Notification.NotificationType notificationType, String content, String url) {
+    private Notification createNotification(User receiver, Notification.NotificationType notificationType, String title, String content, String url) {
         return Notification.builder()
                 .receiver(receiver)
                 .notificationType(notificationType)
+                .title(title)
                 .content(content)
                 .url(url)
                 .isRead(false)
@@ -102,26 +104,34 @@ public class NotificationService {
         validateAdminId(adminId);
         User receiver = userRepository.findById(receiverId).orElseThrow(UserNotFoundException::new);
         Notification.NotificationType type = Notification.NotificationType.ADMIN_NOTIFY;
+        String title = request.getTitle();
         String message = request.getMessage();
         String relatedUrl = request.getRelatedUrl();
-        send(receiver, type, message, relatedUrl);
+        send(receiver, type, title, message, relatedUrl);
     }
 
     public void sendNotificationToAllUsers(Long adminId, CreateNotificationServiceRequest request) {
         validateAdminId(adminId);
         List<User> allUsers = userRepository.findAll();
         Notification.NotificationType type = Notification.NotificationType.ADMIN_NOTIFY;
+        String title = request.getTitle();
         String message = request.getMessage();
         String relatedUrl = request.getRelatedUrl();
 
         allUsers.stream()
-                .forEach(user -> CompletableFuture.runAsync(() -> sendAsync(user, type, message, relatedUrl)));
+                .forEach(user -> CompletableFuture.runAsync(() -> sendAsync(user, type, title, message, relatedUrl)));
     }
 
-    private void sendAsync(User receiver, Notification.NotificationType notificationType, String content, String relatedUrl) {
-        send(receiver, notificationType, content, relatedUrl);
+    private void sendAsync(User receiver, Notification.NotificationType notificationType, String title, String content, String relatedUrl) {
+        send(receiver, notificationType, title, content, relatedUrl);
         log.info("Thread: {}, Notification sent to user: {}, type: {}, content: {}, url: {}",
-                Thread.currentThread().getName(), receiver.getId(), Notification.NotificationType.COMMENT, content, relatedUrl);
+                Thread.currentThread().getName(), receiver.getId(), Notification.NotificationType.COMMENT, title, content, relatedUrl);
+    }
+
+    public List<NotificationDtoV1> getNotificationDtosV1(Long userId) {
+        return getNotificationsByUserId(userId).stream()
+                .map(NotificationDtoV1::from)
+                .collect(Collectors.toList());
     }
 
     public List<NotificationDto> getNotificationDtos(Long userId) {
