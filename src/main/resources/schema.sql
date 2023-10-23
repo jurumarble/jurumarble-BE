@@ -160,6 +160,7 @@ CREATE TABLE notification
 (
     id                BIGINT  NOT NULL AUTO_INCREMENT,
     user_id           BIGINT  NOT NULL,
+    title             VARCHAR(60)  DEFAULT NULL,
     content           VARCHAR(255) DEFAULT NULL,
     url               VARCHAR(500) DEFAULT NULL,
     is_read           BOOLEAN NOT NULL,

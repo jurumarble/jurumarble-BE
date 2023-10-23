@@ -20,14 +20,11 @@ public class Notification extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    private String title;
     private String content;
-
     private String url;
-
     @Column(nullable = false, name = "is_read")
     private Boolean isRead;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, name = "notification_type")
     private NotificationType notificationType;
@@ -37,9 +34,10 @@ public class Notification extends BaseTimeEntity {
     private User receiver;
 
     @Builder
-    public Notification(User receiver, NotificationType notificationType, String content, String url, Boolean isRead) {
+    public Notification(User receiver, NotificationType notificationType, String title, String content, String url, Boolean isRead) {
         this.receiver = receiver;
         this.notificationType = notificationType;
+        this.title = title;
         this.content = content;
         this.url = url;
         this.isRead = isRead;

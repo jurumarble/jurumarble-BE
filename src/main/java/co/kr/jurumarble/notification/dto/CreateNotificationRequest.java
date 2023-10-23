@@ -11,7 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CreateNotificationRequest {
 
-    @Schema(description = "알림 메시지", maxLength = 500)
+    @Schema(description = "알림 제목")
+    private String title;
+
+    @Schema(description = "알림 내용")
     private String message;
 
     @Schema(description = "Related Url")
@@ -19,13 +22,15 @@ public class CreateNotificationRequest {
 
 
     @Builder
-    public CreateNotificationRequest(String message, String relatedUrl) {
+    public CreateNotificationRequest(String title, String message, String relatedUrl) {
+        this.title = title;
         this.message = message;
         this.relatedUrl = relatedUrl;
     }
 
     public CreateNotificationServiceRequest toServiceRequest() {
         return CreateNotificationServiceRequest.builder()
+                .title(title)
                 .message(message)
                 .relatedUrl(relatedUrl)
                 .build();

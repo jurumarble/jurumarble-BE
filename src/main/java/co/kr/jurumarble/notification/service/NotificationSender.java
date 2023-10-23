@@ -46,34 +46,33 @@ public class NotificationSender {
     public void sendNotificationForNewComments(Long voteId) {
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         User receiver = userRepository.findById(vote.getPostedUserId()).orElseThrow(UserNotFoundException::new);
-        String content = "[" + vote.getTitle() + "] " + "투표에 댓글이 달렸습니다.";
+        String title = vote.getTitle();
+        String content = "투표에 댓글이 달렸습니다.";
         String url = String.valueOf(voteId);
-        notificationService.send(receiver, Notification.NotificationType.COMMENT, content, url);
+        notificationService.send(receiver, Notification.NotificationType.COMMENT, title, content, url);
         log.info("Thread: {}, Notification sent to user: {}, type: {}, content: {}, url: {}",
-                Thread.currentThread().getName(),
-                receiver.getId(),
-                Notification.NotificationType.COMMENT,
-                content, url);
+                Thread.currentThread().getName(), receiver.getId(), Notification.NotificationType.COMMENT, title, content, url);
     }
 
     public void sendNotificationsForVoters(Long voteId) {
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Long count = voteResultRepository.countByVoteId(voteId);
         if (count % 10 == 0 && count != 0) {
-            String content = "[" + vote.getTitle() + "] " + "투표에 " + count + "명 이상이 참여했어요!";
+            String title = vote.getTitle();
+            String content = "투표에 " + count + "명 이상이 참여했어요!";
             String url = String.valueOf(voteId);
             List<VoteResult> voteResultList = voteResultRepository.findByVoteId(voteId);
-            sendNotificationsToVoters(content, url, voteResultList);
+            sendNotificationsToVoters(title, content, url, voteResultList);
         }
     }
 
-    private void sendNotificationsToVoters(String content, String url, List<VoteResult> voteResultList) {
+    private void sendNotificationsToVoters(String title, String content, String url, List<VoteResult> voteResultList) {
         for (VoteResult result : voteResultList) {
             CompletableFuture.runAsync(() -> {
                 User receiver = userRepository.findById(result.getVotedUserId()).orElseThrow(UserNotFoundException::new);
-                notificationService.send(receiver, Notification.NotificationType.VOTE, content, url);
+                notificationService.send(receiver, Notification.NotificationType.VOTE, title, content, url);
                 log.info("Thread: {}, Notification sent to user: {}, type: {}, content: {}, url: {}",
-                        Thread.currentThread().getName(), receiver.getId(), Notification.NotificationType.COMMENT, content, url);
+                        Thread.currentThread().getName(), receiver.getId(), Notification.NotificationType.COMMENT, title, content, url);
             });
         }
     }
