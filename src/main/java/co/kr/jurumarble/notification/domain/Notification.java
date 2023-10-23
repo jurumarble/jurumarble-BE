@@ -28,12 +28,8 @@ public class Notification extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, name = "notification_type")
     private NotificationType notificationType;
-<<<<<<< Updated upstream
 
     @ManyToOne(fetch = FetchType.LAZY)
-=======
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
->>>>>>> Stashed changes
     @JoinColumn(name = "user_Id")
     private User receiver;
 
