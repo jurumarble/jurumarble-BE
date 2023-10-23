@@ -2,6 +2,7 @@ package co.kr.jurumarble.notification.controller;
 
 import co.kr.jurumarble.notification.dto.CreateNotificationRequest;
 import co.kr.jurumarble.notification.dto.NotificationDto;
+import co.kr.jurumarble.notification.dto.NotificationDtoV1;
 import co.kr.jurumarble.notification.service.NotificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -45,10 +46,18 @@ public class NotificationController {
 
     @Operation(summary = "알림 조회", description = "사용자의 모든 알림 메시지를 조회합니다.")
     @GetMapping("")
+    public ResponseEntity<List<NotificationDtoV1>> getNotificationsV1(@RequestAttribute Long userId) {
+        List<NotificationDtoV1> notifications = notificationService.getNotificationDtosV1(userId);
+        return new ResponseEntity(notifications, HttpStatus.OK);
+    }
+
+    @Operation(summary = "알림 조회 v2", description = "사용자의 모든 알림 메시지를 조회합니다.")
+    @GetMapping("/v2")
     public ResponseEntity<List<NotificationDto>> getNotifications(@RequestAttribute Long userId) {
         List<NotificationDto> notifications = notificationService.getNotificationDtos(userId);
         return new ResponseEntity(notifications, HttpStatus.OK);
     }
+
 
     @Operation(summary = "알림 읽음 처리", description = "사용자가 클릭한 알림을 읽음 처리 합니다.")
     @PostMapping("/{notificationId}/read")
