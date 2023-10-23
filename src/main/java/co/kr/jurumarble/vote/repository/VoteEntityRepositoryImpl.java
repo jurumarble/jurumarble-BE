@@ -26,7 +26,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static co.kr.jurumarble.bookmark.domain.QBookmark.bookmark;
 import static co.kr.jurumarble.user.domain.QUser.user;
@@ -355,19 +357,19 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
 
     @Override
     public List<VoteCommonData> findVoteCommonDataByParticipate(Long userId, int pageNum, int pageSize) {
-        return jpaQueryFactory.select(
-                        Projections.bean(VoteCommonData.class,
-                                vote.id.as("voteId"),
-                                vote.postedUserId,
-                                vote.title,
-                                vote.detail,
-                                vote.filteredGender,
-                                vote.filteredAge,
-                                vote.filteredMbti,
-                                voteResult.id.count().as("votedCount"),
-                                vote.voteType,
-                                vote.createdDate.as("createdAt")
-                        ))
+        List<VoteCommonData> voteCommonDataList = jpaQueryFactory
+                .select(Projections.bean(VoteCommonData.class,
+                        vote.id.as("voteId"),
+                        vote.postedUserId,
+                        vote.title,
+                        vote.detail,
+                        vote.filteredGender,
+                        vote.filteredAge,
+                        vote.filteredMbti,
+                        voteResult.id.count().as("votedCount"),
+                        vote.voteType,
+                        vote.createdDate.as("createdAt")
+                ))
                 .from(vote)
                 .innerJoin(voteResult).on(voteResult.voteId.eq(vote.id))
                 .groupBy(vote.id)
@@ -376,6 +378,34 @@ public class VoteEntityRepositoryImpl implements VoteEntityRepository {
                 .offset(pageNum * pageSize)
                 .limit(pageSize + 1)
                 .fetch();
+
+
+        List<Long> voteIds = voteCommonDataList.stream()
+                .map(VoteCommonData::getVoteId)
+                .collect(Collectors.toList());
+
+        Map<Long, Long> voteResultCounts = jpaQueryFactory
+                .select(vote.id, voteResult.id.count())
+                .from(vote)
+                .innerJoin(voteResult).on(voteResult.voteId.eq(vote.id))
+                .where(vote.id.in(voteIds))
+                .groupBy(vote.id)
+                .fetch()
+                .stream()
+                .collect(Collectors.toMap(
+                        tuple -> tuple.get(vote.id),
+                        tuple -> tuple.get(voteResult.id.count())
+                ));
+
+        voteCommonDataList.forEach(voteCommonData -> {
+            Long voteId = voteCommonData.getVoteId();
+            if (voteResultCounts.containsKey(voteId)) {
+                voteCommonData.setVotedCount(voteResultCounts.get(voteId));
+            }
+        });
+
+        return voteCommonDataList;
+
     }
 
     @Override
