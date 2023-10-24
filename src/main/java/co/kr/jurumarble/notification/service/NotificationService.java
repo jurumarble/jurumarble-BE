@@ -128,13 +128,13 @@ public class NotificationService {
                 Thread.currentThread().getName(), receiver.getId(), Notification.NotificationType.COMMENT, title, content, relatedUrl);
     }
 
-    public List<NotificationDtoV1> getNotificationDtosV1(Long userId) {
+    public List<NotificationDtoV1> getNotificationDtos(Long userId) {
         return getNotificationsByUserId(userId).stream()
                 .map(NotificationDtoV1::from)
                 .collect(Collectors.toList());
     }
 
-    public List<NotificationDto> getNotificationDtos(Long userId) {
+    public List<NotificationDto> getNotificationDtosV2(Long userId) {
         return getNotificationsByUserId(userId).stream()
                 .map(NotificationDto::from)
                 .collect(Collectors.toList());
