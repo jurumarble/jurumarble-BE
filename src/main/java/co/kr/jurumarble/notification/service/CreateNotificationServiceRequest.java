@@ -7,14 +7,14 @@ import lombok.Getter;
 public class CreateNotificationServiceRequest {
     private String title;
 
-    private String message;
+    private String content;
 
-    private String relatedUrl;
+    private String url;
 
     @Builder
-    public CreateNotificationServiceRequest(String title, String message, String relatedUrl) {
+    public CreateNotificationServiceRequest(String title, String content, String url) {
         this.title = title;
-        this.message = message;
-        this.relatedUrl = relatedUrl;
+        this.content = content;
+        this.url = url;
     }
 }
