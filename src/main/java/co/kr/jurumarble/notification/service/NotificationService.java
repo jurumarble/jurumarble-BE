@@ -4,8 +4,8 @@ import co.kr.jurumarble.exception.notification.AdminAuthorityException;
 import co.kr.jurumarble.exception.notification.NotificationNotFoundException;
 import co.kr.jurumarble.exception.user.UserNotFoundException;
 import co.kr.jurumarble.notification.domain.Notification;
+import co.kr.jurumarble.notification.dto.NotificationDtoV2;
 import co.kr.jurumarble.notification.dto.NotificationDto;
-import co.kr.jurumarble.notification.dto.NotificationDtoV1;
 import co.kr.jurumarble.notification.repository.EmitterRepository;
 import co.kr.jurumarble.notification.repository.NotificationRepository;
 import co.kr.jurumarble.user.domain.User;
@@ -17,8 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -55,7 +54,7 @@ public class NotificationService {
         emitters.forEach(
                 (key, emitter) -> {
                     emitterRepository.saveEventCache(key, notification);
-                    sendNotification(emitter, eventId, key, NotificationDtoV1.from(notification));
+                    sendNotification(emitter, eventId, key, NotificationDto.from(notification));
                 }
         );
     }
@@ -105,9 +104,9 @@ public class NotificationService {
         User receiver = userRepository.findById(receiverId).orElseThrow(UserNotFoundException::new);
         Notification.NotificationType type = Notification.NotificationType.ADMIN_NOTIFY;
         String title = request.getTitle();
-        String message = request.getMessage();
-        String relatedUrl = request.getRelatedUrl();
-        send(receiver, type, title, message, relatedUrl);
+        String content = request.getContent();
+        String url = request.getUrl();
+        send(receiver, type, title, content, url);
     }
 
     public void sendNotificationToAllUsers(Long adminId, CreateNotificationServiceRequest request) {
@@ -115,30 +114,32 @@ public class NotificationService {
         List<User> allUsers = userRepository.findAll();
         Notification.NotificationType type = Notification.NotificationType.ADMIN_NOTIFY;
         String title = request.getTitle();
-        String message = request.getMessage();
-        String relatedUrl = request.getRelatedUrl();
+        String content = request.getContent();
+        String url = request.getUrl();
 
         allUsers.stream()
-                .forEach(user -> CompletableFuture.runAsync(() -> sendAsync(user, type, title, message, relatedUrl)));
+                .forEach(user -> CompletableFuture.runAsync(() -> sendAsync(user, type, title, content, url)));
     }
 
-    private void sendAsync(User receiver, Notification.NotificationType notificationType, String title, String content, String relatedUrl) {
-        send(receiver, notificationType, title, content, relatedUrl);
+    private void sendAsync(User receiver, Notification.NotificationType notificationType, String title, String content, String url) {
+        send(receiver, notificationType, title, content, url);
         log.info("Thread: {}, Notification sent to user: {}, type: {}, content: {}, url: {}",
-                Thread.currentThread().getName(), receiver.getId(), Notification.NotificationType.COMMENT, title, content, relatedUrl);
+                Thread.currentThread().getName(), receiver.getId(), Notification.NotificationType.COMMENT, title, content, url);
     }
 
-    public List<NotificationDtoV1> getNotificationDtos(Long userId) {
-        return getNotificationsByUserId(userId).stream()
-                .map(NotificationDtoV1::from)
-                .collect(Collectors.toList());
-    }
-
-    public List<NotificationDto> getNotificationDtosV2(Long userId) {
+    public List<NotificationDto> getNotificationDtos(Long userId) {
         return getNotificationsByUserId(userId).stream()
                 .map(NotificationDto::from)
                 .collect(Collectors.toList());
     }
+
+    public List<NotificationDtoV2> getNotificationDtosV2(Long userId) {
+        List<Notification> notifications = getNotificationsByUserId(userId);
+        List<Notification> latestNotifications = removeDuplicates(notifications);
+        latestNotifications.sort(Comparator.comparing(Notification::getCreatedDate).reversed());
+        return latestNotifications.stream().map(NotificationDtoV2::from).collect(Collectors.toList());
+    }
+
 
     @Transactional
     public void setNotificationsAsRead(Long notificationId) {
@@ -157,5 +158,10 @@ public class NotificationService {
         }
     }
 
+    private List<Notification> removeDuplicates(List<Notification> notifications) {
+        return notifications.stream()
+                .collect(Collectors.collectingAndThen(
+                        Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(n -> n.getNotificationType().toString() + n.getUrl()))), ArrayList::new));
+    }
 
 }

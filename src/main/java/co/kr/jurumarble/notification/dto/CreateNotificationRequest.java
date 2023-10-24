@@ -15,24 +15,24 @@ public class CreateNotificationRequest {
     private String title;
 
     @Schema(description = "알림 내용")
-    private String message;
+    private String content;
 
     @Schema(description = "Related Url")
-    private String relatedUrl;
+    private String url;
 
 
     @Builder
-    public CreateNotificationRequest(String title, String message, String relatedUrl) {
+    public CreateNotificationRequest(String title, String content, String url) {
         this.title = title;
-        this.message = message;
-        this.relatedUrl = relatedUrl;
+        this.content = content;
+        this.url = url;
     }
 
     public CreateNotificationServiceRequest toServiceRequest() {
         return CreateNotificationServiceRequest.builder()
                 .title(title)
-                .message(message)
-                .relatedUrl(relatedUrl)
+                .content(content)
+                .url(url)
                 .build();
     }
 
