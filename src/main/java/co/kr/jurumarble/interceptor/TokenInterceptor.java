@@ -34,14 +34,11 @@ public class TokenInterceptor implements HandlerInterceptor {
 
         if(PERMIT_JWT_URL_ARRAY.contains(requestURI) && request.getHeader(HttpHeaders.AUTHORIZATION) == null) {
             request.setAttribute("userId", null);
-            log.info("%%%%%%%%%%%%%%%%%" + "if문 진입");
-            log.info("%%%%%%%%%%%%%%%%%" + request.getAttribute("userId"));
             return true;
         }
 
         String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         parseTokenAndTransferUserId(request, authorizationHeader);
-        log.info("%%%%%%%%%%%%%%%%%" + request.getAttribute("userId"));
         return true;
     }
 
@@ -49,7 +46,6 @@ public class TokenInterceptor implements HandlerInterceptor {
         HashMap<String, Object> parseJwtTokenMap = jwtTokenProvider.parseJwtToken(request ,authorizationHeader);
         Long userId = getUserIdFromToken(parseJwtTokenMap);
         request.setAttribute("userId", userId);
-        log.info("%%%%%%%%%%%%%%%%%" + request.getAttribute("userId"));
     }
 
     private Long getUserIdFromToken(HashMap<String, Object> parseJwtTokenMap) {
