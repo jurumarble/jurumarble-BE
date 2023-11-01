@@ -38,4 +38,17 @@ class VoteValidatorTest {
         assertThrows(AlreadyUserDoVoteException.class, () -> voteValidator.validAlreadyParticipatedVote(vote, user));
     }
 
+    @DisplayName("자신이 작성한 투표가 아닌 투표에 접근하려하면 UserNotAccessRightException을 throw 한다.")
+    @Test
+    void validUserNotAccessRightVote() {
+        // given
+        Long userId = 1L;
+        Vote vote = Vote.builder()
+                .postedUserId(2L)
+                .build();
+        User user = User.builder().id(userId).build();
+
+        // when // then
+        assertThrows(UserNotAccessRightException.class, () -> voteValidator.isVoteOfUser(user.getId(), vote));
+    }
 }
