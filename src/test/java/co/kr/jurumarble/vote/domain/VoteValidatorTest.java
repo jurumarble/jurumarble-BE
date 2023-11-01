@@ -25,7 +25,7 @@ class VoteValidatorTest {
 
     @DisplayName("내가 만든 투표에 참여하는 경우 UserNotAccessRightException을 throw 한다.")
     @Test
-    void validPostedUserWhenParcitipateVote() {
+    void validPostedUserWhenParticipateVote() {
         // given
         Long userId = 1L;
         Vote vote = Vote.builder()
@@ -43,7 +43,7 @@ class VoteValidatorTest {
 
     @DisplayName("이미 참여한 투표에 참여하는 경우 UserNotAccessRightException을 throw 한다.")
     @Test
-    void validAlreadyParcitipatedVote() {
+    void validAlreadyParticipatedVote() {
         // given
         Long userId = 1L;
         Vote vote = Vote.builder()
