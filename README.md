@@ -30,19 +30,18 @@
 <details>
 <summary>투표</summary>
 <br>
-<div style="display: flex; justify-content: space-between;">
-
-<div style="width: 300px; margin-right: 20px;">
-  <p style="text-align: center;">투표 등록</p>
+<table>
+<tr>
+<td style="text-align: center; vertical-align: middle;">
+  <p>투표 등록</p>
   <img src="https://github.com/jurumarble/jurumarble-BE/assets/80972298/9d8965dc-21c2-4ab4-b325-0960d0f2e923" width="300"/>
-</div>
-
-<div style="width: 300px;">
-  <p style="text-align: center;">투표 참여</p>
+</td>
+<td style="text-align: center; vertical-align: middle;">
+  <p>투표 참여</p>
   <img src="https://github.com/jurumarble/jurumarble-BE/assets/80972298/9d5da981-1aa1-455d-a12f-7de13bbd7cfa" width="300"/>
-</div>
-
-</div>
+</td>
+</tr>
+</table>
 </details>
 <br>
 
