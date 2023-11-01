@@ -86,7 +86,7 @@ public class VoteService {
     @Transactional
     public void updateNormalVote(UpdateNormalVoteServiceRequest request) {
         Vote vote = voteRepository.findById(request.getVoteId()).orElseThrow(VoteNotFoundException::new);
-        isVoteOfUser(request.getUserId(), vote);
+        voteValidator.isVoteOfUser(request.getUserId(), vote);
         VoteContent voteContent = voteContentRepository.findByVoteId(vote.getId()).orElseThrow(VoteNotFoundException::new);
         vote.updateNormalVote(request);
         voteContent.update(request);
@@ -95,21 +95,17 @@ public class VoteService {
     @Transactional
     public void updateDrinkVote(UpdateDrinkVoteServiceRequest request) {
         Vote vote = voteRepository.findById(request.getVoteId()).orElseThrow(VoteNotFoundException::new);
-        isVoteOfUser(request.getUserId(), vote);
+        voteValidator.isVoteOfUser(request.getUserId(), vote);
         VoteDrinkContent voteDrinkContent = voteDrinkContentRepository.findByVoteId(vote.getId()).orElseThrow(VoteNotFoundException::new);
         DrinksUsedForVote drinksUsedForVote = drinkFinder.findDrinksUsedForVote(request.extractDrinkIds());
         vote.updateDrinkVote(request);
         voteDrinkContent.updateFromDrinks(drinksUsedForVote);
     }
 
-    public void isVoteOfUser(Long userId, Vote vote) {
-        if (!vote.isVoteOfUser(userId)) throw new UserNotAccessRightException();
-    }
-
     @Transactional
     public void deleteVote(Long voteId, Long userId) {
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
-        isVoteOfUser(userId, vote);
+        voteValidator.isVoteOfUser(userId, vote);
         voteDeleter.deleteVoteRelatedData(vote);
         voteRepository.delete(vote);
     }
