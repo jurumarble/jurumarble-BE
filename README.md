@@ -91,6 +91,8 @@
 
 ## 프로젝트 구성도
 
+![주루마블 캡처본](https://github.com/jurumarble/jurumarble-BE/assets/80972298/8db9f0fd-b732-484b-9233-fb08be6f3820)
+
 <br>
 
 ## 데이터베이스 ERD
