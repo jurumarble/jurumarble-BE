@@ -25,4 +25,8 @@ public class VoteValidator {
         if (voteResultRepository.existsByVoteIdAndVotedUserId(vote.getId(), user.getId()))
             throw new AlreadyUserDoVoteException();
     }
+
+    public void isVoteOfUser(Long userId, Vote vote) {
+        if (!vote.isVoteOfUser(userId)) throw new UserNotAccessRightException();
+    }
 }

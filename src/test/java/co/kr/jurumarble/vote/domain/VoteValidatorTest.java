@@ -23,27 +23,9 @@ class VoteValidatorTest {
     @Mock
     private VoteResultRepository voteResultRepository;
 
-    @DisplayName("내가 만든 투표에 참여하는 경우 UserNotAccessRightException을 throw 한다.")
-    @Test
-    void validPostedUserWhenParcitipateVote() {
-        // given
-        Long userId = 1L;
-        Vote vote = Vote.builder()
-                .postedUserId(userId)
-                .build();
-
-        User postedUser = User.builder().id(userId).build();
-
-        // when // then
-        assertThrows(UserNotAccessRightException.class,
-                () -> {
-                    voteValidator.validPostedUserWhenParticipateVote(vote, postedUser);
-                });
-    }
-
     @DisplayName("이미 참여한 투표에 참여하는 경우 UserNotAccessRightException을 throw 한다.")
     @Test
-    void validAlreadyParcitipatedVote() {
+    void validAlreadyParticipatedVote() {
         // given
         Long userId = 1L;
         Vote vote = Vote.builder()
@@ -56,4 +38,17 @@ class VoteValidatorTest {
         assertThrows(AlreadyUserDoVoteException.class, () -> voteValidator.validAlreadyParticipatedVote(vote, user));
     }
 
+    @DisplayName("자신이 작성한 투표가 아닌 투표에 접근하려하면 UserNotAccessRightException을 throw 한다.")
+    @Test
+    void validUserNotAccessRightVote() {
+        // given
+        Long userId = 1L;
+        Vote vote = Vote.builder()
+                .postedUserId(2L)
+                .build();
+        User user = User.builder().id(userId).build();
+
+        // when // then
+        assertThrows(UserNotAccessRightException.class, () -> voteValidator.isVoteOfUser(user.getId(), vote));
+    }
 }

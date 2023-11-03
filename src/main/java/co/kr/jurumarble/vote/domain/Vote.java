@@ -51,7 +51,8 @@ public class Vote extends BaseTimeEntity {
     private MbtiType filteredMbti;
 
     @Builder
-    public Vote(Long postedUserId, String title, String detail, VoteType voteType, GenderType filteredGender, AgeType filteredAge, MbtiType filteredMbti) {
+    public Vote(Long voteId, Long postedUserId, String title, String detail, VoteType voteType, GenderType filteredGender, AgeType filteredAge, MbtiType filteredMbti) {
+        this.id = voteId;
         this.postedUserId = postedUserId;
         this.title = title;
         this.detail = detail;
