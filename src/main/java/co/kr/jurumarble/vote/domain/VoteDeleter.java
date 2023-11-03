@@ -35,7 +35,7 @@ public class VoteDeleter {
         deleteVoteNotification(vote);
     }
 
-    private void deleteVoteContent(Vote vote) {
+    protected void deleteVoteContent(Vote vote) {
         if (VoteType.DRINK == vote.getVoteType()) {
             VoteDrinkContent voteDrinkContent = voteDrinkContentRepository.findByVoteId(vote.getId()).orElseThrow(VoteDrinkContentNotFoundException::new);
             voteDrinkContentRepository.delete(voteDrinkContent);
@@ -47,22 +47,22 @@ public class VoteDeleter {
         }
     }
 
-    private void deleteVoteComment(Vote vote) {
+    protected void deleteVoteComment(Vote vote) {
         List<Comment> comments = commentRepository.findByVoteId(vote.getId());
         commentRepository.deleteAll(comments);
     }
 
-    private void deleteVoteResult(Vote vote) {
+    protected void deleteVoteResult(Vote vote) {
         List<VoteResult> voteResults = voteResultRepository.findByVoteId(vote.getId());
         voteResultRepository.deleteAll(voteResults);
     }
 
-    private void deleteVoteBookmark(Vote vote) {
+    protected void deleteVoteBookmark(Vote vote) {
         List<Bookmark> bookmarks = bookmarkRepository.findByVoteId(vote.getId());
         bookmarkRepository.deleteAll(bookmarks);
     }
 
-    private void deleteVoteNotification(Vote vote) {
+    protected void deleteVoteNotification(Vote vote) {
         List<Notification> notifications = notificationRepository.findNotificationsByUrl(vote.getId().toString());
         notificationRepository.deleteAll(notifications);
     }

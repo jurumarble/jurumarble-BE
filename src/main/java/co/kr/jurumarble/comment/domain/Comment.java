@@ -63,7 +63,8 @@ public class Comment extends BaseTimeEntity {
     private Restaurant restaurant = new Restaurant();
 
     @Builder
-    public Comment(User user, Long voteId, Long drinkId, String content, Comment parent, List<Comment> children, List<CommentEmotion> commentEmotionList, Restaurant restaurant) {
+    public Comment(Long commentId, User user, Long voteId, Long drinkId, String content, Comment parent, List<Comment> children, List<CommentEmotion> commentEmotionList, Restaurant restaurant) {
+        this.id = commentId;
         this.user = user;
         this.voteId = voteId;
         this.drinkId = drinkId;

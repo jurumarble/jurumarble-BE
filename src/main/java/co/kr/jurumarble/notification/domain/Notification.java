@@ -34,7 +34,8 @@ public class Notification extends BaseTimeEntity {
     private User receiver;
 
     @Builder
-    public Notification(User receiver, NotificationType notificationType, String title, String content, String url, Boolean isRead) {
+    public Notification(Long notificationId, User receiver, NotificationType notificationType, String title, String content, String url, Boolean isRead) {
+        this.id = notificationId;
         this.receiver = receiver;
         this.notificationType = notificationType;
         this.title = title;
