@@ -53,6 +53,8 @@ public class VoteDeleterTest {
     @DisplayName("술 투표를 삭제하면 해당 술 후보 컨텐츠를 삭제한다.")
     @Test
     public void testDeleteVoteContentForDrinkVote() {
+
+        // given
         Long voteId = 1L;
         Vote vote = Vote.builder()
                 .voteId(voteId)
@@ -69,14 +71,16 @@ public class VoteDeleterTest {
 
         Mockito.when(voteDrinkContentRepository.findByVoteId(vote.getId())).thenReturn(Optional.of(voteDrinkContent));
 
+        // when
         voteDeleter.deleteVoteContent(vote);
-
+        // then
         Mockito.verify(voteDrinkContentRepository).delete(voteDrinkContent);
     }
 
     @DisplayName("일반 투표를 삭제하면 해당 후보 컨텐츠를 삭제한다.")
     @Test
     public void testDeleteVoteContentForNormalVote() {
+        // given
         Long voteId = 2L;
         Vote vote = Vote.builder()
                 .voteId(voteId)
@@ -88,15 +92,16 @@ public class VoteDeleterTest {
                 .build();
 
         Mockito.when(voteContentRepository.findByVoteId(vote.getId())).thenReturn(Optional.of(voteContent));
-
+        // when
         voteDeleter.deleteVoteContent(vote);
-
+        // then
         Mockito.verify(voteContentRepository).delete(voteContent);
     }
 
     @DisplayName("투표를 삭제하면 해당 댓글을 삭제한다")
     @Test
     public void testDeleteVoteComment() {
+        // given
         Long voteId = 3L;
         Vote vote = Vote.builder()
                 .voteId(voteId)
@@ -109,15 +114,16 @@ public class VoteDeleterTest {
         List<Comment> comments = Collections.singletonList(comment);
 
         Mockito.when(commentRepository.findByVoteId(vote.getId())).thenReturn(comments);
-
+        // when
         voteDeleter.deleteVoteComment(vote);
-
+        // then
         Mockito.verify(commentRepository).deleteAll(comments);
     }
 
     @DisplayName("투표를 삭제하면 해당 투표 결과를 삭제한다")
     @Test
     public void testDeleteVoteResult() {
+        // given
         Long voteId = 4L;
         Vote vote = Vote.builder()
                 .voteId(voteId)
@@ -126,24 +132,25 @@ public class VoteDeleterTest {
         List<VoteResult> voteResults = Collections.singletonList(new VoteResult());
 
         Mockito.when(voteResultRepository.findByVoteId(vote.getId())).thenReturn(voteResults);
-
+        // when
         voteDeleter.deleteVoteResult(vote);
-
+        // then
         Mockito.verify(voteResultRepository).deleteAll(voteResults);
     }
 
     @DisplayName("투표를 삭제하면 해당 투표의 북마크를 삭제한다")
     @Test
     public void testDeleteVoteBookmark() {
+        // given
         Long voteId = 5L;
         Vote vote = Vote.builder()
                 .voteId(voteId)
                 .build();
 
         List<Bookmark> bookmarks = Collections.singletonList(new Bookmark());
-
+        // when
         Mockito.when(bookmarkRepository.findByVoteId(vote.getId())).thenReturn(bookmarks);
-
+        // then
         voteDeleter.deleteVoteBookmark(vote);
 
         Mockito.verify(bookmarkRepository).deleteAll(bookmarks);
@@ -152,6 +159,7 @@ public class VoteDeleterTest {
     @DisplayName("투표를 삭제하면 해당 투표의 알림을 삭제한다")
     @Test
     public void testDeleteVoteNotification() {
+        // given
         Long voteId = 6L;
         Vote vote = Vote.builder()
                 .voteId(voteId)
@@ -165,9 +173,9 @@ public class VoteDeleterTest {
         List<Notification> notifications = Collections.singletonList(notification);
 
         Mockito.when(notificationRepository.findNotificationsByUrl(vote.getId().toString())).thenReturn(notifications);
-
+        // when
         voteDeleter.deleteVoteNotification(vote);
-
+        // then
         Mockito.verify(notificationRepository).deleteAll(notifications);
     }
 }
