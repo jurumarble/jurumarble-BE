@@ -96,6 +96,7 @@
 <br>
 
 ## 데이터베이스 ERD
+![주루마블ERD](https://github.com/jurumarble/jurumarble-BE/assets/80972298/696511c0-82a9-4a31-83e3-2ff1f31aa392)
 
 <br>
 
