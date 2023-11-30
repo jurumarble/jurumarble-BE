@@ -22,7 +22,7 @@ public class EbHealthCheck {
 
     @GetMapping("/api/swagger-check3")
     public String swagger() {
-        return "<h1>되는지 확인용</h1>";
+        return "<h1>되는지 확인용!</h1>";
     }
 
 }
