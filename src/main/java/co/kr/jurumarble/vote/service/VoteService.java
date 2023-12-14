@@ -2,9 +2,9 @@ package co.kr.jurumarble.vote.service;
 
 import co.kr.jurumarble.drink.domain.DrinkFinder;
 import co.kr.jurumarble.drink.domain.dto.DrinksUsedForVote;
-import co.kr.jurumarble.exception.user.UserNotAccessRightException;
 import co.kr.jurumarble.exception.user.UserNotFoundException;
-import co.kr.jurumarble.exception.vote.*;
+import co.kr.jurumarble.exception.vote.SortByNotFountException;
+import co.kr.jurumarble.exception.vote.VoteNotFoundException;
 import co.kr.jurumarble.notification.event.DoVoteEvent;
 import co.kr.jurumarble.user.domain.User;
 import co.kr.jurumarble.user.repository.UserRepository;
