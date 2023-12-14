@@ -33,7 +33,7 @@ public class NotificationSender {
 
     @TransactionalEventListener
     @Async
-    public void handleVoteCreated(CommentCreatedEvent event) {
+    public void handleCommentCreated(CommentCreatedEvent event) {
         sendNotificationForNewComments(event.getVoteId());
     }
 
