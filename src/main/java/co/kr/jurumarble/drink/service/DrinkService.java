@@ -103,9 +103,25 @@ public class DrinkService {
         log.info("********************" + endY);
         log.info("*******************" + (endX - startX));
         log.info("*******************" + (endY - startY));
+        double distance = calculateDistanceInKm(startX, startY, endX, endY);
+        log.info("^^^^^^^^^^^^^^^^^^^^^^^^^^" + distance);
         PageRequest pageRequest = PageRequest.of(page, size);
         Slice<MapInDrinkData> drinkData = drinkRepository.findDrinksByCoordinate(pageRequest, startX, startY, endX, endY);
         return new SliceImpl<>(getGetMapInDrinksResponses(drinkData), drinkData.getPageable(), drinkData.hasNext());
+    }
+
+    public double calculateDistanceInKm(double startX, double startY, double endX, double endY) {
+        final int R = 6371; // 지구의 반지름
+
+        double latDistance = Math.toRadians(endX - startX);
+        double lonDistance = Math.toRadians(endY - startY);
+
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(startX)) * Math.cos(Math.toRadians(endX))
+                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        return R * c;
     }
 
     private List<GetMapInDrinksResponse> getGetMapInDrinksResponses(Slice<MapInDrinkData> drinkData) {
