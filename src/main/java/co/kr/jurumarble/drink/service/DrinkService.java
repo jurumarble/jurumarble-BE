@@ -22,6 +22,7 @@ import co.kr.jurumarble.user.repository.UserRepository;
 import co.kr.jurumarble.utils.PageableConverter;
 import co.kr.jurumarble.vote.enums.SortByType;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
@@ -35,6 +36,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class DrinkService {
 
     private static final int FIXED_INDEX_OF_GETTING_HOT_DRINKS = 0;
@@ -95,10 +97,15 @@ public class DrinkService {
     }
 
     public Slice<GetMapInDrinksResponse> getMapInDrinks(Double startX, Double startY, Double endX, Double endY, int page, int size) {
+        log.info("********************" + startX);
+        log.info("********************" + startY);
+        log.info("********************" + endX);
+        log.info("********************" + endY);
+        log.info("*******************" + (endX - startX));
+        log.info("*******************" + (endY - startY));
         PageRequest pageRequest = PageRequest.of(page, size);
         Slice<MapInDrinkData> drinkData = drinkRepository.findDrinksByCoordinate(pageRequest, startX, startY, endX, endY);
         return new SliceImpl<>(getGetMapInDrinksResponses(drinkData), drinkData.getPageable(), drinkData.hasNext());
-
     }
 
     private List<GetMapInDrinksResponse> getGetMapInDrinksResponses(Slice<MapInDrinkData> drinkData) {
