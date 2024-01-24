@@ -99,20 +99,12 @@ public class DrinkService {
     }
 
     public Slice<GetMapInDrinksResponse> getMapInDrinks(Double startX, Double startY, Double endX, Double endY, int page, int size) {
-        log.info("********************" + startX);
-        log.info("********************" + startY);
-        log.info("********************" + endX);
-        log.info("********************" + endY);
-        log.info("*******************" + (endX - startX));
-        log.info("*******************" + (endY - startY));
         double distance = calculateDistanceInKm(startX, startY, endX, endY);
         if (distance < RANGE_OF_DRINK_MAP) {
-            log.info("이제 쿼리 나간다!!!!!!!!!!!!!!!!!!!" + distance);
             PageRequest pageRequest = PageRequest.of(page, size);
             Slice<MapInDrinkData> drinkData = drinkRepository.findDrinksByCoordinate(pageRequest, startX, startY, endX, endY);
             return new SliceImpl<>(getGetMapInDrinksResponses(drinkData), drinkData.getPageable(), drinkData.hasNext());
         } else {
-            log.info("쿼리 안나간다!!!!!!!!!!!!!!!!!!!" + distance);
             return new SliceImpl<>(new ArrayList<>());
         }
     }
