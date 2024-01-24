@@ -106,12 +106,13 @@ public class DrinkService {
         log.info("*******************" + (endX - startX));
         log.info("*******************" + (endY - startY));
         double distance = calculateDistanceInKm(startX, startY, endX, endY);
-        log.info("^^^^^^^^^^^^^^^^^^^^^^^^^^" + distance);
         if (distance < RANGE_OF_DRINK_MAP) {
+            log.info("이제 쿼리 나간다!!!!!!!!!!!!!!!!!!!" + distance);
             PageRequest pageRequest = PageRequest.of(page, size);
             Slice<MapInDrinkData> drinkData = drinkRepository.findDrinksByCoordinate(pageRequest, startX, startY, endX, endY);
             return new SliceImpl<>(getGetMapInDrinksResponses(drinkData), drinkData.getPageable(), drinkData.hasNext());
         } else {
+            log.info("쿼리 안나간다!!!!!!!!!!!!!!!!!!!" + distance);
             return new SliceImpl<>(new ArrayList<>());
         }
     }
