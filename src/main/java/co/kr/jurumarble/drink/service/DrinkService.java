@@ -42,7 +42,7 @@ public class DrinkService {
 
     private static final int FIXED_INDEX_OF_GETTING_HOT_DRINKS = 0;
     private static final int NUMBER_OF_HOT_DRINK = 10;
-    private static final int RANGE_OF_DRINK_MAP = 15;
+    private static final int RANGE_OF_DRINK_MAP = 40;
 
     private final DrinkRepository drinkRepository;
     private final EnjoyDrinkRepository enjoyDrinkRepository;
