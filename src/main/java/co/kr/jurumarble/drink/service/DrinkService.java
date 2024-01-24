@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,6 +42,7 @@ public class DrinkService {
 
     private static final int FIXED_INDEX_OF_GETTING_HOT_DRINKS = 0;
     private static final int NUMBER_OF_HOT_DRINK = 10;
+    private static final int RANGE_OF_DRINK_MAP = 15;
 
     private final DrinkRepository drinkRepository;
     private final EnjoyDrinkRepository enjoyDrinkRepository;
@@ -105,13 +107,17 @@ public class DrinkService {
         log.info("*******************" + (endY - startY));
         double distance = calculateDistanceInKm(startX, startY, endX, endY);
         log.info("^^^^^^^^^^^^^^^^^^^^^^^^^^" + distance);
-        PageRequest pageRequest = PageRequest.of(page, size);
-        Slice<MapInDrinkData> drinkData = drinkRepository.findDrinksByCoordinate(pageRequest, startX, startY, endX, endY);
-        return new SliceImpl<>(getGetMapInDrinksResponses(drinkData), drinkData.getPageable(), drinkData.hasNext());
+        if (distance < RANGE_OF_DRINK_MAP) {
+            PageRequest pageRequest = PageRequest.of(page, size);
+            Slice<MapInDrinkData> drinkData = drinkRepository.findDrinksByCoordinate(pageRequest, startX, startY, endX, endY);
+            return new SliceImpl<>(getGetMapInDrinksResponses(drinkData), drinkData.getPageable(), drinkData.hasNext());
+        } else {
+            return new SliceImpl<>(new ArrayList<>());
+        }
     }
 
     public double calculateDistanceInKm(double startX, double startY, double endX, double endY) {
-        final int R = 6371; // 지구의 반지름
+        final int R = 6371;
 
         double latDistance = Math.toRadians(endX - startX);
         double lonDistance = Math.toRadians(endY - startY);
