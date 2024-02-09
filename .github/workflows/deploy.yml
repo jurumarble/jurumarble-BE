@@ -53,4 +53,4 @@ jobs:
           environment_name: Jurumarble-env # 엘리스틱 빈스톡 환경 이름!
           version_label: jurumarble-${{steps.current-time.outputs.formattedTime}}
           region: ap-northeast-2
-          deployment_package: deploy/deploy.zip         #deploy 파일의 deploy.zip 파일을 던지겠다. 엘라스틱빈스톡에 압축 파일 배포도 가능
+          deployment_package: deploy/deploy.zip
