@@ -85,6 +85,17 @@
 
 <br>
 
+## 개발환경
+```
+- DB : Mysql(8.0)
+- Language : Java
+- IDE : IntelliJ, DataGrip
+- Framework : SpringBoot
+- Cloud : AWS
+- VCS : Github
+```
+<br>
+
 ## 기술 스택 🛠
 
 <br>
