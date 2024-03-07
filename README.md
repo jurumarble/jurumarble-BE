@@ -88,7 +88,7 @@
 ## 개발환경
 ```
 - DB : Mysql(8.0)
-- Language : Java
+- Language : Java(11)
 - IDE : IntelliJ, DataGrip
 - Framework : SpringBoot
 - Cloud : AWS
