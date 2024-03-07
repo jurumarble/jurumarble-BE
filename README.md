@@ -17,7 +17,7 @@
 
 ## 서비스 기능 📖
 
-<details>
+<details open>
 <summary>소셜 로그인</summary>
 <br>
 <div style="display: flex; justify-content: center;">
@@ -27,7 +27,7 @@
 
 <br>
 
-<details>
+<details open>
 <summary>투표</summary>
 <br>
 <table>
@@ -45,7 +45,7 @@
 </details>
 <br>
 
-<details>
+<details open>
 <summary>댓글</summary>
 <br>
 <div style="display: flex; justify-content: center;">
