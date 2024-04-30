@@ -45,7 +45,7 @@ jobs:
           cp -r .platform deploy/.platform
           cd deploy && zip -r deploy.zip .
       - name: Deploy to EB
-        uses: einaregilsson/beanstalk-deploy@v21        #엘라스틱 빈스톡으로 배포하는 라이브러리
+        uses: einaregilsson/beanstalk-deploy@v21        #엘라스틱 빈스톡으로 배포하는 라이브러
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
           aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
