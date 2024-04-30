@@ -8,6 +8,7 @@
     <a href="https://jurumarble.vercel.app">👉주루마블 바로가기👈</a>
 </div>
 
+
 <br>
 
 ## 프로젝트 소개 💡
@@ -17,7 +18,7 @@
 
 ## 서비스 기능 📖
 
-<details>
+<details open>
 <summary>소셜 로그인</summary>
 <br>
 <div style="display: flex; justify-content: center;">
@@ -27,7 +28,7 @@
 
 <br>
 
-<details>
+<details open>
 <summary>투표</summary>
 <br>
 <table>
@@ -45,7 +46,7 @@
 </details>
 <br>
 
-<details>
+<details open>
 <summary>댓글</summary>
 <br>
 <div style="display: flex; justify-content: center;">
@@ -85,7 +86,24 @@
 
 <br>
 
+## 개발환경
+```
+- DB : Mysql(8.0)
+- Language : Java(11)
+- IDE : IntelliJ, DataGrip
+- Framework : SpringBoot
+- Cloud : AWS
+- VCS : Github
+```
+<br>
+
 ## 기술 스택 🛠
+
+<div align = "center">
+<img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"><img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"><img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white"><img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
+
+<img src="https://img.shields.io/badge/amazonaws-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white"><img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=Redis&logoColor=white"> 
+</div>
 
 <br>
 
